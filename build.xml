@@ -89,6 +89,9 @@
     <target name="dist" depends="build-core, core-docs">
     </target>
     
+    <target name="publish" depends="dist">
+    </target>
+    
     
 </project>
 
