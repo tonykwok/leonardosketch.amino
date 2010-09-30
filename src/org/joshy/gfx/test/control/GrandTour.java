@@ -20,7 +20,6 @@ public class GrandTour implements Runnable {
     public static void main(String... args) throws Exception, InterruptedException {
         Core.setUseJOGL(false);
         Core.init();
-        //SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new GrandTour());
     }
 
