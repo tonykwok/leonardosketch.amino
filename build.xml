@@ -67,7 +67,7 @@
         <mkdir dir="dist/docs"/>
         <javadoc destdir="dist/docs">
         
-            <packageset dir="Core/src" defaultexcludes="yes">
+            <packageset dir="src" defaultexcludes="yes">
               <exclude name="org/joshy/gfx/test/**"/>
               <exclude name="org/joshy/gfx/css/**"/>
               <exclude name="org/joshy/gfx/node/geom3d/**"/>
