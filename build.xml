@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+            
+<project default="help">
+    <target name="help">
+        <echo>ant build      build and package the entire project, including jnlps</echo>
+    </target>
+
+    <target name="init">
+        <echo message="basedir = ${basedir}"/>
+        <buildnumber/>
+        <tstamp>
+            <format property="TIMESTAMP" pattern="yyyy-MM-dd_kk-mm"/>
+        </tstamp>
+        <echo message="timestamp = ${TIMESTAMP}"/>
+
+        <property  name="publish.dir" value="dist/foo"/>
+        <echo message="publish dir = ${publish.dir}"/>
+        
+        <property  name="lib.jogl.dir" value="lib/jogl/"/>
+        <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
+        
+        <property  name="jnlp.codebase" value="file://${basedir}/dist/jnlp/"/>        
+        <echo message="jnlp codebase = ${jnlp.codebase}"/>
+        
+    </target>
+    
+    
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+    </target>
+
+    <target name="build-core" depends="init">
+        <mkdir dir="build"/>
+
+        <mkdir dir="build/classes/"/>
+
+        <javac destdir="build/classes/" debug="true">
+            <src path="src"/>
+            <classpath path="${lib.jogl.dir}gluegen-rt.jar"></classpath>
+            <classpath path="${lib.jogl.dir}jogl.all.jar"></classpath>
+            <classpath path="${lib.jogl.dir}nativewindow.all.jar"></classpath>
+            <classpath path="${lib.jogl.dir}newt.all.jar"></classpath>
+            <classpath><fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+        </javac>
+        <copy todir="build/classes/">
+            <fileset dir="src">
+                <include name="**"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+
+        <mkdir dir="build/jars"/>
+        <jar destfile="build/jars/amino-core.jar">
+            <fileset dir = "build/classes"></fileset>
+        </jar>
+
+        <copy todir="build/jars/">
+            <fileset dir="lib"><include  name="*.jar"/></fileset>
+        </copy>
+
+    </target>
+    
+    
+    
+    <target name="core-docs">
+        <mkdir dir="dist/docs"/>
+        <javadoc destdir="dist/docs">
+        
+            <packageset dir="Core/src" defaultexcludes="yes">
+              <exclude name="org/joshy/gfx/test/**"/>
+              <exclude name="org/joshy/gfx/css/**"/>
+              <exclude name="org/joshy/gfx/node/geom3d/**"/>
+              <exclude name="org/joshy/gfx/stage/jogl/**"/>
+              <exclude name="org/joshy/gfx/stage/swing/**"/>
+              <exclude name="org/joshy/gfx/stage/testing/**"/>
+              <exclude name="org/joshy/gfx/text/**"/>
+              <include name="org/joshy/gfx/**"/>
+            </packageset>
+            
+            <classpath>
+                <pathelement path="lib/parboiled-0.9.7.3.jar"/>
+                <pathelement path="lib/XMLLib.jar"/>
+            </classpath>
+            
+        </javadoc>
+    </target>
+    
+    <target name="dist" depends="build-core, core-docs">
+    </target>
+    
+    
+</project>
+
+
