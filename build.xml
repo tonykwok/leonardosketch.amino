@@ -13,7 +13,7 @@
         </tstamp>
         <echo message="timestamp = ${TIMESTAMP}"/>
 
-        <property  name="publish.dir" value="dist/foo"/>
+        <property  name="publish.dir" value="published/foo"/>
         <echo message="publish dir = ${publish.dir}"/>
         
         <property  name="lib.jogl.dir" value="lib/jogl/"/>
@@ -28,6 +28,7 @@
     <target name="clean">
         <delete dir="build"/>
         <delete dir="dist"/>
+        <delete dir="published"/>
     </target>
 
     <target name="build-core" depends="init">
@@ -90,6 +91,14 @@
     </target>
     
     <target name="publish" depends="dist">
+        <copy todir="${publish.dir}">
+            <fileset dir="dist/">
+            </fileset>
+        </copy>
+        <copy todir="${publish.dir}/lib">
+            <fileset dir="build/jars/">
+            </fileset>
+        </copy>
     </target>
     
     
