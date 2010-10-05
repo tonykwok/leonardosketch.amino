@@ -37,7 +37,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         setHeight(300);
         setRenderer(defaultItemRenderer);
         setTextRenderer(new TextRenderer<E>(){
-            public String toString(ListView view, E item, int index) {
+            public String toString(SelectableControl view, E item, int index) {
                 if(item == null) return "null";
                 return item.toString();
             }
@@ -444,7 +444,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     }
 
     public static interface TextRenderer<E> {
-        public String toString(ListView view, E item, int index);
+        public String toString(SelectableControl view, E item, int index);
     }
 
     ItemRenderer defaultItemRenderer =  new ItemRenderer<E>() {

@@ -15,6 +15,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
     private ListModel model;
     private int selectedIndex;
     private PopupMenu popup;
+    private ListView.TextRenderer<E> textRenderer;
 
     public PopupMenuButton()  {
         setWidth(200);
@@ -44,6 +45,11 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         this.model = model;
     }
 
+    public PopupMenuButton<E> setTextRenderer(ListView.TextRenderer<E> textRenderer) {
+        this.textRenderer = textRenderer;
+        return this;
+    }
+
     @Override
     protected void setPressed(boolean pressed) {
         super.setPressed(pressed);
@@ -54,6 +60,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
                         setSelectedIndex((Integer)event.getValue());
                     }
                 });
+                popup.setTextRenderer(this.textRenderer);
                 popup.setWidth(200);
                 popup.setHeight(200);
                 popup.setVisible(false);
@@ -102,8 +109,12 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
     }
 
     private void drawText(GFX g) {
-        Object o = getSelectedItem();
-        Font.drawCenteredVertically(g, o.toString(), font,6, 0, getWidth(), getHeight(), true);
+        E o = getSelectedItem();
+        String s = o.toString();
+        if(textRenderer != null) {
+            s = textRenderer.toString(this,o,0);
+        }
+        Font.drawCenteredVertically(g, s, font,6, 0, getWidth(), getHeight(), true);
     }
 
     public E getSelectedItem() {

@@ -201,6 +201,16 @@ public class SwingGFX extends GFX {
     }
 
     @Override
+    public void drawImage(Image img, double dx, double dy, double dw, double dh, double sx, double sy, double sw, double sh) {
+        SwingImage image = (SwingImage) img;
+        g.drawImage(image.buffer,
+                (int)dx, (int)dy, (int)(dx+dw), (int)(dy+dh),
+                (int)sx, (int)sy, (int)(sx+sw), (int)(sy+sh),
+                null
+        );
+    }
+
+    @Override
     public void drawPolygon(double[] points) {
         drawPolygon(points,true);
     }

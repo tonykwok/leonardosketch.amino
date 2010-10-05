@@ -524,6 +524,11 @@ public class JOGLGFX extends GFX {
         gl.glPopMatrix();
     }
 
+    @Override
+    public void drawImage(Image image, double dx, double dy, double dw, double dh, double sx, double sy, double sw, double sh) {
+        
+    }
+
     private void setPaint() {
         java.awt.Color cl = java.awt.Color.BLACK;
         if (paint instanceof FlatColor) {

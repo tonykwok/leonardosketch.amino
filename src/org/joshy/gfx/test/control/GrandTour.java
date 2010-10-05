@@ -170,7 +170,7 @@ public class GrandTour implements Runnable {
         final ListModel<Example> exampleModel = (ListModel<Example>)ListView.createModel(examples);
         exampleList.setModel(exampleModel);
         exampleList.setTextRenderer(new ListView.TextRenderer<Example>(){
-            public String toString(ListView view, Example item, int index) {
+            public String toString(SelectableControl view, Example item, int index) {
                 if(item != null) {
                     return item.name;
                 } else {

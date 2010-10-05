@@ -28,25 +28,29 @@ public abstract class FlexBox extends Panel {
         return this;
     }
     public FlexBox add(Control control, double flex) {
-        super.add(control);
         spaceMap.put(control,flex);
+        super.add(control);
         return this;
     }
 
     @Override
-    public Panel add(Node... nodes) {
-        super.add(nodes);
+    public Panel add(Node ... nodes) {
         for(Node n : nodes) {
             if(n instanceof Control){
                 this.spaceMap.put((Control)n,NONE);
             }
         }
+        super.add(nodes);
         return this;
     }
 
-    public FlexBox add(Control control) {
+    @Override
+    public FlexBox add(Node control) {
+        u.p("adding: " + control);
+        if(control instanceof Control) {
+            this.spaceMap.put((Control)control,NONE);
+        }
         super.add(control);
-        this.spaceMap.put(control,NONE);
         return this;
     }
 }

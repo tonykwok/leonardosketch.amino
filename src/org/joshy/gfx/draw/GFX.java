@@ -41,6 +41,10 @@ public abstract class GFX {
     public abstract void drawText(String text, Font font, double x, double y);
 
     public abstract void drawImage(Image image, double x, double y);
+    public abstract void drawImage(Image image,
+                                   double dx, double dy, double dw, double dh,
+                                   double sx, double sy, double sw, double sh
+                                   );
     public abstract void drawGridNine(GridNine g9, double x, double y, double width, double height);
 
     public abstract void translate(double x, double y);

@@ -80,7 +80,7 @@ public class FlickrReader implements Runnable {
     };
 
     private ListView.TextRenderer<Photo> photoFormatter = new ListView.TextRenderer<Photo>(){
-        public String toString(ListView view, Photo item, int index) {
+        public String toString(SelectableControl view, Photo item, int index) {
             if(item == null) return "";
             return "Photo: "+item.title;
         }

@@ -11,6 +11,7 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -26,6 +27,7 @@ public class PopupMenu extends Control {
     private int hoverRow = -1;
     private Callback<ChangedEvent> callback;
     private long openTime;
+    private ListView.TextRenderer textRenderer;
 
     public PopupMenu(ListModel model, Callback<ChangedEvent> callback) {
         setVisible(true);
@@ -129,18 +131,23 @@ public class PopupMenu extends Control {
                 cssSkin.drawBorder(g,matcher,prefix,itemBounds);
                 int col = cssSkin.getCSSSet().findColorValue(matcher, prefix+"color");
                 g.setPaint(new FlatColor(col));
-                drawText(g, o, rowy);
+                drawText(g, o, rowy, i);
             } else {
                 g.setPaint(bg);
                 g.fillRect(1,rowy+spacer,getWidth()-1,rowHeight);
                 g.setPaint(fg);
-                drawText(g, o, rowy);
+                drawText(g, o, rowy, i);
             }
         }
     }
 
-    private void drawText(GFX g, Object o, double rowy) {
-        Font.drawCenteredVertically(g,o.toString(), cssSkin.getDefaultFont(),
+    private void drawText(GFX g, Object o, double rowy, int i) {
+        String s = o.toString();
+        u.p("popup menu text renderer = " + textRenderer);
+        if(textRenderer != null) {
+            s = textRenderer.toString(null,o,i);
+        }
+        Font.drawCenteredVertically(g, s, cssSkin.getDefaultFont(),
                 3,rowy+spacer,getWidth(),rowHeight,true);
     }
 
@@ -151,5 +158,9 @@ public class PopupMenu extends Control {
 
     public void setCallback(Callback<ChangedEvent> callback) {
         this.callback = callback;
+    }
+
+    public void setTextRenderer(ListView.TextRenderer textRenderer) {
+        this.textRenderer = textRenderer;
     }
 }

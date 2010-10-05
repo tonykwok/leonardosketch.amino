@@ -2,6 +2,7 @@ package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.util.u;
 
 /**
 * Created by IntelliJ IDEA.
@@ -52,13 +53,22 @@ public class VFlexBox extends FlexBox {
         for(Control c : controlChildren()) {
             c.doPrefLayout();
             Bounds bounds = c.getLayoutBounds();
+            if(bounds == null) {
+                u.p("ERROR! control " + c + " is returning null layout bounds: " + bounds );
+                return;
+            }
             if(c instanceof SplitPane) {
                 //reset to 0
                 c.setHeight(0);
                 //c.setWidth(0);
             }
             totalHeight += bounds.getHeight();
-            totalFlex += spaceMap.get(c);
+            //u.p("spacemap = " + spaceMap.get(c));
+            if(spaceMap.containsKey(c)) {
+                totalFlex += spaceMap.get(c);
+            } else {
+                totalFlex += 0;
+            }
         }
 
         double totalExcess = getHeight()-totalHeight;
@@ -70,7 +80,12 @@ public class VFlexBox extends FlexBox {
             c.setTranslateX(0+insets.getLeft());
             c.setTranslateY(y+insets.getTop());
             //set the height
-            double flex = spaceMap.get(c);
+            double flex = 0;
+            if(spaceMap.containsKey(c)) {
+                flex = spaceMap.get(c);
+            } else {
+                u.p("WARNING: Control "+ c + " has no flex value");
+            }
             if(totalFlex > 0) {
                 c.setHeight(c.getHeight()+flex/totalFlex*totalExcess);
             }
