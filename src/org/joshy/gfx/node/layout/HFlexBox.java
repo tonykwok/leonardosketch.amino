@@ -65,7 +65,7 @@ public class HFlexBox extends FlexBox {
             //double baseline = c.getBaseline();
         }
 
-        double totalExcess = getWidth()-totalWidth;
+        double totalExcess = getWidth()-totalWidth-insets.getLeft()-insets.getRight();
 
         double x = 0;
         for(Control c : controlChildren()) {
@@ -93,7 +93,7 @@ public class HFlexBox extends FlexBox {
                 c.setTranslateY(getHeight()-bounds.getHeight()+insets.getTop());
             } else if (align == Align.Stretch) {
                 c.setTranslateY(0+insets.getTop());
-                c.setHeight(getHeight());
+                c.setHeight(getHeight()-insets.getTop()-insets.getBottom());
             } else {
                 c.setTranslateY(0+insets.getTop());
             }

@@ -121,6 +121,7 @@ public class SwingStage extends Stage {
                 for(Node n : children()) {
                     if(n instanceof Control) {
                         Control c = (Control) n;
+                        c.doPrefLayout();
                         c.setWidth(getWidth());
                         c.setHeight(getHeight());
 

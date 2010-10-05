@@ -71,7 +71,7 @@ public class VFlexBox extends FlexBox {
             }
         }
 
-        double totalExcess = getHeight()-totalHeight;
+        double totalExcess = getHeight()-totalHeight-insets.getTop()-insets.getBottom();
 
         double y = 0;
         for(Control c : controlChildren()) {
@@ -93,7 +93,7 @@ public class VFlexBox extends FlexBox {
             y = y + c.getHeight();
             //set the width
             if(align == Align.Stretch) {
-                c.setWidth(getWidth());
+                c.setWidth(getWidth()-insets.getLeft()-insets.getRight());
             }
             if(align == Align.Right) {
                 c.setTranslateX(getWidth()-bounds.getWidth());

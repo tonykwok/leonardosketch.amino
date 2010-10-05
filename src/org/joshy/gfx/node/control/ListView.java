@@ -168,6 +168,11 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         setLayoutDirty();
     }
 
+    @Override
+    public void doPrefLayout() {
+        setWidth(10);
+        setHeight(10);
+    }
 
     @Override
     public void doLayout() {
