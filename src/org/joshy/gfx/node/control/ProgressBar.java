@@ -10,26 +10,36 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.ProgressUpdate;
 import org.joshy.gfx.node.Bounds;
 
-/**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Jan 23, 2010
- * Time: 9:37:06 AM
- * To change this template use File | Settings | File Templates.
+/**  The ProgressBar is a control which shows the progress of some process, usually a background
+ * task. It shows the progress as a bar of increasing width.
+ * It was designed with background tasks in mind and can be easily attached to a background
+ * task. For example, the following code will attach a progress bar to a background task.
+ *
+ * <pre><code>
+ BackgroundTask task = new BackgroundTask<String, String>() {
+     protected String onWork(String data) {
+        ... do some work in the background
+        ... call update gui to show progress from 0.0 to 1.0
+         updateGUI(data,result,i/100.0);
+        ... return result when done
+         return result;
+     }
+ };
+
+ //create progress bar and attach to the task
+ ProgressBar pb = new ProgressBar();
+ pb.setTask(task);
+
+ //start the task
+ task.start(); 
+ *
+ * </code></pre>
  */
 public class ProgressBar extends Control {
     double percentage = 0.0;
     private CSSSkin.BoxState size;
 
     public ProgressBar() {
-        doLayout();
-        /*
-        try {
-            fill = PatternPaint.create(new File("assets/progressbar_fill.png"));
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        */        
     }
 
     @Override

@@ -9,6 +9,34 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.ProgressUpdate;
 import org.joshy.gfx.util.u;
 
+/**  The ProgressSpinner is a control which shows the progress of some process, usually a background
+ * task. It shows the progress by constantly spinning, or by showing a percentage
+ * complete as a piechart.
+ *
+ * cdIt was designed with background tasks in mind and can be easily attached to a background
+ * task. For example, the following code will attach a progress bar to a background task.
+ *
+ * <pre><code>
+ BackgroundTask task = new BackgroundTask<String, String>() {
+     protected String onWork(String data) {
+        ... do some work in the background
+        ... call update gui to show progress from 0.0 to 1.0
+         updateGUI(data,result,i/100.0);
+        ... return result when done
+         return result;
+     }
+ };
+
+ //create progress bar and attach to the task
+ ProgressBar pb = new ProgressBar();
+ pb.setTask(task);
+
+ //start the task
+ task.start();
+ *
+ * </code></pre>
+ */
+
 public class ProgressSpinner extends Control {
     double percentage = 0.0;
     private PropertyAnimator indeterminateAnim;
