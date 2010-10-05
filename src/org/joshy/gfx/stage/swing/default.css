@@ -143,7 +143,7 @@ Slider {
 
 
 /* =========== panels ======== */
-Panel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
+Panel, TitlePanel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
     background-color: transparent;
     border-width: 0px;
     border-color: black;
@@ -151,6 +151,18 @@ Panel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
     padding: 3px;
 }
 
+TitlePanel {
+    background-color: transparent;
+    border-width: 1px;
+    margin: 6px;
+    padding: 6px;
+    title-margin: 0px;
+    title-padding-left:   3px;
+    title-padding-right: 15px;
+    title-padding-top:    3px;
+    title-padding-bottom: 3px;
+    title-background-color: #e8e8e8;
+}
 #root {
     background-color: #d0d0d0;
 }

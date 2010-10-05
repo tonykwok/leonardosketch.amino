@@ -1,15 +1,13 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.FlexBox;
-import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.SplitPane;
-import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
 
 import java.io.IOException;
@@ -165,6 +163,17 @@ public class GrandTour implements Runnable {
 
             }
         });
+
+        examples.add(new Example("Title Panel") {
+            @Override
+            public Control build() throws Exception {
+                TitlePanel panel = new TitlePanel();
+
+                panel.add(new Button("blah"));
+                return panel;
+            }
+        });
+
 
         ListView exampleList = new ListView();
         final ListModel<Example> exampleModel = (ListModel<Example>)ListView.createModel(examples);

@@ -11,6 +11,7 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.URLUtils;
+import org.joshy.gfx.util.u;
 
 import java.net.URI;
 
@@ -352,10 +353,10 @@ public class CSSSkin {
         size.width = set.findIntegerValue(matcher,"width");
         size.height = set.findIntegerValue(matcher,"height");
 
-        Insets margin = getMargin(matcher);
-        Insets padding = getPadding(matcher);
-        size.contentWidth = control.getWidth()-margin.getLeft()-margin.getRight()-padding.getLeft()-padding.getRight();
-        size.contentHeight = control.getHeight()-margin.getTop()-margin.getBottom()-padding.getTop()-padding.getBottom();
+        size.margin = getMargin(matcher);
+        size.padding = getPadding(matcher);
+        size.contentWidth = control.getWidth()-size.margin.getLeft()-size.margin.getRight()-size.padding.getLeft()-size.padding.getRight();
+        size.contentHeight = control.getHeight()-size.margin.getTop()-size.margin.getBottom()-size.padding.getTop()-size.padding.getBottom();
         return size;
     }
 
