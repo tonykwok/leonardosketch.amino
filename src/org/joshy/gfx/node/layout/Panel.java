@@ -27,6 +27,12 @@ public class Panel extends Container {
     }
 
     @Override
+    public void doSkins() {
+        cssSkin = SkinManager.getShared().getCSSSkin();
+        super.doSkins();
+    }
+    
+    @Override
     public void doPrefLayout() {
         insets = cssSkin.getInsets(this);
         size = cssSkin.getSize(this);
@@ -42,11 +48,6 @@ public class Panel extends Container {
         }
     }
 
-    @Override
-    public void doSkins() {
-        cssSkin = SkinManager.getShared().getCSSSkin();
-        super.doSkins();
-    }
 
     @Override
     public void draw(GFX g) {

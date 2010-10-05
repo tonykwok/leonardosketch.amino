@@ -11,7 +11,6 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.URLUtils;
-import org.joshy.gfx.util.u;
 
 import java.net.URI;
 
@@ -202,7 +201,6 @@ public class CSSSkin {
         g.translate(-bounds.getX(),-bounds.getY());
     }
 
-
     public void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, Bounds bounds) {
         Insets margin = getMargin(matcher,prefix);
         Insets borderWidth = getBorderWidth(matcher,prefix);
@@ -388,9 +386,11 @@ public class CSSSkin {
         }
         return size;
     }
+
     protected Insets getPadding(CSSMatcher matcher) {
         return getPadding(matcher,"");
     }
+
     protected Insets getPadding(CSSMatcher matcher, String prefix) {
         int padding_left = set.findIntegerValue(matcher,prefix+"padding-left");
         int padding_right = set.findIntegerValue(matcher,prefix+"padding-right");
@@ -427,11 +427,22 @@ public class CSSSkin {
         Insets padding = getPadding(matcher,prefix);
         g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"color")));
         double x = margin.getLeft() + borderWidth.getLeft() + padding.getLeft();
+        String textAlign = set.findStringValue(matcher.element,"text-align");
+        double contentX = margin.getLeft()+borderWidth.getLeft()+padding.getLeft();
+        double contentY = margin.getTop()+borderWidth.getTop()+padding.getTop();
+        double textX = contentX;
+        Font font = getFont(matcher);
+        if("center".equals(textAlign)) {
+            Font.drawCentered(g,text,font,textX,contentY,b.getWidth(),b.getHeight(),true);
+        } else {
+            Font.drawCenteredVertically(g,text,font,textX,contentY,b.getWidth(),b.getHeight(),true);
+        }
+        /*
         Font font = getDefaultFont();
         double tw = font.getWidth(text);
         double th = font.getAscender();
         double ty = 0 + (b.getHeight() -th)/2 + font.getAscender();
-        g.drawText(text,font,x, ty);
+        g.drawText(text,font,x, ty);*/
         g.translate(-b.getX(),-b.getY());
     }
 

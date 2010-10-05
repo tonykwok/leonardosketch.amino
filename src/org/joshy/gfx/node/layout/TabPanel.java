@@ -1,11 +1,13 @@
 package org.joshy.gfx.node.layout;
 
+import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 
@@ -80,6 +82,7 @@ public class TabPanel extends Panel {
 
         @Override
         public void doSkins() {
+            cssSkin = SkinManager.getShared().getCSSSkin();
         }
 
         @Override
@@ -91,21 +94,15 @@ public class TabPanel extends Panel {
             double size = getWidth()/tabs.size();
             double x = 0;
             for(Control c : tabs) {
-
-                //background
-                g.setPaint(FlatColor.GRAY);
+                CSSMatcher matcher = new CSSMatcher(this);
                 if(c.isVisible()) {
-                    g.setPaint(FlatColor.WHITE);
+                    matcher.pseudo = "selected";
                 }
-                g.fillRect(x,0,size,30);
-
-                //border
-                g.setPaint(FlatColor.BLACK);
-                g.drawRect(x,0,size,30);
-
-                //title
+                Bounds bounds = new Bounds(x,0,size,30);
                 String title = titleMap.get(c);
-                g.drawText(title, Font.name("Arial").size(12).resolve(),x+5,12);
+                cssSkin.drawBackground(g,matcher,"",bounds);
+                cssSkin.drawBorder(g,matcher,"",bounds);
+                cssSkin.drawText(g,matcher,"",bounds,title);
                 x+=size;
             }
         }

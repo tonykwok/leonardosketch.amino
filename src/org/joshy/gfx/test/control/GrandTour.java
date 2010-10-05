@@ -1,7 +1,6 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -170,6 +169,16 @@ public class GrandTour implements Runnable {
                 TitlePanel panel = new TitlePanel();
 
                 panel.add(new Button("blah"));
+                return panel;
+            }
+        });
+
+        examples.add(new Example("Tabbed Panel") {
+            @Override
+            public Control build() throws Exception {
+                TabPanel panel = new TabPanel();
+                panel.add("Tab 1", new Button("Button 1"));
+                panel.add("Tab 2", new Button("Button 2"));
                 return panel;
             }
         });
