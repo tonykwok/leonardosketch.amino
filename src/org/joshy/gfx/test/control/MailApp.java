@@ -55,7 +55,7 @@ public class MailApp implements Runnable {
                 .setBoxAlign(HFlexBox.Align.Stretch)
                 .add(new VFlexBox()
                         .setBoxAlign(FlexBox.Align.Stretch)
-                        .add(new ScrollPane(new ListView().setWidth(200)),1)
+                        .add(new ScrollPane(new ListView()),1)
                         .add(new HFlexBox()
                             .setBoxAlign(HFlexBox.Align.Stretch)
                             .add(new Button("+"))

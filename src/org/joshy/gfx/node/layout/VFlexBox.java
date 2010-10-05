@@ -88,6 +88,7 @@ public class VFlexBox extends FlexBox {
             }
             if(totalFlex > 0) {
                 c.setHeight(c.getHeight()+flex/totalFlex*totalExcess);
+                u.p("gave excess height to child: " + c + " " + c.getHeight());
             }
             //update running total
             y = y + c.getHeight();

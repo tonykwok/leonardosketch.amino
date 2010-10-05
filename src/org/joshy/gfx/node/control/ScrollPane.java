@@ -30,6 +30,8 @@ public class ScrollPane extends AbstractPane {
     private double vscrollValue;
     private double hscrollValue;
     private boolean horizontalScrollVisible = true;
+    private VisiblePolicy horizontalVisiblePolicy = VisiblePolicy.Always;
+    private VisiblePolicy verticalVisiblePolicy = VisiblePolicy.Always;
 
     public ScrollPane() {
         vscroll = new Scrollbar(true);
@@ -39,6 +41,14 @@ public class ScrollPane extends AbstractPane {
         hscroll.setProportional(true);
         hscroll.setParent(this);
         contentWrapper = new Container() {
+            @Override
+            public void doLayout() {
+                for(Node n : children()) {
+                    if(n instanceof Control) {
+                        ((Control)n).doLayout();
+                    }
+                }
+            }
 
             @Override
             public void draw(GFX g) {
@@ -133,11 +143,7 @@ public class ScrollPane extends AbstractPane {
             if(sa instanceof Control) {
                 Control control = (Control) sa;
                 control.setWidth(getWidth()-vscroll.getWidth());
-                if(hscroll.isVisible()) {
-                    control.setHeight(getHeight()-hscroll.getHeight());
-                } else {
-                    control.setHeight(getHeight());
-                }
+                control.setHeight(getHeight()-hscroll.getHeight());
             }
         }
         hscroll.setMin(0);
@@ -150,7 +156,25 @@ public class ScrollPane extends AbstractPane {
             hscroll.setSpan(getWidth()/cBounds.getWidth());
         }
 
-        double vmax = cBounds.getHeight()-getHeight()+hscroll.getHeight();
+        if(horizontalVisiblePolicy == VisiblePolicy.Never) {
+            hscroll.setVisible(false);
+        }
+        if(horizontalVisiblePolicy == VisiblePolicy.Always) {
+            hscroll.setVisible(true);
+        }
+        if(horizontalVisiblePolicy == VisiblePolicy.WhenNeeded) {
+            if(hscroll.getSpan() == 1) {
+                hscroll.setVisible(false);
+            } else {
+                hscroll.setVisible(true);
+            }
+        }
+
+
+        double vmax = cBounds.getHeight()-getHeight();
+        if(hscroll.isVisible()) {
+            vmax +=hscroll.getHeight();
+        }
         vscroll.setMin(0);
         if(vmax < 0) {
             vscroll.setMax(0);
@@ -159,7 +183,21 @@ public class ScrollPane extends AbstractPane {
             vscroll.setMax(vmax);
             vscroll.setSpan(getHeight()/cBounds.getHeight());
         }
-        
+
+        if(verticalVisiblePolicy == VisiblePolicy.Never) {
+            vscroll.setVisible(false);
+        }
+        if(verticalVisiblePolicy == VisiblePolicy.Always) {
+            vscroll.setVisible(true);
+        }
+        if(verticalVisiblePolicy == VisiblePolicy.WhenNeeded) {
+            if(vscroll.getSpan() == 1) {
+                vscroll.setVisible(false);
+            } else {
+                vscroll.setVisible(true);
+            }
+        }
+
         // the main pref layout pass
         for(Node n : children()) {
             if(n instanceof Control) {
@@ -244,11 +282,24 @@ public class ScrollPane extends AbstractPane {
         return hscroll;
     }
 
+    public void setHorizontalVisiblePolicy(VisiblePolicy horizontalVisiblePolicy) {
+        this.horizontalVisiblePolicy = horizontalVisiblePolicy;
+        setDrawingDirty();
+    }
+
+    public void setVerticalVisiblePolicy(VisiblePolicy verticalVisiblePolicy) {
+        this.verticalVisiblePolicy = verticalVisiblePolicy;
+    }
+
     public interface ScrollingAware {
         public double getFullWidth(double width, double height);
         public double getFullHeight(double width, double height);
         public void setScrollX(double value);
         public void setScrollY(double value);
         public void setScrollParent(ScrollPane scrollPane);
+    }
+
+    public enum VisiblePolicy {
+        Never, Always, WhenNeeded
     }
 }

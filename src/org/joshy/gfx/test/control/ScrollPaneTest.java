@@ -25,7 +25,12 @@ public class ScrollPaneTest implements Runnable {
     public void run() {
         Stage stage = Stage.createStage();
         ScrollPane scroll = new ScrollPane();
-        scroll.setHorizontalScrollVisible(true);
+        //scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
+        //scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Always);
+        scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
+        //scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
+        //scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.Always);
+        scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
         Oval oval = new Oval();
         oval.setWidth(700);
         oval.setHeight(1000);
