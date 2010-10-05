@@ -17,6 +17,7 @@ public class MouseEvent extends Event {
     public static final EventType MouseMoved = new EventType("MouseMoved");
     public static final EventType MousePressed = new EventType("MousePressed");
     public static final EventType MouseDragged = new EventType("MouseDragged");
+    public static final EventType MouseDraggedRaw = new EventType("MouseDraggedRaw");
     public static final EventType MouseReleased = new EventType("MouseReleased");
     public static final EventType MouseEntered = new EventType("MouseEntered");
     public static final EventType MouseExited = new EventType("MouseExited");
@@ -29,6 +30,7 @@ public class MouseEvent extends Event {
             if(type == MouseExited) return true;
             if(type == MousePressed) return true;
             if(type == MouseDragged) return true;
+            if(type == MouseDraggedRaw) return true;
             if(type == MouseReleased) return true;
             return super.matches(type);
         }

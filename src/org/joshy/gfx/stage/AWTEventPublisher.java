@@ -98,13 +98,15 @@ public class AWTEventPublisher extends EventPublisher implements MouseListener, 
     public void mouseDragged(MouseEvent e) {
         logEvent("MouseDragged",e);
         //send event to the pressedNode
-        publishMouseEvent(e.getX(),e.getY(),EventBus.getSystem().getPressedNode(),org.joshy.gfx.event.MouseEvent.MouseDragged,
+        publishMouseEvent(e.getX(),e.getY(),EventBus.getSystem().getPressedNode(),
+                org.joshy.gfx.event.MouseEvent.MouseDragged,
                 e.getButton(),e.isShiftDown(),e.isAltDown(), e.isControlDown(),e.isMetaDown()
         );
+        
         // also send event to the top node under the cursor if it's not the pressedNode
         Node node = findTopNode(e.getX(),e.getY());
         if(EventBus.getSystem().getPressedNode() != node) {
-            publishMouseEvent(e.getX(),e.getY(),node,org.joshy.gfx.event.MouseEvent.MouseDragged,
+            publishMouseEvent(e.getX(),e.getY(),node,org.joshy.gfx.event.MouseEvent.MouseDraggedRaw,
                 e.getButton(),e.isShiftDown(),e.isAltDown(),e.isControlDown(),e.isMetaDown());
         }        
     }
