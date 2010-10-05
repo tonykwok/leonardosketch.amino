@@ -2,6 +2,7 @@ package org.joshy.gfx.stage;
 
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
+import org.joshy.gfx.node.control.ScrollPane;
 
 import java.awt.geom.Point2D;
 
@@ -17,6 +18,12 @@ public class EventPublisher {
     }
 
     public static Node findTopNode(Parent parent, double x, double y) {
+        if(parent instanceof ScrollPane) {
+            if(!((ScrollPane)parent).getInputBounds().contains(x,y)) {
+                return null;
+            }
+        }
+
         if(parent instanceof Node) {
             x -= ((Node)parent).getTranslateX();
             y -= ((Node)parent).getTranslateY();
