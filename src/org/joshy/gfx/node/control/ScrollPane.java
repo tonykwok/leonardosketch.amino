@@ -109,10 +109,10 @@ public class ScrollPane extends AbstractPane {
 
     @Override
     public void doLayout() {
-        // the main layout pass
+        // the main pref layout pass
         for(Node n : children()) {
             if(n instanceof Control) {
-                ((Control)n).doLayout();
+                ((Control)n).doPrefLayout();
             }
         }
         
@@ -160,6 +160,12 @@ public class ScrollPane extends AbstractPane {
             vscroll.setSpan(getHeight()/cBounds.getHeight());
         }
         
+        // the main pref layout pass
+        for(Node n : children()) {
+            if(n instanceof Control) {
+                ((Control)n).doLayout();
+            }
+        }
     }
 
     public void setContent(Node node) {

@@ -163,14 +163,20 @@ public class Scrollbar extends Control {
     }
 
     @Override
-    public void doLayout() {
+    public void doPrefLayout() {
         if(cssSkin != null) {
             size = cssSkin.getSize(this);
             setWidth(size.width);
             setHeight(size.height);
         }
     }
-    
+
+    @Override
+    public void doLayout() {
+        size.width = getWidth();
+        size.height = getHeight();
+    }
+
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
@@ -184,6 +190,7 @@ public class Scrollbar extends Control {
             rightArrowBounds = new Bounds(0, getHeight()-arrowLength,getWidth(),arrowLength);           
         }
 
+        //draw using css
         if(cssSkin != null) {
             cssSkin.draw(g,this,size,thumbBounds, leftArrowBounds, rightArrowBounds);
             return;
