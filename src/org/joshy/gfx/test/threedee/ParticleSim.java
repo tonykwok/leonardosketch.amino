@@ -114,13 +114,13 @@ public class ParticleSim implements Runnable {
             PopupMenuButton blendPopup = new PopupMenuButton();
             
             vbox.add(
-                    new Label("Emission Rate").setFill(FlatColor.WHITE),
+                    new Label("Emission Rate")/*.setFill(FlatColor.WHITE)*/,
                     emissionRate,
-                    new Label("Angle").setFill(FlatColor.WHITE),
+                    new Label("Angle")/*.setFill(FlatColor.WHITE)*/,
                     angle,
-                    new Label("Jitter").setFill(FlatColor.WHITE),
+                    new Label("Jitter")/*.setFill(FlatColor.WHITE)*/,
                     jitter,
-                    new Label("Max Age").setFill(FlatColor.WHITE),
+                    new Label("Max Age")/*.setFill(FlatColor.WHITE)*/,
                     maxAge,
                     blendPopup
             );

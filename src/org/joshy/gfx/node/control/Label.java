@@ -3,8 +3,6 @@ package org.joshy.gfx.node.control;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
@@ -17,14 +15,10 @@ import org.joshy.gfx.node.Bounds;
  */
 public class Label extends Control {
     private String text = "Label";
-    private Font font;
-    private double baseline;
-    private FlatColor fill;
     private CSSSkin.BoxState size;
     private BoxPainter boxPainter;
 
     public Label(String text) {
-        this.fill = FlatColor.BLACK;
         this.text = text;
     }
 
@@ -85,8 +79,4 @@ public class Label extends Control {
         return size.margin.getTop() + size.borderWidth.getTop() + size.padding.getTop() + size.contentBaseline;
     }
 
-    public Label setFill(FlatColor fill) {
-        this.fill = fill;
-        return this;
-    }
 }

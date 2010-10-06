@@ -44,9 +44,6 @@ public class BoxPainter {
         double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
         g.translate(bounds.getX(),bounds.getY());
-        //Insets margin = box.margin;
-        //BaseValue background = set.findValue(matcher,prefix+"background");
-        //int borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
 
         if(!transparent) {
             g.setPaint(background_color);
