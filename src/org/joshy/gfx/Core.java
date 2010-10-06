@@ -7,6 +7,10 @@ import org.joshy.gfx.stage.swing.SwingCore;
 import org.joshy.gfx.util.u;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+
+import org.joshy.gfx.event.FocusManager;
 
 /**
  * Created by IntelliJ IDEA.
@@ -90,4 +94,19 @@ public abstract class Core {
     }
 
     public abstract void reloadSkins();
+
+    public static void setDebugCSS(File file) {
+        Core.getShared().addDebugCSS(file);
+    }
+    public static void requestDebugCSS() {
+        FileDialog fd = new FileDialog((Frame)null);
+        fd.setTitle("Select Debugging CSS File");
+        fd.setMode(FileDialog.LOAD);
+        fd.show();
+        if(fd.getFile() != null) {
+                Core.getShared().addDebugCSS(new File(fd.getDirectory(),fd.getFile()));
+        }
+    }
+
+    protected abstract void addDebugCSS(File file);
 }

@@ -22,9 +22,9 @@ public abstract class Shape extends Node {
         fill = new FlatColor(0,0,0,1);
     }
 
-    public void setFill(Paint fillPaint) {
+    public Shape setFill(Paint fillPaint) {
         this.fill = fillPaint;
-
+        return this;
     }
 
     public void setRotationAxis(Transform axis) {

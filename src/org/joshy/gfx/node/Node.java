@@ -2,7 +2,6 @@ package org.joshy.gfx.node;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.util.u;
 
 public abstract class Node {
     protected Parent parent;
@@ -32,9 +31,10 @@ public abstract class Node {
         return this.translateX;
     }
 
-    public void setTranslateX(double translateX) {
+    public Node setTranslateX(double translateX) {
         this.translateX = translateX;
         setDrawingDirty();
+        return this;
     }
     
 
@@ -44,9 +44,10 @@ public abstract class Node {
         return translateY;
     }
 
-    public void setTranslateY(double translateY) {
+    public Node setTranslateY(double translateY) {
         this.translateY = translateY;
         setDrawingDirty();
+        return this;
     }
     
     public abstract Bounds getVisualBounds();

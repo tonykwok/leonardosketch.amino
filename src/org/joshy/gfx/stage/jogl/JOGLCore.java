@@ -12,6 +12,7 @@ import org.joshy.gfx.util.u;
 import org.parboiled.support.ParsingResult;
 
 import javax.swing.*;
+import java.io.File;
 import java.net.URL;
 
 public class JOGLCore extends Core {
@@ -55,6 +56,11 @@ public class JOGLCore extends Core {
 
     @Override
     public void reloadSkins() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void addDebugCSS(File file) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 }
