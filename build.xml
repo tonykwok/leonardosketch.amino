@@ -2,7 +2,7 @@
             
 <project default="help">
     <target name="help">
-        <echo>ant build      build and package the entire project, including jnlps</echo>
+        <echo>ant dist      build and package the entire project, including jnlps</echo>
     </target>
 
     <target name="init">
@@ -87,7 +87,20 @@
         </javadoc>
     </target>
     
-    <target name="dist" depends="build-core, core-docs">
+    <target name="dist" depends="build-core, core-docs, build-src">
+    </target>
+    
+    <target name="build-src" depends="init">
+        <mkdir dir="dist"/>
+        <zip destfile="dist/amino.src.zip">
+            <zipfileset dir=".">
+                <include name="build.xml"/>
+                <include name="lib/**"/>
+                <include name="src/**"/>
+                <include name="test/**"/>
+            </zipfileset>
+<!--            <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>-->
+        </zip>        
     </target>
     
     <target name="publish" depends="dist">
