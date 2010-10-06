@@ -52,7 +52,7 @@ public class PopupMenu extends Control {
 
     private void processMouse(MouseEvent event) {
         long currentTime = new Date().getTime();
-        if(event.getType() == MouseEvent.MouseDragged || event.getType() == MouseEvent.MouseMoved) {
+        if(event.getType() == MouseEvent.MouseDragged || event.getType() == MouseEvent.MouseDraggedRaw || event.getType() == MouseEvent.MouseMoved) {
             hoverRow = (int)(event.getY()/rowHeight);
             setDrawingDirty();
         }

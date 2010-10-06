@@ -30,16 +30,16 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
             }
         });
         setSelectedIndex(0);
-        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+/*        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
-                processMouse(event);
+                //processMouse(event);
             }
-        });
+        });*/
     }
-
+/*
     private void processMouse(MouseEvent event) {
         
-    }
+    }*/
 
     public void setModel(ListModel<E> model) {
         this.model = model;
