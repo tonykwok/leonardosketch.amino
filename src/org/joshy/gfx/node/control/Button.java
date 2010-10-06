@@ -4,7 +4,6 @@ import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
@@ -20,7 +19,6 @@ public class Button extends Control {
     protected boolean selectable = false;
     protected String style;
     private Callback<ActionEvent> callback;
-    protected Font font;
     private BoxPainter boxPainter;
 
     public boolean isSelected() {
@@ -110,7 +108,6 @@ public class Button extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        font = cssSkin.getDefaultFont();
         setLayoutDirty();
     }
 
@@ -161,17 +158,6 @@ public class Button extends Control {
             }
 
             boxPainter.draw(g, size, this, text);
-            //cssSkin.draw(g, size, this, text, buttonStateToCssState(state));
-            //debugging
-            if(false) {
-                g.setPaint(FlatColor.WHITE);
-                g.fillRect(0,0,50,50);
-                g.setPaint(FlatColor.BLUE);
-                g.fillRoundRect(10,10,20,20,10,10);
-                g.setPaint(FlatColor.BLACK);
-                g.drawRoundRect(10,10,20,20,10,10);
-            }
-            return;
         }
 
     }

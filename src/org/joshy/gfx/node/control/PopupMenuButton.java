@@ -114,7 +114,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         if(textRenderer != null) {
             s = textRenderer.toString(this,o,0);
         }
-        Font.drawCenteredVertically(g, s, font,6, 0, getWidth(), getHeight(), true);
+        Font.drawCenteredVertically(g, s, cssSkin.getDefaultFont(),6, 0, getWidth(), getHeight(), true);
     }
 
     public E getSelectedItem() {

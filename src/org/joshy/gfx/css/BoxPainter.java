@@ -55,10 +55,10 @@ public class BoxPainter {
             }
             if(borderRadius == 0) {
                 g.fillRect(
-                        0+margin.getLeft(),
-                        0+margin.getTop(),
-                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                        bounds.getHeight()-margin.getTop()-margin.getBottom()
+                        0,
+                        0,
+                        bounds.getWidth(),
+                        bounds.getHeight()
                         );
             } else {
                 g.fillRoundRect(
@@ -84,10 +84,10 @@ public class BoxPainter {
                 if(borderWidth.allEqual()) {
                     gfx.setStrokeWidth(borderWidth.getLeft());
                     gfx.drawRect(
-                            bounds.getX()+margin.getLeft(),
-                            bounds.getY()+margin.getTop(),
-                            bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                            bounds.getHeight()-margin.getTop()-margin.getBottom()
+                            bounds.getX(),
+                            bounds.getY(),
+                            bounds.getWidth(),
+                            bounds.getHeight()
                     );
                     gfx.setStrokeWidth(1);
                 } else {

@@ -10,6 +10,7 @@ import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class LayoutTests implements Runnable {
 
     public static void main(String ... args) throws Exception {
         Core.init();
+        Core.setDebugCSS(new File("/Users/joshmarinacci/projects/personal/amino/test.css"));
         Core.getShared().defer(new LayoutTests());
-
     }
 
     public void run() {

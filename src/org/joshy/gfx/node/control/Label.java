@@ -1,6 +1,8 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -18,6 +20,8 @@ public class Label extends Control {
     private Font font;
     private double baseline;
     private FlatColor fill;
+    private CSSSkin.BoxState size;
+    private BoxPainter boxPainter;
 
     public Label(String text) {
         this.fill = FlatColor.BLACK;
@@ -27,40 +31,45 @@ public class Label extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        font = cssSkin.getDefaultFont();
-    }
-
-    @Override
-    public void doLayout() {
-        /*
-        double tw = font.calculateWidth(text);
-        double th = font.calculateHeight(text);
-        baseline = font.getAscender();
-        setWidth(tw);
-        setHeight(th);*/
+        setLayoutDirty();
     }
 
     @Override
     public void doPrefLayout() {
-        double tw = font.calculateWidth(text);
-        double th = font.calculateHeight(text);
-        baseline = font.getAscender();
-        setWidth(tw);
-        setHeight(th);
+        size = cssSkin.getSize(this,text);
+        if(prefWidth != CALCULATED) {
+            setWidth(prefWidth);
+            size.width = prefWidth;
+        } else {
+            setWidth(size.width);
+        }
+        setHeight(size.height);
+        boxPainter = cssSkin.createBoxPainter(this,size,text,CSSSkin.State.None);
+    }
+
+    @Override
+    public void doLayout() {
+        if(size != null) {
+            size.width = getWidth();
+            size.height = getHeight();
+        }
     }
 
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
-        if(fill != null && text != null) {
-            g.setPaint(fill);
-            g.drawText(text, font, 0, baseline);
+        if(cssSkin != null) {
+            if(size == null) {
+                doPrefLayout();
+            }
+            boxPainter.draw(g, size, this, text);
         }
     }
 
     public void setText(String text) {
         this.text = text;
         setLayoutDirty();
+        setDrawingDirty();
     }
 
     @Override
@@ -70,7 +79,10 @@ public class Label extends Control {
 
     @Override
     public double getBaseline() {
-        return baseline;
+        if(size == null) {
+            doPrefLayout();
+        }
+        return size.margin.getTop() + size.borderWidth.getTop() + size.padding.getTop() + size.contentBaseline;
     }
 
     public Label setFill(FlatColor fill) {

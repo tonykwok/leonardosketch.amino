@@ -33,6 +33,8 @@
 
 Label {
     border-width: 0px;
+    background-color: transparent;
+    shrink-to-fit: true;
 }
 
 Button, Togglebutton {
