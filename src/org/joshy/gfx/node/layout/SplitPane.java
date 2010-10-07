@@ -77,58 +77,6 @@ public class SplitPane extends AbstractPane {
         return this;
     }
 
-    @Override
-    public void draw(GFX g) {
-        g.setPaint(FlatColor.BLACK);
-        if(vertical) {
-            g.fillRect(0,position-dividerWidth/2,getWidth(),dividerWidth);
-        } else {
-            g.fillRect(position-dividerWidth/2,0,dividerWidth,getHeight());
-        }
-        for(Node child : children()) {
-            g.translate(child.getTranslateX(),child.getTranslateY());
-            child.draw(g);
-            g.translate(-child.getTranslateX(),-child.getTranslateY());
-        }
-        this.drawingDirty = false;
-    }
-
-    @Override
-    public void doLayout() {
-        if(first != null) {
-            first.setTranslateX(0);
-            first.setTranslateY(0);
-            if(vertical) {
-                first.setHeight(position-dividerWidth/2);
-                first.setWidth(getWidth());
-            } else {
-                first.setWidth(position-dividerWidth/2);
-                first.setHeight(getHeight());
-            }
-        }
-        if(second != null) {
-            if(vertical) {
-                second.setTranslateY(position+dividerWidth/2);
-                second.setTranslateX(0);
-                second.setHeight(getHeight()-position-dividerWidth/2);
-                second.setWidth(getWidth());
-            } else {
-                second.setTranslateX(position+dividerWidth/2);
-                second.setTranslateY(0);
-                second.setWidth(getWidth()-position-dividerWidth/2);
-                second.setHeight(getHeight());
-            }
-        }
-        
-        // the main layout pass
-        for(Node n : children()) {
-            if(n instanceof Control) {
-                ((Control)n).doPrefLayout();
-                ((Control)n).doLayout();
-            }
-        }
-    }
-
     public SplitPane setPosition(double position) {
         this.position = position;
         setLayoutDirty();
@@ -155,6 +103,65 @@ public class SplitPane extends AbstractPane {
             list.add(first);
         }
         return list;
+    }
+
+    @Override
+    public void doLayout() {
+        // the main layout pass
+        for(Node n : children()) {
+            if(n instanceof Control) {
+                ((Control)n).doPrefLayout();
+            }
+        }
+
+        if(first != null) {
+            first.setTranslateX(0);
+            first.setTranslateY(0);
+            if(vertical) {
+                first.setHeight(position-dividerWidth/2);
+                first.setWidth(getWidth());
+            } else {
+                first.setWidth(position-dividerWidth/2);
+                first.setHeight(getHeight());
+            }
+        }
+        if(second != null) {
+            if(vertical) {
+                second.setTranslateY(position+dividerWidth/2);
+                second.setTranslateX(0);
+                second.setHeight(getHeight()-position-dividerWidth/2);
+                second.setWidth(getWidth());
+            } else {
+                second.setTranslateX(position+dividerWidth/2);
+                second.setTranslateY(0);
+                second.setWidth(getWidth()-position-dividerWidth/2);
+                second.setHeight(getHeight());
+            }
+        }
+
+        // the main layout pass
+        for(Node n : children()) {
+            if(n instanceof Control) {
+                ((Control)n).doLayout();
+            }
+        }
+    }
+
+
+    @Override
+    public void draw(GFX g) {
+        g.setPaint(FlatColor.BLACK);
+        if(vertical) {
+            g.fillRect(0,position-dividerWidth/2,getWidth(),dividerWidth);
+        } else {
+            g.fillRect(position-dividerWidth/2,0,dividerWidth,getHeight());
+        }
+        for(Node child : children()) {
+            g.translate(child.getTranslateX(),child.getTranslateY());
+            child.draw(g);
+            g.translate(-child.getTranslateX(),-child.getTranslateY());
+        }
+        this.drawingDirty = false;
     }
 
 
