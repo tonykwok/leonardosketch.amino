@@ -103,7 +103,7 @@ public class LayoutTests implements Runnable {
             return new HFlexBox().add(new Button("Label"),new Button("Button"), new Button("Popup List"));
         }
         if(BUTTON_SIZING.equals(testName)) {
-            return new HFlexBox().add(new Button("long b").setPrefWidth(100));
+            return new HFlexBox().add(new Button("pref width == 200px").setPrefWidth(200));
         }
         
         if(SIMPLE_HBOX.equals(testName)) {
