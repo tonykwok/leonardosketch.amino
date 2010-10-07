@@ -1,5 +1,7 @@
 package org.joshy.gfx.node.layout;
 
+import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 
@@ -41,32 +43,35 @@ public class HFlexBox extends FlexBox {
     }
 
     @Override
+    protected void drawSelf(GFX g) {
+        super.drawSelf(g);
+        //g.setPaint(FlatColor.RED);
+        //g.drawLine(0,maxBaseline,getWidth(),maxBaseline);
+    }
+
+    double maxBaseline = 0;
+    @Override
     public void doLayout() {
         if(insets == null) doPrefLayout();
-
-        /*
-          hbox.doLayout would do:
-             call doPrefLayout on all children
-             calc metrics based on getLayoutBounds() on all children
-             set actual dimensions of all children
-             call doLayout() on all children
-        */
 
         //set children to their preferred width first
         //and calc total width & flex
         double totalWidth = 0;
         double totalFlex = 0;
+        maxBaseline = 0;
         for(Control c : controlChildren()) {
             if(!c.isVisible()) continue;
             c.doPrefLayout();
             Bounds bounds = c.getLayoutBounds();
             totalWidth += bounds.getWidth();
             totalFlex += spaceMap.get(c);
-            //double baseline = c.getBaseline();
+            maxBaseline = Math.max(maxBaseline,c.getBaseline());
         }
 
         double totalExcess = getWidth()-totalWidth-insets.getLeft()-insets.getRight();
 
+        //max baseline == height from top of hbox to baseline of all nodes.
+        //now set each control to be c.y=baseline-c.height
         double x = 0;
         for(Control c : controlChildren()) {
             if(!c.isVisible()) continue;            
@@ -87,8 +92,7 @@ public class HFlexBox extends FlexBox {
             if(align == Align.Top) {
                 c.setTranslateY(0+insets.getTop());
             } else if(align == Align.Baseline) {
-                double baseline = c.getBaseline();
-                c.setTranslateY(getHeight()-baseline+insets.getTop());
+                c.setTranslateY(insets.getTop() + maxBaseline-c.getBaseline());
             } else if(align == Align.Bottom) {
                 c.setTranslateY(getHeight()-bounds.getHeight()+insets.getTop());
             } else if (align == Align.Stretch) {

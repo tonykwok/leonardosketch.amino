@@ -46,7 +46,6 @@ public abstract class FlexBox extends Panel {
 
     @Override
     public FlexBox add(Node control) {
-        u.p("adding: " + control);
         if(control instanceof Control) {
             this.spaceMap.put((Control)control,NONE);
         }
