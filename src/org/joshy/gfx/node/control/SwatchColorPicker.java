@@ -59,10 +59,6 @@ public class SwatchColorPicker extends Button {
     }
 
     @Override
-    public void doSkins() {
-    }
-
-    @Override
     public void draw(GFX g) {
         if(!isVisible())return;
         g.setPaint(FlatColor.WHITE);
