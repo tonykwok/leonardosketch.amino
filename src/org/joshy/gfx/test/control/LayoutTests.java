@@ -114,7 +114,12 @@ public class LayoutTests implements Runnable {
         if(SIMPLE_HBOX_BASELINE.equals(testName)) {
             return new HFlexBox()
                     .setBoxAlign(FlexBox.Align.Baseline)
-                    .add(new Label("Label"), new Button("Button"), createPopup("Popup List"));
+                    .add(
+                            new Label("Label")
+                            , new Button("Button")
+                            , createPopup("Popup List")
+                            , new Textbox("this is a text box")
+                    );
         }
         if(SIMPLE_HBOX_BOTTOM.equals(testName)) {
             return new HFlexBox()

@@ -226,7 +226,10 @@ Scrollbar:vertical {
 
 /* ============== text box ============= */
 Textbox, Passwordbox {
-    padding: 6px;
+    margin: 3px;
+    padding: 5px;
+    border-color: #888888;
+    border-width: 1px;
     background-color: #d0d0d0;
     shrink-to-fit: true;
 }
@@ -243,7 +246,7 @@ PopupMenuButton {
     color: #444444;
     border-color: #808080;
     border-radius: 11px;
-    padding: 2px;
+    padding: 3px;
 }
 
 PopupMenu {

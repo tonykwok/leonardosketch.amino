@@ -333,9 +333,10 @@ public abstract class TextControl extends Control implements Focusable {
         setDrawingDirty();
     }
 
-    public void setText(String text) {
+    public TextControl setText(String text) {
         this.text = text;
         setDrawingDirty();
+        return this;
     }
 
     public void setFont(Font font) {
