@@ -1,6 +1,5 @@
 package org.joshy.gfx.node.layout;
 
-import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.Control;
 
 /**
@@ -11,18 +10,24 @@ import org.joshy.gfx.node.control.Control;
 * To change this template use File | Settings | File Templates.
 */
 public class StackPanel extends Panel {
+
     @Override
-    public void doLayout() {
+    public void doPrefLayout() {
+        super.doPrefLayout();
         for(Control c : controlChildren()) {
             c.doPrefLayout();
-            c.doLayout();
-            c.setWidth(getWidth());
-            c.setHeight(getHeight());
         }
     }
 
     @Override
-    protected void drawSelf(GFX g) {
-        //no op
+    public void doLayout() {
+        for(Control c : controlChildren()) {
+            //c.doPrefLayout();
+            c.setWidth(getWidth());
+            c.setHeight(getHeight());
+            c.doLayout();
+        }
     }
+
+
 }

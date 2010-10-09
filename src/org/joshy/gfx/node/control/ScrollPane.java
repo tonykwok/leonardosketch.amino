@@ -42,6 +42,15 @@ public class ScrollPane extends AbstractPane {
         hscroll.setParent(this);
         contentWrapper = new Container() {
             @Override
+            public void doPrefLayout() {
+                for(Node n : children()) {
+                    if(n instanceof Control) {
+                        ((Control)n).doPrefLayout();
+                    }
+                }
+            }
+
+            @Override
             public void doLayout() {
                 for(Node n : children()) {
                     if(n instanceof Control) {
@@ -118,14 +127,19 @@ public class ScrollPane extends AbstractPane {
     }
 
     @Override
-    public void doLayout() {
-        // the main pref layout pass
+    public void doPrefLayout() {
+        vscroll.doPrefLayout();
+        hscroll.doPrefLayout();
         for(Node n : children()) {
             if(n instanceof Control) {
                 ((Control)n).doPrefLayout();
             }
         }
-        
+    }
+
+    @Override
+    public void doLayout() {
+        // the main pref layout pass
         vscroll.setTranslateX(getWidth()-vscroll.getWidth());
         if(horizontalScrollVisible) {
             vscroll.setHeight(getHeight()-hscroll.getHeight());
