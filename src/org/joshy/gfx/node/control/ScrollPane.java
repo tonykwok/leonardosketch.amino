@@ -2,9 +2,7 @@ package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.ChangedEvent;
-import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.AbstractPane;
@@ -86,6 +84,25 @@ public class ScrollPane extends AbstractPane {
                     contentWrapper.setTranslateX(hscrollValue);
                 }
                 setDrawingDirty();
+            }
+        });
+        EventBus.getSystem().addListener(Scope.Container, contentWrapper, ScrollEvent.ScrollAll, new Callback<ScrollEvent>(){
+            @Override
+            public void call(ScrollEvent event) {
+                if(ScrollEvent.ScrollVertical == event.getType()) {
+                    if(event.getAmount() > 0) {
+                        vscroll.incrementValue(vscroll.getSmallScrollAmount());
+                    } else {
+                        vscroll.incrementValue(-vscroll.getSmallScrollAmount());
+                    }
+                }
+                if(ScrollEvent.ScrollHorizontal == event.getType()) {
+                    if(event.getAmount() > 0) {
+                        hscroll.incrementValue(hscroll.getSmallScrollAmount());
+                    } else {
+                        hscroll.incrementValue(-hscroll.getSmallScrollAmount());
+                    }
+                }
             }
         });
         setContent(new Panel());

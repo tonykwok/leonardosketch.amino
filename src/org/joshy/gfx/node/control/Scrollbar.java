@@ -56,6 +56,10 @@ public class Scrollbar extends Control {
         });
     }
 
+    public void incrementValue(double amount) {
+        setValue(getValue()+amount);
+    }
+
     private void processInput(MouseEvent event) {
         double ex = event.getX();
         double ey = event.getY();
@@ -317,4 +321,10 @@ public class Scrollbar extends Control {
     public double getSpan() {
         return span;
     }
+
+
+    public double getSmallScrollAmount() {
+        return smallScroll;
+    }
+
 }

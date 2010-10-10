@@ -73,10 +73,13 @@ public class EventBus {
         for(MatchRule rule : callbackMap.keySet()) {
             if(rule.type.matches(event.getType())) {
 //                u.p("checking rule: " + rule.type);
+                //check if everything matches first
                 if(rule.source != null & rule.source != event.getSource()) continue;
+                //do all of the direct registered callbacks
                 for(Callback cb : callbacks.get(rule)) {
                     cb.call(event);
                 }
+                //if key event, process up the stack if not accepted
                 if(event.type == KeyEvent.KeyPressed) {
 //                    u.p("it's a key event");
                     KeyEvent ke = (KeyEvent) event;
@@ -87,7 +90,11 @@ public class EventBus {
                         processContainerScope(ke);
                     }
                 }
+                //if mouse event, process up the stack if not accepted
                 if(MouseEvent.MouseAll.matches(event.type)) {
+                    processContainerScope(event);
+                }
+                if(ScrollEvent.ScrollAll.matches(event.type)) {
                     processContainerScope(event);
                 }
             }

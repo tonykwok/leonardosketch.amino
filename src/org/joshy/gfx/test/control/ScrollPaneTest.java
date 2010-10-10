@@ -1,11 +1,15 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.ScrollEvent;
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.shape.Oval;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,6 +39,13 @@ public class ScrollPaneTest implements Runnable {
         oval.setWidth(700);
         oval.setHeight(1000);
         scroll.setContent(oval);
+
+        EventBus.getSystem().addListener(oval, ScrollEvent.ScrollAll, new Callback<ScrollEvent>(){
+            @Override
+            public void call(ScrollEvent event) {
+                //u.p("got a scrll event: " + event);
+            }
+        });
 
         ListView list = new ListView();
         list.setModel(new ListModel<String>(){
