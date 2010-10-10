@@ -94,10 +94,10 @@ public class EventBus {
                 if(MouseEvent.MouseAll.matches(event.type)) {
                     processContainerScope(event);
                 }
-                if(ScrollEvent.ScrollAll.matches(event.type)) {
-                    processContainerScope(event);
-                }
             }
+        }
+        if(ScrollEvent.ScrollAll.matches(event.type)) {
+            processContainerScope(event);
         }
         event.finished();
     }
