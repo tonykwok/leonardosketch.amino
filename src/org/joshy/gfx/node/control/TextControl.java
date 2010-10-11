@@ -49,7 +49,7 @@ public abstract class TextControl extends Control implements Focusable {
     protected TextSelection selection = new TextSelection(this);
 
     protected TextControl() {
-        currentCursorPoint = new CursorPoint(0,0,0,0,0,0,0);
+        currentCursorPoint = new CursorPoint(0,0,1,20,0,0,0);
 
         EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
@@ -63,7 +63,9 @@ public abstract class TextControl extends Control implements Focusable {
                     currentCursorPoint = mouseXYToCursorPoint(ex,ey,text);
                     u.p("set to : " + currentCursorPoint);
                 } else {
-                    currentCursorPoint = new CursorPoint(0,0,0,0,0,0,0);
+                    Font font = getFont();
+                    double cursorH = font.getAscender() + font.getDescender();
+                    currentCursorPoint = new CursorPoint(0,0,1,cursorH,0,0,0);
                 }
                 if(!selection.isActive()) {
                     selection.setStart(currentCursorPoint);
@@ -80,7 +82,7 @@ public abstract class TextControl extends Control implements Focusable {
                 if(text.length() >= 1) {
                     currentCursorPoint = mouseXYToCursorPoint(event.getX(),event.getY(),text);
                 } else {
-                    currentCursorPoint = new CursorPoint(0,0,0,0,0,0,0);
+                    currentCursorPoint = new CursorPoint(0,0,1,20,0,0,0);
                 }
                 if(selection.isActive()) {
                     selection.setEnd(currentCursorPoint);

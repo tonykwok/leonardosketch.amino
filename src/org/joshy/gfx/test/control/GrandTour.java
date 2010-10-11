@@ -37,7 +37,8 @@ public class GrandTour implements Runnable {
         examples.add(new Example("Text controls") {
             public Control build() {
                 Textbox tb = new Textbox();
-                tb.setText("a textbox");
+                //tb.setText("a textbox");
+                tb.setPrefWidth(150);
                 Passwordbox passbox = new Passwordbox();
                 passbox.setText("password");
                 Textarea ta = new Textarea();
