@@ -44,6 +44,7 @@ public class ScrollPaneTest implements Runnable {
         });
                         */
         ListView list = new ListView();
+        list.setRowHeight(50);
         list.setModel(new ListModel<String>(){
 
             public String get(int i) {

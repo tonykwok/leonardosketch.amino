@@ -8,6 +8,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 import java.util.List;
 
@@ -71,10 +72,14 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
                     int startRow = (int)(-scrollY/rowHeight);
                     int startCol = (int)(-scrollX/colWidth);
                     int index = 0;
-                    int row = (int) (event.getY()/rowHeight+startRow);
+                    int voff = (int) (scrollY % rowHeight);
+                    int ay = (int) (event.getY()-voff);
+                    int erow = (int) (ay / rowHeight);
+                    erow += startRow;
+                    int row = (int) ((event.getY()+voff)/rowHeight+startRow);
                     int col = (int) (event.getX()/colWidth+startCol);
                     switch(orientation) {
-                        case Vertical: index = (int) ((event.getY()/rowHeight)+startRow); break;
+                        case Vertical: index = erow; break;
                         case Horizontal: index = (int) (event.getX()/colWidth+startCol); break;
                         case HorizontalWrap:
                             int rowLength = (int) (getWidth()/colWidth);
