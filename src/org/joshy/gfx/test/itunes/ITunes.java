@@ -113,7 +113,7 @@ public class ITunes implements Runnable {
             final ScrollPane sourcePane = new ScrollPane();
             sourcePane.setWidth(200);
             sourcePane.setContent(sourceList);
-            sourcePane.setHorizontalScrollVisible(false);
+//            sourcePane.setHorizontalScrollVisible(false);
 
             final TableView playList = new TableView();
             playList.setModel(new PlaylistModel());

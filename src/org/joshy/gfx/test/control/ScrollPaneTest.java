@@ -27,7 +27,7 @@ public class ScrollPaneTest implements Runnable {
         ScrollPane scroll = new ScrollPane();
         //scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
         //scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Always);
-        scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
+        scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         //scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         //scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.Always);
         scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);

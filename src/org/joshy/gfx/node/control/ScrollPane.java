@@ -27,7 +27,6 @@ public class ScrollPane extends AbstractPane {
     private Container contentWrapper;
     private double vscrollValue;
     private double hscrollValue;
-    private boolean horizontalScrollVisible = true;
     private VisiblePolicy horizontalVisiblePolicy = VisiblePolicy.Always;
     private VisiblePolicy verticalVisiblePolicy = VisiblePolicy.Always;
 
@@ -156,37 +155,6 @@ public class ScrollPane extends AbstractPane {
 
     @Override
     public void doLayout() {
-        // the main pref layout pass
-        vscroll.setTranslateX(getWidth()-vscroll.getWidth());
-        if(horizontalScrollVisible) {
-            vscroll.setHeight(getHeight()-hscroll.getHeight());
-        } else {
-            vscroll.setHeight(getHeight());
-        }
-        hscroll.setTranslateY(getHeight()-hscroll.getHeight());
-        hscroll.setWidth(getWidth()-vscroll.getWidth());
-
-
-        Bounds cBounds = content.getVisualBounds();
-        if(content instanceof ScrollingAware) {
-            ScrollingAware sa = (ScrollingAware) content;
-            cBounds = new Bounds(0,0,sa.getFullWidth(getWidth(),getHeight()),sa.getFullHeight(getWidth(),getHeight()));
-            if(sa instanceof Control) {
-                Control control = (Control) sa;
-                control.setWidth(getWidth()-vscroll.getWidth());
-                control.setHeight(getHeight()-hscroll.getHeight());
-            }
-        }
-        hscroll.setMin(0);
-        double hmax =  cBounds.getWidth()-getWidth()+vscroll.getWidth();
-        if(hmax < 0) {
-            hscroll.setMax(0);
-            hscroll.setSpan(1);
-        } else {
-            hscroll.setMax(hmax);
-            hscroll.setSpan(getWidth()/cBounds.getWidth());
-        }
-
         if(horizontalVisiblePolicy == VisiblePolicy.Never) {
             hscroll.setVisible(false);
         }
@@ -200,6 +168,44 @@ public class ScrollPane extends AbstractPane {
                 hscroll.setVisible(true);
             }
         }
+        double vInset = hscroll.getHeight();
+        if(!hscroll.isVisible()) {
+            vInset = 0;
+        }
+
+
+        // the main pref layout pass
+        vscroll.setTranslateX(getWidth()-vscroll.getWidth());
+        vscroll.setHeight(getHeight()-vInset);
+/*        if(hscroll.isVisible()) {
+            vscroll.setHeight(getHeight()-hscroll.getHeight());
+        } else {
+            vscroll.setHeight(getHeight());
+        }*/
+        hscroll.setTranslateY(getHeight()-vInset);
+        hscroll.setWidth(getWidth()-vscroll.getWidth());
+
+
+        Bounds cBounds = content.getVisualBounds();
+        if(content instanceof ScrollingAware) {
+            ScrollingAware sa = (ScrollingAware) content;
+            cBounds = new Bounds(0,0,sa.getFullWidth(getWidth(),getHeight()),sa.getFullHeight(getWidth(),getHeight()));
+            if(sa instanceof Control) {
+                Control control = (Control) sa;
+                control.setWidth(getWidth()-vscroll.getWidth());
+                control.setHeight(getHeight()-vInset);
+            }
+        }
+        hscroll.setMin(0);
+        double hmax =  cBounds.getWidth()-getWidth()+vscroll.getWidth();
+        if(hmax < 0) {
+            hscroll.setMax(0);
+            hscroll.setSpan(1);
+        } else {
+            hscroll.setMax(hmax);
+            hscroll.setSpan(getWidth()/cBounds.getWidth());
+        }
+
 
 
         double vmax = cBounds.getHeight()-getHeight();
@@ -245,11 +251,6 @@ public class ScrollPane extends AbstractPane {
         }
     }
 
-    public void setHorizontalScrollVisible(boolean visible) {
-        this.horizontalScrollVisible = visible;
-        hscroll.setVisible(visible);
-    }
-
     public Iterable<? extends Node> children() {
         List<Node> childs = new ArrayList<Node>();
         childs.add(contentWrapper);
@@ -286,7 +287,11 @@ public class ScrollPane extends AbstractPane {
         //vertical adjustments
         //calc if we need to scroll down to reveal more at the bottom
         // (subtract off the value of the horiz scrollbar width
-        double diff = bounds.getY()+bounds.getHeight() - (h-20-vscrollValue);
+        double vInset = 20;
+        if(!hscroll.isVisible()) {
+            vInset = 0;
+        }
+        double diff = bounds.getY()+bounds.getHeight() - (h-vInset-vscrollValue);
         //calc if we need to scroll up to reveal more on top
         double diff2 = h + bounds.getY() - (getHeight()-vscrollValue);
         if(diff > 0) {
