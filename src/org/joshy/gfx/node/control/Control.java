@@ -19,6 +19,7 @@ public abstract class Control extends Node {
     protected double height = 0;
     protected double prefWidth = CALCULATED;
     protected double prefHeight = CALCULATED;
+    private boolean enabled = true;
     
     protected boolean skinsDirty;
     protected boolean layoutDirty;
@@ -152,6 +153,15 @@ public abstract class Control extends Node {
 
     public double getPrefHeight() {
         return prefHeight;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public Control setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
     }
 }
 

@@ -27,7 +27,9 @@ public class GrandTour implements Runnable {
                 FlexBox box = new VFlexBox()
                         .setBoxAlign(FlexBox.Align.Left)
                         .add(new Button("Regular Button"))
+                        .add(new Button("Disabled Button").setEnabled(false))
                         .add(new Togglebutton("Toggle Button"))
+                        .add(new Togglebutton("Disabled Toggle").setEnabled(false))
                         .add(new Checkbox("Check box"))
                         .add(new Radiobutton("Radio button"))
                         .add(new Linkbutton("a hyperlink"));
@@ -37,7 +39,8 @@ public class GrandTour implements Runnable {
         examples.add(new Example("Text controls") {
             public Control build() {
                 Textbox tb = new Textbox();
-                //tb.setText("a textbox");
+                tb.setText("012345");
+                tb.selectAll();
                 tb.setPrefWidth(150);
                 Passwordbox passbox = new Passwordbox();
                 passbox.setText("password");

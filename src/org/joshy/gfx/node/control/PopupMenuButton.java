@@ -41,8 +41,9 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         
     }*/
 
-    public void setModel(ListModel<E> model) {
+    public PopupMenuButton<E> setModel(ListModel<E> model) {
         this.model = model;
+        return this;
     }
 
     public PopupMenuButton<E> setTextRenderer(ListView.TextRenderer<E> textRenderer) {

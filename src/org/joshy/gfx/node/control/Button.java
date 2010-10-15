@@ -19,7 +19,7 @@ public class Button extends Control {
     protected boolean selectable = false;
     protected String style;
     private Callback<ActionEvent> callback;
-    private BoxPainter boxPainter;
+    protected BoxPainter boxPainter;
 
     public boolean isSelected() {
         return selected;
@@ -83,6 +83,7 @@ public class Button extends Control {
     }
 
     private void fireAction() {
+        if(!isEnabled()) return;
         ActionEvent action = new ActionEvent(ActionEvent.Action, Button.this);
         EventBus.getSystem().publish(action);
         if(callback != null) {
@@ -136,6 +137,9 @@ public class Button extends Control {
     }
     
     private CSSSkin.State buttonStateToCssState(State state) {
+        if(!isEnabled()) {
+            return CSSSkin.State.Disabled;
+        }
         switch(state) {
             case Selected: return CSSSkin.State.Selected;
             case SelectedPressed: return CSSSkin.State.Selected;

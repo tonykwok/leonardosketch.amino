@@ -29,7 +29,7 @@ public class CSSSkin {
     }
 
     public enum State {
-        Pressed, Hover, Selected, None
+        Pressed, Hover, Selected, Disabled, None
     }
 
     public BoxPainter createBoxPainter(Control control, BoxState boxState, String text, CSSSkin.State state) {
@@ -484,6 +484,9 @@ public class CSSSkin {
 
     public CSSMatcher createMatcher(Control control, State state) {
         CSSMatcher matcher = new CSSMatcher(control);
+        if(state == State.Disabled) {
+            matcher.pseudo = "disabled";
+        }
         if(state == State.Hover) {
             matcher.pseudo = "hover";
         }

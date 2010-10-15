@@ -143,7 +143,6 @@ public class PopupMenu extends Control {
 
     private void drawText(GFX g, Object o, double rowy, int i) {
         String s = o.toString();
-        u.p("popup menu text renderer = " + textRenderer);
         if(textRenderer != null) {
             s = textRenderer.toString(null,o,i);
         }

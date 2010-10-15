@@ -37,7 +37,7 @@ Label {
     shrink-to-fit: true;
 }
 
-Button, Togglebutton {
+.-class-Button, Togglebutton {
     background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
     /* a black shadow offset by 3,2 with a blur radius of 4 */
     text-shadow: #000000 0px 1px 4px;
@@ -73,6 +73,12 @@ Button:hover, Togglebutton:hover {
     background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     color: #ffffff;
     border-color: #808080;
+}
+
+Button:disabled, Togglebutton:disabled {
+    background: none;
+    background-color: #a0a0a0;
+    text-shadow: none;
 }
 
 Togglebutton:selected {
