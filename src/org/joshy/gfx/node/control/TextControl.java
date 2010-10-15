@@ -61,7 +61,6 @@ public abstract class TextControl extends Control implements Focusable {
                     double ex = filterMouseX(event.getX());
                     double ey = filterMouseY(event.getY());
                     currentCursorPoint = mouseXYToCursorPoint(ex,ey,text);
-                    u.p("set to : " + currentCursorPoint);
                 } else {
                     Font font = getFont();
                     double cursorH = font.getAscender() + font.getDescender();
