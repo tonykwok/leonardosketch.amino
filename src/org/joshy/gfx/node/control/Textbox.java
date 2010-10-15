@@ -5,6 +5,9 @@ import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
 
 public class Textbox extends TextControl {
@@ -145,4 +148,13 @@ public class Textbox extends TextControl {
         return text;
     }
 
+    @Override
+    protected void processKeyEvent(KeyEvent event) {
+        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_ENTER) {
+            ActionEvent act = new ActionEvent(ActionEvent.Action,this);
+            EventBus.getSystem().publish(act);
+        } else {
+            super.processKeyEvent(event);
+        }
+    }
 }

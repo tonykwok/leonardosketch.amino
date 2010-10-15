@@ -136,7 +136,7 @@ public abstract class TextControl extends Control implements Focusable {
         return x;
     }
 
-    private void processKeyEvent(KeyEvent event) {
+    protected void processKeyEvent(KeyEvent event) {
         int cursorCharX = cursorPointToCursorChar(currentCursorPoint);
         
         if(event.getKeyCode().equals(KeyEvent.KeyCode.KEY_V) && event.isSystemPressed()) {
