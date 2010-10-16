@@ -87,7 +87,11 @@ public class Button extends Control {
         ActionEvent action = new ActionEvent(ActionEvent.Action, Button.this);
         EventBus.getSystem().publish(action);
         if(callback != null) {
-            callback.call(action);
+            try {
+                callback.call(action);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

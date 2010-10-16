@@ -98,13 +98,14 @@ public abstract class Core {
     public static void setDebugCSS(File file) {
         Core.getShared().addDebugCSS(file);
     }
+    
     public static void requestDebugCSS() {
         FileDialog fd = new FileDialog((Frame)null);
         fd.setTitle("Select Debugging CSS File");
         fd.setMode(FileDialog.LOAD);
-        fd.show();
+        fd.setVisible(true);
         if(fd.getFile() != null) {
-                Core.getShared().addDebugCSS(new File(fd.getDirectory(),fd.getFile()));
+            Core.getShared().addDebugCSS(new File(fd.getDirectory(),fd.getFile()));
         }
     }
 

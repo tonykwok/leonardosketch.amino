@@ -11,7 +11,6 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -25,14 +24,13 @@ import java.util.Date;
 public class PopupMenu extends Control {
     private ListModel model;
     private int hoverRow = -1;
-    private Callback<ChangedEvent> callback;
     private long openTime;
     private ListView.TextRenderer textRenderer;
 
     public PopupMenu(ListModel model, Callback<ChangedEvent> callback) {
         setVisible(true);
         this.model = model;
-        this.callback = callback;
+        EventBus.getSystem().addListener(this, ChangedEvent.IntegerChanged,callback);
         EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
                 processMouse(event);
@@ -74,7 +72,7 @@ public class PopupMenu extends Control {
     }
 
     private void fireSelection(int row) {
-        this.callback.call(new ChangedEvent(ChangedEvent.IntegerChanged,(Integer)row,this));
+        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.IntegerChanged,(Integer)row,this));
     }
 
     double rowHeight = 25;
@@ -156,7 +154,7 @@ public class PopupMenu extends Control {
     }
 
     public void setCallback(Callback<ChangedEvent> callback) {
-        this.callback = callback;
+        EventBus.getSystem().addListener(this,ChangedEvent.IntegerChanged,callback);
     }
 
     public void setTextRenderer(ListView.TextRenderer textRenderer) {

@@ -77,7 +77,11 @@ public class EventBus {
                 if(rule.source != null & rule.source != event.getSource()) continue;
                 //do all of the direct registered callbacks
                 for(Callback cb : callbacks.get(rule)) {
-                    cb.call(event);
+                    try {
+                        cb.call(event);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 //if key event, process up the stack if not accepted
                 if(event.type == KeyEvent.KeyPressed) {
@@ -118,7 +122,11 @@ public class EventBus {
                     if(rule.source == parent && rule.type.matches(event.getType())) {
 //                        u.p("matched the parent");
                         for(Callback cb : callbacks.get(rule)) {
-                            cb.call(event);
+                            try {
+                                cb.call(event);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                         if(event.type == KeyEvent.KeyPressed) {
 //                            u.p("it's a key event");

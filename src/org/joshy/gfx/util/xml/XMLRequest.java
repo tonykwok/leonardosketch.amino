@@ -169,6 +169,10 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
     @Override
     protected void onEnd(Doc document) {
         if(callback == null) return;
-        callback.call(document);
+        try {
+            callback.call(document);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

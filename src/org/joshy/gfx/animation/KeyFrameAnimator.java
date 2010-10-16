@@ -58,7 +58,11 @@ public class KeyFrameAnimator implements Animateable {
     public void onStart(long current) {
         startTime = new Date().getTime();
         if(doBeforeCallback != null) {
-            doBeforeCallback.call(target);
+            try {
+                doBeforeCallback.call(target);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -115,7 +119,11 @@ public class KeyFrameAnimator implements Animateable {
 
     public void onStop(long currentTime) {
         if(doAfterCallback != null) {
-            doAfterCallback.call(target);
+            try {
+                doAfterCallback.call(target);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

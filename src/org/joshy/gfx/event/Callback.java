@@ -8,5 +8,5 @@ package org.joshy.gfx.event;
 * To change this template use File | Settings | File Templates.
 */
 public interface Callback<T> {
-    public void call(T event);
+    public void call(T event) throws Exception;
 }

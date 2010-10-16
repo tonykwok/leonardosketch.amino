@@ -118,13 +118,20 @@ public class MainCSSTest {
 
     @Test
     public void advancedClassTests() {
+
         Button button = new Button();
         button.getCSSClasses().add("class1");
         CSSMatcher matcher = new CSSMatcher(button);
         assertTrue(set.findIntegerValue(matcher,"dummy-prop")==1);
+
         button.getCSSClasses().add("class2");
         assertTrue(set.findIntegerValue(new CSSMatcher(button),"dummy-prop")==3);
         assertTrue(set.findIntegerValue(new CSSMatcher(button),"dummy-prop2")==10);
+
+        CSSMatcher pseudoTest = new CSSMatcher(button);
+        pseudoTest.pseudo = "hover";
+        assertTrue(set.findIntegerValue(pseudoTest,"dummy-prop3")==20);
+        
     }
 
     @Test

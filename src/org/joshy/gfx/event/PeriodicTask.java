@@ -31,7 +31,11 @@ public class PeriodicTask {
     private void doCallback() {
         Core.getShared().defer(new Runnable(){
             public void run() {
-                callback.call(null);
+                try {
+                    callback.call(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

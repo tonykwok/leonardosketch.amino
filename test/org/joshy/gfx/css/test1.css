@@ -111,6 +111,9 @@ Button.classmatch3 {
 .-class-Button {
     dummy-prop2: 10px; 
 }
+.-class-Button:hover {
+    dummy-prop3: 20px;
+}
 
 
 /* constants tests */

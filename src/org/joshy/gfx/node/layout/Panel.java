@@ -42,7 +42,11 @@ public class Panel extends Container {
     public void doLayout() {
         if(insets == null) doPrefLayout();
         if(callback != null) {
-            callback.call(this);
+            try {
+                callback.call(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             super.doLayout();
         }
