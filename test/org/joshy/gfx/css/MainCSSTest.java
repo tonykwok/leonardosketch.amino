@@ -130,7 +130,7 @@ public class MainCSSTest {
 
         CSSMatcher pseudoTest = new CSSMatcher(button);
         pseudoTest.pseudo = "hover";
-        assertTrue(set.findIntegerValue(pseudoTest,"dummy-prop3")==20);
+        assertTrue(set.findIntegerValue(pseudoTest,"dummy-prop3")==25);
         
     }
 

@@ -95,6 +95,7 @@ Linkbutton {
     margin: 2px;
     padding: 3px;
 }
+
 Linkbutton:hover {
     color: #5050ff;
 }

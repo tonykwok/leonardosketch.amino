@@ -4,6 +4,7 @@ import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.ColorValue;
 import org.joshy.gfx.css.values.IntegerPixelValue;
 import org.joshy.gfx.css.values.URLValue;
+import org.joshy.gfx.util.u;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -66,7 +67,8 @@ public class CSSRuleSet {
 
         //match pseudo class
         if(matcher.pseudo != null) {
-            if(matcher.pseudo.equals(elem.pseudo) && matcher.element.equals(elem.element)) {
+            p("looking for pseudo: "+ matcher.pseudo + " " + matcher.element);
+            if(matcher.pseudo.equals(elem.pseudo) && matcher.element != null && matcher.element.equals(elem.element)) {
                 p("matched pseudo on: " + elem);
                 return true;
             }
