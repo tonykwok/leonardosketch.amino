@@ -17,12 +17,12 @@ public class PeriodicTask {
         thread = new Thread(new Runnable(){
             public void run() {
                 while(true) {
-                    doCallback();
                     try {
                         Thread.sleep(time);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    doCallback();
                 }
             }
         });
