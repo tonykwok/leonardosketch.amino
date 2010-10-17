@@ -1,0 +1,149 @@
+package org.joshy.gfx.node.control;
+
+import org.joshy.gfx.event.*;
+import org.joshy.gfx.node.layout.Panel;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: joshmarinacci
+ * Date: Oct 14, 2010
+ * Time: 8:44:11 PM
+ * To change this template use File | Settings | File Templates.
+ */
+public class SpinBox<E extends Number> extends Panel {
+    private Textbox valueBox;
+    E value;
+    private Callback<ChangedEvent> changedCallback;
+    private Label label;
+    private Button incrementButton;
+    private Button decrementButton;
+
+    public SpinBox() {
+        valueBox = new SpinBoxBox();
+        valueBox.setText(""+value);
+        valueBox.setPrefWidth(50);
+        this.label = new Label("");
+        incrementButton = new SpinButton("+",true);
+        decrementButton = new SpinButton("-",false);
+
+        //this.add(label);
+        this.add(valueBox);
+        this.add(incrementButton);
+        incrementButton.onClicked(new Callback<ActionEvent>(){
+                public void call(ActionEvent actionEvent) {
+                    increment(1);
+                    valueBox.setText(""+value);
+                    fireUpdate();
+                }
+            });
+        this.add(decrementButton);
+        decrementButton.onClicked(new Callback<ActionEvent>(){
+                public void call(ActionEvent actionEvent) {
+                    increment(-1);
+                    valueBox.setText(""+value);
+                    fireUpdate();
+                }
+            });
+
+        EventBus.getSystem().addListener(valueBox, FocusEvent.Gained, new Callback<FocusEvent>(){
+            public void call(FocusEvent focusEvent) {
+                valueBox.selectAll();
+            }
+        });
+        EventBus.getSystem().addListener(valueBox, ActionEvent.Action, new Callback<ActionEvent>(){
+            public void call(ActionEvent event) {
+                int va = Integer.parseInt(valueBox.getText());
+                value = (E) new Integer(va);
+                fireUpdate();
+            }
+        });
+
+
+        this.onDoLayout(new Callback<Panel>() {
+            public void call(Panel panel) {
+                for(Control c : controlChildren()) {
+                    c.doPrefLayout();
+                }
+                double h = 31;
+                double l = 40;
+
+                valueBox.setTranslateX(0);
+                valueBox.setTranslateY(0);
+                valueBox.setWidth(l);
+                valueBox.setHeight(h);
+
+                incrementButton.setTranslateX(l);
+                decrementButton.setTranslateX(l);
+                incrementButton.setTranslateY(0);
+                decrementButton.setTranslateY(h/2);
+                incrementButton.setWidth(h/2);
+                decrementButton.setWidth(h/2);
+                incrementButton.setHeight(h/2);
+                decrementButton.setHeight(h/2);
+
+                for(Control c : controlChildren()) {
+                    c.doLayout();
+                }
+            }
+        });
+        setWidth(100);
+        setHeight(100);
+    }
+
+    public SpinBox(String s) {
+        this();
+        this.label.setText(s);
+    }
+
+    private void increment(int i) {
+        if(value instanceof Integer) {
+            int v = value.intValue() + i;
+            value = (E) new Integer(v);
+        }
+    }
+
+    public SpinBox<E> setLabel(String text) {
+        this.label.setText(text);
+        return this;
+    }
+
+    private void fireUpdate() {
+        if(changedCallback != null) {
+            try {
+                changedCallback.call(new ChangedEvent(ChangedEvent.IntegerChanged,value,this));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public SpinBox<E> setValue(E val) {
+        this.value = val;
+        this.valueBox.setText(""+value);
+        return this;
+    }
+    public SpinBox onChanged(Callback<ChangedEvent> callback) {
+        this.changedCallback = callback;
+        return this;
+    }
+
+    private static class SpinButton extends Button {
+        private boolean top;
+
+        public SpinButton(String s, boolean top) {
+            super("");
+            this.top = top;
+            if(top) {
+                cssClasses.add("-SpinButton-top");
+            } else {
+                cssClasses.add("-SpinButton-bottom");
+            }
+        }
+    }
+
+    private static class SpinBoxBox extends Textbox {
+        private SpinBoxBox() {
+            cssClasses.add("-SpinButton-box");
+        }
+    }
+}

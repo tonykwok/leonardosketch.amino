@@ -44,11 +44,14 @@ public class GrandTour implements Runnable {
                 tb.setPrefWidth(150);
                 Passwordbox passbox = new Passwordbox();
                 passbox.setText("password");
+                SpinBox<Integer> spinBox = new SpinBox<Integer>().setValue(99);
+
                 Textarea ta = new Textarea();
                 ta.setText("A\nText\nArea");
                 FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
                         .add(new Label("A Label"))
                         .add(tb)
+                        .add(spinBox)
                         .add(passbox)
                         .add(ta);
                 return box;

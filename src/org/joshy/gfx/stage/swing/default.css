@@ -231,7 +231,8 @@ Scrollbar:vertical {
     height: 100px;
 }
 
-/* ============== text box ============= */
+/* ============== text boxes ============= */
+
 Textbox, Passwordbox {
     margin: 3px;
     padding: 5px;
@@ -240,8 +241,39 @@ Textbox, Passwordbox {
     background-color: #d0d0d0;
     shrink-to-fit: true;
 }
+
 Textbox:active, Passwordbox:active {
     background-color: #ffffff;
+}
+
+SpinButton {
+    margin: 0px;
+    padding: 0px;
+    border-radius: 0px;
+}
+
+SpinButton:hover {
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    color: #ffffff;
+    border-color: #808080;
+}
+
+.-SpinButton-top {
+    margin: 3px 0px 0px 0px;
+    icon: url(images/arrow_up.png);
+}
+
+.-SpinButton-bottom {
+    margin: 0px 0px 2px 0px;
+    padding: 0px;
+    icon: url(images/arrow_down.png);
+}
+
+.-SpinButton-box {
+    margin: 3px 0px 3px 3px;
+    padding: 3px 3px 8px 3px;
+    border-color: #808080;
+    background-color: #d0d0d0;
 }
 
 
