@@ -89,6 +89,11 @@ public abstract class Core {
         return _focusManager;
     }
 
+    /**
+     * Setting testing to true turns off thread checks. This is mainly useful
+     * for running automated unit tests on the current thread.
+     * @param testingt
+     */
     public static void setTesting(boolean testingt) {
         testing = testingt;
     }
