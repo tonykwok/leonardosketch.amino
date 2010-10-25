@@ -5,7 +5,6 @@ import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.util.OSUtil;
-import org.joshy.gfx.util.u;
 
 import java.util.Date;
 

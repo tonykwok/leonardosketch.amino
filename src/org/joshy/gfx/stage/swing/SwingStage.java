@@ -3,6 +3,7 @@ package org.joshy.gfx.stage.swing;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Node;
+import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.node.layout.Panel;
@@ -228,6 +229,10 @@ public class SwingStage extends Stage {
     public double getHeight() {
         return this.frame.getHeight();
 
+    }
+
+    public Parent getRoot() {
+        return root;
     }
 
     private class SceneComponent extends JComponent {

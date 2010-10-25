@@ -151,7 +151,43 @@ public class KeyEvent extends Event {
     public String toString() {
         return type + " code="+keyCode;
     }
-    
+
+    public static KeyCode getKeyCodeFromChar(char ch) {
+//        u.p("ch = " + ch);
+        if(ch >= 'a') {
+            ch-=32;
+        }
+//        u.p("ch = " + ch);
+        switch(ch) {
+            case 'A' : return KeyCode.KEY_A;
+            case 'B' : return KeyCode.KEY_B;
+            case 'C' : return KeyCode.KEY_C;
+            case 'D' : return KeyCode.KEY_D;
+            case 'E' : return KeyCode.KEY_E;
+            case 'F' : return KeyCode.KEY_F;
+            case 'G' : return KeyCode.KEY_G;
+            case 'H' : return KeyCode.KEY_H;
+            case 'I' : return KeyCode.KEY_I;
+            case 'J' : return KeyCode.KEY_J;
+            case 'K' : return KeyCode.KEY_K;
+            case 'L' : return KeyCode.KEY_L;
+            case 'M' : return KeyCode.KEY_M;
+            case 'N' : return KeyCode.KEY_N;
+            case 'O' : return KeyCode.KEY_O;
+            case 'P' : return KeyCode.KEY_P;
+            case 'Q' : return KeyCode.KEY_Q;
+            case 'R' : return KeyCode.KEY_R;
+            case 'S' : return KeyCode.KEY_S;
+            case 'T' : return KeyCode.KEY_T;
+            case 'U' : return KeyCode.KEY_U;
+            case 'V' : return KeyCode.KEY_V;
+            case 'W' : return KeyCode.KEY_W;
+            case 'X' : return KeyCode.KEY_X;
+            case 'Y' : return KeyCode.KEY_Y;
+            case 'Z' : return KeyCode.KEY_Z;
+        }
+        return null;
+    }
     public static KeyCode getKeyCodeFromAWT(int awt) {
 //        u.p("converting awt " + awt + " to ");
         switch(awt) {
