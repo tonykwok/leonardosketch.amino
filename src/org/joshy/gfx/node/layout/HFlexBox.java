@@ -60,7 +60,6 @@ public class HFlexBox extends FlexBox {
         maxBaseline = 0;
         for(Control c : controlChildren()) {
             if(!c.isVisible()) continue;
-            c.doPrefLayout();
             Bounds bounds = c.getLayoutBounds();
             totalWidth += bounds.getWidth();
             totalFlex += spaceMap.get(c);

@@ -74,6 +74,11 @@ public class SwingStage extends Stage {
             }
 
             @Override
+            public void doPrefLayout() {
+                super.doPrefLayout();
+            }
+
+            @Override
             public void doLayout() {
                 contentLayer.setWidth(getWidth());
                 contentLayer.setHeight(getHeight());
@@ -117,15 +122,24 @@ public class SwingStage extends Stage {
         root.setId("root");
         scene = new SceneComponent();
         contentLayer = new Container() {
+            
+            @Override
+            public void doPrefLayout() {
+                for(Node n : children()) {
+                    if(n instanceof Control) {
+                        Control c = (Control) n;
+                        c.doPrefLayout();
+                    }
+                }
+            }
+
             @Override
             public void doLayout() {
                 for(Node n : children()) {
                     if(n instanceof Control) {
                         Control c = (Control) n;
-                        c.doPrefLayout();
                         c.setWidth(getWidth());
                         c.setHeight(getHeight());
-
                         c.doLayout();
                     }
                 }
@@ -261,8 +275,11 @@ public class SwingStage extends Stage {
                 skinsDirty = false;
             }
             if(layoutDirty) {
+                PerformanceTracker.getInstance().layoutStart();
+                doGFXPrefLayout(getWidth(), getHeight());
                 doGFXLayout(getWidth(),getHeight());
                 layoutDirty = false;
+                PerformanceTracker.getInstance().layoutEnd();
             }
             //if paintcomponent was called, then we must always draw
             //if(drawingDirty) {
@@ -277,12 +294,15 @@ public class SwingStage extends Stage {
             PerformanceTracker.getInstance().skinEnd();
         }
 
+        private void doGFXPrefLayout(int width, int height) {
+            root.setWidth(width);
+            root.setHeight(height);
+            root.doPrefLayout();
+        }
         private void doGFXLayout(int width, int height) {
-            PerformanceTracker.getInstance().layoutStart();
             root.setWidth(width);
             root.setHeight(height);
             root.doLayout();
-            PerformanceTracker.getInstance().layoutEnd();
         }
 
         private void doGFXDrawing(Graphics graphics, int width, int height) {

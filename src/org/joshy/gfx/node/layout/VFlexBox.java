@@ -51,7 +51,6 @@ public class VFlexBox extends FlexBox {
         double totalHeight = 0;
         double totalFlex = 0;
         for(Control c : controlChildren()) {
-            c.doPrefLayout();
             Bounds bounds = c.getLayoutBounds();
             if(bounds == null) {
                 u.p("ERROR! control " + c + " is returning null layout bounds: " + bounds );

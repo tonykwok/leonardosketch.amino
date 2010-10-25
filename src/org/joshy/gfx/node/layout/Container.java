@@ -62,12 +62,20 @@ public abstract class Container extends Control implements Parent {
             }
         }
     }
-    
+
     // the main layout pass
-    public void doLayout() {
+    @Override
+    public void doPrefLayout() {
         for(Node n : children()) {
             if(n instanceof Control) {
                 ((Control)n).doPrefLayout();
+            }
+        }
+    }
+    
+    public void doLayout() {
+        for(Node n : children()) {
+            if(n instanceof Control) {
                 ((Control)n).doLayout();
             }
         }

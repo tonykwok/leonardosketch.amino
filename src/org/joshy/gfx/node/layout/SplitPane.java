@@ -106,13 +106,17 @@ public class SplitPane extends AbstractPane {
     }
 
     @Override
-    public void doLayout() {
-        // the main layout pass
+    public void doPrefLayout() {
         for(Node n : children()) {
             if(n instanceof Control) {
                 ((Control)n).doPrefLayout();
             }
         }
+    }
+
+    @Override
+    public void doLayout() {
+        // the main layout pass
 
         if(first != null) {
             first.setTranslateX(0);

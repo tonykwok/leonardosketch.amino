@@ -12,7 +12,17 @@ import org.joshy.gfx.node.control.Control;
  * To change this template use File | Settings | File Templates.
  */
 public class FlowPanel extends Panel {
-    
+
+    @Override
+    public void doPrefLayout() {
+        for(Node child : children) {
+            if(child instanceof Control) {
+                Control control = (Control) child;
+                control.doPrefLayout();
+            }
+        }
+    }
+
     @Override
     public void doLayout() {
         double x = 0;
@@ -20,7 +30,6 @@ public class FlowPanel extends Panel {
         for(Node child : children) {
             if(child instanceof Control) {
                 Control control = (Control) child;
-                control.doPrefLayout();
                 control.doLayout();
             }
             Bounds bounds = child.getVisualBounds();

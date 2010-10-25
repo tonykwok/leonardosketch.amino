@@ -39,9 +39,16 @@ public class TabPanel extends Panel {
     }
 
     @Override
-    public void doLayout() {
+    public void doPrefLayout() {
+        super.doPrefLayout();    //To change body of overridden methods use File | Settings | File Templates.
         for(Control c : controlChildren()) {
             c.doPrefLayout();
+        }
+    }
+
+    @Override
+    public void doLayout() {
+        for(Control c : controlChildren()) {
             if(c == tabtop) {
                 tabtop.setWidth(getWidth());
                 tabtop.setHeight(30);
