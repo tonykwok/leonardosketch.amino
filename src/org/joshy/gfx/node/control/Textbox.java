@@ -1,7 +1,7 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.OldStyleInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -12,7 +12,7 @@ import org.joshy.gfx.node.Bounds;
 
 public class Textbox extends TextControl {
     double xoff = 0;
-    private CSSSkin.BoxState cssSize;
+    private OldStyleInfo cssSize;
 
     public Textbox() {
         setWidth(100);

@@ -3,6 +3,8 @@ package org.joshy.gfx.node.control;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
+import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
@@ -15,7 +17,8 @@ import org.joshy.gfx.node.Bounds;
  */
 public class Label extends Control {
     private String text = "Label";
-    private CSSSkin.BoxState size;
+    private StyleInfo styleInfo;
+    private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
 
     public Label(String text) {
@@ -25,39 +28,38 @@ public class Label extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
+        styleInfo = cssSkin.getStyleInfo(this);
         setLayoutDirty();
     }
 
     @Override
     public void doPrefLayout() {
-        size = cssSkin.getSize(this,text);
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,text);
         if(prefWidth != CALCULATED) {
             setWidth(prefWidth);
-            size.width = prefWidth;
+            sizeInfo.width = prefWidth;
         } else {
-            setWidth(size.width);
+            setWidth(sizeInfo.width);
         }
-        setHeight(size.height);
-        boxPainter = cssSkin.createBoxPainter(this,size,text,CSSSkin.State.None);
+        setHeight(sizeInfo.height);
     }
 
     @Override
     public void doLayout() {
-        if(size != null) {
-            size.width = getWidth();
-            size.height = getHeight();
+        if(sizeInfo != null) {
+            sizeInfo.width = getWidth();
+            sizeInfo.height = getHeight();
         }
+        boxPainter = cssSkin.createBoxPainter(this,styleInfo,sizeInfo,text,CSSSkin.State.None);
     }
 
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
-        if(cssSkin != null) {
-            if(size == null) {
-                doPrefLayout();
-            }
-            boxPainter.draw(g, size, this, text);
+        if(sizeInfo == null) {
+            doPrefLayout();
         }
+        boxPainter.draw(g, styleInfo, sizeInfo, this, text);
     }
 
     public void setText(String text) {
@@ -73,10 +75,10 @@ public class Label extends Control {
 
     @Override
     public double getBaseline() {
-        if(size == null) {
+        if(sizeInfo == null) {
             doPrefLayout();
         }
-        return size.margin.getTop() + size.borderWidth.getTop() + size.padding.getTop() + size.contentBaseline;
+        return styleInfo.margin.getTop() + styleInfo.borderWidth.getTop() + styleInfo.padding.getTop() + styleInfo.contentBaseline;
     }
 
 }

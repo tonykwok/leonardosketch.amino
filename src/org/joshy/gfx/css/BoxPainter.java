@@ -7,6 +7,7 @@ import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.util.u;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,15 +34,16 @@ public class BoxPainter {
     private ImageBuffer oldBuf;
 
 
-    public void draw(GFX g, CSSSkin.BoxState box, Control control, String text) {
-        drawBackground(g,box,control,text);
-        drawContent(g, box, text);
-        drawBorder(g, box);
+    public void draw(GFX g, StyleInfo styleInfo, SizeInfo size, Control control, String text) {
+        drawBackground(g,styleInfo,size,control,text);
+        drawContent(g, styleInfo, size,text);
+        drawBorder(g, styleInfo,size);
     }
     
-    public void drawBackground(GFX g, CSSSkin.BoxState box, Control control, String text) {
-        double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
-        double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
+    public void drawBackground(GFX g, StyleInfo box, SizeInfo size, Control control, String text) {
+        u.p("drawing background. margin = " + margin);
+        double backWidth = size.width-box.margin.getLeft()-box.margin.getRight();
+        double backHeight = size.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
         g.translate(bounds.getX(),bounds.getY());
 
@@ -70,9 +72,9 @@ public class BoxPainter {
         g.translate(-bounds.getX(),-bounds.getY());
     }
 
-    private void drawBorder(GFX gfx, CSSSkin.BoxState box) {
-        double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
-        double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
+    private void drawBorder(GFX gfx, StyleInfo box, SizeInfo size) {
+        double backWidth = size.width-box.margin.getLeft()-box.margin.getRight();
+        double backHeight = size.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
 
         if(!borderWidth.allEquals(0)) {
@@ -109,14 +111,15 @@ public class BoxPainter {
         }
     }
 
-    private void drawContent(GFX gfx, CSSSkin.BoxState box, String content) {
+    private void drawContent(GFX gfx, StyleInfo box, SizeInfo size, String content) {
         //draw the internal content
         double contentX = box.margin.getLeft()+borderWidth.getLeft()+box.padding.getLeft();
         double contentY = box.margin.getTop()+borderWidth.getTop()+box.padding.getTop();
         gfx.setPaint(color);
 
         double textX = contentX;
-        double textWidth = box.contentWidth;
+        double textWidth = size.contentWidth;
+        u.p("size.contentWidth = " + size.contentWidth);
         if(icon != null) {
             textX += icon.getWidth();
             textWidth -= icon.getWidth();
@@ -127,12 +130,13 @@ public class BoxPainter {
             if(text_shadow instanceof ShadowValue) {
                 ShadowValue shadow = (ShadowValue) text_shadow;
                 if(!content.equals(oldText)) {
-                    ImageBuffer buf = gfx.createBuffer((int)textWidth,(int)box.contentHeight);
+                    u.p("creating an image buffer of size: " + textWidth + " " + size.contentHeight);
+                    ImageBuffer buf = gfx.createBuffer((int)textWidth,(int)size.contentHeight);
                     if(buf != null) {
                         GFX g2 = buf.getGFX();
                         g2.setPaint(new FlatColor(shadow.getColor(),0.3));
                         g2.translate(-textX,-contentY);
-                        Font.drawCentered(g2,content,font,textX,contentY,textWidth,box.contentHeight,true);
+                        Font.drawCentered(g2,content,font,textX,contentY,textWidth,size.contentHeight,true);
                         buf.apply(new BlurEffect(3,3));
                         oldBuf = buf;
                     }
@@ -146,9 +150,9 @@ public class BoxPainter {
         }
 
         if("center".equals(textAlign)) {
-            Font.drawCentered(gfx,content,font,textX,contentY,textWidth,box.contentHeight,true);
+            Font.drawCentered(gfx,content,font,textX,contentY,textWidth,size.contentHeight,true);
         } else {
-            Font.drawCenteredVertically(gfx,content,font,textX,contentY,textWidth,box.contentHeight,true);
+            Font.drawCenteredVertically(gfx,content,font,textX,contentY,textWidth,size.contentHeight,true);
         }
 
         if(icon != null) {

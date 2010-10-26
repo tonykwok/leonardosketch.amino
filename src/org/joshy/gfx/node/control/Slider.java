@@ -2,7 +2,7 @@ package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.OldStyleInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Paint;
@@ -27,7 +27,7 @@ public class Slider extends Control {
     private double largeScroll = 20;
     private FlatColor thumbFill;
     private Paint trackFill;
-    private CSSSkin.BoxState size;
+    private OldStyleInfo size;
 
     public Slider(boolean vertical) {
         thumbFill = FlatColor.BLACK;

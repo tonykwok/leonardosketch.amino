@@ -2,7 +2,7 @@ package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.OldStyleInfo;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
@@ -37,7 +37,7 @@ import org.joshy.gfx.node.Bounds;
  */
 public class ProgressBar extends Control {
     double percentage = 0.0;
-    private CSSSkin.BoxState size;
+    private OldStyleInfo size;
 
     public ProgressBar() {
     }

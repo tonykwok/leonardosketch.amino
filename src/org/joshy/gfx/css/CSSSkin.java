@@ -11,6 +11,7 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.URLUtils;
+import org.joshy.gfx.util.u;
 
 import java.net.URI;
 
@@ -32,8 +33,47 @@ public class CSSSkin {
         Pressed, Hover, Selected, Disabled, None
     }
 
-    public BoxPainter createBoxPainter(Control control, BoxState boxState, String text, CSSSkin.State state) {
+    public BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state) {
+        CSSMatcher matcher = createMatcher(control, state);
+        BoxPainter boxPainter = new BoxPainter();
+        String prefix = "";
+        boxPainter.borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
+        boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
+        if(!boxPainter.transparent) {
+            boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"));
+        } else {
+            boxPainter.background_color = FlatColor.BLACK;
+        }
+        BaseValue background = set.findValue(matcher,prefix+"background");
+
+
+        double backWidth = size.width-style.margin.getLeft()-style.margin.getRight();
+        double backHeight = size.height-style.margin.getTop()-style.margin.getBottom();
+        Bounds bounds = new Bounds(style.margin.getLeft(),style.margin.getTop(),backWidth,backHeight);
+        if(background instanceof LinearGradientValue) {
+            boxPainter.gradient = true;
+            boxPainter.gradientFill = toGradientFill((LinearGradientValue)background,bounds.getWidth(),bounds.getHeight());
+        }
         
+        //border stuff
+        boxPainter.margin = getMargin(matcher);
+        boxPainter.borderWidth = getBorderWidth(matcher,"");
+        if(!boxPainter.borderWidth.allEquals(0)) {
+            boxPainter.border_color = (new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
+        }
+
+        //content stuff
+        boxPainter.icon = getIcon(matcher);
+        boxPainter.font = getFont(matcher);
+        boxPainter.textAlign = set.findStringValue(matcher.element,"text-align");
+        boxPainter.color = new FlatColor(set.findColorValue(matcher,"color"));
+        boxPainter.text_shadow = set.findValue(matcher, "text-shadow");
+
+        return boxPainter;
+    }
+    
+    public BoxPainter createBoxPainter(Control control, OldStyleInfo boxState, String text, CSSSkin.State state) {
+
         CSSMatcher matcher = createMatcher(control, state);
         double backWidth = boxState.width-boxState.margin.getLeft()-boxState.margin.getRight();
         double backHeight = boxState.height-boxState.margin.getTop()-boxState.margin.getBottom();
@@ -80,7 +120,7 @@ public class CSSSkin {
         return font;
     }
 
-    public void draw(GFX gfx, BoxState box, Control control, String content, State state) {
+    public void draw(GFX gfx, OldStyleInfo box, Control control, String content, State state) {
         CSSMatcher matcher = createMatcher(control,state);
         //draw background
         drawBackground(gfx, matcher, "", box);
@@ -92,7 +132,7 @@ public class CSSSkin {
         drawDebugOverlay(gfx,matcher,"",box);
     }
 
-    private void drawDebugOverlay(GFX gfx, CSSMatcher matcher, String prefix, BoxState box) {
+    private void drawDebugOverlay(GFX gfx, CSSMatcher matcher, String prefix, OldStyleInfo box) {
         Insets borderWidth = getBorderWidth(matcher,"");
 
         //debugging
@@ -117,7 +157,7 @@ public class CSSSkin {
         }
     }
 
-    private void drawContent(GFX gfx, CSSMatcher matcher, String prefix, BoxState box, String content) {
+    private void drawContent(GFX gfx, CSSMatcher matcher, String prefix, OldStyleInfo box, String content) {
         Image icon = getIcon(matcher);
         Font font = getFont(matcher);
 
@@ -163,7 +203,7 @@ public class CSSSkin {
 
     }
 
-    private void drawBackground(GFX g, CSSMatcher matcher, String prefix, BoxState box) {
+    private void drawBackground(GFX g, CSSMatcher matcher, String prefix, OldStyleInfo box) {
         double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
@@ -254,7 +294,7 @@ public class CSSSkin {
         }
     }
 
-    private void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, BoxState box) {
+    private void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, OldStyleInfo box) {
         double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
@@ -300,7 +340,7 @@ public class CSSSkin {
         }
     }
 
-    public void draw(GFX g, Scrollbar scrollbar, BoxState size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
+    public void draw(GFX g, Scrollbar scrollbar, OldStyleInfo size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
         if(set == null) {
             g.setPaint(FlatColor.BLUE);
             g.fillRect(0,0,20,20);
@@ -338,9 +378,9 @@ public class CSSSkin {
         drawBorder(    g,matcher,"thumb-",thumbBounds);
     }
 
-    public BoxState getSize(Control control) {
+    public OldStyleInfo getSize(Control control) {
         CSSMatcher matcher = createMatcher(control, State.None);
-        BoxState size = new BoxState();
+        OldStyleInfo size = new OldStyleInfo();
 
         if(set == null) {
             size.width = 100;
@@ -358,8 +398,48 @@ public class CSSSkin {
         return size;
     }
 
-    public BoxState getSize(Control control, String content) {
-        BoxState size = getSize(control);
+    
+    public StyleInfo getStyleInfo(Control control) {
+        CSSMatcher matcher = createMatcher(control, State.None);
+        StyleInfo info = new StyleInfo();
+        info.margin = getMargin(matcher);
+        info.padding = getPadding(matcher);
+        info.borderWidth = getBorderWidth(matcher,"");
+
+        return info;
+    }
+
+    public SizeInfo getSizeInfo(Control control, StyleInfo style, String content) {
+        CSSMatcher matcher = createMatcher(control, State.None);
+        SizeInfo size = new SizeInfo();
+        u.p("style = " + style);
+        u.p("margin = " + style.margin);
+        size.contentWidth = control.getWidth()-style.margin.getLeft()-style.margin.getRight()-style.padding.getLeft()-style.padding.getRight();
+        size.contentHeight = control.getHeight()-style.margin.getTop()-style.margin.getBottom()-style.padding.getTop()-style.padding.getBottom();
+
+        Image icon = getIcon(matcher);
+        //calc the sizes
+        if("true".equals(set.findStringValue(matcher,"shrink-to-fit"))) {
+            Font font = getFont(matcher);
+            size.contentWidth = font.calculateWidth(content);
+            size.contentHeight = font.calculateHeight(content);
+            if(icon != null) {
+                size.contentWidth += icon.getWidth();
+                size.contentHeight = Math.max(size.contentHeight,icon.getHeight());
+            }
+            size.width = style.margin.getLeft()+style.margin.getRight()+style.borderWidth.getLeft()+style.borderWidth.getRight()+style.padding.getLeft()+style.padding.getRight()+size.contentWidth;
+            size.height = style.margin.getTop()+style.margin.getBottom()+style.borderWidth.getTop()+style.borderWidth.getBottom()+style.padding.getTop()+style.padding.getBottom()+size.contentHeight;
+            double fh = font.calculateHeight(content);
+            size.contentBaseline = (size.contentHeight-fh)/2 + fh;
+        } else {
+            size.contentBaseline = size.contentHeight;
+        }
+        return size;
+    }
+
+
+    public OldStyleInfo getSize(Control control, String content) {
+        OldStyleInfo size = getSize(control);
         CSSMatcher matcher = createMatcher(control,null);
         Image icon = getIcon(matcher);
         size.margin = getMargin(matcher);
@@ -524,26 +604,5 @@ public class CSSSkin {
         return defaultFont;
     }
 
-
-    public static class BoxState {
-        public double width;
-        public double height;
-        public double contentWidth;
-        public double contentHeight;
-        public Insets margin;
-        public Insets borderWidth;
-        public Insets padding;
-        public double contentBaseline;
-
-        public BoxState() {
-        }
-
-        public BoxState(double width, double height) {
-            this.width = width;
-            this.height = height;
-            this.contentWidth = width;
-            this.contentHeight = height;
-        }
-    }
 
 }

@@ -3,6 +3,8 @@ package org.joshy.gfx.node.control;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
+import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
@@ -108,36 +110,37 @@ public class Button extends Control {
         this.text = text;        
     }
 
-    protected CSSSkin.BoxState size;
+    protected StyleInfo styleInfo;
+    protected SizeInfo sizeInfo;
 
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
+        styleInfo = cssSkin.getStyleInfo(this);
         setLayoutDirty();
     }
 
     @Override
     public void doPrefLayout() {
-        if(cssSkin != null) {
-            size = cssSkin.getSize(this,text);
-            if(prefWidth != CALCULATED) {
-                setWidth(prefWidth);
-                size.width = prefWidth;
-            } else {
-                setWidth(size.width);
-            }
-            setHeight(size.height);
-            State state = calculateState();
-            boxPainter = cssSkin.createBoxPainter(this,size,text,buttonStateToCssState(state));
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,text);
+
+        if(prefWidth != CALCULATED) {
+            setWidth(prefWidth);
+            sizeInfo.width = prefWidth;
+        } else {
+            setWidth(sizeInfo.width);
         }
+        setHeight(sizeInfo.height);
     }
 
     @Override
     public void doLayout() {
-        if(size != null) {
-            size.width = getWidth();
-            size.height = getHeight();
+        if(sizeInfo != null) {
+            sizeInfo.width = getWidth();
+            sizeInfo.height = getHeight();
         }
+        State state = calculateState();
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, buttonStateToCssState(state));
     }
     
     private CSSSkin.State buttonStateToCssState(State state) {
@@ -159,15 +162,10 @@ public class Button extends Control {
         if(!isVisible()) return;
         g.setPaint(new FlatColor(1,0,0,1));
 
-
-        if(cssSkin != null) {
-            if(size == null) {
-                doPrefLayout();
-            }
-
-            boxPainter.draw(g, size, this, text);
+        if(sizeInfo == null) {
+            doPrefLayout();
         }
-
+        boxPainter.draw(g, styleInfo, sizeInfo, this, text);
     }
 
     private State calculateState() {
@@ -196,10 +194,10 @@ public class Button extends Control {
 
     @Override
     public double getBaseline() {
-        if(size == null) {
+        if(styleInfo == null) {
             doPrefLayout();
         }
-        return size.margin.getTop() + size.borderWidth.getTop() + size.padding.getTop() + size.contentBaseline;
+        return styleInfo.margin.getTop() + styleInfo.borderWidth.getTop() + styleInfo.padding.getTop() + styleInfo.contentBaseline;
     }
 
     public String getText() {

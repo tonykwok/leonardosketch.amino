@@ -15,7 +15,7 @@ public class Linkbutton extends Button {
     public void draw(GFX g) {
         if(!isVisible()) return;
         if(cssSkin != null) {
-            if(size == null) {
+            if(styleInfo == null) {
                 doPrefLayout();
             }
             CSSMatcher matcher = cssSkin.createMatcher(this, CSSSkin.State.None);

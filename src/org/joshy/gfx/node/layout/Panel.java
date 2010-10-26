@@ -2,7 +2,7 @@ package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.OldStyleInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
@@ -15,7 +15,7 @@ public class Panel extends Container {
     protected FlatColor fill = null;
     protected FlatColor borderColor = FlatColor.BLACK;
     private Callback<Panel> callback;
-    protected CSSSkin.BoxState size;
+    protected OldStyleInfo size;
 
     public Panel() {
         setSkinDirty();
@@ -36,6 +36,7 @@ public class Panel extends Container {
     public void doPrefLayout() {
         insets = cssSkin.getInsets(this);
         size = cssSkin.getSize(this);
+        super.doPrefLayout();
     }
 
     @Override
