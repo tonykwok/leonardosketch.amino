@@ -1,7 +1,9 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
-import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.node.Node;
+import org.joshy.gfx.node.layout.Container;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +12,7 @@ import org.joshy.gfx.node.layout.Panel;
  * Time: 8:44:11 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SpinBox<E extends Number> extends Panel {
+public class SpinBox<E extends Number> extends Container {
     private Textbox valueBox;
     E value;
     private Callback<ChangedEvent> changedCallback;
@@ -58,34 +60,6 @@ public class SpinBox<E extends Number> extends Panel {
             }
         });
 
-
-        this.onDoLayout(new Callback<Panel>() {
-            public void call(Panel panel) {
-                for(Control c : controlChildren()) {
-                    c.doPrefLayout();
-                }
-                double h = 31;
-                double l = 40;
-
-                valueBox.setTranslateX(0);
-                valueBox.setTranslateY(0);
-                valueBox.setWidth(l);
-                valueBox.setHeight(h);
-
-                incrementButton.setTranslateX(l);
-                decrementButton.setTranslateX(l);
-                incrementButton.setTranslateY(0);
-                decrementButton.setTranslateY(h/2);
-                incrementButton.setWidth(h/2);
-                decrementButton.setWidth(h/2);
-                incrementButton.setHeight(h/2);
-                decrementButton.setHeight(h/2);
-
-                for(Control c : controlChildren()) {
-                    c.doLayout();
-                }
-            }
-        });
         setWidth(100);
         setHeight(100);
     }
@@ -126,6 +100,54 @@ public class SpinBox<E extends Number> extends Panel {
         this.changedCallback = callback;
         return this;
     }
+
+
+    @Override
+    public void doPrefLayout() {
+        setHeight(31);
+        setWidth(100);
+        super.doPrefLayout();
+    }
+
+
+    @Override
+    public void doLayout() {
+        double h = 31;
+        double l = 40;
+
+        valueBox.setTranslateX(0);
+        valueBox.setTranslateY(0);
+        valueBox.setWidth(l);
+        valueBox.setHeight(h);
+
+        incrementButton.setTranslateX(l);
+        decrementButton.setTranslateX(l);
+        incrementButton.setTranslateY(0);
+        decrementButton.setTranslateY(h/2);
+        incrementButton.setWidth(h/2);
+        decrementButton.setWidth(h/2);
+        incrementButton.setHeight(h/2);
+        decrementButton.setHeight(h/2);
+
+        for(Control c : controlChildren()) {
+            c.doLayout();
+        }
+    }
+
+    @Override
+    public void draw(GFX g) {
+        if(!visible) return;
+//        g.setOpacity(getOpacity());
+//        drawSelf(g);
+        for(Node child : children) {
+            g.translate(child.getTranslateX(),child.getTranslateY());
+            child.draw(g);
+            g.translate(-child.getTranslateX(),-child.getTranslateY());
+        }
+        this.drawingDirty = false;
+//        g.setOpacity(1.0);
+    }
+
 
     private static class SpinButton extends Button {
         private boolean top;
