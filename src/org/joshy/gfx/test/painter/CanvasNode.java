@@ -52,6 +52,10 @@ class CanvasNode extends Control {
     public void doSkins() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+    @Override
+    public void doPrefLayout() {
+        //noop
+    }
 
     @Override
     public void doLayout() {

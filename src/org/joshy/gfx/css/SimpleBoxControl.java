@@ -63,6 +63,10 @@ class SimpleBoxControl extends Control {
     }
 
     @Override
+    public void doPrefLayout() {
+        //noop
+    }
+    @Override
     public void doLayout() {
         //To change body of implemented methods use File | Settings | File Templates.
     }

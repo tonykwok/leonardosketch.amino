@@ -127,7 +127,7 @@ public abstract class Control extends Node {
     /** do pref layout
      *
      */
-    public void doPrefLayout() { }
+    public abstract void doPrefLayout();
 
     /** the control should load up it's skins, caching as much
      * info as possible so that drawing and layout can be fast.

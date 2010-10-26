@@ -167,6 +167,11 @@ public class CollapsingListTest implements Runnable {
         }
 
         @Override
+        public void doPrefLayout() {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
         public void doSkins() {
         }
 

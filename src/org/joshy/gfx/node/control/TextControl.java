@@ -361,7 +361,13 @@ public abstract class TextControl extends Control implements Focusable {
     }
 
     @Override
+    public void doPrefLayout() {
+        //noop
+    }
+
+    @Override
     public void doLayout() {
+        //noop
     }
 
     protected CursorPoint getCurrentCursorPoint() {

@@ -71,6 +71,11 @@ public class ProgressSpinner extends Control {
     }
 
     @Override
+    public void doPrefLayout() {
+        //noop
+    }
+
+    @Override
     public void doLayout() {
         setWidth(50);
         setHeight(50);

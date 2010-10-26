@@ -151,6 +151,11 @@ public class SwatchColorPicker extends Button {
             double value = ((double)x-1)/((double)colCount-2);
             return new FlatColor(value,value,value,1);
         }
+        
+        @Override
+        public void doPrefLayout() {
+            //noop
+        }
 
         @Override
         public void doLayout() {

@@ -86,6 +86,11 @@ public class PopupMenu extends Control {
     }
 
     @Override
+    public void doPrefLayout() {
+        //noop
+    }
+
+    @Override
     public void doLayout() {
         setHeight( rowHeight * model.size() + spacer*2);
     }

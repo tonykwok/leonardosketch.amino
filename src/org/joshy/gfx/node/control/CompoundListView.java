@@ -135,6 +135,11 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
                     }
 
                     @Override
+                    public void doPrefLayout() {
+                        //To change body of implemented methods use File | Settings | File Templates.
+                    }
+
+                    @Override
                     public void doSkins() {
                     }
 
@@ -251,6 +256,11 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
         return this;
     }
 
+    @Override
+    public void doPrefLayout() {
+        //noop
+    }
+    
     @Override
     public void doLayout() {
         double yoff = scrollY % itemViewHeight;

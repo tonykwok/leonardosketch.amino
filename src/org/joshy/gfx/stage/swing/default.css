@@ -31,6 +31,12 @@
     shrink-to-fit: true;
 }
 
+Tooltip {
+    background-color: #444444;
+    color: white;
+    shrink-to-fit: true;
+}
+
 Label {
     border-width: 0px;
     background-color: transparent;

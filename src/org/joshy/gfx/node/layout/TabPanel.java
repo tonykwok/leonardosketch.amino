@@ -91,6 +91,11 @@ public class TabPanel extends Panel {
         }
 
         @Override
+        public void doPrefLayout() {
+            
+        }
+
+        @Override
         public void doSkins() {
             cssSkin = SkinManager.getShared().getCSSSkin();
         }
