@@ -5,6 +5,7 @@ import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSProcessor;
 import org.joshy.gfx.css.CSSRuleSet;
 import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.CSSSkin2;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.stage.swing.SwingCore;
@@ -33,7 +34,7 @@ public class JOGLCore extends Core {
         ParsingResult<?> result = CSSProcessor.parseCSS(url.openStream());
         CSSRuleSet set = new CSSRuleSet();
         set.setBaseURI(url.toURI());
-        CSSSkin cssskin = new CSSSkin();
+        CSSSkin cssskin = new CSSSkin2();
         cssskin.setRuleSet(set);
         CSSProcessor.condense(result.parseTreeRoot,set);
         u.p("default css parsed from: " + url);

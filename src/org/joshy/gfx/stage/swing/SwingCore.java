@@ -5,6 +5,7 @@ import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSProcessor;
 import org.joshy.gfx.css.CSSRuleSet;
 import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.CSSSkin2;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.PeriodicTask;
@@ -55,7 +56,7 @@ public class SwingCore extends Core {
         u.p("default css parsed from: " + url);
         CSSProcessor.condense(baseResult.parseTreeRoot, baseSet);
 
-        CSSSkin cssskin = new CSSSkin();
+        CSSSkin cssskin = new CSSSkin2();
         cssskin.setRuleSet(baseSet);
         SkinManager.getShared().setCSSSkin(cssskin);
     }

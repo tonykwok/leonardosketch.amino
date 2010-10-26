@@ -165,6 +165,8 @@ TitlePanel {
     border-width: 1px;
     margin: 6px;
     padding: 6px;
+    title-color: black;
+    title-border-color: black;
     title-margin: 0px;
     title-padding-left:   3px;
     title-padding-right: 15px;

@@ -66,7 +66,7 @@ public class BoxPainter {
         g.translate(-bounds.getX(),-bounds.getY());
     }
 
-    private void drawBorder(GFX gfx, StyleInfo box, SizeInfo size) {
+    protected void drawBorder(GFX gfx, StyleInfo box, SizeInfo size) {
         double backWidth = size.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = size.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
