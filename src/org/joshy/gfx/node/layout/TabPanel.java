@@ -34,6 +34,9 @@ public class TabPanel extends Panel {
 
     public void add(String title, Control control) {
         add(control);
+        if(!tabs.isEmpty()) {
+            control.setVisible(false);
+        }
         tabs.add(control);
         titleMap.put(control,title);
     }
