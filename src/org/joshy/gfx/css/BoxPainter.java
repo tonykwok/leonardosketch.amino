@@ -7,14 +7,9 @@ import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.util.u;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Sep 19, 2010
- * Time: 12:02:39 AM
- * To change this template use File | Settings | File Templates.
+ * Paints a control laid out by the css boxmodel.
  */
 public class BoxPainter {
     int borderRadius;
@@ -41,7 +36,6 @@ public class BoxPainter {
     }
     
     public void drawBackground(GFX g, StyleInfo box, SizeInfo size, Control control, String text) {
-        u.p("drawing background. margin = " + margin);
         double backWidth = size.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = size.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
@@ -119,7 +113,6 @@ public class BoxPainter {
 
         double textX = contentX;
         double textWidth = size.contentWidth;
-        u.p("size.contentWidth = " + size.contentWidth);
         if(icon != null) {
             textX += icon.getWidth();
             textWidth -= icon.getWidth();
@@ -130,7 +123,6 @@ public class BoxPainter {
             if(text_shadow instanceof ShadowValue) {
                 ShadowValue shadow = (ShadowValue) text_shadow;
                 if(!content.equals(oldText)) {
-                    u.p("creating an image buffer of size: " + textWidth + " " + size.contentHeight);
                     ImageBuffer buf = gfx.createBuffer((int)textWidth,(int)size.contentHeight);
                     if(buf != null) {
                         GFX g2 = buf.getGFX();

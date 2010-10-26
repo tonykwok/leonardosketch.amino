@@ -11,7 +11,6 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.URLUtils;
-import org.joshy.gfx.util.u;
 
 import java.net.URI;
 
@@ -412,8 +411,6 @@ public class CSSSkin {
     public SizeInfo getSizeInfo(Control control, StyleInfo style, String content) {
         CSSMatcher matcher = createMatcher(control, State.None);
         SizeInfo size = new SizeInfo();
-        u.p("style = " + style);
-        u.p("margin = " + style.margin);
         size.contentWidth = control.getWidth()-style.margin.getLeft()-style.margin.getRight()-style.padding.getLeft()-style.padding.getRight();
         size.contentHeight = control.getHeight()-style.margin.getTop()-style.margin.getBottom()-style.padding.getTop()-style.padding.getBottom();
 
