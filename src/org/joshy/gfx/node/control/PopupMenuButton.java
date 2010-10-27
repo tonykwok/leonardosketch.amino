@@ -18,8 +18,6 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
     private ListView.TextRenderer<E> textRenderer;
 
     public PopupMenuButton()  {
-        setWidth(200);
-        setHeight(25);
         setSkinDirty();
         setModel(new ListModel<E>() {
             public E get(int i) {
@@ -30,16 +28,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
             }
         });
         setSelectedIndex(0);
-/*        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
-            public void call(MouseEvent event) {
-                //processMouse(event);
-            }
-        });*/
     }
-/*
-    private void processMouse(MouseEvent event) {
-        
-    }*/
 
     public PopupMenuButton<E> setModel(ListModel<E> model) {
         this.model = model;
@@ -77,36 +66,37 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         }
     }
 
+
+    @Override
+    public void doPrefLayout() {
+        super.doPrefLayout();
+        if(prefWidth != CALCULATED) {
+            setWidth(prefWidth);
+            sizeInfo.width = prefWidth;
+        } else {
+            setWidth(sizeInfo.width+20);
+        }
+    }
+
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
 
-        if(cssSkin != null) {
-            CSSMatcher matcher = new CSSMatcher("PopupMenuButton");
-            Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
-            cssSkin.drawBackground(g,matcher,"", bounds);
-            int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
-            g.setPaint(new FlatColor(col));
-            drawText(g);
-            drawTriangle(g);
-            cssSkin.drawBorder(g,matcher,"",bounds);
-            return;
-        } else {
-            g.setPaint(FlatColor.WHITE);
-            g.fillRoundRect(0,0,getWidth(),getHeight(), 10,10);
-            g.setPaint(FlatColor.BLACK);
-            drawText(g);
-            drawTriangle(g);
-            g.setPaint(FlatColor.BLACK);
-            g.drawRoundRect(0,0,getWidth(),getHeight(), 10,10);
-        }
+        CSSMatcher matcher = new CSSMatcher("PopupMenuButton");
+        Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
+        cssSkin.drawBackground(g,matcher,"", bounds);
+        int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
+        g.setPaint(new FlatColor(col));
+        drawText(g);
+        drawTriangle(g);
+        cssSkin.drawBorder(g,matcher,"",bounds);
     }
 
     private void drawTriangle(GFX g) {
         double[] points = new double[]{0,0, 14,0, 7, 9};
-        g.translate(getWidth()-22,6);
+        g.translate(getWidth()-22,10);
         g.fillPolygon(points);
-        g.translate(-getWidth()+22,-6);
+        g.translate(-getWidth()+22,-10);
     }
 
     private void drawText(GFX g) {
