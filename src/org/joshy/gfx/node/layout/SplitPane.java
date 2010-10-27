@@ -1,5 +1,7 @@
 package org.joshy.gfx.node.layout;
 
+import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
@@ -106,6 +108,14 @@ public class SplitPane extends AbstractPane {
         return list;
     }
 
+
+    @Override
+    public void doSkins() {
+        cssSkin = SkinManager.getShared().getCSSSkin();
+        setLayoutDirty();
+        super.doSkins();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
     @Override
     public void doPrefLayout() {
         for(Node n : children()) {
@@ -156,11 +166,16 @@ public class SplitPane extends AbstractPane {
     @Override
     public void draw(GFX g) {
         g.setPaint(FlatColor.BLACK);
+        Bounds thumbBounds = new Bounds(0,position-dividerWidth/2,getWidth(),dividerWidth);
         if(vertical) {
-            g.fillRect(0,position-dividerWidth/2,getWidth(),dividerWidth);
+//            g.fillRect(0,position-dividerWidth/2,getWidth(),dividerWidth);
         } else {
-            g.fillRect(position-dividerWidth/2,0,dividerWidth,getHeight());
+//            g.fillRect(position-dividerWidth/2,0,dividerWidth,getHeight());
+            thumbBounds = new Bounds(position-dividerWidth/2,0,dividerWidth,getHeight());
         }
+
+
+
         if(first != null) {
             Bounds oldClip = g.getClipRect();
             g.setClipRect(new Bounds(0,0,first.getWidth(),first.getHeight()));
@@ -177,6 +192,14 @@ public class SplitPane extends AbstractPane {
             g.translate(-second.getTranslateX(),-second.getTranslateY());
             g.setClipRect(oldClip);
         }
+
+        CSSMatcher matcher = new CSSMatcher(this);
+        if(vertical) {
+            matcher.pseudo = "vertical";
+        }
+        cssSkin.drawBackground(g,matcher,"divider-", thumbBounds);
+        cssSkin.drawBorder(g,matcher,"divider-",thumbBounds);
+        
         this.drawingDirty = false;
     }
 

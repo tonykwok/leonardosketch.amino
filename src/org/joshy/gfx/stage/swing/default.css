@@ -198,6 +198,19 @@ TabTop:selected {
     color: #ffffff;
 }
 
+SplitPane {
+    divider-background-color: #00ff00;
+    divider-background: linear-gradient(left center, #888888 0%, #222222 100%);
+    divider-border-color: #000000;
+    divider-border-left-width: 1px;
+    divider-border-right-width: 1px;
+    divider-border-top-width: 1px;
+    divider-border-bottom-width: 1px;
+}
+SplitPane:vertical {
+    divider-background: linear-gradient(center top, #888888 0%, #222222 100%);
+}
+
 #root {
     background-color: #d0d0d0;
 }
