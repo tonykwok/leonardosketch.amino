@@ -37,6 +37,19 @@ public class Panel extends Container {
         insets = cssSkin.getInsets(this);
         size = cssSkin.getSize(this);
         super.doPrefLayout();
+        if(prefWidth != CALCULATED) {
+            setWidth(prefWidth);
+            size.width = prefWidth;
+        } else {
+            setWidth(size.width);
+        }
+        if(prefHeight != CALCULATED) {
+            setHeight(prefHeight);
+            size.height = prefHeight;
+        } else {
+            setHeight(size.height);
+        }
+
     }
 
     @Override

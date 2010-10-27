@@ -1,6 +1,7 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -205,6 +206,16 @@ public class GrandTour implements Runnable {
                 TitlePanel panel = new TitlePanel();
 
                 panel.add(new Button("blah"));
+                return panel;
+            }
+        });
+
+        examples.add(new Example("Disclosure Panel"){
+            @Override
+            public Control build() throws Exception {
+                DisclosurePanel panel = new DisclosurePanel();
+                panel.setTitle(new Label("click to disclose"));
+                panel.setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200));
                 return panel;
             }
         });
