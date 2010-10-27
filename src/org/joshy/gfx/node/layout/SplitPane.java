@@ -5,6 +5,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 
@@ -160,10 +161,21 @@ public class SplitPane extends AbstractPane {
         } else {
             g.fillRect(position-dividerWidth/2,0,dividerWidth,getHeight());
         }
-        for(Node child : children()) {
-            g.translate(child.getTranslateX(),child.getTranslateY());
-            child.draw(g);
-            g.translate(-child.getTranslateX(),-child.getTranslateY());
+        if(first != null) {
+            Bounds oldClip = g.getClipRect();
+            g.setClipRect(new Bounds(0,0,first.getWidth(),first.getHeight()));
+            g.translate(first.getTranslateX(),first.getTranslateY());
+            first.draw(g);
+            g.translate(-first.getTranslateX(),-first.getTranslateY());
+            g.setClipRect(oldClip);
+        }
+        if(second != null) {
+            Bounds oldClip = g.getClipRect();
+            g.setClipRect(new Bounds(second.getTranslateX(),second.getTranslateY(),second.getWidth(),second.getHeight()));
+            g.translate(second.getTranslateX(),second.getTranslateY());
+            second.draw(g);
+            g.translate(-second.getTranslateX(),-second.getTranslateY());
+            g.setClipRect(oldClip);
         }
         this.drawingDirty = false;
     }

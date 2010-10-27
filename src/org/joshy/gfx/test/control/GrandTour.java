@@ -204,7 +204,6 @@ public class GrandTour implements Runnable {
             @Override
             public Control build() throws Exception {
                 TitlePanel panel = new TitlePanel();
-
                 panel.add(new Button("blah"));
                 return panel;
             }
