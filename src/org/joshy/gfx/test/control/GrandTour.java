@@ -17,6 +17,7 @@ public class GrandTour implements Runnable {
     public static void main(String... args) throws Exception, InterruptedException {
         Core.setUseJOGL(false);
         Core.init();
+        //Core.setDebugCSS(new File("test.css"));
         Core.getShared().defer(new GrandTour());
     }
 
@@ -49,6 +50,11 @@ public class GrandTour implements Runnable {
                 passbox.setText("password");
                 SpinBox<Integer> spinBox = new SpinBox<Integer>().setValue(99);
 
+                Textbox searchbox = new Textbox("searchbox");
+                searchbox.setId("searchbox");
+                searchbox.addCSSClass("searchbox");
+                searchbox.setPrefWidth(150);
+
                 Textarea ta = new Textarea();
                 ta.setText("A\nText\nArea");
                 FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
@@ -56,6 +62,7 @@ public class GrandTour implements Runnable {
                         .add(tb)
                         .add(spinBox)
                         .add(passbox)
+                        .add(searchbox)
                         .add(ta);
                 return box;
             }

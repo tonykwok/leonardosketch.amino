@@ -163,6 +163,10 @@ public abstract class Control extends Node {
         this.enabled = enabled;
         return this;
     }
+
+    public void addCSSClass(String clss) {
+        this.cssClasses.add(clss);
+    }
 }
 
 

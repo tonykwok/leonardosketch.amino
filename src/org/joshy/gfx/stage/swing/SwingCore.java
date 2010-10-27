@@ -91,6 +91,7 @@ public class SwingCore extends Core {
 
     @Override
     protected void addDebugCSS(final File file) {
+        u.p("scanning debug css from: " + file.getAbsolutePath());
         new PeriodicTask(100).call(new Callback() {
             public void call(Object event) {
                 checkDebugCSSFile(file);

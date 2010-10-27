@@ -284,6 +284,11 @@ SpinButton:hover {
     background-color: #d0d0d0;
 }
 
+.searchbox {
+    border-color: #888888;
+    border-radius: 26px;
+    padding: 5px 10px 5px 10px;
+}
 
 /* ===========  Popups ============== */
 PopupMenuButton {
