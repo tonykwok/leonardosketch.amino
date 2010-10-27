@@ -30,12 +30,12 @@ public class BoxPainter {
 
 
     public void draw(GFX g, StyleInfo styleInfo, SizeInfo size, Control control, String text) {
-        drawBackground(g,styleInfo,size,control,text);
+        drawBackground(g,styleInfo,size,control);
         drawContent(g, styleInfo, size,text);
         drawBorder(g, styleInfo,size);
     }
     
-    public void drawBackground(GFX g, StyleInfo box, SizeInfo size, Control control, String text) {
+    public void drawBackground(GFX g, StyleInfo box, SizeInfo size, Control control) {
         double backWidth = size.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = size.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);

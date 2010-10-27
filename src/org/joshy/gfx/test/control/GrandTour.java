@@ -40,6 +40,19 @@ public class GrandTour implements Runnable {
                 return box;
             }
         });
+        
+        examples.add(new Example("Labels") {
+            @Override
+            public Control build() throws Exception {
+                FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
+                        .add(new Label("A label"))
+                        .add(new Label("A label so long that it will have to wrap").setPrefWidth(150))
+                        .add(new Label("A multiline\nlabel with \nhard coded returns"))
+                ;
+                return box;
+            }
+        });
+
         examples.add(new Example("Text controls") {
             public Control build() {
                 Textbox tb = new Textbox();
@@ -58,7 +71,6 @@ public class GrandTour implements Runnable {
                 Textarea ta = new Textarea();
                 ta.setText("A\nText\nArea");
                 FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
-                        .add(new Label("A Label"))
                         .add(tb)
                         .add(spinBox)
                         .add(passbox)
