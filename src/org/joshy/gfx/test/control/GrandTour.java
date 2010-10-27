@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GrandTour implements Runnable {
+public class GrandTour implements Runnable { 
     public static void main(String... args) throws Exception, InterruptedException {
         Core.setUseJOGL(false);
         Core.init();
@@ -149,6 +149,13 @@ public class GrandTour implements Runnable {
                 sp.setHeight(200);
 
                 CompoundListView clistView = new CompoundListView();
+                clistView.setItemViewFactory(new CompoundListView.ItemViewFactory(){
+                    @Override
+                    public Control createItemView(CompoundListView listView, int index, Control prev) {
+                        return new Button("item");
+                    }
+                });
+                clistView.setRowHeight(35);
                 ScrollPane sp3 = new ScrollPane();
                 sp3.setContent(clistView);
                 sp3.setWidth(300);

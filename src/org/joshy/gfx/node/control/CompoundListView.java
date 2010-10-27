@@ -197,7 +197,7 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
         //create the new ones
         int startIndex = (int) (-scrollY / itemViewHeight);
         int viewCount = (int) (getHeight() / itemViewHeight);
-        u.p("regen item views. setStart index = " + startIndex + " new view count = " + viewCount);
+        //u.p("regen item views. setStart index = " + startIndex + " new view count = " + viewCount);
         for (int i = startIndex; i < startIndex + viewCount + 1; i++) {
             Control itemView = itemViewFactory.createItemView(this, i, null);
             views.add(itemView);
@@ -257,8 +257,22 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
     }
 
     @Override
+    public void doSkins() {
+        for (Node n : children()) {
+            if (n instanceof Control) {
+                ((Control) n).doSkins();
+            }
+        }
+    }
+
+    @Override
     public void doPrefLayout() {
-        //noop
+        for (Node n : children()) {
+            if (n instanceof Control) {
+                Control c = (Control) n;
+                c.doPrefLayout();
+            }
+        }
     }
     
     @Override
@@ -274,15 +288,6 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
                 c.doLayout();
             }
             y += itemViewHeight;
-        }
-    }
-
-    @Override
-    public void doSkins() {
-        for (Node n : children()) {
-            if (n instanceof Control) {
-                ((Control) n).doSkins();
-            }
         }
     }
 
