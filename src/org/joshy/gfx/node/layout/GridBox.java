@@ -78,6 +78,11 @@ public class GridBox extends Panel {
     }
 
     @Override
+    public void doPrefLayout() {
+        super.doPrefLayout();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void doLayout() {
         
         //lay out the columns first
@@ -111,7 +116,8 @@ public class GridBox extends Panel {
             double maxHeight = 0;
             double maxBaseline = 0;
             for(Control c : row.controls) {
-                c.doPrefLayout();
+                //pref layout on controls has already been called
+                //c.doPrefLayout();
                 Bounds bounds = c.getLayoutBounds();
                 maxHeight = Math.max(maxHeight,bounds.getHeight()+padding);
                 double baseline = (bounds.getY()+bounds.getHeight()) - bounds.getY();

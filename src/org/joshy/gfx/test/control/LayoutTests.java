@@ -230,7 +230,9 @@ public class LayoutTests implements Runnable {
         }
         if(NEW_DOC_DIALOG_GRID_TEST.equals(testName)) {
             final Textbox width = new Textbox("800");
+            width.setPrefWidth(100);
             final Textbox height = new Textbox("500");
+            height.setPrefWidth(100);
             
             final PopupMenuButton popup = new PopupMenuButton();
             popup.setModel(ListView.createModel(new String[]{"16x16","1024x1024"}));
@@ -243,7 +245,7 @@ public class LayoutTests implements Runnable {
                 }
             };
 
-            return new GridBox()
+            GridBox gb = new GridBox()
                     .setPadding(5)
                     .createColumn(100, GridBox.Align.Right)
                     .createColumn(100, GridBox.Align.Left)
@@ -258,6 +260,8 @@ public class LayoutTests implements Runnable {
                     .nextRow()
                     .addControl(new Button("Cancel"))
                     .addControl(new Button("Okay"));
+            gb.debug(false);
+            return gb;
         }
 
         if(CONTROLS_BASELINE_TEST.equals(testName)) {
