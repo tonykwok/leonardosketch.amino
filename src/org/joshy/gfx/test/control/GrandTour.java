@@ -213,10 +213,16 @@ public class GrandTour implements Runnable {
         examples.add(new Example("Disclosure Panel"){
             @Override
             public Control build() throws Exception {
-                DisclosurePanel panel = new DisclosurePanel();
-                panel.setTitle(new Label("click to disclose"));
-                panel.setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200));
-                return panel;
+                return new VFlexBox()
+                        .add(new DisclosurePanel()
+                            .setTitle(new Label("click to disclose"))
+                            .setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200))
+                        )
+                        .add(new DisclosurePanel()
+                            .setTitle(new Label("click to disclose"))
+                            .setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200))
+                        )
+                        ;
             }
         });
 

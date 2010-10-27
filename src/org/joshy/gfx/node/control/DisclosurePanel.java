@@ -33,19 +33,30 @@ public class DisclosurePanel extends Container {
         });
     }
 
-    public void setTitle(Control title) {
+    public DisclosurePanel setTitle(Control title) {
         this.title = title;
         add(title);
+        return this;
     }
 
-    public void setContent(Control content) {
+    public DisclosurePanel setContent(Control content) {
         this.content = content;
         add(content);
+        return this;
     }
 
     @Override
     public void doPrefLayout() {
         super.doPrefLayout();
+        double w1 = button.getLayoutBounds().getWidth()+title.getLayoutBounds().getWidth();
+        double w2 = 0;
+        double h1 = button.getLayoutBounds().getHeight();
+        if(isOpen()) {
+            w2 = content.getLayoutBounds().getWidth();
+            h1+=content.getLayoutBounds().getHeight();
+        }
+        setWidth(Math.max(w1,w2));
+        setHeight(h1);
     }
 
     @Override
