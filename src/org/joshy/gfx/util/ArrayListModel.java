@@ -58,7 +58,6 @@ public class ArrayListModel<E> extends ArrayList<E> implements ListModel<E> {
     }
 
     private void fireUpdate() {
-        System.out.println("list model firing an update");
         EventBus.getSystem().publish(new ListView.ListEvent(ListView.ListEvent.Updated,this));
     }
 
