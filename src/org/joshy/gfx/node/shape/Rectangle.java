@@ -1,12 +1,7 @@
 package org.joshy.gfx.node.shape;
 
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.Paint;
-import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.shape.Shape;
-import org.joshy.gfx.util.u;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,7 +24,14 @@ public class Rectangle extends Shape {
         x = 0.0;
         y = 0.0;
     }
-    
+
+    public Rectangle(double x, double y, double w, double h) {
+        this.setX(x);
+        this.setY(y);
+        this.setWidth(w);
+        this.setHeight(h);
+    }
+
     public double getWidth() {
         return width;
     }
@@ -82,10 +84,14 @@ public class Rectangle extends Shape {
 
     @Override
     public void draw(GFX g) {
-        g.setPaint(fill);
-        g.fillRect(x,y,width,height);
-        g.setPaint(stroke);
-        g.drawRect(x+0.5,y+0.5,width-1,height-1);
+        g.setPaint(getFill());
+        g.fillRect(x,y,getWidth(),getHeight());
+        g.setPaint(getStroke());
+        if(getStrokeWidth() > 0) {
+            g.setStrokeWidth(getStrokeWidth());
+            g.drawRect(x,y,getWidth(),getHeight());
+            g.setStrokeWidth(1);
+        }
     }
 
 }

@@ -30,7 +30,7 @@ public class SpinningRectangle implements Runnable {
         r.setHeight(100);
         r.setTranslateX(200);
         r.setTranslateY(200);
-        r.setRotationAxis(Transform.Y_AXIS);
+        //r.setRotationAxis(Transform.Y_AXIS);
         r.setFill(FlatColor.RED);
         Stage s = Stage.createStage();
         s.setContent(r);

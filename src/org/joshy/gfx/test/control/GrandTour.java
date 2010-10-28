@@ -2,14 +2,19 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.node.shape.BezierCurve;
+import org.joshy.gfx.node.shape.Polygon;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
+import org.joshy.gfx.node.Group;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.*;
+import org.joshy.gfx.node.shape.*;
 import org.joshy.gfx.stage.Stage;
 
+import java.awt.geom.Path2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -236,6 +241,59 @@ public class GrandTour implements Runnable {
                 return panel;
             }
         });
+
+        examples.add(new Example("Scenegraph Shapes"){
+            @Override
+            public Control build() throws Exception {
+                Group group = new Group();
+                group.add(new Rectangle(100,20,50,20)
+                        .setFill(FlatColor.RED));
+                group.add(new Oval(50,20)
+                        .setFill(FlatColor.GREEN)
+                        .setTranslateX(30)
+                        .setTranslateY(50)
+                );
+                group.add(new Circle(40,100)
+                        .setRadius(20)
+                        .setFill(FlatColor.BLUE.deriveWithAlpha(0.5))
+                );
+                group.add(new Arc(40,200)
+                        .setStartAngle(30)
+                        .setEndAngle(180)
+                        .setRadius(30)
+                        .setClosed(true)
+                        .setFill(FlatColor.PURPLE)
+                );
+                group.add(new Polygon()
+                        .addPoint(0,0).addPoint(10,10).addPoint(20,0).addPoint(25,30).addPoint(0,30)
+                        .setClosed(true)
+                        .setFill(FlatColor.YELLOW)
+                        .setTranslateX(20)
+                        .setTranslateY(130)
+                );
+                group.add(new BezierCurve(
+                        0,0,0,20,
+                        30,10,30,30
+                        )
+                        .setStrokeWidth(3)
+                        .setTranslateX(150)
+                        .setTranslateY(150)
+                );
+                Path2D.Double path = new Path2D.Double();
+                path.moveTo(0,0);
+                path.lineTo(30,40);
+                path.curveTo(40,50, 10,10, 0,30);
+                path.closePath();
+                group.add(new PathShape(path)
+                        .setClosed(true)
+                        .setFill(FlatColor.GRAY)
+                        .setTranslateX(50)
+                        .setTranslateY(200)
+                );
+                return new Panel().add(group);
+            }
+        });
+
 
 
         ListView exampleList = new ListView();

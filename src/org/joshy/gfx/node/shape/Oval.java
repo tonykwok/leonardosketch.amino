@@ -15,6 +15,14 @@ public class Oval extends Shape {
     private double width = 100;
     private double height = 100;
 
+    public Oval() {
+    }
+
+    public Oval(double w, double h) {
+        this.setWidth(w);
+        this.setHeight(h);
+    }
+
     public Oval setWidth(double width) {
         this.width = width;
         return this;

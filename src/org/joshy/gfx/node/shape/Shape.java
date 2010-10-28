@@ -2,7 +2,6 @@ package org.joshy.gfx.node.shape;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
-import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.node.Node;
 
 /**
@@ -13,11 +12,9 @@ import org.joshy.gfx.node.Node;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class Shape extends Node {
-    protected Paint fill = FlatColor.BLACK;
-    private Transform axis = Transform.Z_AXIS;
-    private double rotation = 0;
+    protected Paint fill = FlatColor.GRAY;
     protected Paint stroke = FlatColor.BLACK;
-    protected double strokeWidth;
+    protected double strokeWidth = 1;
 
     public Shape() {
         fill = new FlatColor(0,0,0,1);
@@ -28,24 +25,9 @@ public abstract class Shape extends Node {
         return this;
     }
 
-    public void setRotationAxis(Transform axis) {
-        this.axis = axis;
-    }
-
-    public Transform getRotationAxis() {
-        return axis;
-    }
-
-    public double getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-    }
-
-    public void setStroke(Paint strokePaint) {
+    public Shape setStroke(Paint strokePaint) {
         this.stroke = strokePaint;
+        return this;
     }
 
     protected Paint getFill() {
