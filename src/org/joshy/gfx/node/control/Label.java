@@ -8,6 +8,8 @@ import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.Insets;
+import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +64,8 @@ public class Label extends Control {
 
     //TODO: all of this code is very very dodgy and must be rewritten
     private void layoutText() {
+        Insets insets = styleInfo.calcContentInsets();
+        double maxw = sizeInfo.width - insets.getLeft()-insets.getRight();
         if(getWidth() <= 10) return;
         int start = 0;
         int end = 0;
@@ -78,12 +82,17 @@ public class Label extends Control {
                 String[] splitWord = word.split("\n");
                 testLine = line + " " + splitWord[0];
                 lines.add(testLine);
+                if(splitWord.length>1) {
                 line = splitWord[1];
                 testLine = splitWord[1];
+                } else {
+                    line = "";
+                    testLine = "";
+                }
             }
 
             double w = Font.DEFAULT.calculateWidth(testLine);
-            if(w > getWidth()) {
+            if(w > maxw) {
                 lines.add(line);
                 line = word;
                 continue;
@@ -105,9 +114,13 @@ public class Label extends Control {
             doPrefLayout();
         }
         boxPainter.draw(g, styleInfo, sizeInfo, this, "");
+        g.setPaint(boxPainter.color);
         double y = Font.DEFAULT.calculateHeight("ASDF");
+        Insets insets = styleInfo.calcContentInsets();
+        y+=insets.getTop();
+        double x = insets.getLeft();
         for(String line : lines) {
-            g.drawText(line,Font.DEFAULT,0,y);
+            g.drawText(line,Font.DEFAULT,x,y);
             y+= Font.DEFAULT.calculateHeight(line);
         }
         //g.setPaint(FlatColor.RED);

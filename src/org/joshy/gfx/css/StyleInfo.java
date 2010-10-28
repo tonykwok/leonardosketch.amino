@@ -7,4 +7,8 @@ public class StyleInfo {
     public Insets borderWidth;
     public Insets padding;
     public double contentBaseline;
+
+    public Insets calcContentInsets() {
+        return new Insets(margin,borderWidth,padding);
+    }
 }
