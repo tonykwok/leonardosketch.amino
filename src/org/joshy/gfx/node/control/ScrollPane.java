@@ -151,6 +151,9 @@ public class ScrollPane extends AbstractPane {
                 ((Control)n).doPrefLayout();
             }
         }
+        if(getPrefWidth() != CALCULATED) {
+            setWidth(getPrefWidth());
+        }
     }
 
     @Override
@@ -318,13 +321,16 @@ public class ScrollPane extends AbstractPane {
         return hscroll;
     }
 
-    public void setHorizontalVisiblePolicy(VisiblePolicy horizontalVisiblePolicy) {
+    public ScrollPane setHorizontalVisiblePolicy(VisiblePolicy horizontalVisiblePolicy) {
         this.horizontalVisiblePolicy = horizontalVisiblePolicy;
         setDrawingDirty();
+        return this;
     }
 
-    public void setVerticalVisiblePolicy(VisiblePolicy verticalVisiblePolicy) {
+    public ScrollPane setVerticalVisiblePolicy(VisiblePolicy verticalVisiblePolicy) {
         this.verticalVisiblePolicy = verticalVisiblePolicy;
+        setDrawingDirty();
+        return this;
     }
 
     public interface ScrollingAware {

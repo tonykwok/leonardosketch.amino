@@ -164,8 +164,13 @@ public abstract class Control extends Node {
         return this;
     }
 
-    public void addCSSClass(String clss) {
+    public Control addCSSClass(String clss) {
         this.cssClasses.add(clss);
+        return this;
+    }
+
+    public boolean hasCSSClass(String clss) {
+        return cssClasses.contains(clss);
     }
 }
 
