@@ -55,12 +55,12 @@ public class TransformTest implements Runnable {
 
         Stage stage = Stage.createStage();
         stage.setContent(new Panel()
-            .add(trans)
             .add(new VFlexBox()
                 .add(scaleSlider)
                 .add(rotateSlider)
                 .add(translateSlider)
             )
+                .add(trans)
         );
     }
 }

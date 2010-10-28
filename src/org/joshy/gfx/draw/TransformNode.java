@@ -56,7 +56,7 @@ public class TransformNode extends AbstractPane {
 
     @Override
     public Bounds getVisualBounds() {
-        return new Bounds(0,0,100,100);
+        return new Bounds(0,0,0,0);
     }
 
     @Override
