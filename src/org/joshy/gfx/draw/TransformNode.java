@@ -17,13 +17,14 @@ import java.util.List;
  */
 public class TransformNode extends AbstractPane {
     private Node content;
-    private double scaleX;
-    private double scaleY;
-    private double rotate;
+    private double scaleX = 1.0;
+    private double scaleY = 1.0;
+    private double rotate = 0.0;
 
-    public void setContent(Node content) {
+    public TransformNode setContent(Node content) {
         this.content = content;
         content.setParent(this);
+        return this;
     }
 
     public TransformNode setScaleX(double scaleX) {
@@ -38,9 +39,10 @@ public class TransformNode extends AbstractPane {
         return this;
     }
 
-    public void setRotate(double rotate) {
+    public TransformNode setRotate(double rotate) {
         this.rotate = rotate;
         setDrawingDirty();
+        return this;
     }
 
     @Override
