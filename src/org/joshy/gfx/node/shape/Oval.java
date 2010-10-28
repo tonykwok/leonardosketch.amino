@@ -1,9 +1,7 @@
 package org.joshy.gfx.node.shape;
 
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.shape.Shape;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,12 +15,14 @@ public class Oval extends Shape {
     private double width = 100;
     private double height = 100;
 
-    public void setWidth(double width) {
+    public Oval setWidth(double width) {
         this.width = width;
+        return this;
     }
 
-    public void setHeight(double height) {
+    public Oval setHeight(double height) {
         this.height = height;
+        return this;
     }
 
     @Override
@@ -30,7 +30,11 @@ public class Oval extends Shape {
         g.setPaint(getFill());
         g.fillOval(0,0,getWidth(),getHeight());
         g.setPaint(getStroke());
-        g.drawOval(0,0,getWidth(),getHeight());
+        if(getStrokeWidth() > 0) {
+            g.setStrokeWidth(getStrokeWidth());
+            g.drawOval(0,0,getWidth(),getHeight());
+            g.setStrokeWidth(1);
+        }
     }
 
     @Override
@@ -50,4 +54,5 @@ public class Oval extends Shape {
     public double getHeight() {
         return height;
     }
+
 }

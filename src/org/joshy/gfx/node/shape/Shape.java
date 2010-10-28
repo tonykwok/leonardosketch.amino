@@ -17,6 +17,7 @@ public abstract class Shape extends Node {
     private Transform axis = Transform.Z_AXIS;
     private double rotation = 0;
     protected Paint stroke = FlatColor.BLACK;
+    protected double strokeWidth;
 
     public Shape() {
         fill = new FlatColor(0,0,0,1);
@@ -53,5 +54,14 @@ public abstract class Shape extends Node {
 
     protected Paint getStroke() {
         return this.stroke;
+    }
+
+    public Shape setStrokeWidth(double strokeWidth) {
+        this.strokeWidth = strokeWidth;
+        return this;
+    }
+
+    public double getStrokeWidth() {
+        return strokeWidth;
     }
 }
