@@ -18,6 +18,8 @@ import org.parboiled.support.ParsingResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.junit.Assert.assertTrue;
 
@@ -35,14 +37,15 @@ public class MainCSSTest {
     public void setUp() throws Exception {
         Core.setTesting(true);
         Core.init();
+        URI uri = MainCSSTest.class.getResource("test1.css").toURI();
         InputStream css = MainCSSTest.class.getResourceAsStream("test1.css");
         ParsingResult<?> result = parseCSS(css);
         set = new CSSRuleSet();
-        condense(result.parseTreeRoot,set);
+        condense(result.parseTreeRoot,set,uri);
     }
 
     @Test
-    public void basicTests() throws IOException {
+    public void basicTests() throws IOException, URISyntaxException {
 
         //basic matching
         assertTrue(set.findStringValue("button","color").equals("ff00aa"));
@@ -53,7 +56,8 @@ public class MainCSSTest {
 
         //get the url
         CSSMatcher matcher = new CSSMatcher("button");
-        assertTrue(set.findURIValue(matcher,"icon").toString().endsWith("png"));
+        u.p("uri = " + set.findURIValue(matcher,"icon").getFullURI().toString());
+        assertTrue(set.findURIValue(matcher,"icon").getFullURI().toString().endsWith("png"));
         //get the icon position:
         assertTrue("left".equals(set.findStringValue("button","icon-position")));
 
@@ -248,14 +252,15 @@ public class MainCSSTest {
     }
 
     /* -------------- support -------------- */
-    private static void condense(Node<?> node, CSSRuleSet set) {
+    private static void condense(Node<?> node, CSSRuleSet set, URI uri) {
         if(node == null) return;
         if("CSSRule".equals(node.getLabel())) {
             CSSRule rule = (CSSRule) node.getValue();
+            rule.setBaseURI(uri);
             set.rules.add(rule);
         }
         for(Node<?> n : node.getChildren()) {
-            condense(n,set);
+            condense(n,set,uri);
         }
     }
 
