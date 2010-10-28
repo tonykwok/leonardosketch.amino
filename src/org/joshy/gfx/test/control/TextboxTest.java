@@ -1,15 +1,14 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
+import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Textarea;
-import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -54,10 +53,24 @@ public class TextboxTest implements Runnable {
           */
         Stage stage = Stage.createStage();
         //stage.setContent(g);
-        Textarea ta = new Textarea("hello there\nmister man\nhow are you doing todays?");
+        final Textarea ta = new Textarea("hello there\nmister man\nhow are you doing todays?");
         //Textbox ta = new Textbox("hello there");
         //ta.setFont(Font.name("Helvetica").size(50).resolve());
-        stage.setContent(ta);
+        stage.setContent(new VFlexBox()
+                .add(ta)
+                .add(new Button("select all").onClicked(new Callback<ActionEvent>(){
+                        @Override
+                        public void call(ActionEvent event) throws Exception {
+                            ta.selectAll();
+                        }
+                    }))
+                .add(new Button("clear text").onClicked(new Callback<ActionEvent>(){
+                        @Override
+                        public void call(ActionEvent event) throws Exception {
+                            ta.setText("");
+                        }
+                    }))
+        );
 
     }
 }

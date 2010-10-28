@@ -5,6 +5,7 @@ import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -335,6 +336,11 @@ public abstract class TextControl extends Control implements Focusable {
 
     public TextControl setText(String text) {
         this.text = text;
+        int cursorCharX = cursorPointToCursorChar(currentCursorPoint);
+        if(cursorCharX >= text.length()) {
+            cursorCharX = text.length()-1;
+        }
+        currentCursorPoint =  cursorCharToCursorPoint(cursorCharX,text);
         setDrawingDirty();
         return this;
     }
@@ -447,7 +453,17 @@ public abstract class TextControl extends Control implements Focusable {
                 cursorX = 0;
                 row++;
             } else {
-                cursorX = font.getWidth(line.substring(0,cursorLeft));
+                String substring = "";
+                if(cursorLeft <= 0) {
+                    cursorX = 0;
+                    break;
+                }
+                if(cursorLeft >= line.length()) {
+                    substring = line;
+                } else {
+                    substring = line.substring(0,cursorLeft);
+                }
+                cursorX = font.getWidth(substring);
                 break;
             }
         }
@@ -456,8 +472,13 @@ public abstract class TextControl extends Control implements Focusable {
     }
 
     int rowColumnToCursorChar(int row, int col) {
+        if(text == null) return 0;
+        if(text.length() <= 1) return 0;
         String[] lines = text.split("\n");
         int cx = 0;
+        if(row >= lines.length) {
+            return 0;
+        }
         for(int r = 0; r<row; r++) {
             cx += lines[r].length()+1;
         }
