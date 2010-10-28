@@ -2,9 +2,13 @@ package org.joshy.gfx.test.drawing;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Group;
 import org.joshy.gfx.node.shape.Oval;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,12 @@ public class ChartTest implements Runnable {
 
         Stage stage = Stage.createStage();
         stage.setContent(group);
+        EventBus.getSystem().addListener(MouseEvent.MousePressed, new Callback<MouseEvent>(){
+            @Override
+            public void call(MouseEvent event) throws Exception {
+                u.p("pressed: " + event.getSource());
+            }
+        });
     }
 
     class DataPoint {
