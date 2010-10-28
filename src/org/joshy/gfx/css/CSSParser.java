@@ -23,6 +23,7 @@ public class CSSParser extends BaseParser<Object> {
     
     public Rule RuleSet() {
         return Sequence(
+                Spacing(),
                 CSSRule(),
                 ZeroOrMore(CSSRule())
         );
