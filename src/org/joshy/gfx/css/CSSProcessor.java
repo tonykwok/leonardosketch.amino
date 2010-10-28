@@ -1,6 +1,7 @@
 package org.joshy.gfx.css;
 
 import org.joshy.gfx.util.u;
+import org.parboiled.Node;
 import org.parboiled.Parboiled;
 import org.parboiled.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
@@ -8,6 +9,7 @@ import org.parboiled.support.ParsingResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,13 +19,14 @@ import java.io.InputStream;
  * To change this template use File | Settings | File Templates.
  */
 public class CSSProcessor {
-    public static void condense(org.parboiled.Node<?> node, CSSRuleSet set) {
+    public static void condense(Node<?> node, CSSRuleSet set, URI uri) {
         if("CSSRule".equals(node.getLabel())) {
             CSSRule rule = (CSSRule) node.getValue();
+            rule.setBaseURI(uri);
             set.rules.add(rule);
         }
         for(org.parboiled.Node<?> n : node.getChildren()) {
-            condense(n,set);
+            condense(n,set, uri);
         }
     }
 

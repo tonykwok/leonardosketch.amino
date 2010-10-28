@@ -3,6 +3,7 @@ package org.joshy.gfx.css;
 import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.LinearGradientValue;
 import org.joshy.gfx.css.values.ShadowValue;
+import org.joshy.gfx.css.values.URLValue;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
@@ -10,7 +11,6 @@ import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
-import org.joshy.gfx.util.URLUtils;
 
 import java.net.URI;
 
@@ -470,21 +470,14 @@ public abstract class CSSSkin {
 
     protected Image getIcon(CSSMatcher matcher) {
         Image icon = null;
-        URI uri = set.findURIValue(matcher, "icon");
-        if(uri != null) {
-//            u.p("doing the icon: " + uri);
-//            u.p("base URI = " + set.getBaseURI());
-            if(set.getBaseURI() != null) {
-                try {
-                    URI imageURI = URLUtils.safeURIResolve(set.getBaseURI(),uri);
-                    //URI imageURI = set.getBaseURI().resolve(uri);
-//                    u.p("image uri = " + imageURI);
-                    icon = Image.getImageFromCache(imageURI.toURL());
-//                    u.p("Image = " + icon);
-                } catch (Exception e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
+        URLValue uv = set.findURIValue(matcher, "icon");
+        try {
+            if(uv != null) {
+                URI uri = uv.getFullURI();
+                icon = Image.getImageFromCache(uri.toURL());
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return icon;
     }

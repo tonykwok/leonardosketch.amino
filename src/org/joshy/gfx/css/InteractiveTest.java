@@ -69,10 +69,9 @@ public class InteractiveTest implements Runnable {
             try {
                 ParsingResult<?> result = CSSProcessor.parseCSS(new FileInputStream(file));
                 CSSRuleSet set = new CSSRuleSet();
-                set.setBaseURI(file.toURI());
                 SwingCore sc = (SwingCore) Core.getShared();
                 SkinManager.getShared().getCSSSkin().setRuleSet(set);
-                CSSProcessor.condense(result.parseTreeRoot,set);
+                CSSProcessor.condense(result.parseTreeRoot,set,file.toURI());
                 u.p("parsed. reloading skins");
                 Core.getShared().reloadSkins();
             } catch (Exception e) {

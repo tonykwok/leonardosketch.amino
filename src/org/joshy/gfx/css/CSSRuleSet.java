@@ -4,9 +4,7 @@ import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.ColorValue;
 import org.joshy.gfx.css.values.IntegerPixelValue;
 import org.joshy.gfx.css.values.URLValue;
-import org.joshy.gfx.util.u;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +13,6 @@ import java.util.List;
  */
 public class CSSRuleSet {
     public List<CSSRule> rules = new ArrayList<CSSRule>();
-    private URI baseURI;
     private static final boolean DEBUG = false;
     private static void p(String s) {
         if(DEBUG) {
@@ -53,6 +50,10 @@ public class CSSRuleSet {
                     for(CSSProperty prop : rule.getProperties()) {
                         if(prop.name.equals(propName)) {
                             p("found property: " + propName);
+                            if(prop.value instanceof URLValue) {
+                                URLValue uv = (URLValue) prop.value;
+                                uv.baseURI = rule.getBaseURI();
+                            }
                             return prop;
                         }
                     }
@@ -129,18 +130,10 @@ public class CSSRuleSet {
         return prop.value;
     }
 
-    public URI findURIValue(CSSMatcher matcher, String propName) {
+    public URLValue findURIValue(CSSMatcher matcher, String propName) {
         CSSProperty prop = findMatchingRule(matcher,propName);
         if(prop == null) return null;
-        return ((URLValue)prop.value).getValue();
-    }
-
-    public URI getBaseURI() {
-        return baseURI;
-    }
-
-    public void setBaseURI(URI uri) {
-        baseURI = uri;
+        return ((URLValue)prop.value);
     }
 
     public int findIntegerValue(CSSMatcher matcher, String propName) {

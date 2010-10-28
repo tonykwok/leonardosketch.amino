@@ -33,10 +33,9 @@ public class JOGLCore extends Core {
         u.p("css resource = " + url);
         ParsingResult<?> result = CSSProcessor.parseCSS(url.openStream());
         CSSRuleSet set = new CSSRuleSet();
-        set.setBaseURI(url.toURI());
         CSSSkin cssskin = new CSSSkin2();
         cssskin.setRuleSet(set);
-        CSSProcessor.condense(result.parseTreeRoot,set);
+        CSSProcessor.condense(result.parseTreeRoot,set, url.toURI());
         u.p("default css parsed from: " + url);
         SkinManager.getShared().setCSSSkin(cssskin);
     }

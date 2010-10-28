@@ -1,5 +1,6 @@
 package org.joshy.gfx.css;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class CSSRule {
     public List<CSSMatcher> matchers = new ArrayList<CSSMatcher>();
     private List<CSSProperty> properties = new ArrayList<CSSProperty>();
+    public URI baseURI;
 
     public Iterable<? extends CSSProperty> getProperties() {
         return properties;
@@ -24,4 +26,13 @@ public class CSSRule {
     public void addProperty(CSSProperty cssProperty) {
         this.properties.add(cssProperty);
     }
+    
+    public URI getBaseURI() {
+        return baseURI;
+    }
+
+    public void setBaseURI(URI uri) {
+        baseURI = uri;
+    }
+
 }

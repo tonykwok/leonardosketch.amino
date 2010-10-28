@@ -19,6 +19,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +36,7 @@ public class SwingCore extends Core {
     private List<Stage> stages = new ArrayList<Stage>();
     private ParsingResult<?> baseResult;
     private long lastScan;
+    private URI baseResultURI;
 
     public SwingCore() {
         super();
@@ -51,10 +53,10 @@ public class SwingCore extends Core {
         URL url = SwingCore.class.getResource("default.css");
         u.p("css resource = " + url);
         baseResult = CSSProcessor.parseCSS(url.openStream());
+        baseResultURI = url.toURI();
         CSSRuleSet baseSet = new CSSRuleSet();
-        baseSet.setBaseURI(url.toURI());
         u.p("default css parsed from: " + url);
-        CSSProcessor.condense(baseResult.parseTreeRoot, baseSet);
+        CSSProcessor.condense(baseResult.parseTreeRoot, baseSet, url.toURI());
 
         CSSSkin cssskin = new CSSSkin2();
         cssskin.setRuleSet(baseSet);
@@ -108,15 +110,14 @@ public class SwingCore extends Core {
                 //create a new set
                 CSSRuleSet set = new CSSRuleSet();
                 //add in the old rules
-                CSSProcessor.condense(baseResult.parseTreeRoot,set);
+                CSSProcessor.condense(baseResult.parseTreeRoot,set, baseResultURI);
                 u.p("rule count = " + set.rules.size());
 
                 //parse the new file
                 ParsingResult<?> result = CSSProcessor.parseCSS(new FileInputStream(file));
-                set.setBaseURI(file.toURI());
 
                 //add in the new rules
-                CSSProcessor.condense(result.parseTreeRoot,set);
+                CSSProcessor.condense(result.parseTreeRoot,set, file.toURI());
                 u.p("rule count = " + set.rules.size());
 
                 CSSSkin skin = SkinManager.getShared().getCSSSkin();

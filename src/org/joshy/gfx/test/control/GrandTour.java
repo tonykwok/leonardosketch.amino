@@ -10,6 +10,7 @@ import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class GrandTour implements Runnable {
     public static void main(String... args) throws Exception, InterruptedException {
         Core.setUseJOGL(false);
         Core.init();
-        //Core.setDebugCSS(new File("test.css"));
+        Core.setDebugCSS(new File("test.css"));
         Core.getShared().defer(new GrandTour());
     }
 
