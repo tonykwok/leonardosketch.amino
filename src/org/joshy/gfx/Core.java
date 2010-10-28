@@ -9,6 +9,7 @@ import org.joshy.gfx.util.u;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 import org.joshy.gfx.event.FocusManager;
 
@@ -115,4 +116,6 @@ public abstract class Core {
     }
 
     protected abstract void addDebugCSS(File file);
+
+    public abstract  void loadCSS(File file) throws IOException;
 }

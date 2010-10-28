@@ -18,6 +18,7 @@ import org.parboiled.support.ParsingResult;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
@@ -99,6 +100,27 @@ public class SwingCore extends Core {
                 checkDebugCSSFile(file);
             }
         }).start();
+    }
+
+    @Override
+    public void loadCSS(File file) throws IOException {
+        //create a new set
+        CSSRuleSet set = new CSSRuleSet();
+        //add in the old rules
+        CSSProcessor.condense(baseResult.parseTreeRoot,set, baseResultURI);
+        u.p("rule count = " + set.rules.size());
+
+        //parse the new file
+        ParsingResult<?> result = CSSProcessor.parseCSS(new FileInputStream(file));
+
+        //add in the new rules
+        CSSProcessor.condense(result.parseTreeRoot,set, file.toURI());
+        u.p("rule count = " + set.rules.size());
+
+        CSSSkin skin = SkinManager.getShared().getCSSSkin();
+        skin.setRuleSet(set);
+        u.p("parsed. reloading skins");
+        reloadSkins();
     }
 
     private void checkDebugCSSFile(File file) {

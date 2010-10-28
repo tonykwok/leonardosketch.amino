@@ -14,6 +14,7 @@ import org.parboiled.support.ParsingResult;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 public class JOGLCore extends Core {
@@ -62,5 +63,10 @@ public class JOGLCore extends Core {
     @Override
     protected void addDebugCSS(File file) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void loadCSS(File file) throws IOException {
+        
     }
 }
