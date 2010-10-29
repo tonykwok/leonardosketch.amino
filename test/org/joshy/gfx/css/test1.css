@@ -67,6 +67,7 @@ Button.classmatch3 {
     margin: 10px 11px 12px; /* top, left&right, bottom */
 }
 
+/* test expansion of padding properties */
 #padding_test_1 {
     padding-top: 1px;
     padding-right: 3px;
@@ -84,6 +85,13 @@ Button.classmatch3 {
 }
 #padding_test_5 {
     padding: 10px 11px 12px; /* top, left&right, bottom */
+}
+/* test overriding one value of the 4 */
+#padding_test_6 {
+    padding: 5px;
+}
+#padding_test_6 {
+    padding-left: 6px;
 }
 
 #border_test_1 {
