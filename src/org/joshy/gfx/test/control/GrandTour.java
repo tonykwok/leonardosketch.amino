@@ -2,8 +2,6 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.node.shape.BezierCurve;
-import org.joshy.gfx.node.shape.Polygon;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -13,6 +11,9 @@ import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.node.shape.*;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.test.drawing.ChartTest;
+import org.joshy.gfx.test.drawing.OverlayTest;
+import org.joshy.gfx.test.drawing.TransformTest;
 
 import java.awt.geom.Path2D;
 import java.io.IOException;
@@ -294,6 +295,10 @@ public class GrandTour implements Runnable {
                 return new Panel().add(group);
             }
         });
+
+        examples.add(new TransformTest("Transformed Controls"));
+        examples.add(new ChartTest("Scenegraph Chart w/ 1000 data points"));
+        examples.add(new OverlayTest("Interleave Controls and Shapes"));
 
 
 

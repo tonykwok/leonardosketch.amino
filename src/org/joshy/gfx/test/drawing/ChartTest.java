@@ -6,8 +6,11 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Group;
+import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.shape.Oval;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.test.control.GrandTour;
 import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
@@ -20,14 +23,35 @@ import java.util.List;
  * Time: 11:09:49 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ChartTest implements Runnable {
+public class ChartTest extends GrandTour.Example implements Runnable {
+    public ChartTest(String s) {
+        super(s);
+    }
+
     public static void main(String ... args) throws Exception {
         Core.init();
-        Core.getShared().defer(new ChartTest());
+        Core.getShared().defer(new ChartTest("test"));
     }
 
     @Override
     public void run() {
+
+        Stage stage = Stage.createStage();
+        try {
+            stage.setContent(build());
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    @Override
+    public Control build() throws Exception {
+        EventBus.getSystem().addListener(MouseEvent.MousePressed, new Callback<MouseEvent>(){
+            @Override
+            public void call(MouseEvent event) throws Exception {
+                u.p("pressed: " + event.getSource());
+            }
+        });
         Group group = new Group();
         List<DataPoint> dataPoints = new ArrayList<DataPoint>();
         for(int i=0; i<1000; i++) {
@@ -43,15 +67,7 @@ public class ChartTest implements Runnable {
                     .setTranslateY(dp.y)
             );
         }
-
-        Stage stage = Stage.createStage();
-        stage.setContent(group);
-        EventBus.getSystem().addListener(MouseEvent.MousePressed, new Callback<MouseEvent>(){
-            @Override
-            public void call(MouseEvent event) throws Exception {
-                u.p("pressed: " + event.getSource());
-            }
-        });
+        return new Panel().add(group);
     }
 
     class DataPoint {
