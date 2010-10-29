@@ -207,10 +207,10 @@ public class MainCSSTest {
         assertTrue(set.findIntegerValue(m,"padding-left")==11);
 
         m.id = "padding_test_6";
-        assertTrue(set.findIntegerValue(m,"padding-top")==5);
+        assertTrue(set.findIntegerValue(m,"padding-top")==6);
         assertTrue(set.findIntegerValue(m,"padding-right")==5);
         assertTrue(set.findIntegerValue(m,"padding-bottom")==5);
-        assertTrue(set.findIntegerValue(m,"padding-left")==6);
+        assertTrue(set.findIntegerValue(m,"padding-left")==5);
     }
 
     @Test
