@@ -16,6 +16,8 @@ public class Rectangle extends Shape {
     private double y;
     private double width;
     private double height;
+    private double arcWidth;
+    private double arcHeight;
 
     public Rectangle() {
         super();
@@ -85,13 +87,28 @@ public class Rectangle extends Shape {
     @Override
     public void draw(GFX g) {
         g.setPaint(getFill());
-        g.fillRect(x,y,getWidth(),getHeight());
+        if(arcWidth > 0 || arcHeight > 0) {
+            g.fillRoundRect(x,y,width,height,arcWidth,arcHeight);
+        } else {
+            g.fillRect(x,y,width,height);
+        }
         g.setPaint(getStroke());
         if(getStrokeWidth() > 0) {
             g.setStrokeWidth(getStrokeWidth());
-            g.drawRect(x,y,getWidth(),getHeight());
+            if(arcWidth > 0 || arcHeight > 0) {
+                g.drawRoundRect(x,y,width,height,arcWidth,arcHeight);
+            } else {
+                g.drawRect(x,y,width,height);
+            }
             g.setStrokeWidth(1);
         }
     }
 
+    public void setArcWidth(double arcWidth) {
+        this.arcWidth = arcWidth;
+    }
+
+    public void setArcHeight(double arcHeight) {
+        this.arcHeight = arcHeight;
+    }
 }

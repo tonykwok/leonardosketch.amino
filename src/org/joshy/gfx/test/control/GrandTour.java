@@ -242,6 +242,7 @@ public class GrandTour implements Runnable {
             }
         });
 
+        examples.add(new BoxExample());
         examples.add(new Example("Scenegraph Shapes"){
             @Override
             public Control build() throws Exception {
@@ -318,6 +319,7 @@ public class GrandTour implements Runnable {
         split.setPosition(300);
         Stage stage = Stage.createStage();
         stage.setContent(split);
+        stage.setWidth(800);
 
         Callback<SelectionEvent> callback = new Callback<SelectionEvent>() {
             public void call(SelectionEvent event) {
@@ -333,7 +335,7 @@ public class GrandTour implements Runnable {
         EventBus.getSystem().addListener(exampleList, SelectionEvent.Changed, callback);
     }
 
-    private abstract class Example {
+    public abstract static class Example {
         public String name;
 
         public Example(String name) {
@@ -342,4 +344,5 @@ public class GrandTour implements Runnable {
 
         public abstract Control build() throws Exception;
     }
+
 }

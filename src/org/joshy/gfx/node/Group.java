@@ -75,6 +75,13 @@ public class Group extends Node implements Parent {
         setDrawingDirty();
         return this;
     }
+    public Group add(Node ... nodes) {
+        for(Node n : nodes) {
+            add(n);
+        }
+        return this;
+    }
+
 
     public void remove(Node node) {
         node.setParent(null);
