@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,7 +19,10 @@ public class SwingPatternPaint extends PatternPaint {
     BufferedImage image;
 
     public SwingPatternPaint(File file) throws IOException {
-        super();
         image = ImageIO.read(file);
+    }
+
+    public SwingPatternPaint(URL resource) throws IOException {
+        image = ImageIO.read(resource);
     }
 }

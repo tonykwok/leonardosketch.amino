@@ -1,15 +1,12 @@
 package org.joshy.gfx.draw;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.stage.jogl.JOGLGridNine;
 import org.joshy.gfx.stage.jogl.JOGLPatternPaint;
-import org.joshy.gfx.stage.swing.SwingGridNine;
 import org.joshy.gfx.stage.swing.SwingPatternPaint;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,6 +24,14 @@ public class PatternPaint implements Paint {
             return new JOGLPatternPaint(file);
         } else {
             return new SwingPatternPaint(file);
+        }
+    }
+
+    public static PatternPaint create(URL resource) throws IOException {
+        if(Core.getShared().isUseJOGL()) {
+            return new JOGLPatternPaint(resource);
+        } else {
+            return new SwingPatternPaint(resource);
         }
     }
 }

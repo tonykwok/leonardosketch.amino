@@ -9,6 +9,7 @@ import javax.media.opengl.GL;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,6 +27,12 @@ public class JOGLPatternPaint extends PatternPaint {
         this.image = ImageIO.read(file);
         initialized = false;
     }
+
+    public JOGLPatternPaint(URL resource) throws IOException {
+        this.image = ImageIO.read(resource);
+        initialized = false;
+    }
+
     public void initialize() {
         if(!initialized) {
             initialized = true;

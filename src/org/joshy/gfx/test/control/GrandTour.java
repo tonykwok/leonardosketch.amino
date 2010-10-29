@@ -2,6 +2,7 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.PatternPaint;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -248,8 +249,9 @@ public class GrandTour implements Runnable {
             @Override
             public Control build() throws Exception {
                 Group group = new Group();
-                group.add(new Rectangle(100,20,50,20)
-                        .setFill(FlatColor.RED));
+                PatternPaint pat = PatternPaint.create(GrandTour.class.getResource("pattern.png"));
+                group.add(new Rectangle(100,20,200,100)
+                        .setFill(pat));
                 group.add(new Oval(50,20)
                         .setFill(FlatColor.GREEN)
                         .setTranslateX(30)
