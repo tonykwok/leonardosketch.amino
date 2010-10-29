@@ -27,8 +27,10 @@ public class HFlexBox extends FlexBox {
             c.doPrefLayout();
             Bounds bounds = c.getLayoutBounds();
             totalWidth += bounds.getWidth();
+            totalWidth += spacing;
             maxHeight = Math.max(maxHeight,bounds.getHeight());
         }
+        totalWidth -= spacing; //take off the last one
         if(getPrefWidth() == CALCULATED) {
             setWidth(totalWidth+insets.getLeft()+insets.getRight());
         } else {
@@ -53,8 +55,7 @@ public class HFlexBox extends FlexBox {
     public void doLayout() {
         if(insets == null) doPrefLayout();
 
-        //set children to their preferred width first
-        //and calc total width & flex
+        //calc total width & flex with children at their preferred width
         double totalWidth = 0;
         double totalFlex = 0;
         maxBaseline = 0;
@@ -62,9 +63,11 @@ public class HFlexBox extends FlexBox {
             if(!c.isVisible()) continue;
             Bounds bounds = c.getLayoutBounds();
             totalWidth += bounds.getWidth();
+            totalWidth += spacing;
             totalFlex += spaceMap.get(c);
             maxBaseline = Math.max(maxBaseline,c.getBaseline());
         }
+        totalWidth -= spacing; //take off the last one
 
         double totalExcess = getWidth()-totalWidth-insets.getLeft()-insets.getRight();
 
@@ -83,6 +86,7 @@ public class HFlexBox extends FlexBox {
             }
             //update running total
             x = x + c.getWidth();
+            x = x + spacing;
 
             c.setHeight(bounds.getHeight());
 

@@ -27,8 +27,10 @@ public class VFlexBox extends FlexBox {
                 c.setHeight(0);
             }
             totalHeight += bounds.getHeight();
+            totalHeight += spacing;
             maxWidth = Math.max(maxWidth, bounds.getWidth());
         }
+        totalHeight -= spacing; //take off the last one
 
         if(getPrefWidth() == CALCULATED) {
             setWidth(maxWidth+insets.getLeft()+insets.getRight());
@@ -62,6 +64,7 @@ public class VFlexBox extends FlexBox {
                 //c.setWidth(0);
             }
             totalHeight += bounds.getHeight();
+            totalHeight += spacing;
             //u.p("spacemap = " + spaceMap.get(c));
             if(spaceMap.containsKey(c)) {
                 totalFlex += spaceMap.get(c);
@@ -69,6 +72,7 @@ public class VFlexBox extends FlexBox {
                 totalFlex += 0;
             }
         }
+        totalHeight -= spacing; //take off the last one
 
         double totalExcess = getHeight()-totalHeight-insets.getTop()-insets.getBottom();
 
@@ -91,6 +95,7 @@ public class VFlexBox extends FlexBox {
             }
             //update running total
             y = y + c.getHeight();
+            y = y + spacing;
             //set the width
             if(align == Align.Stretch) {
                 c.setWidth(getWidth()-insets.getLeft()-insets.getRight());

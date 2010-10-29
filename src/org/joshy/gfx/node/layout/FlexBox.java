@@ -1,8 +1,9 @@
 package org.joshy.gfx.node.layout;
 
+import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.util.u;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,12 +16,21 @@ import java.util.Map;
 * To change this template use File | Settings | File Templates.
 */
 public abstract class FlexBox extends Panel {
+    protected int spacing;
+
     public enum Align { Stretch, Right, Bottom, Top, Left, Baseline };
     protected Align align = Align.Top;
     protected static final double NONE = 0;
     protected Map<Control,Double> spaceMap = new HashMap<Control,Double>();
 
     public FlexBox() {
+    }
+
+    @Override
+    public void doSkins() {
+        super.doSkins();
+        CSSMatcher matcher = CSSSkin.createMatcher(this, CSSSkin.State.None);
+        spacing = cssSkin.getCSSSet().findIntegerValue(matcher,"spacing");
     }
 
     public FlexBox setBoxAlign(Align baseline) {

@@ -5,7 +5,6 @@ import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.util.OSUtil;
-import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -444,6 +443,10 @@ public abstract class TextControl extends Control implements Focusable {
         double cursorX = 0;
         double cursorW = 1;
         Font font = getFont();
+        if(font == null) {
+            doSkins();
+            font = getFont();
+        }
         double cursorH = font.getAscender() + font.getDescender();
         int row = 0;
         for(String line : lines) {

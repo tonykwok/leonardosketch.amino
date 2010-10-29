@@ -166,6 +166,10 @@ Panel, TitlePanel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
     padding: 3px;
 }
 
+HFlexBox, VFlexBox, GridBox {
+    spacing: 3px;
+}
+
 TitlePanel {
     background-color: transparent;
     border-width: 1px;
