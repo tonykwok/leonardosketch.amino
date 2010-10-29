@@ -107,7 +107,7 @@
     
     <target name="build-grandtour" depends="build-core">
         <java
-            classpath="../leonardosketch-support/AppBundler/dist/AppBundler.jar;build/jars/XMLLib.jar"
+            classpath="lib/AppBundler.jar;lib/XMLLib.jar"
             classname="com.joshondesign.appbundler.Bundler" fork="true">
             <arg value="--file=grandtour-bundler.xml"/>
             <arg value="--target=onejar"/>
