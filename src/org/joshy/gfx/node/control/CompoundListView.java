@@ -4,12 +4,7 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.FocusEvent;
-import org.joshy.gfx.event.KeyEvent;
-import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.event.Scope;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.NodeUtils;
@@ -170,6 +165,13 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
 
     public void setModel(ListModel model) {
         this.model = model;
+        EventBus.getSystem().addListener(model, ListView.ListEvent.Updated, new Callback<ListView.ListEvent>() {
+            public void call(ListView.ListEvent event) {
+                u.p("compound list view got an update from the model");
+                regenerateItemViews();
+            }
+        });
+        
         setSelectedIndex(-1);
         setDrawingDirty();
     }
@@ -200,8 +202,10 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
         //u.p("regen item views. setStart index = " + startIndex + " new view count = " + viewCount);
         for (int i = startIndex; i < startIndex + viewCount + 1; i++) {
             Control itemView = itemViewFactory.createItemView(this, i, null);
-            views.add(itemView);
-            itemView.setParent(this);
+            if(itemView != null) {
+                views.add(itemView);
+                itemView.setParent(this);
+            }
         }
         setSkinDirty();
         setLayoutDirty();
