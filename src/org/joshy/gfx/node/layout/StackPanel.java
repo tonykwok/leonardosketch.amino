@@ -11,13 +11,6 @@ import org.joshy.gfx.node.control.Control;
 */
 public class StackPanel extends Panel {
 
-    @Override
-    public void doPrefLayout() {
-        super.doPrefLayout();
-        for(Control c : controlChildren()) {
-            c.doPrefLayout();
-        }
-    }
 
     @Override
     public void doLayout() {
