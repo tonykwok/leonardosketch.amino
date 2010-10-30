@@ -9,7 +9,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +74,7 @@ public class Label extends Control {
         for(int i =0; i<words.length; i++) {
             String word = words[i];
 
+
             String testLine = line + " " + word;
 
             //hard coded newlines
@@ -93,8 +93,13 @@ public class Label extends Control {
 
             double w = Font.DEFAULT.calculateWidth(testLine);
             if(w > maxw) {
-                lines.add(line);
-                line = word;
+                //if last line
+                if(i == words.length-1) {
+                    lines.add(testLine);
+                } else {
+                    lines.add(line);
+                    line = word;
+                }
                 continue;
             }
 
@@ -127,10 +132,15 @@ public class Label extends Control {
         //g.drawRect(0,0,getWidth(),getHeight());
     }
 
-    public void setText(String text) {
+    public Label setText(String text) {
         this.text = text;
         setLayoutDirty();
         setDrawingDirty();
+        return this;
+    }
+
+    public String getText() {
+        return this.text;
     }
 
     @Override

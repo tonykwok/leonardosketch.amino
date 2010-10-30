@@ -55,6 +55,7 @@ public class GrandTour implements Runnable {
             @Override
             public Control build() throws Exception {
                 FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
+                        .add(new Label("Alabel"))
                         .add(new Label("A label"))
                         .add(new Label("A label so long that it will have to wrap").setPrefWidth(150))
                         .add(new Label("A multiline\nlabel with \nhard coded returns"))

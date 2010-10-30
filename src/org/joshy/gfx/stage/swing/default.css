@@ -37,10 +37,11 @@ Tooltip {
     shrink-to-fit: true;
 }
 
-Label {
+.-class-Label {
     border-width: 0px;
     background-color: transparent;
     shrink-to-fit: true;
+    color: black;
 }
 
 .-class-Button, Togglebutton {
