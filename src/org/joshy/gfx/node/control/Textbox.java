@@ -9,6 +9,7 @@ import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 public class Textbox extends TextControl {
     double xoff = 0;
@@ -107,7 +108,6 @@ public class Textbox extends TextControl {
         String text = filterText(getText());
 
         Font font = this.getFont();
-        font = cssSkin.getDefaultFont();
 
         //draw the selection
         if(selection.isActive() && text.length() >= 1) {
