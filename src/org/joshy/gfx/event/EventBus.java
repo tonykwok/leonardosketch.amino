@@ -32,6 +32,7 @@ public class EventBus {
         callback will be called
      */
     public void addListener(Object source, Event.EventType type, Callback<? extends Event> callback) {
+        if(callback == null) {u.p("WARNING! NULL CALLBACK ADDED"); u.dumpStack(); }
         //u.p("listener = " + callbacks);
         MatchRule rule = new MatchRule(source, type, Scope.Self);
         if(!callbacks.containsKey(rule)) {
@@ -40,6 +41,7 @@ public class EventBus {
         callbacks.get(rule).add(callback);
     }
     public void addListener(Scope scope, Object source, Event.EventType type, Callback<? extends Event> callback) {
+        if(callback == null) {u.p("WARNING! NULL CALLBACK ADDED"); u.dumpStack(); }
         MatchRule rule = new MatchRule(source, type, scope);
         if(!callbacks.containsKey(rule)) {
             callbacks.put(rule,new ArrayList<Callback>());
@@ -48,6 +50,7 @@ public class EventBus {
     }
 
     public void addListener(Event.EventType type, Callback<? extends Event> callback) {
+        if(callback == null) {u.p("WARNING! NULL CALLBACK ADDED"); u.dumpStack(); }
         MatchRule rule = new MatchRule(null, type, Scope.Self);
         if(!callbacks.containsKey(rule)) {
             callbacks.put(rule,new ArrayList<Callback>());

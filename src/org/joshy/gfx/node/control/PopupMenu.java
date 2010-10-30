@@ -27,6 +27,14 @@ public class PopupMenu extends Control {
     private long openTime;
     private ListView.TextRenderer textRenderer;
 
+    public PopupMenu() {
+        setVisible(true);
+        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+            public void call(MouseEvent event) {
+                processMouse(event);
+            }
+        });
+    }
     public PopupMenu(ListModel model, Callback<ChangedEvent> callback) {
         setVisible(true);
         this.model = model;
@@ -159,7 +167,7 @@ public class PopupMenu extends Control {
     }
 
     public void setCallback(Callback<ChangedEvent> callback) {
-        EventBus.getSystem().addListener(this,ChangedEvent.IntegerChanged,callback);
+        EventBus.getSystem().addListener(this, ChangedEvent.IntegerChanged,callback);
     }
 
     public void setTextRenderer(ListView.TextRenderer textRenderer) {
