@@ -133,7 +133,7 @@ public class Textbox extends TextControl {
             double end = font.getWidth(text.substring(0,selection.getTrailingColumn()));
             g.setPaint(FlatColor.GRAY);
             g.fillRect(
-                    cssSize.margin.getLeft() + cssSize.borderWidth.getLeft() + start + xoff,
+                    cssSize.margin.getLeft() + cssSize.borderWidth.getLeft() + cssSize.padding.getLeft() + start + xoff,
                     cp.cursorY + 2 + cssSize.margin.getTop() + cssSize.borderWidth.getTop() + cssSize.padding.getTop(),
                     end-start,
                     cp.cursorH);
