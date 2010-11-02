@@ -1,5 +1,6 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.css.OldStyleInfo;
 import org.joshy.gfx.draw.FlatColor;
@@ -9,8 +10,21 @@ import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.stage.Stage;
 
 public class Textbox extends TextControl {
+    public static void main(String ... args) throws Exception {
+        Core.init();
+        Core.getShared().defer(new Runnable(){
+            @Override
+            public void run() {
+                Stage stage = Stage.createStage();
+                Textbox tb = new Textbox();
+                stage.setContent(tb);
+                Core.getShared().getFocusManager().setFocusedNode(tb);
+            }
+        });
+    }
     double xoff = 0;
     private OldStyleInfo cssSize;
 

@@ -35,8 +35,9 @@ import java.util.Date;
  the text model simply stores lines of text and allows their editing
  the char point converts between screen coords to row & createColumn
  the textcontrol implements the actual drawing and input handleing 
+*/
 
- */
+
 public abstract class TextControl extends Control implements Focusable {
     protected boolean focused;
     protected String text = "";
@@ -476,7 +477,7 @@ public abstract class TextControl extends Control implements Focusable {
 
     int rowColumnToCursorChar(int row, int col) {
         if(text == null) return 0;
-        if(text.length() <= 1) return 0;
+        if(text.length() < 1) return 0;
         String[] lines = text.split("\n");
         int cx = 0;
         if(row >= lines.length) {
