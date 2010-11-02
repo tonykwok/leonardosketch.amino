@@ -12,6 +12,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 public class Button extends Control {
     protected String text;
@@ -197,7 +198,10 @@ public class Button extends Control {
         if(styleInfo == null) {
             doPrefLayout();
         }
-        return styleInfo.margin.getTop() + styleInfo.borderWidth.getTop() + styleInfo.padding.getTop() + styleInfo.contentBaseline;
+        return styleInfo.margin.getTop()
+                + styleInfo.borderWidth.getTop()
+                + styleInfo.padding.getTop()
+                + styleInfo.contentBaseline;
     }
 
     public String getText() {

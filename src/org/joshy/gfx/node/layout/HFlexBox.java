@@ -43,13 +43,6 @@ public class HFlexBox extends FlexBox {
         }
     }
 
-    @Override
-    protected void drawSelf(GFX g) {
-        super.drawSelf(g);
-        //g.setPaint(FlatColor.RED);
-        //g.drawLine(0,maxBaseline,getWidth(),maxBaseline);
-    }
-
     double maxBaseline = 0;
     @Override
     public void doLayout() {
@@ -108,6 +101,13 @@ public class HFlexBox extends FlexBox {
             //layout child
             c.doLayout();
         }
+    }
+
+    @Override
+    protected void drawSelf(GFX g) {
+        super.drawSelf(g);
+//        g.setPaint(FlatColor.RED);
+//        g.drawLine(0,insets.getTop()+maxBaseline,getWidth(),insets.getTop()+maxBaseline);
     }
 
 }

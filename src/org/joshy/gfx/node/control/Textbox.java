@@ -9,7 +9,6 @@ import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 public class Textbox extends TextControl {
     double xoff = 0;
@@ -62,7 +61,11 @@ public class Textbox extends TextControl {
 
     @Override
     public double getBaseline() {
-        return cssSize.margin.getTop() + cssSize.borderWidth.getTop() + cssSize.padding.getTop() + cssSize.contentBaseline;
+        double val = cssSize.margin.getTop()
+                + cssSize.borderWidth.getTop()
+                + cssSize.padding.getTop()
+                + cssSize.contentBaseline;
+        return val;
     }
 
     @Override

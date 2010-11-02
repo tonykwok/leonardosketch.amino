@@ -22,6 +22,8 @@ public class CSSSkin2 extends CSSSkin {
         info.margin = getMargin(matcher);
         info.padding = getPadding(matcher);
         info.borderWidth = getBorderWidth(matcher,"");
+        Font font = getFont(matcher);
+        info.contentBaseline = font.getAscender(); 
         return info;
     }
 
