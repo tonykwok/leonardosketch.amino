@@ -80,14 +80,16 @@ public class Label extends Control {
             //hard coded newlines
             if(word.contains("\n")) {
                 String[] splitWord = word.split("\n");
-                testLine = line + " " + splitWord[0];
-                lines.add(testLine);
-                if(splitWord.length>1) {
-                line = splitWord[1];
-                testLine = splitWord[1];
-                } else {
-                    line = "";
-                    testLine = "";
+                if(splitWord.length > 0) {
+                    testLine = line + " " + splitWord[0];
+                    lines.add(testLine);
+                    if(splitWord.length>1) {
+                        line = splitWord[1];
+                        testLine = splitWord[1];
+                    } else {
+                        line = "";
+                        testLine = "";
+                    }
                 }
             }
 
