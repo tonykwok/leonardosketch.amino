@@ -3,6 +3,7 @@
 <project default="help">
     <target name="help">
         <echo>ant dist      build and package the entire project, including jnlps</echo>
+        <echo>ant build-core  build and jar just amino</echo>
     </target>
 
     <target name="init">
