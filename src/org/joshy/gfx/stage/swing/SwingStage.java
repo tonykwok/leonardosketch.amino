@@ -171,6 +171,7 @@ public class SwingStage extends Stage {
     @Override
     public void setContent(Node node) {
         this.contentNode = node;
+        contentLayer.removeAll();
         contentLayer.add(node);
         this.skinsDirty = true;
         this.layoutDirty = true;
