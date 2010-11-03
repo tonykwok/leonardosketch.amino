@@ -200,7 +200,7 @@ public class SplitPane extends AbstractPane {
         cssSkin.drawBackground(g,matcher,"divider-", thumbBounds);
         cssSkin.drawBorder(g,matcher,"divider-",thumbBounds);
         
-        this.drawingDirty = false;
+        this.setDrawingDirty();
     }
 
 

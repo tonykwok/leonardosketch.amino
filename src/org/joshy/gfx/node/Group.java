@@ -56,14 +56,14 @@ public class Group extends Node implements Parent {
 
     protected void setSkinDirty() {
         this.skinDirty= true;
-        if(parent != null) {
-            parent.setSkinDirty(this);
+        if(getParent() != null) {
+            getParent().setSkinDirty(this);
         }
     }
     protected void setLayoutDirty() {
         this.layoutDirty = true;
-        if(parent != null) {
-            parent.setLayoutDirty(this);
+        if(getParent() != null) {
+            getParent().setLayoutDirty(this);
         }
     }
 

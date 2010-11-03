@@ -106,16 +106,16 @@ public abstract class Control extends Node {
     protected void setLayoutDirty() {
         Core.getShared().assertGUIThread();
         this.layoutDirty = true;
-        if(parent != null) {
-            parent.setLayoutDirty(this);
+        if(getParent() != null) {
+            getParent().setLayoutDirty(this);
         }
     }
 
     protected void setSkinDirty() {
         Core.getShared().assertGUIThread();
         this.skinsDirty = true;
-        if(parent != null) {
-            parent.setSkinDirty(this);
+        if(getParent() != null) {
+            getParent().setSkinDirty(this);
         }
     }
 

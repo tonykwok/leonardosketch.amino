@@ -169,7 +169,7 @@ public class SwatchColorPicker extends Button {
 
         @Override
         public void draw(GFX g) {
-            if (!visible) return;
+            if (!isVisible()) return;
             g.setPaint(FlatColor.WHITE);
             g.fillRect(0, 0, getWidth(), getHeight());
 

@@ -354,7 +354,7 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
     }
 
     public Stage getStage() {
-        return parent.getStage();
+        return getParent().getStage();
     }
 
     public ListModel getModel() {

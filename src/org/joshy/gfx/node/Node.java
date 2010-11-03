@@ -4,11 +4,11 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
 
 public abstract class Node {
-    protected Parent parent;
+    private Parent parent;
     protected boolean drawingDirty = true;
     private double translateZ;
-    protected boolean visible = true;
-    protected double opacity = 1.0;
+    private boolean visible = true;
+    private double opacity = 1.0;
 
     public void setParent(Parent parent) {
         this.parent = parent;
@@ -81,5 +81,9 @@ public abstract class Node {
     public void setOpacity(double opacity) {
         this.opacity = opacity;
         setDrawingDirty();
+    }
+
+    public double getOpacity() {
+        return this.opacity;
     }
 }

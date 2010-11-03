@@ -69,7 +69,7 @@ public class Panel extends Container {
 
     @Override
     public void draw(GFX g) {
-        if(!visible) return;
+        if(!isVisible()) return;
         g.setOpacity(getOpacity());
         drawSelf(g);
         for(Node child : children) {
@@ -111,7 +111,4 @@ public class Panel extends Container {
         return this;
     }
 
-    public double getOpacity() {
-        return this.opacity;
-    }
 }
