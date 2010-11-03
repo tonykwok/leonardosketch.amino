@@ -4,6 +4,8 @@ import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.ColorValue;
 import org.joshy.gfx.css.values.IntegerPixelValue;
 import org.joshy.gfx.css.values.URLValue;
+import org.joshy.gfx.node.Parent;
+import org.joshy.gfx.node.control.Control;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,6 +67,7 @@ public class CSSRuleSet {
     }
 
     private boolean matches(CSSMatcher matcher, CSSMatcher elem) {
+        p("checking if " + matcher + "\n   matches " + elem);
 
         //match pseudo class
         if(matcher.pseudo != null) {
@@ -94,8 +97,13 @@ public class CSSRuleSet {
             for(String c2 : elem.classes) {
                 p("checking css class: " + c1 + " vs " + c2);
                 if(c1.equals(c2)) {
-                    p("matched css class on: " + elem);
-                    return true;
+                    p("matched css class '"+c1+"' on: " + elem);
+                    if(matcher.parent != null) {
+                        p("parent isn't null. must check");
+                        return checkParent(matcher.parent,elem);
+                    } else {
+                        return true;
+                    }
                 }
             }
         }
@@ -105,6 +113,22 @@ public class CSSRuleSet {
             return true;
         }
         return false;
+    }
+
+    private boolean checkParent(CSSMatcher matcher, CSSMatcher elem) {
+        p("doing checkparent");
+        if(elem.control == null) return false;
+        Parent parent = elem.control.getParent();
+        p("       parent control = " + parent);
+        if(parent == null) return false;
+        if(!(parent instanceof Control)) return false;
+
+        CSSMatcher pmatch = new CSSMatcher((Control) parent);
+        if(matches(matcher, pmatch)) {
+            return true;
+        } else {
+            return checkParent(matcher, pmatch);
+        }
     }
 
     public int findIntegerValue(String elemName, String propName) {

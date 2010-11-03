@@ -254,13 +254,14 @@ public class MainCSSTest {
         CSSMatcher matcher = new CSSMatcher(button);
         Control panel = new Panel().add(button).setId("idtest1");
         assertTrue(set.findIntegerValue(matcher,"dummy-prop")==78);
-        assertTrue(set.findIntegerValue(matcher,"dummy-prop2")==79);
+        Control panel2 = new Panel().add(panel).setId("idtest2");
+        assertTrue(set.findIntegerValue(matcher,"dummy-prop2")==165);
 
 
         Stage stage = Stage.createStage();
         stage.setId("window1");
-        stage.setContent(panel);
-        assertTrue(set.findIntegerValue(matcher,"dummy-prop3")==80);
+        stage.setContent(button);
+        assertTrue(set.findIntegerValue(matcher,"dummy-prop3")==199);
     }
 
     /* -------------- support -------------- */

@@ -125,8 +125,13 @@ public class SwingStage extends Stage {
                 }
                 this.drawingDirty = false;
             }
+
+            @Override
+            public String getId() {
+                return SwingStage.this.id;
+            }
         };
-        root.setId("root");
+        root.addCSSClass("-root");
         scene = new SceneComponent();
         contentLayer = new Container() {
             

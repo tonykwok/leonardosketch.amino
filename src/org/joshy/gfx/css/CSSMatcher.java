@@ -17,6 +17,8 @@ public class CSSMatcher {
     public String pseudo;
     public String id;
     public Set<String> classes = new HashSet<String>();
+    public CSSMatcher parent = null;
+    Control control;
 
     public CSSMatcher() {
     }
@@ -26,6 +28,7 @@ public class CSSMatcher {
     }
 
     public CSSMatcher(Control c) {
+        this.control = c;
         this.element = c.getClass().getSimpleName();
         this.id = c.getId();
         classes.addAll(c.getCSSClasses());
@@ -37,7 +40,8 @@ public class CSSMatcher {
                 "element='" + element + '\'' +
                 ", pseudo='" + pseudo + '\'' +
                 ", id='" + id + '\'' +
-                ", cssClass='" + classes + '\'' +
+                ", classes=" + classes +
+                ", parent=" + parent +
                 '}';
     }
 }

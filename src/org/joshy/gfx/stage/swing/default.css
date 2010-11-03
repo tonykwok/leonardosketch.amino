@@ -216,7 +216,7 @@ SplitPane:vertical {
     divider-background: linear-gradient(center top, #888888 0%, #222222 100%);
 }
 
-#root {
+.-root {
     background-color: #d0d0d0;
 }
 

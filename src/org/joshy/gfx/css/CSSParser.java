@@ -20,7 +20,8 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class CSSParser extends BaseParser<Object> {
-    
+
+    //a ruleset represents an entire CSS file
     public Rule RuleSet() {
         return Sequence(
                 Spacing(),
@@ -29,20 +30,23 @@ public class CSSParser extends BaseParser<Object> {
         );
     }
 
+    //this is a CSS rule which can have multiple matchers and multiple property lines in it
     public Rule CSSRule() {
         final Var<List<CSSMatcher>> matcher = new Var<List<CSSMatcher>>();
         final Var properties = new Var();
         return Sequence(
                 //a set of match expressions
-                MatchExpression(),
+                //first matcher
+                CompoundSelector(),
                 matcher.set(new ArrayList()),
-                matcher.get().add((CSSMatcher) this.value("MatchExpression")),
+                matcher.get().add((CSSMatcher) this.value("CompoundSelector")),
+                //optional extra matchers
                 ZeroOrMore(Sequence(
                         Optional(Spacing()),
                         ',',
                         Optional(Spacing()),
-                        MatchExpression(),
-                        matcher.get().add((CSSMatcher) this.value("MatchExpression")),
+                        CompoundSelector(),
+                        matcher.get().add((CSSMatcher) this.value("CompoundSelector")),
                         Optional(Spacing()))),
                 Spacing(),
                 LWING,
@@ -53,7 +57,18 @@ public class CSSParser extends BaseParser<Object> {
         );
     }
 
-    public Rule MatchExpression() {
+    public Rule CompoundSelector() {
+        return Sequence(OneOrMore(
+                Sequence(
+                    Selector()
+                    ,Spacing()
+                    )
+                ),
+                new CompoundSelectorAction());
+    }
+    // a match expression consisting of one or more
+    // id, class, element, and pseudoelement selectors
+    public Rule Selector() {
         final Var<String> elem = new Var<String>();
         final Var<String> pseudo = new Var<String>();
         final Var<String> id = new Var<String>();
@@ -66,7 +81,8 @@ public class CSSParser extends BaseParser<Object> {
                     //foo : match element name
                     Sequence(Sequence(Letter(), ZeroOrMore(LetterOrDigit())),
                             toString,  elem.set((String) value())),
-                    //* : match all
+                    //the '*' character : match all
+                    //TODO: Is this correct? Shouldn't it just be star instead of letter or star?
                     Sequence(LetterOrStar(),
                             toString,elem.set((String)value())),
                     //.foo : match css class
@@ -438,12 +454,34 @@ public class CSSParser extends BaseParser<Object> {
             if(cssClass.get() != null) {
                 match.classes.add(cssClass.get());
             }
-            /*p("--------");
-            p("elem = " + elem.get());
-            p("pseudo = " + pseudo.get());
-            p("id = " + id.get());
-            p("class = " + cssClass.get());*/
+//            u.p("--------");
+//            u.p("elem = " + elem.get());
+//            u.p("pseudo = " + pseudo.get());
+//            u.p("id = " + id.get());
+//            u.p("class = " + cssClass.get());
             set(match);
+            return true;
+        }
+    }
+
+    private class CompoundSelectorAction implements Action{
+        private CompoundSelectorAction() {
+        }
+
+        @Override
+        public boolean run(Context context) {
+//            u.p("doing a compound action " + context.getLastNode().getValue());
+            context.setNodeValue(context.getTreeValue());
+            List selectors = context.getLastNode().getChildren();
+            for(int i=0; i<selectors.size(); i++) {
+                Node sel = (Node) selectors.get(i);
+                CSSMatcher m = (CSSMatcher) sel.getValue();
+//                u.p("real sel = " + m);
+                if(i != 0) {
+//                    u.p("adding to parent");
+                    m.parent = (CSSMatcher)((Node)selectors.get(i-1)).getValue();
+                }
+            }
             return true;
         }
     }
@@ -550,6 +588,7 @@ public class CSSParser extends BaseParser<Object> {
             return true;
         }
     }
+
 }
 
 

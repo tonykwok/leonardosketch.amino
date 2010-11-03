@@ -137,9 +137,18 @@ Button.classmatch3 {
 #idtest1 .-class-Button {
     dummy-prop: 78px;
 }
+#idtest1 blah .-class-Button {
+    dummy-prop1: 1px;
+}
+#idtest2 .-class-Button {
+    dummy-prop2: 165px;
+}
+#window1 .-class-Button {
+    dummy-prop3: 199px;
+}/*
 #idtest1 < Button {
     dummy-prop2: 79px;
 }
 #window1 Button {
     dummy-prop3: 80px;
-}
+}*/
