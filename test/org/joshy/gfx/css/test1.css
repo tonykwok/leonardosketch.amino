@@ -132,3 +132,14 @@ Button.classmatch3 {
     prop2: green;
     prop3: blue;
 }
+
+/* advanced selector tests */
+#idtest1 .-class-Button {
+    dummy-prop: 78px;
+}
+#idtest1 < Button {
+    dummy-prop2: 79px;
+}
+#window1 Button {
+    dummy-prop3: 80px;
+}

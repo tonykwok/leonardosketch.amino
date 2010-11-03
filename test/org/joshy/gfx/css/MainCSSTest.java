@@ -5,6 +5,9 @@ import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.ShadowValue;
 import org.joshy.gfx.css.values.StringListValue;
 import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 import org.junit.After;
 import org.junit.Before;
@@ -107,17 +110,6 @@ public class MainCSSTest {
         idMatcher.id = "hex_test";
         assertTrue(set.findColorValue(idMatcher,"background-color") == 0x00ff00ff);
 
-        //match by element and class
-//        classMatcher.element = "Button";
-//        classMatcher.cssClass = "classmatch2";
-//        assertTrue(set.findIntegerValue(classMatcher,"margin") == 1);
-//        assertTrue(set.findIntegerValue(classMatcher,"padding") == 8);
-
-//        marginTests(set);
-//        paddingTests(set);
-//        borderTests(set);
-//
-//        advancedClassTests(set);
     }
 
     @Test
@@ -171,7 +163,6 @@ public class MainCSSTest {
         assertTrue(set.findIntegerValue(m,"margin-bottom")==12);
         assertTrue(set.findIntegerValue(m,"margin-left")==11);
     }
-
 
     @Test
     public void paddingTests() {
@@ -255,6 +246,21 @@ public class MainCSSTest {
         assertTrue(set.findColorValue(matcher,"prop1")== 0x00ff0000);
         assertTrue(set.findColorValue(matcher,"prop2")== 0x0000ff00);
         assertTrue(set.findColorValue(matcher,"prop3")== 0x000000ff);
+    }
+
+    @Test
+    public void advancedSelectorTests() {
+        Button button = new Button();
+        CSSMatcher matcher = new CSSMatcher(button);
+        Control panel = new Panel().add(button).setId("idtest1");
+        assertTrue(set.findIntegerValue(matcher,"dummy-prop")==78);
+        assertTrue(set.findIntegerValue(matcher,"dummy-prop2")==79);
+
+
+        Stage stage = Stage.createStage();
+        stage.setId("window1");
+        stage.setContent(panel);
+        assertTrue(set.findIntegerValue(matcher,"dummy-prop3")==80);
     }
 
     /* -------------- support -------------- */

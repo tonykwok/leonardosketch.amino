@@ -19,6 +19,7 @@ public class TestingStage extends Stage {
             
         }
     };
+    private String id;
 
     @Override
     public void setContent(Node node) {
@@ -98,6 +99,12 @@ public class TestingStage extends Stage {
     @Override
     public void raiseToTop() {
 
+    }
+
+    @Override
+    public Stage setId(String id) {
+        this.id = id;
+        return this;
     }
 
     public Parent getRoot() {

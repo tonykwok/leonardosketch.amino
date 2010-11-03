@@ -163,6 +163,11 @@ public class JOGLStage extends Stage {
         frame.toFront();
     }
 
+    @Override
+    public Stage setId(String id) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 
     @Override
     public double getHeight() {

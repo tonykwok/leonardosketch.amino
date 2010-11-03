@@ -27,6 +27,7 @@ public class SwingStage extends Stage {
     protected Container root;
     protected Container contentLayer;
     private Node contentNode;
+    private String id;
 
     @Override
     public void setUndecorated(boolean undecorated) {
@@ -53,6 +54,12 @@ public class SwingStage extends Stage {
     public void raiseToTop() {
         frame.setVisible(true);
         frame.toFront();
+    }
+
+    @Override
+    public Stage setId(String id) {
+        this.id = id;
+        return this;
     }
 
     public SwingStage() {

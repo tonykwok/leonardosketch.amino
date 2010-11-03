@@ -57,5 +57,7 @@ public abstract class Stage {
     public abstract void hide();
 
     public abstract void raiseToTop();
+
+    public abstract Stage setId(String id);
 }
 
