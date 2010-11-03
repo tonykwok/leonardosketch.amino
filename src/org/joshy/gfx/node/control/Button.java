@@ -14,17 +14,25 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 
 public class Button extends Control {
-    protected String text;
-    protected boolean pressed = false;
-    protected boolean hovered = false;
-    protected boolean selected;
+    private String text;
+    private boolean pressed = false;
+    private boolean hovered = false;
+    private boolean selected;
     protected boolean selectable = false;
-    protected String style;
+    //protected String style;
     private Callback<ActionEvent> callback;
     protected BoxPainter boxPainter;
 
     public boolean isSelected() {
         return selected;
+    }
+
+    public boolean isHovered() {
+        return hovered;
+    }
+
+    public boolean isPressed() {
+        return pressed;
     }
 
 

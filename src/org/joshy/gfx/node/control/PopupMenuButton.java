@@ -114,7 +114,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
 
     public void setSelectedIndex(int selectedIndex) {
         this.selectedIndex = selectedIndex;
-        this.text = getSelectedItem().toString();
+        this.setText(getSelectedItem().toString());
         EventBus.getSystem().publish(new SelectionEvent(SelectionEvent.Changed,this));
         setDrawingDirty();
     }

@@ -19,17 +19,18 @@ public class Linkbutton extends Button {
                 doPrefLayout();
             }
             CSSMatcher matcher = cssSkin.createMatcher(this, CSSSkin.State.None);
-            if(hovered) {
+            if(isHovered()) {
                 matcher = cssSkin.createMatcher(this, CSSSkin.State.Hover);
             }
-            if(pressed) {
+            if(isPressed()) {
                 matcher = cssSkin.createMatcher(this, CSSSkin.State.Pressed);
             }
             Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
             cssSkin.drawBackground(g, matcher, "", bounds);
             cssSkin.drawBorder(g, matcher, "", bounds);
-            cssSkin.drawText(g,matcher,"",bounds,text);
+            cssSkin.drawText(g,matcher,"",bounds,getText());
             return;
         }
     }
+
 }
