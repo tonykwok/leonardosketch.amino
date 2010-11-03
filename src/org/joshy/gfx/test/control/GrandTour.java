@@ -2,6 +2,7 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.PatternPaint;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
@@ -59,6 +60,7 @@ public class GrandTour implements Runnable {
                         .add(new Label("A label"))
                         .add(new Label("A label so long that it will have to wrap").setPrefWidth(150))
                         .add(new Label("A multiline\nlabel with \nhard coded returns"))
+                        .add(new Label("A Big Font!").setFont(Font.name("Arial").size(30).resolve()));
                 ;
                 return box;
             }

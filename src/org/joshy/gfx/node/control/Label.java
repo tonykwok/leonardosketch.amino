@@ -26,6 +26,7 @@ public class Label extends Control {
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
     private List<String> lines = new ArrayList<String>();
+    private Font realFont;
 
     public Label(String text) {
         this.text = text;
@@ -34,7 +35,7 @@ public class Label extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        styleInfo = cssSkin.getStyleInfo(this);
+        styleInfo = cssSkin.getStyleInfo(this,realFont);
         setLayoutDirty();
     }
 
@@ -49,7 +50,7 @@ public class Label extends Control {
         }
         setHeight(sizeInfo.height);
         layoutText();
-        setHeight(lines.size()*Font.DEFAULT.calculateHeight("ASDF"));
+        setHeight(lines.size()*styleInfo.font.calculateHeight("ASDF"));
     }
 
     @Override
@@ -93,7 +94,7 @@ public class Label extends Control {
                 }
             }
 
-            double w = Font.DEFAULT.calculateWidth(testLine);
+            double w = styleInfo.font.calculateWidth(testLine);
             if(w > maxw) {
                 //if last line
                 if(i == words.length-1) {
@@ -122,13 +123,13 @@ public class Label extends Control {
         }
         boxPainter.draw(g, styleInfo, sizeInfo, this, "");
         g.setPaint(boxPainter.color);
-        double y = Font.DEFAULT.calculateHeight("ASDF");
+        double y = styleInfo.font.calculateHeight("ASDF");
         Insets insets = styleInfo.calcContentInsets();
         y+=insets.getTop();
         double x = insets.getLeft();
         for(String line : lines) {
-            g.drawText(line,Font.DEFAULT,x,y);
-            y+= Font.DEFAULT.calculateHeight(line);
+            g.drawText(line,styleInfo.font,x,y);
+            y+= styleInfo.font.calculateHeight(line);
         }
         //g.setPaint(FlatColor.RED);
         //g.drawRect(0,0,getWidth(),getHeight());
@@ -158,4 +159,9 @@ public class Label extends Control {
         return styleInfo.margin.getTop() + styleInfo.borderWidth.getTop() + styleInfo.padding.getTop() + styleInfo.contentBaseline;
     }
 
+    public Label setFont(Font font) {
+        this.realFont = font;
+        setSkinDirty();
+        return this;
+    }
 }

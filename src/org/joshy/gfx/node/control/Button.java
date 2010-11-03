@@ -12,7 +12,6 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 public class Button extends Control {
     protected String text;
@@ -117,7 +116,7 @@ public class Button extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        styleInfo = cssSkin.getStyleInfo(this);
+        styleInfo = cssSkin.getStyleInfo(this, null);
         setLayoutDirty();
     }
 

@@ -16,14 +16,17 @@ import org.joshy.gfx.node.control.Control;
  * To change this template use File | Settings | File Templates.
  */
 public class CSSSkin2 extends CSSSkin {
-    public StyleInfo getStyleInfo(Control control) {
+    public StyleInfo getStyleInfo(Control control, Font realFont) {
         CSSMatcher matcher = createMatcher(control, CSSSkin.State.None);
         StyleInfo info = new StyleInfo();
         info.margin = getMargin(matcher);
         info.padding = getPadding(matcher);
         info.borderWidth = getBorderWidth(matcher,"");
-        Font font = getFont(matcher);
-        info.contentBaseline = font.getAscender(); 
+        info.font = getFont(matcher);
+        if(realFont != null) {
+            info.font = realFont;
+        }
+        info.contentBaseline = info.font.getAscender();
         return info;
     }
 
@@ -36,16 +39,15 @@ public class CSSSkin2 extends CSSSkin {
         Image icon = getIcon(matcher);
         //calc the sizes
         if("true".equals(set.findStringValue(matcher,"shrink-to-fit"))) {
-            Font font = getFont(matcher);
-            size.contentWidth = font.calculateWidth(content);
-            size.contentHeight = font.calculateHeight(content);
+            size.contentWidth = style.font.calculateWidth(content);
+            size.contentHeight = style.font.calculateHeight(content);
             if(icon != null) {
                 size.contentWidth += icon.getWidth();
                 size.contentHeight = Math.max(size.contentHeight,icon.getHeight());
             }
             size.width = style.margin.getLeft()+style.margin.getRight()+style.borderWidth.getLeft()+style.borderWidth.getRight()+style.padding.getLeft()+style.padding.getRight()+size.contentWidth;
             size.height = style.margin.getTop()+style.margin.getBottom()+style.borderWidth.getTop()+style.borderWidth.getBottom()+style.padding.getTop()+style.padding.getBottom()+size.contentHeight;
-            double fh = font.calculateHeight(content);
+            double fh = style.font.calculateHeight(content);
             size.contentBaseline = (size.contentHeight-fh)/2 + fh;
         } else {
             size.contentBaseline = size.contentHeight;
@@ -83,7 +85,7 @@ public class CSSSkin2 extends CSSSkin {
 
         //content stuff
         boxPainter.icon = getIcon(matcher);
-        boxPainter.font = getFont(matcher);
+        boxPainter.font = style.font;
         boxPainter.textAlign = set.findStringValue(matcher.element,"text-align");
         boxPainter.color = new FlatColor(set.findColorValue(matcher,"color"));
         boxPainter.text_shadow = set.findValue(matcher, "text-shadow");

@@ -62,7 +62,7 @@ public class Tooltip extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        styleInfo = cssSkin.getStyleInfo(this);
+        styleInfo = cssSkin.getStyleInfo(this, null);
         setLayoutDirty();
     }
 

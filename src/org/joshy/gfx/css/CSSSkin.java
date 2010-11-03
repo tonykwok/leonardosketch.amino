@@ -361,7 +361,7 @@ public abstract class CSSSkin {
     }
 
     
-    public abstract StyleInfo getStyleInfo(Control control);
+    public abstract StyleInfo getStyleInfo(Control control, Font realFont);
 
     public abstract SizeInfo getSizeInfo(Control control, StyleInfo style, String content);
 
