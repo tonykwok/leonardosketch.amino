@@ -333,9 +333,6 @@ public class GrandTour implements Runnable {
         split.setFirst(exampleListScroll);
         split.setSecond(new Panel());
         split.setPosition(300);
-        Stage stage = Stage.createStage();
-        stage.setContent(split);
-        stage.setWidth(800);
 
         Callback<SelectionEvent> callback = new Callback<SelectionEvent>() {
             public void call(SelectionEvent event) {
@@ -349,6 +346,11 @@ public class GrandTour implements Runnable {
             }
         };
         EventBus.getSystem().addListener(exampleList, SelectionEvent.Changed, callback);
+
+        Stage stage = Stage.createStage();
+        stage.setContent(split);
+        stage.setWidth(800);
+        stage.centerOnScreen();
     }
 
     public abstract static class Example {

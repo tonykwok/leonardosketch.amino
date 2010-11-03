@@ -62,6 +62,15 @@ public class SwingStage extends Stage {
         return this;
     }
 
+    @Override
+    public void centerOnScreen() {
+//        Toolkit tk = Toolkit.getDefaultToolkit();
+        Point pt = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+//        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+//        Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration());
+        frame.setLocation(pt.x-(int)getWidth()/2,pt.y-(int)getHeight()/2);
+    }
+
     public SwingStage() {
         super();
         frame = new JFrame("stage");

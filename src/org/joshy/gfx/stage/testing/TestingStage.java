@@ -107,6 +107,11 @@ public class TestingStage extends Stage {
         return this;
     }
 
+    @Override
+    public void centerOnScreen() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public Parent getRoot() {
         return root;
     }

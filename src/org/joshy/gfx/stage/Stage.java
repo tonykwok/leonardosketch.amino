@@ -59,5 +59,7 @@ public abstract class Stage {
     public abstract void raiseToTop();
 
     public abstract Stage setId(String id);
+
+    public abstract void centerOnScreen();
 }
 
