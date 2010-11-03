@@ -4,7 +4,6 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.css.OldStyleInfo;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.EventBus;
@@ -123,8 +122,6 @@ public class Textbox extends TextControl {
 
         //filter the text
         String text = filterText(getText());
-
-        Font font = this.getFont();
 
         //draw the selection
         if(selection.isActive() && text.length() >= 1) {

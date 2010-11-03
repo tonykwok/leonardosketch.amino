@@ -345,8 +345,10 @@ public abstract class TextControl extends Control implements Focusable {
         return this;
     }
 
-    public void setFont(Font font) {
+    public TextControl setFont(Font font) {
         this.realFont = font;
+        setSkinDirty();
+        return this;
     }
 
     public Font getFont() {

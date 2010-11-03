@@ -81,6 +81,11 @@ public class GrandTour implements Runnable {
                 searchbox.addCSSClass("searchbox");
                 searchbox.setPrefWidth(150);
 
+                Control largeBox = new Textbox("large font")
+                        .setFont(Font.name("Arial").size(30).resolve())
+                        .setPrefWidth(150)
+                        ;
+
                 Textarea ta = new Textarea();
                 ta.setText("A\nText\nArea");
                 FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
@@ -88,6 +93,7 @@ public class GrandTour implements Runnable {
                         .add(spinBox)
                         .add(passbox)
                         .add(searchbox)
+                        .add(largeBox)
                         .add(ta);
                 return box;
             }
