@@ -12,8 +12,8 @@ public class Passwordbox extends Textbox {
         return bullets;
     }
 
-    @Override
+    /*@Override
     CursorPoint cursorCharToCursorPoint(int cursorCharX, String text) {
         return super.cursorCharToCursorPoint(cursorCharX, filterText(text));
-    }
+    }*/
 }

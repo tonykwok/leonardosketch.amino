@@ -11,11 +11,13 @@ public class TextLayoutModel {
     private String originalText;
     private Font font;
     private List<LayoutLine> lines;
+    private boolean allowMultiline = true;
 
-    public TextLayoutModel(Font font, String text) {
+    public TextLayoutModel(Font font, String text, boolean allowMultiLine) {
         lines = new ArrayList<LayoutLine>();
         this.font = font;
         this.originalText = text;
+        this.allowMultiline = allowMultiLine;
     }
 
     public int lineCount() {
@@ -27,16 +29,16 @@ public class TextLayoutModel {
     }
 
     public void layout(double width, double height) {
-        u.p("doing layout ( "+width+" x " + height + " ) on text: " + originalText);
+//        u.p("doing layout ( "+width+" x " + height + " ) on text: " + originalText);
         lines.clear();
 
         StringBuffer buf = new StringBuffer();
         int wordStart = 0;
         for(int i=0; i<originalText.length(); i++) {
             double w = font.calculateWidth(buf.toString());
-            u.p("width = " + w + "   " + wordStart + " of " + buf.toString());
+//            u.p("width = " + w + "   " + wordStart + " of " + buf.toString());
             //break if line is too long, unless still just one word
-            if(w > width && wordStart > 0) {
+            if(w > width && wordStart > 0 && allowMultiline) {
                 //back up to previous word boundary
                 LayoutLine line = new LayoutLine();
                 String s = buf.toString();
@@ -54,7 +56,7 @@ public class TextLayoutModel {
                 wordStart = buf.length();
             }
             //if hard coded newline, save and start the next line
-            if(isNewLine(ch)) {
+            if(isNewLine(ch) && allowMultiline) {
                 LayoutLine line = new LayoutLine();
                 line.string = buf.toString();
                 lines.add(line);

@@ -41,7 +41,7 @@ public class Textarea extends TextControl {
         String[] lines = text.split("\n");
         g.translate(1,3);
         
-        CursorPoint cp = getCurrentCursorPoint();
+        //CursorPoint cp = getCurrentCursorPoint();
 
         Font font = getFont();
         double y = font.getAscender();
@@ -76,7 +76,9 @@ public class Textarea extends TextControl {
                     end = font.getWidth(line);
                 }
                 g.setPaint(FlatColor.GRAY);
-                g.fillRect(start,y-font.getAscender(), end-start,cp.cursorH);
+
+                //TODO: draw the cursor?
+                //g.fillRect(start,y-font.getAscender(), end-start,cp.cursorH);
                 g.setPaint(FlatColor.BLACK);
             }
 
@@ -87,14 +89,14 @@ public class Textarea extends TextControl {
             y+= font.getAscender() + font.getDescender() + font.getLeading();
             row++;
         }
-
+        /*
         if(focused) {
             // draw cursor
             if(cp != null) {
                 g.fillRect(cp.cursorX , cp.cursorY, cp.cursorW, cp.cursorH);
             }
         }
-
+         */
         g.translate(-1,3);
     }
 

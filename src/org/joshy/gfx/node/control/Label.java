@@ -60,7 +60,7 @@ public class Label extends Control {
     }
 
     private void layoutText() {
-        _layout_model = new TextLayoutModel(styleInfo.font,getText());
+        _layout_model = new TextLayoutModel(styleInfo.font,getText(), true);
         _layout_model.layout(getWidth(),getHeight());
         Insets insets = styleInfo.calcContentInsets();
         setHeight(_layout_model.calculatedHeight()+insets.getTop()+insets.getBottom());

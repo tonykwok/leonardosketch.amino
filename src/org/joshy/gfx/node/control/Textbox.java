@@ -4,11 +4,13 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.css.OldStyleInfo;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.stage.Stage;
 
 public class Textbox extends TextControl {
@@ -42,12 +44,6 @@ public class Textbox extends TextControl {
         return x - xoff - 0 - cssSize.margin.getLeft() - cssSize.borderWidth.getLeft() - cssSize.padding.getLeft();
     }
 
-    @Override
-    public void doSkins() {
-        super.doSkins();
-        setLayoutDirty();
-    }
-
     /* =========== Layout stuff ================= */
     @Override
     public void doPrefLayout() {
@@ -64,11 +60,11 @@ public class Textbox extends TextControl {
         } else {
             setHeight(cssSize.height);
         }
+        doTextLayout();
     }
 
     @Override
     public void doLayout() {
-        if(cssSize == null) doPrefLayout();
         cssSize.width = getWidth();
     }
 
@@ -91,9 +87,6 @@ public class Textbox extends TextControl {
     public void draw(GFX g) {
 
         //draw the background and border first
-        if(cssSize == null) {
-            this.doPrefLayout();
-        }
         CSSMatcher matcher = new CSSMatcher(this);
         cssSkin.drawBackground(g, matcher,"", new Bounds(0,0,getWidth(),getHeight()));
         cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,getWidth(),getHeight()));
@@ -108,7 +101,7 @@ public class Textbox extends TextControl {
                 width - left - right,
                 height));
 
-        //adjust x to scroll if needed
+        /*//adjust x to scroll if needed
         CursorPoint cursor = getCurrentCursorPoint();
         if(cursor.cursorX < -xoff) {
             xoff = 0-cursor.cursorX + 10;
@@ -118,12 +111,13 @@ public class Textbox extends TextControl {
         }
         if(cursor.cursorX == 0) {
             xoff = 0;
-        }
+        } */
 
         //filter the text
         String text = filterText(getText());
 
         //draw the selection
+        /*
         if(selection.isActive() && text.length() >= 1) {
             CursorPoint cp = getCurrentCursorPoint();
             double start = font.getWidth(text.substring(0,selection.getLeadingColumn()));
@@ -135,23 +129,27 @@ public class Textbox extends TextControl {
                     end-start,
                     cp.cursorH);
             g.setPaint(FlatColor.BLACK);
-        }
+        } */
 
         //draw the text
+        Font font = getFont();
+        double y = font.getAscender();
+        Insets insets = styleInfo.calcContentInsets();
+        y+=insets.getTop();
+        double x = insets.getLeft();
         g.setPaint(FlatColor.BLACK);
-        g.drawText(text, font,
-                cssSize.margin.getLeft() + cssSize.borderWidth.getLeft() + cssSize.padding.getLeft() + xoff,
-                getBaseline());
+        g.drawText(text, getFont(), x + xoff, y);
 
         //draw the cursor
-        g.setPaint(FlatColor.BLUE);
         if(focused) {
-            CursorPoint cp = getCurrentCursorPoint();
+            g.setPaint(FlatColor.BLUE);
+            CursorPosition cursor = getCursor();
+            double cx = cursor.calculateX();
             // draw cursor
             g.fillRect(
-                    cssSize.margin.getLeft() + cssSize.borderWidth.getLeft() + + cssSize.padding.getLeft() + cp.cursorX + xoff,
-                    cssSize.margin.getTop() + cssSize.borderWidth.getTop() + cssSize.padding.getTop() + cp.cursorY + 2,
-                    cp.cursorW, cp.cursorH);
+                    insets.getLeft()+cx, insets.getTop(),
+                    1,
+                    getHeight()-insets.getTop()-insets.getBottom());
         }
 
         //restore the old clip

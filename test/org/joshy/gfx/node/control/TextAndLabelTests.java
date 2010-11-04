@@ -1,7 +1,6 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.util.u;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +24,6 @@ public class TextAndLabelTests {
 
     @Test
     public void labelTests() {
-        u.p("doing stuff in a test");
         String text;
 
         //just do a single word and make sure the line count is exactly 1
@@ -70,14 +68,33 @@ public class TextAndLabelTests {
 
 
         
+    }
+
+    @Test
+    public void textboxTests() {
+        String text;
+
+        //just do a single word and make sure the line count is exactly 1
+        Textbox box = new Textbox("shortwords");
+        box.doSkins();
+        box.doPrefLayout();
+        box.setWidth(100);
+        box.setHeight(100);
+        box.doLayout();
+        assertTrue(box._layout_model.lineCount() == 1);
+        assertTrue(box._layout_model.line(0).letterCount() == 10);
+        
         //check that multiple spaces are collapsed
         //select all, check that length of selection is correct
         //select all and delete, check that length of text is 0 and lines is now 1
         //move cursor to end, check that spot is right after last text node
         //move cursor to end of first line, in multiline. check spot
         //move cursor to start of second line, check spot
-        
+    }
 
+    @Test
+    public void textareaTests() {
+        
     }
 
 

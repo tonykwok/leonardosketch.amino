@@ -1,12 +1,14 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Textarea;
+import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 
@@ -30,27 +32,6 @@ public class TextboxTest implements Runnable {
     }
 
     public void run() {
-        /*
-        Panel g = new Panel();
-        Textbox text1 = new Textbox();
-        text1.setText("abcd");
-        //text1.setWidth(100);
-//        text1.setHeight(20);
-        g.add(text1);
-
-        Textarea ta = new Textarea();
-//        ta.setWidth(200);
-//        ta.setHeight(200);
-        ta.setTranslateX(300);
-        g.add(ta);
-        
-        Textbox t2 = new Textbox();
-        t2.setText("abcd");
-//        t2.setWidth(100);
-//        t2.setHeight(20);
-        t2.setTranslateY(100);
-        g.add(t2);
-          */
         Stage stage = Stage.createStage();
         //stage.setContent(g);
         final Textarea ta = new Textarea("hello there\nmister man\nhow are you doing todays?");
@@ -70,7 +51,12 @@ public class TextboxTest implements Runnable {
                             ta.setText("");
                         }
                     }))
-                .add()
+                .add(new Textbox("foo").setPrefWidth(100))
+                .add(new Textbox("bar").setPrefWidth(100))
+                .add(new Textbox("large font")
+                        .setFont(Font.name("Arial").size(50).resolve())
+                        .setPrefWidth(300)
+                )
         );
 
     }
