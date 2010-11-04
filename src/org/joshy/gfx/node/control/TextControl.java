@@ -47,7 +47,7 @@ public abstract class TextControl extends Control implements Focusable {
 
     protected boolean allowMultiLine = false;
     private Font realFont;
-    protected TextSelection selection = new TextSelection(this);
+    protected TextSelection selection;
     TextLayoutModel _layout_model;
     private CursorPosition cursor;
     protected StyleInfo styleInfo;
@@ -55,6 +55,7 @@ public abstract class TextControl extends Control implements Focusable {
 
     protected TextControl() {
         cursor = new CursorPosition();
+        selection = new TextSelection();
 
         EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
@@ -196,38 +197,37 @@ public abstract class TextControl extends Control implements Focusable {
         */
 
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_LEFT_ARROW) {
-//            if(selection.isActive() && !event.isShiftPressed()) {
-//                selection.clear();
-//                return;
-//            }
-//            if(event.isShiftPressed() && !selection.isActive()) {
-//                selection.setStart(currentCursorPoint);
-//            }
+            if(event.isShiftPressed()) {
+                if(!selection.isActive()) {
+                    selection.clear();
+                    selection.direction = TextSelection.LEFT;
+                    selection.setStart(cursor.getIndex());
+                    selection.setEnd(cursor.getIndex());
+                }
+                selection.addLeft(1);
+            } else {
+                selection.clear();
+            }
             cursor.moveLeft(1);
             setDrawingDirty();
-//            if(cursorCharX > 0) {
-//                cursorCharX--;
-//                currentCursorPoint = cursorCharToCursorPoint(cursorCharX,text);
-//                setDrawingDirty();
-//            }
-//            if(event.isShiftPressed() && selection.isActive()) {
-//                selection.setEnd(currentCursorPoint);
-//            }
         }
+        
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_RIGHT_ARROW) {
-//            if(selection.isActive() && !event.isShiftPressed()) {
-//                selection.clear();
-//                return;
-//            }
-//            if(event.isShiftPressed() && !selection.isActive()) {
-//                selection.setStart(currentCursorPoint);
-//            }
+            if(event.isShiftPressed()) {
+                if(!selection.isActive()) {
+                    selection.clear();
+                    selection.direction = TextSelection.RIGHT;
+                    selection.setStart(cursor.getIndex());
+                    selection.setEnd(cursor.getIndex());
+                }
+                selection.addRight(1);
+            } else {
+                selection.clear();
+            }
             cursor.moveRight(1);
             setDrawingDirty();
-//            if(event.isShiftPressed() && selection.isActive()) {
-//                selection.setEnd(currentCursorPoint);
-//            }
         }
+        
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_UP_ARROW) {
             if(!allowMultiLine) {
                 //just move to start
@@ -308,45 +308,7 @@ public abstract class TextControl extends Control implements Focusable {
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
         setDrawingDirty();
     }
-/*
-    private void insertAtCursor(String string) {
-        int cursorCharX = cursorPointToCursorChar(currentCursorPoint);
-        if(text.length() >= 1) {
-            text = text.substring(0, cursorCharX) +
-                "\n"+
-                text.substring(cursorCharX,text.length());
-        } else {
-            text = "\n";
-        }
-        if(selection.isActive()) {
-            selection.clear();
-        }
-        cursorCharX++;
-        currentCursorPoint = cursorCharToCursorPoint(cursorCharX,text);
-        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
-        setDrawingDirty();
-    }
-  */
-    /*
-    private void replaceAndClearSelectionWith(String replacementText) {
-        int cursorCharX = cursorPointToCursorChar(currentCursorPoint);
-        if(text.length() < 1) {
-            text = replacementText;
-        } else {
-            String beforeString = text.substring(0, rowColumnToCursorChar(selection.getLeadingRow(),selection.getLeadingColumn()));
-            String afterString = text.substring(rowColumnToCursorChar(selection.getTrailingRow(),selection.getTrailingColumn()),text.length());
-            cursorCharX = beforeString.length();
-            cursorCharX++;
-            text = beforeString + replacementText + afterString;
-        }
-        currentCursorPoint = cursorCharToCursorPoint(cursorCharX,text);
 
-        selection.clear();
-
-        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
-        setDrawingDirty();
-    }
-    */
     public TextControl setText(String text) {
         this.text = text;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
@@ -406,47 +368,47 @@ public abstract class TextControl extends Control implements Focusable {
         return cursor;
     }
 
-    public static class TextSelection {
-        private TextControl textControl;
+    public  class TextSelection {
         private boolean active;
         public int startRow;
         public int startCol;
         private int endRow;
         public int endCol;
 
-        private TextSelection(TextControl textControl) {
-            this.textControl = textControl;
+        private TextSelection() {
         }
+
+        public static final int LEFT = 1;
+        public static final int RIGHT = 2;
+        int direction = LEFT;
 
         public void clear() {
             active = false;
-            textControl.setDrawingDirty();
+            setDrawingDirty();
         }
 
         protected boolean isActive() {
             return active;
         }
-        /*
-        public void setStart(CursorPoint cp) {
+
+        public void setStart(int index) {
             active = true;
-            startRow = cp.row;
-            endRow = cp.row;
-            startCol = cp.col;
-            endCol = cp.col;
+            startRow = 0;
+            endRow = 0;
+            startCol = index;
+            u.p(this);
+        }
+        public void setEnd(int index) {
+            endCol = index;
+            u.p(this);
         }
 
-        public void setEnd(CursorPoint cp) {
-            endRow = cp.row;
-            endCol = cp.col;
-        }
-        */
         public void selectAll() {
             active = true;
             startRow = 0;
             startCol = 0;
-            String[] lines = textControl.text.split("\n");
-            endRow = lines.length-1;
-            endCol = lines[lines.length-1].length()-1;
+            endRow = 0;
+            startCol = text.length();
         }
 
         public int getLeadingRow() {
@@ -466,15 +428,43 @@ public abstract class TextControl extends Control implements Focusable {
         }
         
         public int getLeadingColumn() {
-            if(endRow < startRow) return endCol;
-            if(endCol < startCol && startRow == endRow) return endCol;
             return startCol;
         }
 
         public int getTrailingColumn() {
-            if(endRow < startRow) return startCol;
-            if(endCol < startCol && startRow == endRow) return startCol;
             return endCol;
+        }
+
+        public void addRight(int i) {
+            if(endCol == startCol) {
+                //flip direction
+                direction = RIGHT;
+            }
+            if(direction == RIGHT) {
+                endCol = getCursor().moveRight(endCol,i);
+            }
+            if(direction == LEFT) {
+                startCol = getCursor().moveLeft(startCol,-i);
+            }
+            u.p(this);
+        }
+
+        public void addLeft(int i) {
+            if(endCol == startCol) {
+                //flip direction
+                direction = LEFT;
+            }
+            if(direction == LEFT) {
+                startCol = getCursor().moveLeft(startCol,i);
+            }
+            if(direction == RIGHT) {
+                endCol = getCursor().moveRight(endCol,-i);
+            }
+            u.p(this);
+        }
+
+        public String toString() {
+            return "selection: " + startCol + " -> " + endCol;
         }
 
     }
@@ -503,8 +493,8 @@ public abstract class TextControl extends Control implements Focusable {
         }
 
         public void moveLeft(int i) {
-            index--;
-            col--;
+            index -= i;
+            col -= i;
             if(index <0) {
                 index = 0;
                 col = 0;
@@ -513,15 +503,31 @@ public abstract class TextControl extends Control implements Focusable {
             u.p(this);
         }
 
+        public int moveLeft(int n, int i) {
+            n -= i;
+            if(n <0) {
+                n = 0;
+            }
+            return n;
+        }
+
         public void moveRight(int i) {
-            index++;
-            col++;
+            index+=i;
+            col+=i;
             String t = getText();
             if(index > t.length()) {
                 index = t.length();
                 col = index;
             }
             u.p(this);
+        }
+        public int moveRight(int n, int i) {
+            n += i;
+            String t = getText();
+            if(n > t.length()) {
+                n = t.length();
+            }
+            return n;
         }
         public String toString() {
             return "cursor: " + col + "," + row + "  index = " + index;
@@ -552,6 +558,11 @@ public abstract class TextControl extends Control implements Focusable {
         public double calculateX() {
             String t = getText();
             t = t.substring(0,index);
+            return getFont().calculateWidth(t);
+        }
+        public double calculateX(int n) {
+            String t = getText();
+            t = t.substring(0,n);
             return getFont().calculateWidth(t);
         }
     }

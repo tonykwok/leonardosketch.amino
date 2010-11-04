@@ -119,19 +119,17 @@ public class Textbox extends TextControl {
         String text = filterText(getText());
 
         //draw the selection
-        /*
-        if(selection.isActive() && text.length() >= 1) {
-            CursorPoint cp = getCurrentCursorPoint();
-            double start = font.getWidth(text.substring(0,selection.getLeadingColumn()));
-            double end = font.getWidth(text.substring(0,selection.getTrailingColumn()));
+
+        if(selection.isActive() && text.length() > 0) {
+            double start = getCursor().calculateX(selection.getLeadingColumn());
+            double end = getCursor().calculateX(selection.getTrailingColumn());
             g.setPaint(FlatColor.GRAY);
             g.fillRect(
-                    cssSize.margin.getLeft() + cssSize.borderWidth.getLeft() + cssSize.padding.getLeft() + start + xoff,
-                    cp.cursorY + 2 + cssSize.margin.getTop() + cssSize.borderWidth.getTop() + cssSize.padding.getTop(),
+                    insets.getLeft() + start + xoff,
+                    insets.getTop(),
                     end-start,
-                    cp.cursorH);
-            g.setPaint(FlatColor.BLACK);
-        } */
+                    getHeight()-insets.getTop()-insets.getBottom());
+        }
 
         //draw the text
         Font font = getFont();
