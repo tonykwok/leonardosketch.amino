@@ -1,8 +1,7 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.OldStyleInfo;
+import org.joshy.gfx.css.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -14,6 +13,9 @@ import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.stage.Stage;
 
 public class Textbox extends TextControl {
+    private SizeInfo sizeInfo;
+    private BoxPainter boxPainter;
+
     public static void main(String ... args) throws Exception {
         Core.init();
         Core.getShared().defer(new Runnable(){
@@ -27,7 +29,6 @@ public class Textbox extends TextControl {
         });
     }
     double xoff = 0;
-    private OldStyleInfo cssSize;
 
     public Textbox() {
         setWidth(100);
@@ -41,40 +42,44 @@ public class Textbox extends TextControl {
 
     @Override
     protected double filterMouseX(double x) {
-        return x - xoff - 0 - cssSize.margin.getLeft() - cssSize.borderWidth.getLeft() - cssSize.padding.getLeft();
+        return x - xoff - 0 - styleInfo.calcContentInsets().getLeft();
+        //return x - xoff - 0 - cssSize.margin.getLeft() - cssSize.borderWidth.getLeft() - cssSize.padding.getLeft();
     }
 
     /* =========== Layout stuff ================= */
     @Override
     public void doPrefLayout() {
-        cssSize = cssSkin.getSize(this,text);
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,text);
+
         if(prefWidth != CALCULATED) {
             setWidth(prefWidth);
-            cssSize.width = prefWidth;
+            sizeInfo.width = prefWidth;
         } else {
-            setWidth(cssSize.width);
+            setWidth(sizeInfo.width);
         }
         if(prefHeight != CALCULATED) {
             setHeight(prefHeight);
-            cssSize.height = prefHeight;
+            sizeInfo.height = prefHeight;
         } else {
-            setHeight(cssSize.height);
+            setHeight(sizeInfo.height);
         }
-        doTextLayout();
+        layoutText();
     }
 
     @Override
     public void doLayout() {
-        cssSize.width = getWidth();
+        layoutText();
+        sizeInfo.width = getWidth();
+        if(sizeInfo != null) {
+            sizeInfo.width = getWidth();
+            sizeInfo.height = getHeight();
+        }
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, CSSSkin.State.None);
     }
 
     @Override
     public double getBaseline() {
-        double val = cssSize.margin.getTop()
-                + cssSize.borderWidth.getTop()
-                + cssSize.padding.getTop()
-                + cssSize.contentBaseline;
-        return val;
+        return styleInfo.calcContentInsets().getTop()+ styleInfo.contentBaseline;
     }
 
     @Override
@@ -85,20 +90,17 @@ public class Textbox extends TextControl {
     /* =============== Drawing stuff ================ */
     @Override
     public void draw(GFX g) {
+        if(!isVisible()) return;
+        //draw background and border, but skip the text
+        boxPainter.draw(g, styleInfo, sizeInfo, this, "");
 
-        //draw the background and border first
-        CSSMatcher matcher = new CSSMatcher(this);
-        cssSkin.drawBackground(g, matcher,"", new Bounds(0,0,getWidth(),getHeight()));
-        cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,getWidth(),getHeight()));
-
-        double left = cssSize.margin.getLeft()+cssSize.borderWidth.getLeft()+cssSize.padding.getLeft();
-        double right = cssSize.padding.getRight()+cssSize.borderWidth.getRight()+cssSize.margin.getRight();
+        Insets insets = styleInfo.calcContentInsets();
         //set a new clip
         Bounds oldClip = g.getClipRect();
         g.setClipRect(new Bounds(
-                cssSize.margin.getLeft()+cssSize.borderWidth.getLeft(),
+                styleInfo.margin.getLeft()+styleInfo.borderWidth.getLeft(),
                 0,
-                width - left - right,
+                width - insets.getLeft() - insets.getRight(),
                 height));
 
         /*//adjust x to scroll if needed
@@ -134,7 +136,6 @@ public class Textbox extends TextControl {
         //draw the text
         Font font = getFont();
         double y = font.getAscender();
-        Insets insets = styleInfo.calcContentInsets();
         y+=insets.getTop();
         double x = insets.getLeft();
         g.setPaint(FlatColor.BLACK);

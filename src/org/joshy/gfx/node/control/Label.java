@@ -10,13 +10,6 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 
-/**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Jan 25, 2010
- * Time: 5:50:29 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Label extends Control {
     private String text = "Label";
     private StyleInfo styleInfo;

@@ -355,7 +355,7 @@ public abstract class TextControl extends Control implements Focusable {
         return this;
     }
 
-    protected void doTextLayout() {
+    protected void layoutText() {
         if(getFont() == null) return;
         _layout_model = new TextLayoutModel(getFont(),getText(),allowMultiLine);
         _layout_model.layout(getWidth(),getHeight());
