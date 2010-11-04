@@ -23,7 +23,7 @@ public class CSSProcessor {
         if("CSSRule".equals(node.getLabel())) {
             CSSRule rule = (CSSRule) node.getValue();
             rule.setBaseURI(uri);
-            set.rules.add(rule);
+            set.append(rule);
         }
         for(org.parboiled.Node<?> n : node.getChildren()) {
             condense(n,set, uri);

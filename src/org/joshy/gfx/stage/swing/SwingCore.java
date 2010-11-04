@@ -108,14 +108,14 @@ public class SwingCore extends Core {
         CSSRuleSet set = new CSSRuleSet();
         //add in the old rules
         CSSProcessor.condense(baseResult.parseTreeRoot,set, baseResultURI);
-        u.p("rule count = " + set.rules.size());
+        u.p("rule count = " + set.rulesCount());
 
         //parse the new file
         ParsingResult<?> result = CSSProcessor.parseCSS(new FileInputStream(file));
 
         //add in the new rules
         CSSProcessor.condense(result.parseTreeRoot,set, file.toURI());
-        u.p("rule count = " + set.rules.size());
+        u.p("rule count = " + set.rulesCount());
 
         CSSSkin skin = SkinManager.getShared().getCSSSkin();
         skin.setRuleSet(set);
@@ -133,14 +133,14 @@ public class SwingCore extends Core {
                 CSSRuleSet set = new CSSRuleSet();
                 //add in the old rules
                 CSSProcessor.condense(baseResult.parseTreeRoot,set, baseResultURI);
-                u.p("rule count = " + set.rules.size());
+                u.p("rule count = " + set.rulesCount());
 
                 //parse the new file
                 ParsingResult<?> result = CSSProcessor.parseCSS(new FileInputStream(file));
 
                 //add in the new rules
                 CSSProcessor.condense(result.parseTreeRoot,set, file.toURI());
-                u.p("rule count = " + set.rules.size());
+                u.p("rule count = " + set.rulesCount());
 
                 CSSSkin skin = SkinManager.getShared().getCSSSkin();
                 skin.setRuleSet(set);

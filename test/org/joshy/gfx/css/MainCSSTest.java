@@ -270,7 +270,7 @@ public class MainCSSTest {
         if("CSSRule".equals(node.getLabel())) {
             CSSRule rule = (CSSRule) node.getValue();
             rule.setBaseURI(uri);
-            set.rules.add(rule);
+            set.append(rule);
         }
         for(Node<?> n : node.getChildren()) {
             condense(n,set,uri);

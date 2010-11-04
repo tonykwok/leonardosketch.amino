@@ -18,6 +18,7 @@ public class CSSMatcher {
     public String id;
     public Set<String> classes = new HashSet<String>();
     public CSSMatcher parent = null;
+    public CSSRule rule;
     Control control;
 
     public CSSMatcher() {

@@ -6,28 +6,43 @@ import org.joshy.gfx.css.values.IntegerPixelValue;
 import org.joshy.gfx.css.values.URLValue;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**  Represents an entire set of CSS rules. Usually it maps to a single .css file.
  */
 public class CSSRuleSet {
-    public List<CSSRule> rules = new ArrayList<CSSRule>();
+    private List<CSSRule> rules;// = new ArrayList<CSSRule>();
     private static final boolean DEBUG = false;
-    private static void p(String s) {
-        if(DEBUG) {
-            System.out.println(s);
-        }
-    }
+    private List<CSSMatcher> idMatchers;
+    private List<CSSMatcher> classMatchers;
+    private List<CSSRule> reverseRules;
 
     public CSSRuleSet() {
-        
+        rules = new ArrayList<CSSRule>();
+        reverseRules = new ArrayList<CSSRule>();
+        idMatchers = new ArrayList<CSSMatcher>();
+        classMatchers = new ArrayList<CSSMatcher>();
     }
 
     public void append(CSSRuleSet set) {
-        rules.addAll(set.rules);
+        for(CSSRule r : set.rules) {
+            append(r);
+        }
+    }
+    public void append(CSSRule rule) {
+        rules.add(rule);
+        reverseRules.add(0,rule);
+        for(CSSMatcher m : rule.matchers) {
+            if(m.id != null) {
+                idMatchers.add(m);
+            }
+            if(!m.classes.isEmpty()) {
+                classMatchers.add(m);
+            }
+        }
     }
 
     public String findStringValue(String elem, String propName) {
@@ -40,18 +55,11 @@ public class CSSRuleSet {
     }
 
     public CSSProperty findMatchingRule(CSSMatcher elem, String propName) {
-        p("----- looking for property: " + propName);
-        p("on element: " + elem);
-        List<CSSRule> rulescopy = new ArrayList<CSSRule>();
-        rulescopy.addAll(rules);
-        Collections.reverse(rulescopy);
-        for(CSSRule rule : rulescopy) {
+        for(CSSRule rule : reverseRules) {
             for(CSSMatcher matcher : rule.matchers) {
-                p("checking matcher: " + matcher);
                 if(matches(matcher,elem)) {
                     for(CSSProperty prop : rule.getProperties()) {
                         if(prop.name.equals(propName)) {
-                            p("found property: " + propName);
                             if(prop.value instanceof URLValue) {
                                 URLValue uv = (URLValue) prop.value;
                                 uv.baseURI = rule.getBaseURI();
@@ -59,7 +67,6 @@ public class CSSRuleSet {
                             return prop;
                         }
                     }
-                    p("didn't find property: " + propName + ". trying again");
                 }
             }
         }
@@ -67,39 +74,30 @@ public class CSSRuleSet {
     }
 
     private boolean matches(CSSMatcher matcher, CSSMatcher elem) {
-        p("checking if " + matcher + "\n   matches " + elem);
 
         //match pseudo class
         if(matcher.pseudo != null) {
-            p("looking for pseudo: "+ matcher.pseudo + " " + matcher.element);
             if(matcher.pseudo.equals(elem.pseudo) && matcher.element != null && matcher.element.equals(elem.element)) {
-                p("matched pseudo on: " + elem);
                 return true;
             }
         }
 
         if(matcher.id != null) {
-           p("checking id: " + matcher.id + " vs " + elem.id);
             if(matcher.id.equals(elem.id)) {
-                p("matched id on: " + elem);
                 return true;
             }
         }
 
         if(matcher.element != null) {
             if(matcher.element.equals(elem.element) && matcher.pseudo == null) {
-                p("matched element on: " + elem);
                 return true;
             }
         }
 
         for(String c1 : matcher.classes) {
             for(String c2 : elem.classes) {
-                p("checking css class: " + c1 + " vs " + c2);
                 if(c1.equals(c2)) {
-                    p("matched css class '"+c1+"' on: " + elem);
                     if(matcher.parent != null) {
-                        p("parent isn't null. must check");
                         return checkParent(matcher.parent,elem);
                     } else {
                         return true;
@@ -109,17 +107,16 @@ public class CSSRuleSet {
         }
 
         if("*".equals(matcher.element)) {
-            p("Matched * on: " + elem);
             return true;
         }
         return false;
     }
 
     private boolean checkParent(CSSMatcher matcher, CSSMatcher elem) {
-        p("doing checkparent");
+        u.p("doing checkparent");
         if(elem.control == null) return false;
         Parent parent = elem.control.getParent();
-        p("       parent control = " + parent);
+        u.p("       parent control = " + parent);
         if(parent == null) return false;
         if(!(parent instanceof Control)) return false;
 
@@ -135,7 +132,6 @@ public class CSSRuleSet {
         CSSProperty prop = findMatchingRule(new CSSMatcher(elemName), propName);
         if(prop == null) return 0;
         int v = ((IntegerPixelValue)prop.value).getValue();
-//        u.p("Prop value " + v);
         return v;
     }
 
@@ -161,9 +157,12 @@ public class CSSRuleSet {
     }
 
     public int findIntegerValue(CSSMatcher matcher, String propName) {
-        p("--------");
         CSSProperty prop = findMatchingRule(matcher,propName);
         if(prop == null) return -1;
         return ((IntegerPixelValue)prop.value).getValue();
+    }
+
+    public int rulesCount() {
+        return rules.size();
     }
 }

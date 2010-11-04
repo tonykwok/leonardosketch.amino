@@ -8,7 +8,6 @@ import org.parboiled.annotations.SuppressNode;
 import org.parboiled.support.Var;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -415,7 +414,10 @@ public class CSSParser extends BaseParser<Object> {
 
         public boolean run(Context context) {
             CSSRule rule = new CSSRule();
-            rule.matchers.addAll((Collection<? extends CSSMatcher>) matcher.get());
+            rule.matchers.addAll(matcher.get());
+            for(CSSMatcher m : rule.matchers) {
+                m.rule = rule;
+            }
             for(Object n : context.getLastNode().getChildren()) {
                 Object value = ((Node)n).getValue();
                 if(value instanceof CSSProperty) {
