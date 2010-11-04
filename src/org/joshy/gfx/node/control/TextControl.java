@@ -170,12 +170,19 @@ public abstract class TextControl extends Control implements Focusable {
             String t = getText();
             //if text is empty do nothing
             if(t.length() == 0) return;
-            
-            //split, then remove text in the middle
-            String[] parts = cursor.splitText();
-            parts[0] = parts[0].substring(0,cursor.getIndex()-1);
-            setText(parts[0]+parts[1]);
-            cursor.moveLeft(1);
+
+            if(selection.isActive()) {
+                String[] parts = cursor.splitSelectedText();
+                setText(parts[0]+parts[2]);
+                cursor.setIndex(parts[0].length());
+                selection.clear();
+            } else {
+                //split, then remove text in the middle
+                String[] parts = cursor.splitText();
+                parts[0] = parts[0].substring(0,cursor.getIndex()-1);
+                setText(parts[0]+parts[1]);
+                cursor.moveLeft(1);
+            }
             return;
         }
         /*
@@ -297,16 +304,16 @@ public abstract class TextControl extends Control implements Focusable {
 }
 
     private void insertText(String generatedText) {
-//        if(selection.isActive() && text.length() >= 1) {
-//            replaceAndClearSelectionWith(generatedText);
-//            return;
-//        }
-        u.p("inserting text: " + generatedText);
-        String[] parts = cursor.splitText();
-        setText(parts[0]+generatedText+parts[1]);
-        cursor.moveRight(1);
-        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
-        setDrawingDirty();
+        if(selection.isActive()) {
+            String[] parts = cursor.splitSelectedText();
+            setText(parts[0]+generatedText+parts[2]);
+            cursor.setIndex(parts[0].length() + generatedText.length());
+            selection.clear();
+        } else {
+            String[] parts = cursor.splitText();
+            setText(parts[0]+generatedText+parts[1]);
+            cursor.moveRight(1);
+        }
     }
 
     public TextControl setText(String text) {
@@ -492,6 +499,11 @@ public abstract class TextControl extends Control implements Focusable {
             return index;
         }
 
+        public void setIndex(int i) {
+            this.index = i;
+            u.p(this);
+        }
+
         public void moveLeft(int i) {
             index -= i;
             col -= i;
@@ -538,6 +550,15 @@ public abstract class TextControl extends Control implements Focusable {
             String[] parts =  new String[2];
             parts[0] = t.substring(0,index);
             parts[1] = t.substring(index);
+            return parts;
+        }
+
+        public String[] splitSelectedText() {
+            String t = getText();
+            String[] parts =  new String[3];
+            parts[0] = t.substring(0,selection.getLeadingColumn());
+            parts[1] = t.substring(selection.getLeadingColumn(),selection.getTrailingColumn());
+            parts[2] = t.substring(selection.getTrailingColumn());
             return parts;
         }
 
