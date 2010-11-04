@@ -26,6 +26,8 @@ public class MailApp implements Runnable {
         //content = test2();
         Stage stage = Stage.createStage();
         stage.setContent(content);
+        stage.setWidth(850);
+        stage.setHeight(600);
 
     }
 
@@ -49,22 +51,26 @@ public class MailApp implements Runnable {
                         .add(new Button("Note"))
                         .add(new Button("Todo"))
                         .add(new Spacer(),1)
-                        .add(new Textbox("Search"))
+                        .add(new Textbox("Search").setPrefWidth(150))
                  , 0)
             .add(new HFlexBox()
                 .setBoxAlign(HFlexBox.Align.Stretch)
                 .add(new VFlexBox()
                         .setBoxAlign(FlexBox.Align.Stretch)
-                        .add(new ScrollPane(new ListView()),1)
+                        .add(new ScrollPane(new ListView())
+                                .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
+                                ,1)
                         .add(new HFlexBox()
                             .setBoxAlign(HFlexBox.Align.Stretch)
                             .add(new Button("+"))
                             .add(new Button("^"))
                             .add(new Button("*")),0)
+                        .setPrefWidth(200)
                     ,0)
 
                 .add(new SplitPane(true)
-                    .setFirst(new ScrollPane(new TableView()))
+                    .setFirst(new ScrollPane(new TableView())
+                            .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never))
                     .setSecond(new Panel()
                         .setFill(FlatColor.BLUE)
                         .setWidth(100)
