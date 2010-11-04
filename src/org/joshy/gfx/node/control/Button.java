@@ -170,9 +170,6 @@ public class Button extends Control {
         if(!isVisible()) return;
         g.setPaint(new FlatColor(1,0,0,1));
 
-        if(sizeInfo == null) {
-            doPrefLayout();
-        }
         boxPainter.draw(g, styleInfo, sizeInfo, this, text);
     }
 

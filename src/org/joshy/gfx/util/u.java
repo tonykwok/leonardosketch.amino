@@ -19,7 +19,9 @@ import java.util.List;
 public class u {
     private static PrintStream wrt;
     private static boolean useWrt = false;
-    
+    private static int indent;
+    private static String indentString = "";
+
     public static void p(String str) {
         if(useWrt && wrt == null) {
             try {
@@ -32,10 +34,10 @@ public class u {
             }
         }
         
-        System.out.println(str);
+        System.out.println(indentString+str);
         System.out.flush();
         if(wrt != null) {
-            wrt.println(str);
+            wrt.println(indentString+str);
             wrt.flush();
         }
     }
@@ -161,6 +163,22 @@ public class u {
         }
         if(th.getCause() != null) {
             printFullStackTrace(th.getCause());
+        }
+    }
+
+    public static void indent() {
+        indent++;
+        indentString = "";
+        for(int i=0;i<indent;i++) {
+            indentString += " ";
+        }
+    }
+
+    public static void outdent() {
+        indent--;
+        indentString = "";
+        for(int i=0;i<indent;i++) {
+            indentString += " ";
         }
     }
 }

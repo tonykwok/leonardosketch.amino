@@ -312,8 +312,23 @@ public class SwingStage extends Stage {
 
         private void doSkins() {
             PerformanceTracker.getInstance().skinStart();
-            root.doSkins();
+            processSkins(root);
+            //root.doSkins();
             PerformanceTracker.getInstance().skinEnd();
+        }
+
+        private void processSkins(Control control) {
+            if(control.isSkinDirty()) {
+                if(control instanceof Parent) {
+                    for(Node n : ((Parent)control).children()) {
+                        if(n instanceof Control) {
+                            processSkins((Control) n);
+                        }
+                    }
+                }
+                control.doSkins();
+                control.skinsDirty = false;
+            }
         }
 
         private void doGFXPrefLayout(int width, int height) {

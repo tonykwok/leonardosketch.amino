@@ -21,7 +21,7 @@ public abstract class Control extends Node {
     protected double prefHeight = CALCULATED;
     private boolean enabled = true;
     
-    protected boolean skinsDirty;
+    public boolean skinsDirty;
     protected boolean layoutDirty;
     protected CSSSkin cssSkin;
     private String id;
@@ -171,6 +171,10 @@ public abstract class Control extends Node {
 
     public boolean hasCSSClass(String clss) {
         return cssClasses.contains(clss);
+    }
+
+    public boolean isSkinDirty() {
+        return skinsDirty;
     }
 }
 
