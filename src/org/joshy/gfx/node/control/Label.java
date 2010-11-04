@@ -10,9 +10,6 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by IntelliJ IDEA.
  * User: josh
@@ -25,8 +22,8 @@ public class Label extends Control {
     private StyleInfo styleInfo;
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
-    private List<String> lines = new ArrayList<String>();
     private Font realFont;
+    public TextLayoutModel _layout_model;
 
     public Label(String text) {
         this.text = text;
@@ -50,11 +47,11 @@ public class Label extends Control {
         }
         setHeight(sizeInfo.height);
         layoutText();
-        setHeight(lines.size()*styleInfo.font.calculateHeight("ASDF"));
     }
 
     @Override
     public void doLayout() {
+        layoutText();
         if(sizeInfo != null) {
             sizeInfo.width = getWidth();
             sizeInfo.height = getHeight();
@@ -62,57 +59,11 @@ public class Label extends Control {
         boxPainter = cssSkin.createBoxPainter(this,styleInfo,sizeInfo,text,CSSSkin.State.None);
     }
 
-    //TODO: all of this code is very very dodgy and must be rewritten
     private void layoutText() {
+        _layout_model = new TextLayoutModel(styleInfo.font,getText());
+        _layout_model.layout(getWidth(),getHeight());
         Insets insets = styleInfo.calcContentInsets();
-        double maxw = sizeInfo.width - insets.getLeft()-insets.getRight();
-        if(getWidth() <= 10) return;
-        int start = 0;
-        int end = 0;
-        lines.clear();
-        String[] words = text.split(" ");
-        String line = "";
-        for(int i =0; i<words.length; i++) {
-            String word = words[i];
-
-
-            String testLine = line + " " + word;
-
-            //hard coded newlines
-            if(word.contains("\n")) {
-                String[] splitWord = word.split("\n");
-                if(splitWord.length > 0) {
-                    testLine = line + " " + splitWord[0];
-                    lines.add(testLine);
-                    if(splitWord.length>1) {
-                        line = splitWord[1];
-                        testLine = splitWord[1];
-                    } else {
-                        line = "";
-                        testLine = "";
-                    }
-                }
-            }
-
-            double w = styleInfo.font.calculateWidth(testLine);
-            if(w > maxw) {
-                //if last line
-                if(i == words.length-1) {
-                    lines.add(testLine);
-                } else {
-                    lines.add(line);
-                    line = word;
-                }
-                continue;
-            }
-
-            //last word
-            if(i == words.length-1) {
-                lines.add(testLine);
-            }
-
-            line = testLine;
-        }
+        setHeight(_layout_model.calculatedHeight()+insets.getTop()+insets.getBottom());
     }
 
     @Override
@@ -123,13 +74,13 @@ public class Label extends Control {
         }
         boxPainter.draw(g, styleInfo, sizeInfo, this, "");
         g.setPaint(boxPainter.color);
-        double y = styleInfo.font.calculateHeight("ASDF");
+        double y = styleInfo.font.getAscender();
         Insets insets = styleInfo.calcContentInsets();
         y+=insets.getTop();
         double x = insets.getLeft();
-        for(String line : lines) {
-            g.drawText(line,styleInfo.font,x,y);
-            y+= styleInfo.font.calculateHeight(line);
+        for(TextLayoutModel.LayoutLine line : _layout_model.lines()) {
+            g.drawText(line.getString(),styleInfo.font,x,y);
+            y+= line.getHeight();
         }
         //g.setPaint(FlatColor.RED);
         //g.drawRect(0,0,getWidth(),getHeight());

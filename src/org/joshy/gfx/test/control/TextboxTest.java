@@ -70,6 +70,7 @@ public class TextboxTest implements Runnable {
                             ta.setText("");
                         }
                     }))
+                .add()
         );
 
     }
