@@ -81,20 +81,22 @@ public class HFlexBox extends FlexBox {
             x = x + c.getWidth();
             x = x + spacing;
 
-            c.setHeight(bounds.getHeight());
-
             //position y
             if(align == Align.Top) {
                 c.setTranslateY(0+insets.getTop());
+                c.setHeight(bounds.getHeight());
             } else if(align == Align.Baseline) {
                 c.setTranslateY(insets.getTop() + maxBaseline-c.getBaseline());
+                c.setHeight(bounds.getHeight());
             } else if(align == Align.Bottom) {
                 c.setTranslateY(getHeight()-bounds.getHeight()+insets.getTop());
+                c.setHeight(bounds.getHeight());
             } else if (align == Align.Stretch) {
                 c.setTranslateY(0+insets.getTop());
                 c.setHeight(getHeight()-insets.getTop()-insets.getBottom());
             } else {
                 c.setTranslateY(0+insets.getTop());
+                c.setHeight(bounds.getHeight());
             }
 
 
