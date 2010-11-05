@@ -110,5 +110,9 @@ public class TextLayoutModel {
         public double getHeight() {
             return font.getAscender()+font.getDescender();
         }
+
+        public double getWidth() {
+            return font.calculateWidth(getString());
+        }
     }
 }

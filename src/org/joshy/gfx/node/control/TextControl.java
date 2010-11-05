@@ -62,6 +62,9 @@ public abstract class TextControl extends Control implements Focusable {
                 if(selection.isActive() && !event.isShiftPressed()) {
                     selection.clear();
                 }
+                double ex = filterMouseX(event.getX());
+                double ey = filterMouseY(event.getY());
+                cursor.setIndexFromMouse(ex,ey);
                 /*
                 if(text.length() >= 1) {
                     double ex = filterMouseX(event.getX());
@@ -591,6 +594,62 @@ public abstract class TextControl extends Control implements Focusable {
             this.row = 0;
             this.col = 0;
             this.index = 0;
+        }
+
+        public void setIndexFromMouse(double ex, double ey) {
+//            u.p("calculating from mouse: " + ex + " " + ey);
+
+            //calc row first
+            double y = 0;
+            int rowcount =0;
+            for(TextLayoutModel.LayoutLine line : _layout_model.lines()) {
+                if(ey >= y && ey < y + line.getHeight()) {
+                    row = rowcount;
+                    break;
+                }
+                y+= line.getHeight();
+                rowcount++;
+            }
+
+            TextLayoutModel.LayoutLine line = _layout_model.line(row);
+            if(ex < 0) {
+                col = 0;
+            } else if(ex > line.getWidth()) {
+                col = line.letterCount();
+            } else {
+                //now calc the column
+                String text = line.getString();
+//                u.p("text = " + text);
+                double lastX = 0;
+                for(int i=0; i<text.length(); i++) {
+                    double x = getFont().calculateWidth(text.substring(0,i));
+                    double w = (x-lastX)/2;
+//                    u.p("i = " + i + " x = " + x + " w = " + w);
+                    if(ex >= x-w && ex < x+w) {
+//                        u.p("found at " + i);
+                        col = i;
+                    }
+                    if(i==1 && ex < w) {
+                        col = 0;
+                    }
+                    lastX = x;
+                }
+            }
+//            u.p("pos = " + col+","+row);
+
+            index = rowColToIndex(row,col);
+        }
+
+        private int rowColToIndex(int row, int col) {
+            int index = 0;
+            for(int i=0; i<row; i++) {
+                TextLayoutModel.LayoutLine line = _layout_model.line(i);
+                index += line.letterCount();
+            }
+            index+=col;
+
+//            u.p("turned row,col" + row + " " + col + " into index: " + index);
+            return index;
         }
     }
 }

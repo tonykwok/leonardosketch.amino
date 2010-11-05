@@ -65,6 +65,17 @@ public class Textarea extends TextControl {
         cursorColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"cursor-color"));
     }
 
+
+    @Override
+    protected double filterMouseX(double x) {
+        return x - styleInfo.calcContentInsets().getLeft();
+    }
+
+    @Override
+    protected double filterMouseY(double y) {
+        return y - styleInfo.calcContentInsets().getTop();
+    }
+
     @Override
     public double getBaseline() {
         return styleInfo.calcContentInsets().getTop()+ styleInfo.contentBaseline;

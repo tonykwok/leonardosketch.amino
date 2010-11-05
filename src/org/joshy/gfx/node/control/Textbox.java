@@ -52,7 +52,11 @@ public class Textbox extends TextControl {
     @Override
     protected double filterMouseX(double x) {
         return x - xoff - 0 - styleInfo.calcContentInsets().getLeft();
-        //return x - xoff - 0 - cssSize.margin.getLeft() - cssSize.borderWidth.getLeft() - cssSize.padding.getLeft();
+    }
+
+    @Override
+    protected double filterMouseY(double y) {
+        return y - styleInfo.calcContentInsets().getTop();
     }
 
     /* =========== Layout stuff ================= */
