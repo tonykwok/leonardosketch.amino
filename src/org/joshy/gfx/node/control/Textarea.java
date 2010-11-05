@@ -69,6 +69,11 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
         cursorColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"cursor-color"));
     }
 
+    @Override
+    protected void cursorMoved() {
+        
+    }
+
 
     @Override
     protected double filterMouseX(double x) {

@@ -99,6 +99,23 @@ public class Textbox extends TextControl {
     }
 
     @Override
+    protected void cursorMoved() {
+        double cx = getCursor().calculateX();
+        Insets insets = styleInfo.calcContentInsets();
+        double fudge = getFont().getAscender();
+        double w = getWidth() - insets.getLeft() - insets.getRight();
+        //don't let jump get beyond 1/3rd of the width of the text box
+        double jump = Math.min(getFont().getAscender()*2,w/3);
+        if(cx >= w - fudge -xoff) {
+            xoff -= jump;
+        }
+        if(cx + xoff < fudge) {
+            xoff += jump;
+            if(xoff > 0) xoff = 0;
+        }
+    }
+
+    @Override
     public double getBaseline() {
         return styleInfo.calcContentInsets().getTop()+ styleInfo.contentBaseline;
     }
@@ -121,8 +138,8 @@ public class Textbox extends TextControl {
         g.setClipRect(new Bounds(
                 styleInfo.margin.getLeft()+styleInfo.borderWidth.getLeft(),
                 0,
-                width - insets.getLeft() - insets.getRight(),
-                height));
+                getWidth() - insets.getLeft() - insets.getRight(),
+                getHeight()));
 
         //filter the text
         String text = filterText(getText());
@@ -155,7 +172,7 @@ public class Textbox extends TextControl {
         if(isFocused()) {
             g.setPaint(cursorColor);
             CursorPosition cursor = getCursor();
-            double cx = cursor.calculateX();
+            double cx = cursor.calculateX() + xoff;
             // draw cursor
             g.fillRect(
                     insets.getLeft()+cx, insets.getTop(),
