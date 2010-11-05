@@ -9,13 +9,10 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Oct 25, 2010
- * Time: 7:20:29 PM
- * To change this template use File | Settings | File Templates.
+ * A new and better implementation of CSSSkin
  */
 public class CSSSkin2 extends CSSSkin {
+
     public StyleInfo getStyleInfo(Control control, Font realFont) {
         CSSMatcher matcher = createMatcher(control, CSSSkin.State.None);
         StyleInfo info = new StyleInfo();

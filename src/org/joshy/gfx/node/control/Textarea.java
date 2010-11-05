@@ -1,8 +1,6 @@
 package org.joshy.gfx.node.control;
 
-import org.joshy.gfx.css.BoxPainter;
-import org.joshy.gfx.css.CSSSkin;
-import org.joshy.gfx.css.SizeInfo;
+import org.joshy.gfx.css.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -12,6 +10,8 @@ import org.joshy.gfx.node.Insets;
 public class Textarea extends TextControl {
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
+    private FlatColor selectionColor;
+    private FlatColor cursorColor;
 
     public Textarea() {
         setWidth(100);
@@ -60,6 +60,9 @@ public class Textarea extends TextControl {
             state = CSSSkin.State.Focused;
         }        
         boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, state);
+        CSSMatcher matcher = CSSSkin2.createMatcher(this, state);
+        selectionColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"selection-color"));
+        cursorColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"cursor-color"));
     }
 
     @Override
@@ -121,7 +124,7 @@ public class Textarea extends TextControl {
 
         //draw the cursor
         if(isFocused()) {
-            g.setPaint(FlatColor.BLUE);
+            g.setPaint(cursorColor);
             CursorPosition cursor = getCursor();
             double cx = cursor.calculateX();
             double cy = cursor.calculateY();
@@ -139,7 +142,7 @@ public class Textarea extends TextControl {
     }
 
     private void drawSelectionStrip(GFX g, Insets insets, Font font, double start, double end, double y) {
-        g.setPaint(FlatColor.GRAY);
+        g.setPaint(selectionColor);
         g.fillRect(
                 insets.getLeft() + start,
                 insets.getTop()+y,

@@ -264,12 +264,15 @@ Textbox, Passwordbox, Textarea {
     padding: 5px;
     border-color: #888888;
     border-width: 1px;
-    background-color: #d0d0d0;
+    background-color: #e0e0e0;
     shrink-to-fit: true;
+    selection-color : #c0c0c0;
+    cursor-color: #00ff00;
 }
 
 Textbox:focused, Passwordbox:focused, Textarea:focused {
     background-color: #ffffff;
+    selection-color: #99bbff;
 }
 
 SpinButton {

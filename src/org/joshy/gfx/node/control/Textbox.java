@@ -1,9 +1,7 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.css.BoxPainter;
-import org.joshy.gfx.css.CSSSkin;
-import org.joshy.gfx.css.SizeInfo;
+import org.joshy.gfx.css.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -18,6 +16,8 @@ public class Textbox extends TextControl {
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
     private String hintText = "";
+    private FlatColor selectionColor;
+    private FlatColor cursorColor;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -88,6 +88,9 @@ public class Textbox extends TextControl {
             state = CSSSkin.State.Focused;
         }
         boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, state);
+        CSSMatcher matcher = CSSSkin2.createMatcher(this, state);
+        selectionColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"selection-color"));
+        cursorColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"cursor-color"));
     }
 
     @Override
@@ -123,7 +126,7 @@ public class Textbox extends TextControl {
         if(selection.isActive() && text.length() > 0) {
             double start = getCursor().calculateX(0,selection.getLeadingColumn());
             double end = getCursor().calculateX(0,selection.getTrailingColumn());
-            g.setPaint(FlatColor.GRAY);
+            g.setPaint(selectionColor);
             g.fillRect(
                     insets.getLeft() + start + xoff,
                     insets.getTop(),
@@ -145,7 +148,7 @@ public class Textbox extends TextControl {
 
         //draw the cursor
         if(isFocused()) {
-            g.setPaint(FlatColor.BLUE);
+            g.setPaint(cursorColor);
             CursorPosition cursor = getCursor();
             double cx = cursor.calculateX();
             // draw cursor
