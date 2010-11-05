@@ -1,7 +1,6 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +69,7 @@ public class TextLayoutModel {
         lines.add(line);
 
         for(LayoutLine l : lines) {
-            u.p("line = " + l.getString());
+//            u.p("line = " + l.getString());
         }
     }
 
@@ -93,7 +92,7 @@ public class TextLayoutModel {
         return lineCount()*(font.getAscender()+font.getDescender());
     }
 
-    public Iterable<? extends LayoutLine> lines() {
+    public List<LayoutLine> lines() {
         return lines;
     }
 

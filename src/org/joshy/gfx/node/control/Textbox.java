@@ -13,7 +13,6 @@ import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 
 public class Textbox extends TextControl {
     private SizeInfo sizeInfo;
@@ -145,7 +144,7 @@ public class Textbox extends TextControl {
         g.drawText(text, getFont(), x + xoff, y);
 
         //draw the cursor
-        if(focused) {
+        if(isFocused()) {
             g.setPaint(FlatColor.BLUE);
             CursorPosition cursor = getCursor();
             double cx = cursor.calculateX();

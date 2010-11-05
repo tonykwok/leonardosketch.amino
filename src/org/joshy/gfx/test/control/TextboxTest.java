@@ -34,9 +34,10 @@ public class TextboxTest implements Runnable {
     public void run() {
         Stage stage = Stage.createStage();
         //stage.setContent(g);
-        final Textarea ta = new Textarea("hello there mister man how are you doing todayz?");
-        ta.setPrefWidth(100);
-        ta.setPrefHeight(100);
+        final Textarea ta = new Textarea("hello there hello there how are u?");
+        ta.setFont(Font.name("Arial").size(50).resolve());
+        ta.setPrefWidth(300);
+        ta.setPrefHeight(200);
         //Textbox ta = new Textbox("hello there");
         //ta.setFont(Font.name("Helvetica").size(50).resolve());
         stage.setContent(new VFlexBox()

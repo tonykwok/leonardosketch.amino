@@ -93,6 +93,21 @@ public class Textarea extends TextControl {
             y += line.getHeight();
         }
 
+        //draw the cursor
+        if(isFocused()) {
+            g.setPaint(FlatColor.BLUE);
+            CursorPosition cursor = getCursor();
+            double cx = cursor.calculateX();
+            double cy = cursor.calculateY();
+            // draw cursor
+            g.fillRect(
+                    insets.getLeft()+cx,
+                    insets.getTop()+cy,
+                    1,
+                    font.getAscender()+font.getDescender());
+        }
+
+
         //restore the old clip
         g.setClipRect(oldClip);
     }

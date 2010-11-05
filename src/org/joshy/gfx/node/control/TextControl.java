@@ -284,10 +284,12 @@ public abstract class TextControl extends Control implements Focusable {
 
     protected void layoutText(double width, double height) {
         if(getFont() == null) return;
+        int index = cursor.getIndex();
         _layout_model = new TextLayoutModel(getFont(),getText(),allowMultiLine);
         _layout_model.layout(width,height);
         Insets insets = styleInfo.calcContentInsets();
         setHeight(_layout_model.calculatedHeight()+insets.getTop()+insets.getBottom());
+        cursor.setIndex(index);
     }
 
     public TextControl setFont(Font font) {
@@ -459,12 +461,30 @@ public abstract class TextControl extends Control implements Focusable {
 
         public void setIndex(int i) {
             this.index = i;
+            int n = i;
+            row = 0;
+            col = 0;
+            for(TextLayoutModel.LayoutLine line : _layout_model.lines()) {
+                if(line.letterCount() >= n) {
+                    break;
+                }
+                row++;
+                n -= line.letterCount();
+            }
+            col = n;
             u.p(this);
         }
 
         public void moveLeft(int i) {
             index -= i;
             col -= i;
+            TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
+            //wrap back to prev row?
+            if(col < 0 && row > 0) {
+                row--;
+                col = _layout_model.line(row).letterCount();
+                index+=1;
+            }
             if(index <0) {
                 index = 0;
                 col = 0;
@@ -484,13 +504,25 @@ public abstract class TextControl extends Control implements Focusable {
         public void moveRight(int i) {
             index+=i;
             col+=i;
+
+            TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
+            //wrap to next row?
+            if(col > rowLine.letterCount()) {
+                if(row < _layout_model.lineCount()-1) {
+                    row++;
+                    col=0;
+                    index-=1;
+                }
+            }
+            
             String t = getText();
             if(index > t.length()) {
                 index = t.length();
-                col = index;
+                col = _layout_model.line(row).letterCount();
             }
             u.p(this);
         }
+        
         public int moveRight(int n, int i) {
             n += i;
             String t = getText();
@@ -499,8 +531,14 @@ public abstract class TextControl extends Control implements Focusable {
             }
             return n;
         }
+
         public String toString() {
-            return "cursor: " + col + "," + row + "  index = " + index;
+            StringBuffer sb = new StringBuffer();
+            sb.append("cursor: " + col + "," + row + "  index = " + index);
+            if(getText().length() > index) {
+                sb.append(" char = " + getText().substring(index,index+1));
+            }
+            return sb.toString();
         }
 
         public String[] splitText() {
@@ -535,14 +573,22 @@ public abstract class TextControl extends Control implements Focusable {
         }
 
         public double calculateX() {
-            String t = getText();
-            t = t.substring(0,index);
+            TextLayoutModel.LayoutLine line = _layout_model.line(row);
+            u.p("Line = " + line.getString() + " len = " + line.letterCount());
+            u.p("col = " + col);
+            String t = line.getString().substring(0,col);
             return getFont().calculateWidth(t);
         }
+
+        public double calculateY() {
+            return (getFont().getAscender()+getFont().getDescender())*row;
+        }
+
         public double calculateX(int n) {
             String t = getText();
             t = t.substring(0,n);
             return getFont().calculateWidth(t);
         }
+
     }
 }
