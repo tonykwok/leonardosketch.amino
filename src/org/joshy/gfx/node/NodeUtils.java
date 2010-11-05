@@ -1,5 +1,7 @@
 package org.joshy.gfx.node;
 
+import org.joshy.gfx.node.control.Control;
+
 import java.awt.geom.Point2D;
 
 public class NodeUtils {
@@ -22,4 +24,19 @@ public class NodeUtils {
         }
         return new Point2D.Double(x,y);
     }
+
+    public static void doSkins(Control control) {
+        if(control.isSkinDirty()) {
+            if(control instanceof Parent) {
+                for(Node n : ((Parent)control).children()) {
+                    if(n instanceof Control) {
+                        doSkins((Control) n);
+                    }
+                }
+            }
+            control.doSkins();
+            control.skinsDirty = false;
+        }
+    }
+
 }

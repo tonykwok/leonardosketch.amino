@@ -3,6 +3,7 @@ package org.joshy.gfx.stage.swing;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Node;
+import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
@@ -312,24 +313,10 @@ public class SwingStage extends Stage {
 
         private void doSkins() {
             PerformanceTracker.getInstance().skinStart();
-            processSkins(root);
-            //root.doSkins();
+            NodeUtils.doSkins(root);
             PerformanceTracker.getInstance().skinEnd();
         }
 
-        private void processSkins(Control control) {
-            if(control.isSkinDirty()) {
-                if(control instanceof Parent) {
-                    for(Node n : ((Parent)control).children()) {
-                        if(n instanceof Control) {
-                            processSkins((Control) n);
-                        }
-                    }
-                }
-                control.doSkins();
-                control.skinsDirty = false;
-            }
-        }
 
         private void doGFXPrefLayout(int width, int height) {
             root.setWidth(width);
