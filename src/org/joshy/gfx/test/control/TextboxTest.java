@@ -38,8 +38,6 @@ public class TextboxTest implements Runnable {
         ta.setFont(Font.name("Arial").size(50).resolve());
         ta.setPrefWidth(300);
         ta.setPrefHeight(200);
-        //Textbox ta = new Textbox("hello there");
-        //ta.setFont(Font.name("Helvetica").size(50).resolve());
         stage.setContent(new VFlexBox()
                 .add(ta)
                 .add(new Button("select all").onClicked(new Callback<ActionEvent>(){

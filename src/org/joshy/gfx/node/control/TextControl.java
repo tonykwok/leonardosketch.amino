@@ -365,7 +365,7 @@ public abstract class TextControl extends Control implements Focusable {
         public void selectAll() {
             active = true;
             startCol = 0;
-            startCol = text.length();
+            endCol = text.length();
         }
 
         public int getLeadingColumn() {
@@ -415,7 +415,6 @@ public abstract class TextControl extends Control implements Focusable {
     }
 
     public void selectAll() {
-        //To change body of created methods use File | Settings | File Templates.
         selection.selectAll();
         setDrawingDirty();
     }
