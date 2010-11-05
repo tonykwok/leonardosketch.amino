@@ -57,6 +57,9 @@ public class TextboxTest implements Runnable {
                         .setFont(Font.name("Arial").size(50).resolve())
                         .setPrefWidth(300)
                 )
+                .add(new Textbox("")
+                        .setHintText("hint text")
+                        .setPrefWidth(100))
         );
 
     }

@@ -15,6 +15,7 @@ import org.joshy.gfx.stage.Stage;
 public class Textbox extends TextControl {
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
+    private String hintText = "";
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -38,6 +39,11 @@ public class Textbox extends TextControl {
     public Textbox(String text) {
         this();
         setText(text);
+    }
+
+    public Textbox setHintText(String text) {
+        this.hintText = text;
+        return this;
     }
 
     @Override
@@ -103,18 +109,6 @@ public class Textbox extends TextControl {
                 width - insets.getLeft() - insets.getRight(),
                 height));
 
-        /*//adjust x to scroll if needed
-        CursorPoint cursor = getCurrentCursorPoint();
-        if(cursor.cursorX < -xoff) {
-            xoff = 0-cursor.cursorX + 10;
-        }
-        if(cursor.cursorX + xoff > (width-left-right)-10) {
-            xoff = (width-left-right)-cursor.cursorX - 10;
-        }
-        if(cursor.cursorX == 0) {
-            xoff = 0;
-        } */
-
         //filter the text
         String text = filterText(getText());
 
@@ -136,6 +130,10 @@ public class Textbox extends TextControl {
         double y = font.getAscender();
         y+=insets.getTop();
         double x = insets.getLeft();
+        if(!focused && text.length() == 0) {
+            g.setPaint(new FlatColor(0x6080a0));
+            g.drawText(hintText, getFont(), x + xoff, y);
+        }
         g.setPaint(FlatColor.BLACK);
         g.drawText(text, getFont(), x + xoff, y);
 
