@@ -154,6 +154,9 @@ public class ScrollPane extends AbstractPane {
         if(getPrefWidth() != CALCULATED) {
             setWidth(getPrefWidth());
         }
+        if(getPrefHeight() != CALCULATED) {
+            setHeight(getPrefHeight()) ;
+        }
     }
 
     @Override
