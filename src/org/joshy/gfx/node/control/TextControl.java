@@ -250,49 +250,7 @@ public abstract class TextControl extends Control implements Focusable {
                 setDrawingDirty();
             }
         }
-        /*
 
-        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_UP_ARROW && allowMultiLine) {
-            if(selection.isActive() && !event.isShiftPressed()) {
-                selection.clear();
-                return;
-            }
-            if(event.isShiftPressed() && !selection.isActive()) {
-                selection.setStart(currentCursorPoint);
-            }
-            CursorPoint cp = cursorCharToCursorPoint(cursorCharX, getText());
-            if(cp.row > 0) {
-                cp.row--;
-            }
-            cursorCharX = cursorPointToCursorChar(cp);
-            currentCursorPoint = cursorCharToCursorPoint(cursorCharX,text);
-            setDrawingDirty();
-            if(event.isShiftPressed() && selection.isActive()) {
-                selection.setEnd(currentCursorPoint);
-            }
-        }
-
-        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_DOWN_ARROW && allowMultiLine) {
-            if(selection.isActive() && !event.isShiftPressed()) {
-                selection.clear();
-                return;
-            }
-            if(event.isShiftPressed() && !selection.isActive()) {
-                selection.setStart(currentCursorPoint);
-            }
-            CursorPoint cp = cursorCharToCursorPoint(cursorCharX, getText());
-            if(cp.row < cp.rowCount-1) {
-                cp.row++;
-            }
-            cursorCharX = cursorPointToCursorChar(cp);
-            currentCursorPoint = cursorCharToCursorPoint(cursorCharX,text);
-            setDrawingDirty();
-            if(event.isShiftPressed() && selection.isActive()) {
-                selection.setEnd(currentCursorPoint);
-            }
-        }
-       */
-        
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_TAB) {
             if(event.isShiftPressed()) {
                 Core.getShared().getFocusManager().gotoPrevFocusableNode();
