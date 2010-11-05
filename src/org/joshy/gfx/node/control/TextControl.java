@@ -65,39 +65,16 @@ public abstract class TextControl extends Control implements Focusable {
                 double ex = filterMouseX(event.getX());
                 double ey = filterMouseY(event.getY());
                 cursor.setIndexFromMouse(ex,ey);
-                /*
-                if(text.length() >= 1) {
-                    double ex = filterMouseX(event.getX());
-                    double ey = filterMouseY(event.getY());
-                    currentCursorPoint = mouseXYToCursorPoint(ex,ey,text);
-                } else {
-                    Font font = getFont();
-                    double cursorH = font.getAscender() + font.getDescender();
-                    currentCursorPoint = new CursorPoint(0,0,1,cursorH,0,0,0);
-                }
-                if(!selection.isActive()) {
-                    selection.setStart(currentCursorPoint);
-                }
-                if(event.isShiftPressed() && selection.isActive()) {
-                    selection.setEnd(currentCursorPoint);
-                } */
             }
         });
-/*
+
+        /*
         EventBus.getSystem().addListener(this, MouseEvent.MouseDragged, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
-                Core.getShared().getFocusManager().setFocusedNode(TextControl.this);
-                if(text.length() >= 1) {
-                    currentCursorPoint = mouseXYToCursorPoint(event.getX(),event.getY(),text);
-                } else {
-                    currentCursorPoint = new CursorPoint(0,0,1,20,0,0,0);
-                }
-                if(selection.isActive()) {
-                    selection.setEnd(currentCursorPoint);
-                }
             }
         });
-  */
+        */
+
         EventBus.getSystem().addListener(FocusEvent.All, new Callback<FocusEvent>(){
             public void call(FocusEvent event) {
                 if(event.getType() == FocusEvent.Lost && event.getSource() == TextControl.this) {
@@ -146,20 +123,26 @@ public abstract class TextControl extends Control implements Focusable {
 
     protected void processKeyEvent(KeyEvent event) {
 
+
+        //Paste
         if(event.getKeyCode().equals(KeyEvent.KeyCode.KEY_V) && event.isSystemPressed()) {
             insertText(OSUtil.getClipboardAsString());
             return;
         }
-        
+
+        //regular keys
         if(event.isTextKey()) {
             insertText(event.getGeneratedText());
             return;
         }
+
+        //Enter
         if(allowMultiLine && event.getKeyCode() == KeyEvent.KeyCode.KEY_ENTER) {
             insertText("\n");
             return;
         }
 
+        //backspace and delete
         boolean bs = event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE;
         boolean del = event.getKeyCode() == KeyEvent.KeyCode.KEY_DELETE;
         if( bs || del) {
@@ -196,6 +179,7 @@ public abstract class TextControl extends Control implements Focusable {
             return;
         }
 
+        //left arrow
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_LEFT_ARROW) {
             if(event.isShiftPressed()) {
                 if(!selection.isActive()) {
@@ -214,7 +198,8 @@ public abstract class TextControl extends Control implements Focusable {
             cursor.moveLeft(1);
             setDrawingDirty();
         }
-        
+
+        //right arrow
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_RIGHT_ARROW) {
             if(event.isShiftPressed()) {
                 if(!selection.isActive()) {
@@ -233,21 +218,24 @@ public abstract class TextControl extends Control implements Focusable {
             cursor.moveRight(1);
             setDrawingDirty();
         }
-        
+
+        //up arrow
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_UP_ARROW) {
-            if(!allowMultiLine) {
-                //just move to start
+            if(allowMultiLine) {
+                cursor.moveUp(1);
+            } else {
                 cursor.moveStart();
-                setDrawingDirty();
             }
+            setDrawingDirty();
         }
 
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_DOWN_ARROW) {
-            if(!allowMultiLine) {
-                //just move to end
+            if(allowMultiLine) {
+                cursor.moveDown(1);
+            } else {
                 cursor.moveEnd();
-                setDrawingDirty();
             }
+            setDrawingDirty();
         }
 
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_TAB) {
@@ -508,7 +496,29 @@ public abstract class TextControl extends Control implements Focusable {
                 col = _layout_model.line(row).letterCount();
             }
         }
-        
+
+        public void moveUp(int i) {
+            if(row > 0) {
+                row--;
+            }
+            TextLayoutModel.LayoutLine line = _layout_model.line(row);
+            if(col > line.letterCount()) {
+                col = line.letterCount();
+            }
+            index = rowColToIndex(row,col);
+        }
+
+        public void moveDown(int i) {
+            if(row < _layout_model.lineCount()-1) {
+                row++;
+            }
+            TextLayoutModel.LayoutLine line = _layout_model.line(row);
+            if(col > line.letterCount()) {
+                col = line.letterCount();
+            }
+            index = rowColToIndex(row,col);
+        }
+
         public boolean atStartOfLine() {
             TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
             if(col == 0) {
