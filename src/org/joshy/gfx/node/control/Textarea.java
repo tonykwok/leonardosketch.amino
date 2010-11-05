@@ -6,12 +6,16 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
+import org.joshy.gfx.util.u;
 
-public class Textarea extends TextControl {
+public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
     private FlatColor selectionColor;
     private FlatColor cursorColor;
+    private ScrollPane scrollParent;
+    private double scrollX;
+    private double scrollY;
 
     public Textarea() {
         setWidth(100);
@@ -68,12 +72,12 @@ public class Textarea extends TextControl {
 
     @Override
     protected double filterMouseX(double x) {
-        return x - styleInfo.calcContentInsets().getLeft();
+        return x - scrollX - styleInfo.calcContentInsets().getLeft();
     }
 
     @Override
     protected double filterMouseY(double y) {
-        return y - styleInfo.calcContentInsets().getTop();
+        return y - scrollY - styleInfo.calcContentInsets().getTop();
     }
 
     @Override
@@ -92,13 +96,13 @@ public class Textarea extends TextControl {
         Bounds oldClip = g.getClipRect();
         g.setClipRect(new Bounds(
                 styleInfo.margin.getLeft()+styleInfo.borderWidth.getLeft(),
-                0,
-                width - insets.getLeft() - insets.getRight(),
-                height));
+                insets.getTop(),
+                getWidth() - insets.getLeft() - insets.getRight(),
+                getHeight()-insets.getTop()-insets.getBottom()));
 
         //draw the text
         Font font = getFont();
-        double y = 0;
+        double y = 0 + scrollY;
         double x = insets.getLeft();
         g.setPaint(FlatColor.BLACK);
         for(int row = 0; row < _layout_model.lineCount(); row++) {
@@ -142,7 +146,7 @@ public class Textarea extends TextControl {
             // draw cursor
             g.fillRect(
                     insets.getLeft()+cx,
-                    insets.getTop()+cy,
+                    insets.getTop()+cy + scrollY,
                     1,
                     font.getAscender()+font.getDescender());
         }
@@ -161,4 +165,32 @@ public class Textarea extends TextControl {
                 font.getAscender()+font.getDescender());
     }
 
+    @Override
+    public double getFullWidth(double width, double height) {
+        return width;
+    }
+
+    @Override
+    public double getFullHeight(double width, double height) {
+        _layout_model.layout(width,height);
+        Insets insets = styleInfo.calcContentInsets();
+        double h =  _layout_model.calculatedHeight()+insets.getTop()+insets.getBottom();
+        u.p("returning " + h);
+        return h;
+    }
+
+    @Override
+    public void setScrollX(double value) {
+        this.scrollX = value;
+    }
+
+    @Override
+    public void setScrollY(double value) {
+        this.scrollY = value;
+    }
+
+    @Override
+    public void setScrollParent(ScrollPane scrollPane) {
+        this.scrollParent = scrollPane;
+    }
 }

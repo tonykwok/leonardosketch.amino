@@ -40,21 +40,7 @@ public class TextboxTest implements Runnable {
         ta.setPrefWidth(300);
         ta.setPrefHeight(200);
         stage.setContent(new VFlexBox()
-                .add(ta)
-                .add(new Button("select all").onClicked(new Callback<ActionEvent>(){
-                        @Override
-                        public void call(ActionEvent event) throws Exception {
-                            ta.selectAll();
-                        }
-                    }))
-                .add(new Button("clear text").onClicked(new Callback<ActionEvent>(){
-                        @Override
-                        public void call(ActionEvent event) throws Exception {
-                            ta.setText("");
-                        }
-                    }))
                 .add(new Textbox("foo").setPrefWidth(100))
-                .add(new Textbox("bar").setPrefWidth(100))
                 .add(new Textbox("large font")
                         .setFont(Font.name("Arial").size(50).resolve())
                         .setPrefWidth(300)
@@ -70,6 +56,19 @@ public class TextboxTest implements Runnable {
                             }
                         })
                         .setPrefWidth(100))
+                .add(ta)
+                .add(new Button("select all").onClicked(new Callback<ActionEvent>(){
+                        @Override
+                        public void call(ActionEvent event) throws Exception {
+                            ta.selectAll();
+                        }
+                    }))
+                .add(new Button("clear text").onClicked(new Callback<ActionEvent>(){
+                        @Override
+                        public void call(ActionEvent event) throws Exception {
+                            ta.setText("");
+                        }
+                    }))
         );
 
     }
