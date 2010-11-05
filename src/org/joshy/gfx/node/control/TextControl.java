@@ -155,6 +155,7 @@ public abstract class TextControl extends Control implements Focusable {
         }
         if(allowMultiLine && event.getKeyCode() == KeyEvent.KeyCode.KEY_ENTER) {
             insertText("\n");
+            return;
         }
 
         boolean bs = event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE;
@@ -274,7 +275,9 @@ public abstract class TextControl extends Control implements Focusable {
         this.text = text;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
         selection.clear();
-        cursor.reset();
+        if(cursor.getIndex() > getText().length()) {
+            cursor.reset();
+        }
         setLayoutDirty();
         setDrawingDirty();
         return this;
