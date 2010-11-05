@@ -1,7 +1,9 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.css.*;
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -11,6 +13,7 @@ import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 
 public class Textbox extends TextControl {
     private SizeInfo sizeInfo;
@@ -69,18 +72,23 @@ public class Textbox extends TextControl {
         } else {
             setHeight(sizeInfo.height);
         }
-        layoutText();
+        layoutText(sizeInfo.contentWidth,sizeInfo.contentHeight);
     }
 
     @Override
     public void doLayout() {
-        layoutText();
+        layoutText(sizeInfo.contentWidth,sizeInfo.contentHeight);
         sizeInfo.width = getWidth();
         if(sizeInfo != null) {
             sizeInfo.width = getWidth();
             sizeInfo.height = getHeight();
         }
-        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, CSSSkin.State.None);
+
+        CSSSkin.State state = CSSSkin.State.None;
+        if(isFocused()) {
+            state = CSSSkin.State.Focused;
+        }
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, state);
     }
 
     @Override
@@ -113,7 +121,6 @@ public class Textbox extends TextControl {
         String text = filterText(getText());
 
         //draw the selection
-
         if(selection.isActive() && text.length() > 0) {
             double start = getCursor().calculateX(selection.getLeadingColumn());
             double end = getCursor().calculateX(selection.getTrailingColumn());

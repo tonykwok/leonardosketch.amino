@@ -29,7 +29,7 @@ public abstract class CSSSkin {
     }
 
     public enum State {
-        Pressed, Hover, Selected, Disabled, None
+        Pressed, Hover, Selected, Disabled, Focused, None
     }
 
     public abstract BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state);
@@ -495,6 +495,9 @@ public abstract class CSSSkin {
         }
         if(state == State.Selected) {
             matcher.pseudo = "selected";
+        }
+        if(state == State.Focused) {
+            matcher.pseudo = "focused";
         }
         if(control instanceof Scrollbar) {
             if(((Scrollbar)control).isVertical()) {

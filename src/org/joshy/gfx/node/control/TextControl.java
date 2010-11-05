@@ -100,11 +100,11 @@ public abstract class TextControl extends Control implements Focusable {
             public void call(FocusEvent event) {
                 if(event.getType() == FocusEvent.Lost && event.getSource() == TextControl.this) {
                     focused = false;
-                    setDrawingDirty();
+                    setLayoutDirty();
                 }
                 if(event.getType() == FocusEvent.Gained && event.getSource() == TextControl.this) {
                     focused = true;
-                    setDrawingDirty();
+                    setLayoutDirty();
                 }
             }
         });
@@ -282,10 +282,10 @@ public abstract class TextControl extends Control implements Focusable {
         return this;
     }
 
-    protected void layoutText() {
+    protected void layoutText(double width, double height) {
         if(getFont() == null) return;
         _layout_model = new TextLayoutModel(getFont(),getText(),allowMultiLine);
-        _layout_model.layout(getWidth(),getHeight());
+        _layout_model.layout(width,height);
         Insets insets = styleInfo.calcContentInsets();
         setHeight(_layout_model.calculatedHeight()+insets.getTop()+insets.getBottom());
     }

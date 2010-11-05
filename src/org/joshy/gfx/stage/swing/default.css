@@ -259,7 +259,7 @@ Scrollbar:vertical {
 
 /* ============== text boxes ============= */
 
-Textbox, Passwordbox {
+Textbox, Passwordbox, Textarea {
     margin: 3px;
     padding: 5px;
     border-color: #888888;
@@ -268,7 +268,7 @@ Textbox, Passwordbox {
     shrink-to-fit: true;
 }
 
-Textbox:active, Passwordbox:active {
+Textbox:focused, Passwordbox:focused, Textarea:focused {
     background-color: #ffffff;
 }
 

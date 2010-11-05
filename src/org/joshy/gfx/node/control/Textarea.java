@@ -1,103 +1,100 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.Insets;
 
 public class Textarea extends TextControl {
-    
+    private SizeInfo sizeInfo;
+    private BoxPainter boxPainter;
+
     public Textarea() {
-        this.width = 100;
-        this.height = 100;
+        setWidth(100);
+        setHeight(100);
         this.allowMultiLine = true;
     }
 
     public Textarea(String text) {
         this();
-        this.text = text;
+        setText(text);
+    }
+
+    @Override
+    public void doPrefLayout() {
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,text);
+
+        if(prefWidth != CALCULATED) {
+            setWidth(prefWidth);
+            sizeInfo.width = prefWidth;
+        } else {
+            setWidth(sizeInfo.width);
+        }
+        layoutText(sizeInfo.contentWidth,sizeInfo.contentHeight);
+        if(prefHeight != CALCULATED) {
+            setHeight(prefHeight);
+            sizeInfo.height = prefHeight;
+        } else {
+            setHeight(sizeInfo.height);
+        }
+    }
+
+    @Override
+    public void doLayout() {
+        double h = getHeight();
+        Insets insets = styleInfo.calcContentInsets();
+        double w = getWidth()-insets.getLeft()-insets.getRight();
+        layoutText(w,sizeInfo.contentHeight);
+        setHeight(h);
+        sizeInfo.width = getWidth();
+        if(sizeInfo != null) {
+            sizeInfo.width = getWidth();
+            sizeInfo.height = getHeight();
+        }
+        CSSSkin.State state = CSSSkin.State.None;
+        if(isFocused()) {
+            state = CSSSkin.State.Focused;
+        }        
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, state);
+    }
+
+    @Override
+    public double getBaseline() {
+        return styleInfo.calcContentInsets().getTop()+ styleInfo.contentBaseline;
     }
 
     @Override
     public void draw(GFX g) {
-        
-        //draw background
-        if(focused) {
-            g.setPaint(new FlatColor("#e0e0e0"));
-        } else {
-            g.setPaint(new FlatColor("#f0f0f0"));
-        }
-        g.fillRect(0,0,width,height);
+        if(!isVisible()) return;
+        //draw background and border, but skip the text
+        boxPainter.draw(g, styleInfo, sizeInfo, this, "");
 
-        //draw border
-        if(focused) {
-            g.setPaint(FlatColor.BLUE);
-        } else {
-            g.setPaint(FlatColor.BLACK);
-        }
-        g.drawRect(0,0,width,height);
+        Insets insets = styleInfo.calcContentInsets();
+        //set a new clip
+        Bounds oldClip = g.getClipRect();
+        g.setClipRect(new Bounds(
+                styleInfo.margin.getLeft()+styleInfo.borderWidth.getLeft(),
+                0,
+                width - insets.getLeft() - insets.getRight(),
+                height));
 
-        //draw text
-        g.setPaint(FlatColor.BLACK);
-        String[] lines = text.split("\n");
-        g.translate(1,3);
-        
-        //CursorPoint cp = getCurrentCursorPoint();
-
+        //draw the text
         Font font = getFont();
         double y = font.getAscender();
-        int row = 0;
-        for(String line : lines) {
-            //draw selection, if needed
-
-            if(selection.isActive()) {
-                double start = 0;
-                double end = 0;
-                //u.p("leading createColumn = " + selection.getLeadingColumn() + " trailing createColumn = " + selection.getTrailingColumn());
-                //we are doing the leading row
-                if(row == selection.getLeadingRow()) {
-                    if(selection.getTrailingRow() != selection.getLeadingRow()) {
-                        //if wrapping off the end to the next line
-                        start = font.getWidth(line.substring(0,selection.getLeadingColumn()));
-                        end = font.getWidth(line);
-                    } else {
-                        //else we are on the same line
-                        start = font.getWidth(line.substring(0,selection.getLeadingColumn()));
-                        end = font.getWidth(line.substring(0,selection.getTrailingColumn()));
-                    }
-                }
-                //we are doing the trailing row, and it's not the leading row
-                if(row == selection.getTrailingRow() && row != selection.getLeadingRow()) {
-                    start = 0;
-                    end = font.getWidth(line.substring(0,selection.getTrailingColumn()));
-                }
-                //if we are doing between the leading and trailing rows
-                if(row > selection.getLeadingRow() && row < selection.getTrailingRow()) {
-                    start = 0;
-                    end = font.getWidth(line);
-                }
-                g.setPaint(FlatColor.GRAY);
-
-                //TODO: draw the cursor?
-                //g.fillRect(start,y-font.getAscender(), end-start,cp.cursorH);
-                g.setPaint(FlatColor.BLACK);
-            }
-
-            //draw text
-            g.drawText(line,font,0,y);
-            //g.drawLine(0,y,300,y);
-
-            y+= font.getAscender() + font.getDescender() + font.getLeading();
-            row++;
+        y+=insets.getTop();
+        double x = insets.getLeft();
+        g.setPaint(FlatColor.BLACK);
+        for(TextLayoutModel.LayoutLine line :_layout_model.lines()) {
+            g.drawText(line.getString(), font, x, y);
+            y += line.getHeight();
         }
-        /*
-        if(focused) {
-            // draw cursor
-            if(cp != null) {
-                g.fillRect(cp.cursorX , cp.cursorY, cp.cursorW, cp.cursorH);
-            }
-        }
-         */
-        g.translate(-1,3);
+
+        //restore the old clip
+        g.setClipRect(oldClip);
     }
 
 }
