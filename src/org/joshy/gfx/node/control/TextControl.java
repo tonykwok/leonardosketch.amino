@@ -153,22 +153,23 @@ public abstract class TextControl extends Control implements Focusable {
             insertText(event.getGeneratedText());
             return;
         }
-        /*
-        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_ENTER && allowMultiLine) {
-            if(selection.isActive()) {
-                replaceAndClearSelectionWith("\n");
-            } else {
-                insertAtCursor("\n");
-            }
-            return;
+        if(allowMultiLine && event.getKeyCode() == KeyEvent.KeyCode.KEY_ENTER) {
+            insertText("\n");
         }
-        */
 
-        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE) {
-            //if at start, do nothing
-            if(cursor.getRow() == 0 && cursor.getCol()==0) return;
-            String t = getText();
+        boolean bs = event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE;
+        boolean del = event.getKeyCode() == KeyEvent.KeyCode.KEY_DELETE;
+        if( bs || del) {
+
+            //if backspace and at start, do nothing
+            if(bs && cursor.getRow() == 0 && cursor.getCol()==0) return;
+            //if delete and at end, do nothing
+            if(del && cursor.atEndOfText()) {
+                return;
+            }
+
             //if text is empty do nothing
+            String t = getText();
             if(t.length() == 0) return;
 
             if(selection.isActive()) {
@@ -178,30 +179,19 @@ public abstract class TextControl extends Control implements Focusable {
                 selection.clear();
             } else {
                 //split, then remove text in the middle
-                String[] parts = cursor.splitText();
+                int splitPoint = cursor.getIndex();
+                if(del) {
+                    splitPoint++;
+                }
+                String[] parts = cursor.splitText(splitPoint);
                 parts[0] = parts[0].substring(0,cursor.getIndex()-1);
                 setText(parts[0]+parts[1]);
-                cursor.moveLeft(1);
-            }
-            return;
-        }
-        /*
-        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_DELETE) {
-            if(text.length() > 0 && (cursorCharX < text.length()-1)) {
-                if(selection.isActive()) {
-                    replaceAndClearSelectionWith("");
-                } else {
-                    String beforeString = text.substring(0, cursorCharX);
-                    String afterString = text.substring(cursorCharX+1,text.length());
-                    text = beforeString + afterString;
-                    currentCursorPoint = cursorCharToCursorPoint(cursorCharX,text);
-                    EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
-                    setDrawingDirty();
+                if(bs) {
+                    cursor.moveLeft(1);
                 }
             }
             return;
         }
-        */
 
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_LEFT_ARROW) {
             if(event.isShiftPressed()) {
@@ -274,7 +264,7 @@ public abstract class TextControl extends Control implements Focusable {
             cursor.setIndex(parts[0].length() + generatedText.length());
             selection.clear();
         } else {
-            String[] parts = cursor.splitText();
+            String[] parts = cursor.splitText(cursor.getIndex());
             setText(parts[0]+generatedText+parts[1]);
             cursor.moveRight(1);
         }
@@ -520,6 +510,14 @@ public abstract class TextControl extends Control implements Focusable {
             u.p(this);
         }
         
+        public boolean atStartOfLine() {
+            TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
+            if(col == 0) {
+                return true;
+            }
+            return false;
+        }
+
         public boolean atEndOfLine() {
             TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
             if(col == rowLine.letterCount()) {
@@ -528,13 +526,15 @@ public abstract class TextControl extends Control implements Focusable {
             return false;
         }
 
-        public boolean atStartOfLine() {
-            TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
-            if(col == 0) {
-                return true;
+        public boolean atEndOfText() {
+            if(row == _layout_model.lineCount()-1) {
+                if(col == _layout_model.line(row).letterCount()) {
+                    return true;
+                }
             }
             return false;
         }
+
 
         public String toString() {
             StringBuffer sb = new StringBuffer();
@@ -545,7 +545,7 @@ public abstract class TextControl extends Control implements Focusable {
             return sb.toString();
         }
 
-        public String[] splitText() {
+        public String[] splitText(int index) {
             String t = getText();
             String[] parts =  new String[2];
             parts[0] = t.substring(0,index);
