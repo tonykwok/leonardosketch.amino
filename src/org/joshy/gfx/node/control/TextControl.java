@@ -123,10 +123,26 @@ public abstract class TextControl extends Control implements Focusable {
 
     protected void processKeyEvent(KeyEvent event) {
 
-
         //Paste
         if(event.getKeyCode().equals(KeyEvent.KeyCode.KEY_V) && event.isSystemPressed()) {
             insertText(OSUtil.getClipboardAsString());
+            return;
+        }
+
+        //Copy
+        if(event.getKeyCode().equals(KeyEvent.KeyCode.KEY_C) && event.isSystemPressed()) {
+            if(selection.isActive() && selection.getLength() > 0) {
+                OSUtil.setStringToClipboard(selection.getSelectedText());
+            }
+            return;
+        }
+
+        //Cut
+        if(event.getKeyCode().equals(KeyEvent.KeyCode.KEY_X) && event.isSystemPressed()) {
+            if(selection.isActive() && selection.getLength() > 0) {
+                OSUtil.setStringToClipboard(selection.getSelectedText());
+                insertText("");
+            }
             return;
         }
 
@@ -403,6 +419,13 @@ public abstract class TextControl extends Control implements Focusable {
             return "selection: " + startCol + " -> " + endCol;
         }
 
+        public int getLength() {
+            return endCol - startCol;
+        }
+
+        public String getSelectedText() {
+            return getText().substring(startCol,endCol);
+        }
     }
 
     public void selectAll() {

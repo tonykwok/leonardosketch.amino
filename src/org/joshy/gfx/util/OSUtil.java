@@ -1,10 +1,7 @@
 package org.joshy.gfx.util;
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.datatransfer.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -57,6 +54,17 @@ public class OSUtil {
         }
       }
       return result;
+    }
+
+    public static void setStringToClipboard(String selectedText) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection content = new StringSelection(selectedText);
+        clipboard.setContents(content, new ClipboardOwner(){
+            @Override
+            public void lostOwnership(Clipboard clipboard, Transferable transferable) {
+                u.p("clipboard lost ownership");
+            }
+        });
     }
 
     public static File getJavaWSExecutable() {
