@@ -11,6 +11,7 @@ import org.joshy.gfx.node.control.Textarea;
 import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 
 /**
  * Created by IntelliJ IDEA.
@@ -60,6 +61,14 @@ public class TextboxTest implements Runnable {
                 )
                 .add(new Textbox("")
                         .setHintText("hint text")
+                        .setPrefWidth(100))
+                .add(new Textbox("action box")
+                        .onAction(new Callback<ActionEvent>(){
+                            @Override
+                            public void call(ActionEvent event) throws Exception {
+                                u.p("got action from: " + event.getSource());
+                            }
+                        })
                         .setPrefWidth(100))
         );
 

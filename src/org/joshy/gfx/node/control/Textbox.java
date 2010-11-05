@@ -6,6 +6,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
@@ -176,4 +177,8 @@ public class Textbox extends TextControl {
         }
     }
 
+    public Control onAction(Callback<ActionEvent> callback) {
+        EventBus.getSystem().addListener(this,ActionEvent.Action,callback);
+        return this;
+    }
 }

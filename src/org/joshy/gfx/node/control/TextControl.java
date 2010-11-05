@@ -7,7 +7,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.util.OSUtil;
-import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -275,7 +274,7 @@ public abstract class TextControl extends Control implements Focusable {
         this.text = text;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
         selection.clear();
-        if(cursor.getIndex() > getText().length()) {
+        if(cursor.getIndex()-1 > getText().length()) {
             cursor.reset();
         }
         setLayoutDirty();
@@ -360,11 +359,9 @@ public abstract class TextControl extends Control implements Focusable {
         public void setStart(int index) {
             active = true;
             startCol = index;
-            u.p(this);
         }
         public void setEnd(int index) {
             endCol = index;
-            u.p(this);
         }
 
         public void selectAll() {
@@ -395,7 +392,6 @@ public abstract class TextControl extends Control implements Focusable {
             if(direction == LEFT) {
                 startCol = getCursor().moveLeft(startCol,-i);
             }
-            u.p(this);
         }
 
         public void addLeft(int i) {
@@ -410,7 +406,6 @@ public abstract class TextControl extends Control implements Focusable {
                 endCol--;
                 if(endCol <0) endCol=0;
             }
-            u.p(this);
         }
 
         public String toString() {
@@ -463,7 +458,6 @@ public abstract class TextControl extends Control implements Focusable {
             int[] rowCol = indexToRowCol(i);
             row = rowCol[0];
             col = rowCol[1];
-            u.p(this);
         }
 
         public void moveLeft(int i) {
@@ -481,7 +475,6 @@ public abstract class TextControl extends Control implements Focusable {
                 col = 0;
                 row = 0;
             }
-            u.p(this);
         }
 
         public int moveLeft(int n, int i) {
@@ -511,7 +504,6 @@ public abstract class TextControl extends Control implements Focusable {
                 index = t.length();
                 col = _layout_model.line(row).letterCount();
             }
-            u.p(this);
         }
         
         public boolean atStartOfLine() {
@@ -570,14 +562,12 @@ public abstract class TextControl extends Control implements Focusable {
             index = 0;
             col = 0;
             row = 0;
-            u.p(this);
         }
 
         public void moveEnd() {
             String t = getText();
             index = t.length();
             col = index;
-            u.p(this);
         }
 
         public double calculateX() {
