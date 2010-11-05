@@ -273,6 +273,8 @@ public abstract class TextControl extends Control implements Focusable {
     public TextControl setText(String text) {
         this.text = text;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
+        selection.clear();
+        cursor.reset();
         setLayoutDirty();
         setDrawingDirty();
         return this;
@@ -592,5 +594,10 @@ public abstract class TextControl extends Control implements Focusable {
         }
 
 
+        public void reset() {
+            this.row = 0;
+            this.col = 0;
+            this.index = 0;
+        }
     }
 }
