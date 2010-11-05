@@ -211,7 +211,10 @@ public abstract class TextControl extends Control implements Focusable {
                     selection.setStart(cursor.getIndex());
                     selection.setEnd(cursor.getIndex());
                 }
-                selection.addLeft(1);
+                //extend selection only if this wouldn't make us wrap backward
+                if(!cursor.atStartOfLine()) {
+                    selection.addLeft(1);
+                }
             } else {
                 selection.clear();
             }
@@ -227,7 +230,10 @@ public abstract class TextControl extends Control implements Focusable {
                     selection.setStart(cursor.getIndex());
                     selection.setEnd(cursor.getIndex());
                 }
-                selection.addRight(1);
+                //extend selection only it this wouldn't make us wrap forward
+                if(!cursor.atEndOfLine()) {
+                    selection.addRight(1);
+                }
             } else {
                 selection.clear();
             }
@@ -337,9 +343,7 @@ public abstract class TextControl extends Control implements Focusable {
 
     public  class TextSelection {
         private boolean active;
-        public int startRow;
         public int startCol;
-        private int endRow;
         public int endCol;
 
         private TextSelection() {
@@ -360,8 +364,6 @@ public abstract class TextControl extends Control implements Focusable {
 
         public void setStart(int index) {
             active = true;
-            startRow = 0;
-            endRow = 0;
             startCol = index;
             u.p(this);
         }
@@ -372,28 +374,10 @@ public abstract class TextControl extends Control implements Focusable {
 
         public void selectAll() {
             active = true;
-            startRow = 0;
             startCol = 0;
-            endRow = 0;
             startCol = text.length();
         }
 
-        public int getLeadingRow() {
-            if(endRow < startRow) {
-                return endRow;
-            } else {
-                return startRow;
-            }
-        }
-
-        public int getTrailingRow() {
-            if(endRow < startRow) {
-                return startRow;
-            } else {
-                return endRow;
-            }
-        }
-        
         public int getLeadingColumn() {
             return startCol;
         }
@@ -408,7 +392,10 @@ public abstract class TextControl extends Control implements Focusable {
                 direction = RIGHT;
             }
             if(direction == RIGHT) {
-                endCol = getCursor().moveRight(endCol,i);
+                endCol++;
+                if(endCol > getText().length()) {
+                    endCol = getText().length();
+                }
             }
             if(direction == LEFT) {
                 startCol = getCursor().moveLeft(startCol,-i);
@@ -425,7 +412,8 @@ public abstract class TextControl extends Control implements Focusable {
                 startCol = getCursor().moveLeft(startCol,i);
             }
             if(direction == RIGHT) {
-                endCol = getCursor().moveRight(endCol,-i);
+                endCol--;
+                if(endCol <0) endCol=0;
             }
             u.p(this);
         }
@@ -459,19 +447,28 @@ public abstract class TextControl extends Control implements Focusable {
             return index;
         }
 
-        public void setIndex(int i) {
-            this.index = i;
+        public int[] indexToRowCol(int i) {
+            int[] rowCol = new int[2];
             int n = i;
-            row = 0;
-            col = 0;
+            rowCol[0] = 0;
+            rowCol[1] = 0;
             for(TextLayoutModel.LayoutLine line : _layout_model.lines()) {
                 if(line.letterCount() >= n) {
                     break;
                 }
-                row++;
+                rowCol[0]++;
                 n -= line.letterCount();
             }
-            col = n;
+            rowCol[1] = n;
+
+            return rowCol;
+        }
+
+        public void setIndex(int i) {
+            this.index = i;
+            int[] rowCol = indexToRowCol(i);
+            row = rowCol[0];
+            col = rowCol[1];
             u.p(this);
         }
 
@@ -523,13 +520,20 @@ public abstract class TextControl extends Control implements Focusable {
             u.p(this);
         }
         
-        public int moveRight(int n, int i) {
-            n += i;
-            String t = getText();
-            if(n > t.length()) {
-                n = t.length();
+        public boolean atEndOfLine() {
+            TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
+            if(col == rowLine.letterCount()) {
+                return true;
             }
-            return n;
+            return false;
+        }
+
+        public boolean atStartOfLine() {
+            TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
+            if(col == 0) {
+                return true;
+            }
+            return false;
         }
 
         public String toString() {
@@ -574,8 +578,12 @@ public abstract class TextControl extends Control implements Focusable {
 
         public double calculateX() {
             TextLayoutModel.LayoutLine line = _layout_model.line(row);
-            u.p("Line = " + line.getString() + " len = " + line.letterCount());
-            u.p("col = " + col);
+            String t = line.getString().substring(0,col);
+            return getFont().calculateWidth(t);
+        }
+
+        public double calculateX(int row, int col) {
+            TextLayoutModel.LayoutLine line = _layout_model.line(row);
             String t = line.getString().substring(0,col);
             return getFont().calculateWidth(t);
         }
@@ -584,11 +592,6 @@ public abstract class TextControl extends Control implements Focusable {
             return (getFont().getAscender()+getFont().getDescender())*row;
         }
 
-        public double calculateX(int n) {
-            String t = getText();
-            t = t.substring(0,n);
-            return getFont().calculateWidth(t);
-        }
 
     }
 }
