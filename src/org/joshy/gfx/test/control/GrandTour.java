@@ -88,6 +88,8 @@ public class GrandTour implements Runnable {
 
                 Textarea ta = new Textarea();
                 ta.setText("A\nText\nArea");
+                ta.setPrefWidth(200);
+                ta.setPrefHeight(100);
                 FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
                         .add(tb)
                         .add(spinBox)

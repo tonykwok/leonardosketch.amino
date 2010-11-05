@@ -267,7 +267,7 @@ Textbox, Passwordbox, Textarea {
     background-color: #e0e0e0;
     shrink-to-fit: true;
     selection-color : #c0c0c0;
-    cursor-color: #00ff00;
+    cursor-color: #000000;
 }
 
 Textbox:focused, Passwordbox:focused, Textarea:focused {
@@ -307,7 +307,7 @@ SpinButton:hover {
 
 .searchbox {
     border-color: #888888;
-    border-radius: 26px;
+    border-radius: 20px;
     padding: 5px 10px 5px 10px;
 }
 
