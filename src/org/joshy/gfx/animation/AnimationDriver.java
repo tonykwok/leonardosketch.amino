@@ -34,6 +34,7 @@ public class AnimationDriver {
                 long currentTime = now() - startTime;
                 animateable.update(currentTime);
                 if(animateable.isDone()) {
+                    animateable.onStop(currentTime);
                     running = false;
                     timer.stop();
                 }
