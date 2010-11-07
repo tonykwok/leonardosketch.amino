@@ -146,8 +146,13 @@ public class Textbox extends TextControl {
 
         //draw the selection
         if(selection.isActive() && text.length() > 0) {
-            double start = getCursor().calculateX(0,selection.getLeadingColumn());
-            double end = getCursor().calculateX(0,selection.getTrailingColumn());
+            double start = getCursor().calculateX(0,selection.getStart());
+            double end = getCursor().calculateX(0,selection.getEnd());
+            if(end < start) {
+                double t = start;
+                start = end;
+                end = t;
+            }
             g.setPaint(selectionColor);
             g.fillRect(
                     insets.getLeft() + start + xoff,

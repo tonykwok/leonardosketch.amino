@@ -200,13 +200,12 @@ public abstract class TextControl extends Control implements Focusable {
             if(event.isShiftPressed()) {
                 if(!selection.isActive()) {
                     selection.clear();
-                    selection.direction = TextSelection.LEFT;
                     selection.setStart(cursor.getIndex());
                     selection.setEnd(cursor.getIndex());
                 }
                 //extend selection only if this wouldn't make us wrap backward
                 if(!cursor.atStartOfLine()) {
-                    selection.addLeft(1);
+                    selection.setEnd(selection.getEnd()-1);
                 }
             } else {
                 selection.clear();
@@ -220,13 +219,12 @@ public abstract class TextControl extends Control implements Focusable {
             if(event.isShiftPressed()) {
                 if(!selection.isActive()) {
                     selection.clear();
-                    selection.direction = TextSelection.RIGHT;
                     selection.setStart(cursor.getIndex());
                     selection.setEnd(cursor.getIndex());
                 }
                 //extend selection only it this wouldn't make us wrap forward
                 if(!cursor.atEndOfLine()) {
-                    selection.addRight(1);
+                    selection.setEnd(selection.getEnd()+1);
                 }
             } else {
                 selection.clear();
@@ -240,6 +238,15 @@ public abstract class TextControl extends Control implements Focusable {
             if(allowMultiLine) {
                 cursor.moveUp(1);
             } else {
+                if(event.isShiftPressed()) {
+                    if(!selection.isActive()) {
+                        selection.clear();
+                        selection.setStart(0);
+                        selection.setEnd(cursor.getIndex());
+                    } else {
+                        selection.setEnd(0);
+                    }
+                }
                 cursor.moveStart();
             }
             setDrawingDirty();
@@ -249,6 +256,15 @@ public abstract class TextControl extends Control implements Focusable {
             if(allowMultiLine) {
                 cursor.moveDown(1);
             } else {
+                if(event.isShiftPressed()) {
+                    if(!selection.isActive()) {
+                        selection.clear();
+                        selection.setStart(cursor.getIndex());
+                        selection.setEnd(getText().length());
+                    } else {
+                        selection.setEnd(getText().length());
+                    }
+                }
                 cursor.moveEnd();
             }
             setDrawingDirty();
@@ -363,10 +379,19 @@ public abstract class TextControl extends Control implements Focusable {
             return active;
         }
 
+        public int getStart() {
+            return startCol;
+        }
+
         public void setStart(int index) {
             active = true;
             startCol = index;
         }
+
+        public int getEnd() {
+            return endCol;
+        }
+
         public void setEnd(int index) {
             endCol = index;
         }
@@ -375,14 +400,6 @@ public abstract class TextControl extends Control implements Focusable {
             active = true;
             startCol = 0;
             endCol = text.length();
-        }
-
-        public int getLeadingColumn() {
-            return startCol;
-        }
-
-        public int getTrailingColumn() {
-            return endCol;
         }
 
         public void addRight(int i) {
@@ -592,9 +609,9 @@ public abstract class TextControl extends Control implements Focusable {
         public String[] splitSelectedText() {
             String t = getText();
             String[] parts =  new String[3];
-            parts[0] = t.substring(0,selection.getLeadingColumn());
-            parts[1] = t.substring(selection.getLeadingColumn(),selection.getTrailingColumn());
-            parts[2] = t.substring(selection.getTrailingColumn());
+            parts[0] = t.substring(0,selection.getStart());
+            parts[1] = t.substring(selection.getStart(),selection.getEnd());
+            parts[2] = t.substring(selection.getEnd());
             return parts;
         }
 

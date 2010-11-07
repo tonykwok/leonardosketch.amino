@@ -114,10 +114,24 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
             TextLayoutModel.LayoutLine line = _layout_model.line(row);
             //draw the selection part of the line
             if(selection.isActive()) {
-                int[] startRC = getCursor().indexToRowCol(selection.getLeadingColumn());
-                int[] endRC = getCursor().indexToRowCol(selection.getTrailingColumn());
+                int[] startRC = getCursor().indexToRowCol(selection.getStart());
+                int[] endRC = getCursor().indexToRowCol(selection.getEnd());
                 double start = getCursor().calculateX(startRC[0],startRC[1]);
                 double end = getCursor().calculateX(endRC[0],endRC[1]);
+                if(end < start && endRC[0] == startRC[0]) {
+                    double t = start;
+                    start = end;
+                    end = t;
+                }
+                if(endRC[0] < startRC[0]) {
+                    double t = start;
+                    start = end;
+                    end = t;
+                    int[] tt = startRC;
+                    startRC = endRC;
+                    endRC = tt;
+                }
+                
                 //if all on same line
                 if(startRC[0] == endRC[0] && startRC[0] == row) {
                     //draw normal strip
