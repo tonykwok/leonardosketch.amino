@@ -38,6 +38,7 @@ import java.util.Map;
 * To change this template use File | Settings | File Templates.
 */
 public class XMLRequest extends BackgroundTask<String, Doc> {
+    private Exception error;
 
     public enum METHOD { GET, POST };
 
@@ -46,6 +47,7 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
     private String username;
     private String password;
     private Callback<Doc> callback;
+    private Callback<Exception> errorCallback;
     private METHOD method = METHOD.GET;
     private boolean multiPart = false;
     private boolean useUserPass = false;
@@ -57,6 +59,11 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
 
     public XMLRequest onComplete(Callback<Doc> callback) {
         this.callback = callback;
+        return this;
+    }
+
+    public XMLRequest onError(Callback<Exception> callback) {
+        this.errorCallback = callback;
         return this;
     }
 
@@ -158,8 +165,9 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
             Doc doc = XMLParser.parse(entity.getContent());
             httpclient.getConnectionManager().shutdown();
             return doc;
-        } catch (Throwable e) {
-            u.p(e);
+        } catch (Exception e) {
+            //u.p(e);
+            this.error = e;
         }
         u.p("done with background work");
         return null;
@@ -168,8 +176,11 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
 
     @Override
     protected void onEnd(Doc document) {
-        if(callback == null) return;
         try {
+            if(error != null && errorCallback != null) {
+                errorCallback.call(error);
+            }
+            if(callback == null) return;
             callback.call(document);
         } catch (Exception e) {
             e.printStackTrace();
