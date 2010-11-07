@@ -179,6 +179,16 @@ public class JOGLGFX extends GFX {
     }
 
     @Override
+    public void fillCustomRoundRect(double x, double y, double w, double h, double ulw, double ulh, double urw, double urh, double lrw, double lrh, double llw, double llh) {
+
+    }
+
+    @Override
+    public void drawCustomRoundRect(double x, double y, double w, double h, double ulw, double ulh, double urw, double urh, double lrw, double lrh, double llw, double llh) {
+        
+    }
+
+    @Override
     public void drawPath(Path2D.Double path) {
     }
 

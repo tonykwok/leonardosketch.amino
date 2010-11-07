@@ -259,6 +259,38 @@ public class SwingGFX extends GFX {
     }
 
     @Override
+    public void fillCustomRoundRect(double x, double y, double w, double h, double ulw, double ulh, double urw, double urh, double lrw, double lrh, double llw, double llh) {
+        Path2D path = createCustomRoundRect(x,y,w,h,ulw,ulh,urw,urh,lrw,lrh,llw,llh);
+        g.fill(path);
+    }
+
+    private Path2D createCustomRoundRect(double x, double y, double w, double h, double ulw, double ulh, double urw, double urh, double lrw, double lrh, double llw, double llh) {
+        Path2D path = new Path2D.Double();
+        path.moveTo(x+ulw,y);
+        //upper right
+        path.lineTo(x+w-urw,y);
+        path.quadTo(x+w,y, x+w, y+urh);
+        //lower right
+        path.lineTo(x+w,y+h-lrh);
+        path.quadTo(x+w, y+h, x+w-lrw,y+h);
+        //lower left
+        path.lineTo(x+llw,y+h);
+        path.quadTo(x,y+h,x,y+h-llh);
+        //upper left
+        path.lineTo(x, y+ulh);
+        path.quadTo(x,y,x+ulw,y);
+
+        path.closePath();
+        return path;
+    }
+
+    @Override
+    public void drawCustomRoundRect(double x, double y, double w, double h, double ulw, double ulh, double urw, double urh, double lrw, double lrh, double llw, double llh) {
+        Path2D path = createCustomRoundRect(x,y,w,h,ulw,ulh,urw,urh,lrw,lrh,llw,llh);
+        g.draw(path);
+    }
+
+    @Override
     public void drawPath(Path2D.Double path) {
         g.draw(path);
     }

@@ -62,6 +62,8 @@ public abstract class GFX {
 
     public abstract void dispose();
     public abstract void fillRoundRectAltered(double x, double y, double width, double height, double ul, double ur, double lr, double ll);
+    public abstract void fillCustomRoundRect(double x, double y, double w, double h, double ulw, double ulh, double urw, double urh, double lrw, double lrh, double llw, double llh);
+    public abstract void drawCustomRoundRect(double x, double y, double w, double h, double ulw, double ulh, double urw, double urh, double lrw, double lrh, double llw, double llh);
 
 
     public abstract void drawPath(Path2D.Double path);
@@ -72,4 +74,5 @@ public abstract class GFX {
     public abstract ImageBuffer createBuffer(int i, int i1);
 
     public abstract void draw(ImageBuffer buf, double x, double y);
+
 }

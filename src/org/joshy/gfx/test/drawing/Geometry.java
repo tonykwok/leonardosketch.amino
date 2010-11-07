@@ -51,6 +51,29 @@ public class Geometry implements Runnable {
 
                 g.drawRoundRect(100, 400, 60, 30, 10, 10);
 
+                g.setPaint(FlatColor.BLACK);
+                g.fillCustomRoundRect(
+                        230, 300, 100, 100, //x,y,w,h
+                        0, 0, //top left
+                        30, 30, //top right
+                        0, 0, //bottom right
+                        30, 30 //bottom left
+                );
+                g.fillRoundRect(
+                        350, 300, 100, 100, //x,y,w,h
+                        60, 60
+                );
+                g.drawCustomRoundRect(
+                        230, 420, 100, 100, //x,y,w,h
+                        30, 30, //top left
+                        30, 30, //top right
+                        0, 0, //bottom right
+                        0, 0 //bottom left
+                );
+                g.drawRoundRect(
+                        350, 420, 100, 100, //x,y,w,h
+                        60, 60
+                );
             }
 
             @Override
