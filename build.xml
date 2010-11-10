@@ -103,7 +103,10 @@
         </javadoc>
     </target>
     
-    <target name="dist" depends="build-core, core-docs, build-src, build-grandtour">
+    <target name="dist" depends="build-core, core-docs, build-src, build-demos">
+    </target>
+    
+    <target name="build-demos" depends="build-grandtour, build-mailapp">
     </target>
     
     <target name="build-grandtour" depends="build-core">
@@ -111,6 +114,17 @@
             classpath="lib/AppBundler.jar;lib/XMLLib.jar"
             classname="com.joshondesign.appbundler.Bundler" fork="true">
             <arg value="--file=grandtour-bundler.xml"/>
+            <arg value="--target=onejar"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=build/jars/"/>
+        </java>        
+    </target>
+    
+    <target name="build-mailapp" depends="build-core">
+        <java
+            classpath="lib/AppBundler.jar;lib/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=mailapp-bundler.xml"/>
             <arg value="--target=onejar"/>
             <arg value="--outdir=dist/"/>
             <arg value="--jardir=build/jars/"/>
