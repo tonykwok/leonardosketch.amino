@@ -1,6 +1,5 @@
 package org.joshy.gfx.test.text;
 
-import com.sun.xml.internal.xsom.impl.parser.state.AttributesImpl;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
