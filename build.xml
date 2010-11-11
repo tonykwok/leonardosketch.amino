@@ -153,6 +153,30 @@
             <fileset dir="build/jars/">
             </fileset>
         </copy>
+
+        <echo file="${publish.dir}/index.html"><![CDATA[
+            <html>
+                <head><title>Amino Daily Build ${build.number} ${TIMESTAMP}</title></head>
+                <body>
+                    <h1>Amino Daily Build</h1>
+                    <h2>Build number: ${build.number}</h2>
+                    <h2>Build date: ${TIMESTAMP}</h2>
+                    <h3>Build</h3>
+                    <ul>
+                        <li><a href="amino.src.zip">Full Source</a> (zip file)</li>
+                        <li><a href="docs/index.html">JavaDocs</a> (online)</li>
+                        <li><a href="lib/">all jars</a></li>
+                    </ul>
+                    <h3>Demos</h3>
+                    <ul>
+                        <li><a href="GrandTour.onejar.jar">Grand Tour</a> double click jar</li>
+                        <li><a href="MailApp.onejar.jar">Mail.app Mockup</a> double click jar</li>
+                    </ul>
+                </body>
+            </html>
+            ]]>
+        </echo>
+
     </target>
     
     
