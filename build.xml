@@ -156,7 +156,10 @@
 
         <echo file="${publish.dir}/index.html"><![CDATA[
             <html>
-                <head><title>Amino Daily Build ${build.number} ${TIMESTAMP}</title></head>
+                <head>
+                    <title>Amino Daily Build ${build.number} ${TIMESTAMP}</title>
+                    <link rel="stylesheet" type="text/css" href="index.css"></link>
+                </head>
                 <body>
                     <h1>Amino Daily Build</h1>
                     <h2>Build number: ${build.number}</h2>
@@ -176,6 +179,7 @@
             </html>
             ]]>
         </echo>
+        <copy todir="${publish.dir}" file="index.css"/>
 
     </target>
     
