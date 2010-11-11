@@ -64,6 +64,10 @@ public class MainCSSTest {
         //get the icon position:
         assertTrue("left".equals(set.findStringValue("button","icon-position")));
 
+        //get a url with a - in it
+        matcher = new CSSMatcher("button2");
+        u.p(" uri = " + set.findURIValue(matcher,"icon"));
+
         //background-color: transparent
         assertTrue("transparent".equals(set.findStringValue("transptest","background-color")));
         assertTrue(!"transparent".equals(set.findStringValue("transptest","color")));

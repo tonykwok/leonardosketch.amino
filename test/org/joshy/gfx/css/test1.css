@@ -16,6 +16,9 @@ button {
     icon-position: left;
     font-weight: bold;
 }
+button2 {
+    icon: url(images/checkbox-normal.png);
+}
 
 transptest {
     background-color: transparent;

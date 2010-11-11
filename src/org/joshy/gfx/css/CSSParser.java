@@ -348,7 +348,7 @@ public class CSSParser extends BaseParser<Object> {
     }
     @SuppressNode
     public Rule URLChar() {
-        return FirstOf(Letter(),'/','.');
+        return FirstOf(Letter(),'/','.','-');
     }
     
     public static class GradientStopAction implements Action {
