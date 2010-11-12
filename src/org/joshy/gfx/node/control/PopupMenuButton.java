@@ -82,7 +82,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
     public void draw(GFX g) {
         if(!isVisible()) return;
 
-        CSSMatcher matcher = new CSSMatcher("PopupMenuButton");
+        CSSMatcher matcher = new CSSMatcher(this);
         Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
         cssSkin.drawBackground(g,matcher,"", bounds);
         int col = cssSkin.getCSSSet().findColorValue(matcher, "color");

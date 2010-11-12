@@ -6,7 +6,6 @@ import org.joshy.gfx.css.values.IntegerPixelValue;
 import org.joshy.gfx.css.values.URLValue;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,7 @@ public class CSSRuleSet {
     private static final boolean DEBUG = false;
     private List<CSSMatcher> idMatchers;
     private List<CSSMatcher> classMatchers;
+    private List<CSSMatcher> classWithPseudoMatchers;
     private List<CSSMatcher> otherMatchers;
     private List<CSSRule> reverseRules;
 
@@ -26,6 +26,7 @@ public class CSSRuleSet {
         reverseRules = new ArrayList<CSSRule>();
         idMatchers = new ArrayList<CSSMatcher>();
         classMatchers = new ArrayList<CSSMatcher>();
+        classWithPseudoMatchers = new ArrayList<CSSMatcher>();
         otherMatchers = new ArrayList<CSSMatcher>();
     }
 
@@ -41,7 +42,11 @@ public class CSSRuleSet {
             if(m.id != null) {
                 idMatchers.add(0,m);
             } else if(!m.classes.isEmpty()) {
-                classMatchers.add(0,m);
+                if(m.pseudo != null) {
+                    classWithPseudoMatchers.add(0,m);
+                } else {
+                    classMatchers.add(0,m);
+                }
             } else {
                 otherMatchers.add(0,m);
             }
@@ -79,7 +84,15 @@ public class CSSRuleSet {
 
         //go through ID rules
         rule = findMatchingRule(idMatchers, elem, propName);
-        if(rule != null) return rule;
+        if(rule != null) {
+            return rule;
+        }
+
+        //go through class w/ pseudo rules
+        rule = findMatchingRule(classWithPseudoMatchers, elem, propName);
+        if(rule != null) {
+            return rule;
+        }
 
         //go through class rules
         rule = findMatchingRule(classMatchers, elem, propName);
@@ -95,9 +108,10 @@ public class CSSRuleSet {
 
         //match pseudo class
         if(matcher.pseudo != null) {
-            if(matcher.pseudo.equals(elem.pseudo) && matcher.element != null && matcher.element.equals(elem.element)) {
+            if(matchPseudo(matcher,elem)) {
                 return true;
             }
+            return false;
         }
 
         if(matcher.id != null) {
@@ -130,12 +144,29 @@ public class CSSRuleSet {
         return false;
     }
 
+    private boolean matchPseudo(CSSMatcher matcher, CSSMatcher elem) {
+        if(!matcher.pseudo.equals(elem.pseudo)) {
+            return false;
+        }
+
+        for(String c1 : matcher.classes) {
+            if(!elem.classes.contains(c1)) {
+                return false;
+            }
+        }
+
+        if(matcher.element != null) {
+            if(!matcher.element.equals(elem.element)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private boolean checkParent(CSSMatcher matcher, CSSMatcher elem) {
         if(elem.control == null) return false;
         Parent parent = elem.control.getParent();
         if(parent == null) return false;
-        u.p("doing checkparent");
-        u.p("       parent control = " + parent);
         if(!(parent instanceof Control)) return false;
 
         CSSMatcher pmatch = new CSSMatcher((Control) parent);

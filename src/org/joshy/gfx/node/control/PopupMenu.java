@@ -108,7 +108,7 @@ public class PopupMenu extends Control {
         if(!isVisible()) return;
 
         Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
-        CSSMatcher matcher = new CSSMatcher("PopupMenu");
+        CSSMatcher matcher = new CSSMatcher(this);
 
         if(cssSkin != null) {
             cssSkin.drawBackground(g,matcher,"",bounds);

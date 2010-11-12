@@ -52,7 +52,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         setRenderer(new DataRenderer() {
             public void draw(GFX g, TableView table, Object cell, int row, int column, double x, double y, double width, double height) {
                 if(cssSkin != null) {
-                    CSSMatcher matcher = new CSSMatcher("TableView");
+                    CSSMatcher matcher = new CSSMatcher(table);
                     Bounds bounds = new Bounds(x,y,width,height);
                     String prefix = "item-";
                     if(getSelectedIndex() == row) {

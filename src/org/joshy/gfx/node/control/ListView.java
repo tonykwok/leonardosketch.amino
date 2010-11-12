@@ -8,7 +8,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 import java.util.List;
 
@@ -186,7 +185,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     @Override
     public void draw(GFX g) {
         if(getWidth() < 1) return;
-        CSSMatcher matcher = new CSSMatcher("ListView");
+        CSSMatcher matcher = new CSSMatcher(this);
         
         if(cssSkin != null) {
             cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
@@ -460,7 +459,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     ItemRenderer defaultItemRenderer =  new ItemRenderer<E>() {
         public void draw(GFX gfx, ListView listView, E item, int index, double x, double y, double width, double height) {
             if(cssSkin != null) {
-                CSSMatcher matcher = new CSSMatcher("ListView");
+                CSSMatcher matcher = new CSSMatcher(listView);
                 Bounds bounds = new Bounds(x,y,width,height);
                 String prefix = "item-";
                 if(listView.getSelectedIndex() == index) {

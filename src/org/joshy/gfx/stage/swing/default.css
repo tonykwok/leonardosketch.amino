@@ -31,7 +31,7 @@
     shrink-to-fit: true;
 }
 
-Tooltip {
+.-class-Tooltip {
     background-color: #444444;
     color: white;
     shrink-to-fit: true;
@@ -44,57 +44,57 @@ Tooltip {
     color: black;
 }
 
-.-class-Button, Togglebutton {
+.-class-Button, .-class-Togglebutton {
     background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
     /* a black shadow offset by 3,2 with a blur radius of 4 */
     text-shadow: #000000 0px 1px 4px;
 }
 
-Checkbox {
+.-class-Checkbox {
     border-width: 0px;
     background-color: transparent;
     icon: url(images/checkbox_normal.png);
     icon-position: left;
 }
 
-Checkbox:selected {
+.-class-Checkbox:selected {
     icon: url(images/checkbox_selected.png);
 }
 
-Radiobutton {
+.-class-Radiobutton {
     border-width: 0px;
     border-radius: 0px;
     background-color: transparent;
     icon: url(images/radiobutton_normal.png);
 }
 
-Radiobutton:selected {
+.-class-Radiobutton:selected {
     icon: url(images/radiobutton_selected.png);
 }
 
-Togglebutton {
+.-class-Togglebutton {
     border-radius: 3px;
 }
 
-Button:hover, Togglebutton:hover {
+.-class-Button:hover, .-class-Togglebutton:hover {
     background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     color: #ffffff;
     border-color: #808080;
 }
 
-Button:disabled, Togglebutton:disabled {
+.-class-Button:disabled, .-class-Togglebutton:disabled {
     background: none;
     background-color: #a0a0a0;
     text-shadow: none;
 }
 
-Togglebutton:selected {
+.-class-Togglebutton:selected {
     background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     color: #ffffff;
     border-color: #808080;
 }
 
-Linkbutton {
+.-class-Linkbutton {
     background-color: transparent;
     shrink-to-fit: true;
     color: #000000;
@@ -103,14 +103,14 @@ Linkbutton {
     padding: 3px;
 }
 
-Linkbutton:hover {
+.-class-Linkbutton:hover {
     color: #5050ff;
 }
 
 
 /* ============= Progress Bar and Slider =========== */
 
-ProgressBar {
+.-class-ProgressBar {
     shrink-to-fit: true;
     padding: 3px;
     
@@ -130,7 +130,7 @@ ProgressBar {
 }
 
 
-Slider {
+.-class-Slider {
     width: 100px;
     height: 20px;
     background-color: black;
@@ -159,7 +159,7 @@ Slider {
 
 
 /* =========== panels ======== */
-Panel, TitlePanel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
+.-class-Panel, .-class-TitlePanel, .-class-HFlexBox, .-class-VFlexBox, .-class-GridBox, .-class-Panel {
     background-color: transparent;
     border-width: 0px;
     border-color: black;
@@ -167,11 +167,11 @@ Panel, TitlePanel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
     padding: 3px;
 }
 
-HFlexBox, VFlexBox, GridBox {
+.-class-HFlexBox, .-class-VFlexBox, .-class-GridBox {
     spacing: 3px;
 }
 
-TitlePanel {
+.-class-TitlePanel {
     background-color: transparent;
     border-width: 1px;
     margin: 6px;
@@ -186,7 +186,7 @@ TitlePanel {
     title-background-color: #e8e8e8;
 }
 
-TabTop {
+.-class-TabTop {
     background-color: #d0d0d0;
     background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
     border-color: black;
@@ -197,13 +197,13 @@ TabTop {
     color: #000000;
     text-align: center;
 }
-TabTop:selected {
+.-class-TabTop:selected {
     background-color: #ffaaaa;
     background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     color: #ffffff;
 }
 
-SplitPane {
+.-class-SplitPane {
     divider-background-color: #00ff00;
     divider-background: linear-gradient(left center, #888888 0%, #222222 100%);
     divider-border-color: #000000;
@@ -212,7 +212,7 @@ SplitPane {
     divider-border-top-width: 1px;
     divider-border-bottom-width: 1px;
 }
-SplitPane:vertical {
+.-class-SplitPane:vertical {
     divider-background: linear-gradient(center top, #888888 0%, #222222 100%);
 }
 
@@ -221,7 +221,7 @@ SplitPane:vertical {
 }
 
 /* =========== scroll bars ========== */
-Scrollbar {
+.-class-Scrollbar {
     width: 100px;
     height: 20px;
     margin: 0px;
@@ -251,7 +251,7 @@ Scrollbar {
     right-arrow-margin: 0px;
 }
 
-Scrollbar:vertical {
+.-class-Scrollbar:vertical {
     thumb-background: linear-gradient(left center, #ffffff 0%, #808080 100%);    
     width: 20px;
     height: 100px;
@@ -259,7 +259,7 @@ Scrollbar:vertical {
 
 /* ============== text boxes ============= */
 
-Textbox, Passwordbox, Textarea {
+.-class-Textbox, .-class-Passwordbox, .-class-Textarea {
     margin: 3px;
     padding: 5px;
     border-color: #888888;
@@ -270,18 +270,18 @@ Textbox, Passwordbox, Textarea {
     cursor-color: #000000;
 }
 
-Textbox:focused, Passwordbox:focused, Textarea:focused {
+.-class-Textbox:focused, .-class-Passwordbox:focused, .-class-Textarea:focused {
     background-color: #ffffff;
     selection-color: #99bbff;
 }
 
-SpinButton {
+.-class-SpinButton {
     margin: 0px;
     padding: 0px;
     border-radius: 0px;
 }
 
-SpinButton:hover {
+.-class-SpinButton:hover {
     background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     color: #ffffff;
     border-color: #808080;
@@ -312,7 +312,7 @@ SpinButton:hover {
 }
 
 /* ===========  Popups ============== */
-PopupMenuButton {
+.-class-PopupMenuButton {
     background-color: #a0a0a0;
     background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
     border-width: 1px;
@@ -322,7 +322,7 @@ PopupMenuButton {
     padding: 3px;
 }
 
-PopupMenu {
+.-class-PopupMenu {
     background-color: #f0f0f0;
     border-radius: 11px;
     border-width: 1px;
@@ -347,7 +347,7 @@ PopupMenu {
 
 
 /* ============ List and Table =========== */
-ListView {
+.-class-ListView {
     margin: 0px;
     border-width: 1px;
     border-color: #a0a0a0;
@@ -376,7 +376,7 @@ ListView {
     selected-item-border-right-width:  0px;
 }
 
-TableView {
+.-class-TableView {
     margin: 0px;
     border-width: 1px;
     border-color: #a0a0a0;

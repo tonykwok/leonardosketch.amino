@@ -2,6 +2,7 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Scrollbar;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,6 +49,16 @@ public class SelectorTests {
         assertTrue(set.findIntegerValue(matcher,"prop1")==1);
         assertTrue(set.findIntegerValue(matcher,"prop2")==12);
         assertTrue(set.findIntegerValue(matcher,"prop3")==23);
+        matcher.pseudo = "hover";
+        assertTrue(set.findIntegerValue(matcher,"prop4")==4);
+
+        Scrollbar sb = new Scrollbar(false);
+        matcher = new CSSMatcher(sb);
+        assertTrue(set.findIntegerValue(matcher,"width")==100);
+        //sb = new Scrollbar(true);
+        //matcher = new CSSMatcher(sb);
+        matcher.pseudo = "vertical";
+        assertTrue(set.findIntegerValue(matcher,"width")==20);
     }
 
     

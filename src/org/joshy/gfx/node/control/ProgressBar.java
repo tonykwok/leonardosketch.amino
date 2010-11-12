@@ -73,7 +73,7 @@ public class ProgressBar extends Control {
             if(size == null) {
                 doPrefLayout();
             }
-            CSSMatcher matcher = new CSSMatcher("ProgressBar");
+            CSSMatcher matcher = new CSSMatcher(this);
             cssSkin.drawBackground(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
             cssSkin.drawBorder(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
             cssSkin.drawBackground(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
