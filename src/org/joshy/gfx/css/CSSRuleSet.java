@@ -18,6 +18,7 @@ public class CSSRuleSet {
     private static final boolean DEBUG = false;
     private List<CSSMatcher> idMatchers;
     private List<CSSMatcher> classMatchers;
+    private List<CSSMatcher> otherMatchers;
     private List<CSSRule> reverseRules;
 
     public CSSRuleSet() {
@@ -25,6 +26,7 @@ public class CSSRuleSet {
         reverseRules = new ArrayList<CSSRule>();
         idMatchers = new ArrayList<CSSMatcher>();
         classMatchers = new ArrayList<CSSMatcher>();
+        otherMatchers = new ArrayList<CSSMatcher>();
     }
 
     public void append(CSSRuleSet set) {
@@ -37,10 +39,11 @@ public class CSSRuleSet {
         reverseRules.add(0,rule);
         for(CSSMatcher m : rule.matchers) {
             if(m.id != null) {
-                idMatchers.add(m);
-            }
-            if(!m.classes.isEmpty()) {
-                classMatchers.add(m);
+                idMatchers.add(0,m);
+            } else if(!m.classes.isEmpty()) {
+                classMatchers.add(0,m);
+            } else {
+                otherMatchers.add(0,m);
             }
         }
     }
@@ -54,22 +57,37 @@ public class CSSRuleSet {
         return property.value.asString();
     }
 
-    public CSSProperty findMatchingRule(CSSMatcher elem, String propName) {
-        for(CSSRule rule : reverseRules) {
-            for(CSSMatcher matcher : rule.matchers) {
-                if(matches(matcher,elem)) {
-                    for(CSSProperty prop : rule.getProperties()) {
-                        if(prop.name.equals(propName)) {
-                            if(prop.value instanceof URLValue) {
-                                URLValue uv = (URLValue) prop.value;
-                                uv.baseURI = rule.getBaseURI();
-                            }
-                            return prop;
+    public CSSProperty findMatchingRule(List<CSSMatcher> matchers, CSSMatcher elem, String propName) {
+        for(CSSMatcher matcher : matchers) {
+            if(matches(matcher,elem)) {
+                for(CSSProperty prop : matcher.rule.getProperties()) {
+                    if(prop.name.equals(propName)) {
+                        if(prop.value instanceof URLValue) {
+                            URLValue uv = (URLValue) prop.value;
+                            uv.baseURI = matcher.rule.getBaseURI();
                         }
+                        return prop;
                     }
                 }
             }
         }
+        return null;
+    }
+    
+    public CSSProperty findMatchingRule(CSSMatcher elem, String propName) {
+        CSSProperty rule;
+
+        //go through ID rules
+        rule = findMatchingRule(idMatchers, elem, propName);
+        if(rule != null) return rule;
+
+        //go through class rules
+        rule = findMatchingRule(classMatchers, elem, propName);
+        if(rule != null) return rule;
+
+        //go through element rules
+        rule = findMatchingRule(otherMatchers, elem, propName);
+        if(rule != null) return rule;
         return null;
     }
 
@@ -113,11 +131,11 @@ public class CSSRuleSet {
     }
 
     private boolean checkParent(CSSMatcher matcher, CSSMatcher elem) {
-        u.p("doing checkparent");
         if(elem.control == null) return false;
         Parent parent = elem.control.getParent();
-        u.p("       parent control = " + parent);
         if(parent == null) return false;
+        u.p("doing checkparent");
+        u.p("       parent control = " + parent);
         if(!(parent instanceof Control)) return false;
 
         CSSMatcher pmatch = new CSSMatcher((Control) parent);

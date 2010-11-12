@@ -1,4 +1,4 @@
-#idtest1 .-class-Button {
+/*#idtest1 .-class-Button {
     dummy-prop: 78px;
 }
 #idtest1 blah .-class-Button {
@@ -9,4 +9,23 @@
 }
 #window1 .-class-Button {
     dummy-prop3: 199px;
+} */
+
+/* check that id overrides class overrides element */
+#testButton {
+    prop3: 23px;
 }
+
+.-class-Button {
+    prop2: 12px;
+    prop3: 13px;                        
+}
+
+Button {
+    prop1: 1px;
+    prop2: 2px;
+    prop3: 3px;
+}
+
+
+
