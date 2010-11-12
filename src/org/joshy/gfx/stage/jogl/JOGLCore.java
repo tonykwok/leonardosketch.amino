@@ -15,6 +15,8 @@ import org.parboiled.support.ParsingResult;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class JOGLCore extends Core {
@@ -68,5 +70,10 @@ public class JOGLCore extends Core {
     @Override
     public void loadCSS(File file) throws IOException {
         
+    }
+
+    @Override
+    public void loadCSS(InputStream in, URL uri) throws IOException, URISyntaxException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

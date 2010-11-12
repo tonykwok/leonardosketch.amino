@@ -5,6 +5,13 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.ArrayListModel;
+import org.joshy.gfx.util.u;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,11 +23,23 @@ import org.joshy.gfx.stage.Stage;
 public class MailApp implements Runnable {
     public static void main(String ... args) throws Exception {
         Core.init();
+        //Core.setDebugCSS();
         Core.getShared().defer(new MailApp());
     }
 
     @Override
+
     public void run() {
+        InputStream stream = MailApp.class.getResourceAsStream("mailapp/test.css");
+        URL uri = MailApp.class.getResource("mailapp/test.css");
+        u.p("uri = " + uri);
+        try {
+            Core.getShared().loadCSS(stream,uri);
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (URISyntaxException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         Control content = null;
         content = test1();
         //content = test2();
@@ -32,39 +51,52 @@ public class MailApp implements Runnable {
     }
 
     private FlexBox test1() {
+
+        ArrayListModel<String> mailboxModel = new ArrayListModel<String>();
+        mailboxModel.add("Inbox");
+        mailboxModel.add("Drafts");
+        mailboxModel.add("Sent");
+        mailboxModel.add("Trash");
+        mailboxModel.add("Friends");
+        mailboxModel.add("Work");
+        mailboxModel.add("Mailing Lists");
+
+
         FlexBox content = new VFlexBox()
             .setBoxAlign(VFlexBox.Align.Stretch)
             .add(
                     new HFlexBox()
                         .setBoxAlign(VFlexBox.Align.Top)
-                        .add(new Button("Mail"))
+                        .add(new Button("").setId("get_mail"))
                         .add(new Spacer(), 1)
-                        .add(new Button("Delete"))
-                        .add(new Button("Junk"))
+                        .add(new Button("").setId("delete"))
+                        .add(new Button("").setId("junk"))
                         .add(new Spacer(), 1)
-                        .add(new Button("Reply"))
-                        .add(new Button("Reply All"))
-                        .add(new Button("Forward"))
+                        .add(new Button("").setId("reply"))
+                        .add(new Button("").setId("reply_all"))
+                        .add(new Button("").setId("forward"))
                         .add(new Spacer(), 1)
-                        .add(new Button("New Message"))
+                        .add(new Button("").setId("new_mail"))
                         .add(new Spacer(), 1)
-                        .add(new Button("Note"))
-                        .add(new Button("Todo"))
+                        .add(new Button("").setId("note"))
+                        .add(new Button("").setId("todo"))
                         .add(new Spacer(),1)
                         .add(new Textbox("Search").setPrefWidth(150))
+                        .setId("toolbar")
                  , 0)
             .add(new HFlexBox()
                 .setBoxAlign(HFlexBox.Align.Stretch)
                 .add(new VFlexBox()
                         .setBoxAlign(FlexBox.Align.Stretch)
-                        .add(new ScrollPane(new ListView())
+                        .add(new ScrollPane(new ListView().setModel(mailboxModel))
                                 .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
+                                .setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded)
                                 ,1)
                         .add(new HFlexBox()
                             .setBoxAlign(HFlexBox.Align.Stretch)
-                            .add(new Button("+"))
-                            .add(new Button("^"))
-                            .add(new Button("*")),0)
+                            .add(new Button("").setId("plus"))
+                            .add(new Button("").setId("activity"))
+                            .add(new Button("").setId("action")),0)
                         .setPrefWidth(200)
                     ,0)
 

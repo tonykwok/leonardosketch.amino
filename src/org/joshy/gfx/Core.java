@@ -10,6 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.joshy.gfx.event.FocusManager;
 
@@ -117,5 +120,6 @@ public abstract class Core {
 
     protected abstract void addDebugCSS(File file);
 
-    public abstract  void loadCSS(File file) throws IOException;
+    public abstract void loadCSS(File file) throws IOException;
+    public abstract void loadCSS(InputStream in, URL uri) throws IOException, URISyntaxException;
 }

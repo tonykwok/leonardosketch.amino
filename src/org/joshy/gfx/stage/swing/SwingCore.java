@@ -19,8 +19,10 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,6 +117,27 @@ public class SwingCore extends Core {
 
         //add in the new rules
         CSSProcessor.condense(result.parseTreeRoot,set, file.toURI());
+        u.p("rule count = " + set.rulesCount());
+
+        CSSSkin skin = SkinManager.getShared().getCSSSkin();
+        skin.setRuleSet(set);
+        u.p("parsed. reloading skins");
+        reloadSkins();
+    }
+
+    @Override
+    public void loadCSS(InputStream in, URL uri) throws IOException, URISyntaxException {
+        //create a new set
+        CSSRuleSet set = new CSSRuleSet();
+        //add in the old rules
+        CSSProcessor.condense(baseResult.parseTreeRoot,set, baseResultURI);
+        u.p("rule count = " + set.rulesCount());
+
+        //parse the new file
+        ParsingResult<?> result = CSSProcessor.parseCSS(in);
+
+        //add in the new rules
+        CSSProcessor.condense(result.parseTreeRoot,set, uri.toURI());
         u.p("rule count = " + set.rulesCount());
 
         CSSSkin skin = SkinManager.getShared().getCSSSkin();
