@@ -33,6 +33,7 @@ public abstract class CSSSkin {
     }
 
     public abstract BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state);
+    public abstract BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state, String prefix);
 
     public BoxPainter createBoxPainter(Control control, OldStyleInfo boxState, String text, CSSSkin.State state) {
 
@@ -401,8 +402,9 @@ public abstract class CSSSkin {
 
     
     public abstract StyleInfo getStyleInfo(Control control, Font realFont);
-
+    public abstract StyleInfo getStyleInfo(Control control, Font realFont, String prefix);
     public abstract SizeInfo getSizeInfo(Control control, StyleInfo style, String content);
+    public abstract SizeInfo getSizeInfo(Control control, StyleInfo style, String content, String prefix);
 
     public OldStyleInfo getSize(Control control, String content) {
         OldStyleInfo size = getSize(control);

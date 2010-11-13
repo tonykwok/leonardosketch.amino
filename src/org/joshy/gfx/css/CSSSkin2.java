@@ -14,11 +14,14 @@ import org.joshy.gfx.node.control.Control;
 public class CSSSkin2 extends CSSSkin {
 
     public StyleInfo getStyleInfo(Control control, Font realFont) {
+        return getStyleInfo(control,realFont,"");
+    }
+    public StyleInfo getStyleInfo(Control control, Font realFont, String prefix) {
         CSSMatcher matcher = createMatcher(control, CSSSkin.State.None);
         StyleInfo info = new StyleInfo();
-        info.margin = getMargin(matcher);
-        info.padding = getPadding(matcher);
-        info.borderWidth = getBorderWidth(matcher,"");
+        info.margin = getMargin(matcher,prefix);
+        info.padding = getPadding(matcher,prefix);
+        info.borderWidth = getBorderWidth(matcher,prefix);
         info.font = getFont(matcher);
         if(realFont != null) {
             info.font = realFont;
@@ -28,6 +31,11 @@ public class CSSSkin2 extends CSSSkin {
     }
 
     public SizeInfo getSizeInfo(Control control, StyleInfo style, String content) {
+        return getSizeInfo(control,style,content,"");
+    }
+
+    @Override
+    public SizeInfo getSizeInfo(Control control, StyleInfo style, String content, String prefix) {
         CSSMatcher matcher = createMatcher(control, State.None);
         SizeInfo size = new SizeInfo();
         size.contentWidth = control.getWidth()-style.margin.getLeft()-style.margin.getRight()-style.padding.getLeft()-style.padding.getRight();
@@ -48,14 +56,21 @@ public class CSSSkin2 extends CSSSkin {
             size.contentBaseline = (size.contentHeight-fh)/2 + fh;
         } else {
             size.contentBaseline = size.contentHeight;
+            size.width = set.findIntegerValue(matcher,"width");
+            size.height = set.findIntegerValue(matcher,"height");
         }
         return size;
     }
+
     public BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state) {
+        return createBoxPainter(control,style,size,text,state,"");
+    }
+
+    @Override
+    public BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, State state, String prefix) {
         CSSMatcher matcher = createMatcher(control, state);
         BoxPainter boxPainter = new BoxPainter();
-        String prefix = "";
-        boxPainter.borderRadius = getBorderRadius(matcher,"");
+        boxPainter.borderRadius = getBorderRadius(matcher,prefix);
         boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
         if(!boxPainter.transparent) {
             boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"));

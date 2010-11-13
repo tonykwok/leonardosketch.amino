@@ -1,8 +1,10 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.OldStyleInfo;
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
+import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Paint;
@@ -27,13 +29,16 @@ public class Slider extends Control {
     private double largeScroll = 20;
     private FlatColor thumbFill;
     private Paint trackFill;
-    private OldStyleInfo size;
+    private StyleInfo styleInfo;
+    private SizeInfo sizeInfo;
+    private SizeInfo thumbSizeInfo;
+    private BoxPainter boxPainter;
+    private BoxPainter thumbPainter;
+    private StyleInfo thumbStyleInfo;
 
     public Slider(boolean vertical) {
         thumbFill = FlatColor.BLACK;
         trackFill = FlatColor.GRAY;
-        //setWidth(300);
-        //setHeight(20);
         this.vertical = vertical;
         EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public void call(MouseEvent event) {
@@ -113,38 +118,40 @@ public class Slider extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
+        styleInfo = cssSkin.getStyleInfo(this, null);
+        thumbStyleInfo = cssSkin.getStyleInfo(this,null,"thumb-");
         setLayoutDirty();
     }
     
     @Override
     public void doPrefLayout() {
-        size = cssSkin.getSize(this);
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
         if(prefWidth != CALCULATED) {
             setWidth(prefWidth);
-            size.width = prefWidth;
+            sizeInfo.width = prefWidth;
         } else {
-            setWidth(size.width);
+            setWidth(sizeInfo.width);
         }
-        setHeight(size.height);
+        setHeight(sizeInfo.height);
+        Bounds thumbBounds = calculateThumbBounds();
+        thumbSizeInfo = cssSkin.getSizeInfo(this,thumbStyleInfo,"","thumb-");
+        thumbSizeInfo.width = thumbBounds.getWidth();
+        thumbSizeInfo.height = thumbBounds.getHeight();
     }
 
     @Override
     public void doLayout() {
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
+        thumbPainter = cssSkin.createBoxPainter(this, thumbStyleInfo, thumbSizeInfo, "", CSSSkin.State.None, "thumb-");
     }
 
     public void draw(GFX g) {
         if(!isVisible()) return;
-
+        boxPainter.draw(g,styleInfo,sizeInfo,this,"");
         Bounds thumbBounds = calculateThumbBounds();
-        Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
-
-        if(size == null) doPrefLayout();
-        CSSMatcher matcher = new CSSMatcher(this);
-        cssSkin.drawBackground(g,matcher,"",bounds);
-        cssSkin.drawBorder(g,matcher,"",bounds);
-
-        cssSkin.drawBackground(g,matcher,"thumb-", thumbBounds);
-        cssSkin.drawBorder(g,matcher,"thumb-",thumbBounds);
+        g.translate(thumbBounds.getX(),thumbBounds.getY());
+        thumbPainter.draw(g,thumbStyleInfo,thumbSizeInfo,this,"");
+        g.translate(-thumbBounds.getX(),-thumbBounds.getY());
     }
 
 

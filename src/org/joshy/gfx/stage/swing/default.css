@@ -141,16 +141,16 @@
     border-color: black;
     border-radius: 10px;
 
+
     thumb-background-color: white;
+    thumb-height: 40px;
     thumb-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-
     thumb-border-color: black;
-
+    thumb-border-radius: 0px;
     thumb-margin-left:   1px;
     thumb-margin-right:  1px;
     thumb-margin-top:    2px;
     thumb-margin-bottom: 2px;
-
     thumb-border-left-width: 1px;
     thumb-border-right-width: 1px;
     thumb-border-top-width: 1px;
