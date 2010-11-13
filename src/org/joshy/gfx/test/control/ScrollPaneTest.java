@@ -26,8 +26,8 @@ public class ScrollPaneTest implements Runnable {
         Stage stage = Stage.createStage();
         ScrollPane scroll = new ScrollPane();
         //scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
-        //scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Always);
-        scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
+        scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Always);
+        //scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         //scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         //scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.Always);
         scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
@@ -52,7 +52,7 @@ public class ScrollPaneTest implements Runnable {
             }
 
             public int size() {
-                return 100;
+                return 5;
             }
         });
         scroll.setContent(list);

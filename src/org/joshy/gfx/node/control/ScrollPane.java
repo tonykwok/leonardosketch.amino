@@ -179,6 +179,18 @@ public class ScrollPane extends AbstractPane {
             vInset = 0;
         }
 
+        if(verticalVisiblePolicy == VisiblePolicy.Never) {
+            vscroll.setVisible(false);
+        }
+        if(verticalVisiblePolicy == VisiblePolicy.Always) {
+            vscroll.setVisible(true);
+        }
+        
+        double hInset = vscroll.getWidth();
+        if(!vscroll.isVisible()) {
+            hInset = 0;
+        }
+
 
         // the main pref layout pass
         vscroll.setTranslateX(getWidth()-vscroll.getWidth());
@@ -189,7 +201,7 @@ public class ScrollPane extends AbstractPane {
             vscroll.setHeight(getHeight());
         }*/
         hscroll.setTranslateY(getHeight()-vInset);
-        hscroll.setWidth(getWidth()-vscroll.getWidth());
+        hscroll.setWidth(getWidth()-hInset);
 
 
         Bounds cBounds = content.getVisualBounds();
@@ -198,12 +210,13 @@ public class ScrollPane extends AbstractPane {
             cBounds = new Bounds(0,0,sa.getFullWidth(getWidth(),getHeight()),sa.getFullHeight(getWidth(),getHeight()));
             if(sa instanceof Control) {
                 Control control = (Control) sa;
-                control.setWidth(getWidth()-vscroll.getWidth());
+                control.setWidth(getWidth()-hInset);
                 control.setHeight(getHeight()-vInset);
             }
         }
+        
         hscroll.setMin(0);
-        double hmax =  cBounds.getWidth()-getWidth()+vscroll.getWidth();
+        double hmax =  cBounds.getWidth()-getWidth()+hInset;
         if(hmax < 0) {
             hscroll.setMax(0);
             hscroll.setSpan(1);
@@ -227,12 +240,6 @@ public class ScrollPane extends AbstractPane {
             vscroll.setSpan(getHeight()/cBounds.getHeight());
         }
 
-        if(verticalVisiblePolicy == VisiblePolicy.Never) {
-            vscroll.setVisible(false);
-        }
-        if(verticalVisiblePolicy == VisiblePolicy.Always) {
-            vscroll.setVisible(true);
-        }
         if(verticalVisiblePolicy == VisiblePolicy.WhenNeeded) {
             if(vscroll.getSpan() == 1) {
                 vscroll.setVisible(false);
