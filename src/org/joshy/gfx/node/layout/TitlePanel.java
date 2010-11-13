@@ -32,7 +32,7 @@ public class TitlePanel extends Panel {
 
         double tw = Font.DEFAULT.calculateWidth(title);
         double th = Font.DEFAULT.calculateHeight(title);
-        Bounds textBounds = new Bounds(size.margin.getLeft()+10,size.margin.getTop()-th/2, tw+6, th);
+        Bounds textBounds = new Bounds(styleInfo.margin.getLeft()+10,styleInfo.margin.getTop()-th/2, tw+6, th);
         cssSkin.drawBackground(g,matcher,"title-",textBounds);
         cssSkin.drawBorder(g,matcher,"title-",textBounds);
         cssSkin.drawText(g,matcher,"title-",textBounds,title);

@@ -19,7 +19,6 @@ public class Button extends Control {
     private boolean hovered = false;
     private boolean selected;
     protected boolean selectable = false;
-    //protected String style;
     private Callback<ActionEvent> callback;
     protected BoxPainter boxPainter;
 

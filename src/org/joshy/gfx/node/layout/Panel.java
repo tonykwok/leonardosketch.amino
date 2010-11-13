@@ -1,21 +1,22 @@
 package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.OldStyleInfo;
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
+import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.Node;
 
 public class Panel extends Container {
-    protected Insets insets;
     protected FlatColor fill = null;
     protected FlatColor borderColor = FlatColor.BLACK;
     private Callback<Panel> callback;
-    protected OldStyleInfo size;
+    protected StyleInfo styleInfo;
+    protected SizeInfo sizeInfo;
+    protected BoxPainter boxPainter;
 
     public Panel() {
         setSkinDirty();
@@ -29,32 +30,31 @@ public class Panel extends Container {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        super.doSkins();
+        styleInfo = cssSkin.getStyleInfo(this, null);
+        setLayoutDirty();
     }
     
     @Override
     public void doPrefLayout() {
-        insets = cssSkin.getInsets(this);
-        size = cssSkin.getSize(this);
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
+
         super.doPrefLayout();
         if(prefWidth != CALCULATED) {
             setWidth(prefWidth);
-            size.width = prefWidth;
+            sizeInfo.width = prefWidth;
         } else {
-            setWidth(size.width);
+            setWidth(sizeInfo.width);
         }
         if(prefHeight != CALCULATED) {
             setHeight(prefHeight);
-            size.height = prefHeight;
+            sizeInfo.height = prefHeight;
         } else {
-            setHeight(size.height);
+            setHeight(sizeInfo.height);
         }
-
     }
 
     @Override
     public void doLayout() {
-        if(insets == null) doPrefLayout();
         if(callback != null) {
             try {
                 callback.call(this);
@@ -64,6 +64,7 @@ public class Panel extends Container {
         } else {
             super.doLayout();
         }
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
     }
 
 
@@ -90,13 +91,8 @@ public class Panel extends Container {
             return;
         }
         
-
-        Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
-        CSSMatcher matcher = new CSSMatcher(this);
-        cssSkin.drawBackground(g,matcher,"",bounds);
-        cssSkin.drawBorder(g,matcher,"",bounds);
+        boxPainter.draw(g, styleInfo, sizeInfo, this, "");
         return;
-
     }
 
     public Panel setFill(FlatColor fill) {

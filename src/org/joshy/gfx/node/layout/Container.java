@@ -57,12 +57,6 @@ public abstract class Container extends Control implements Parent {
     // the main skins pass
     public void doSkins() {
         skinsDirty = false;
-        /*
-        for(Node n : children()) {
-            if(n instanceof Control) {
-                ((Control)n).doSkins();
-            }
-        }*/
     }
 
     // the main layout pass

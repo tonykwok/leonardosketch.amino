@@ -1,6 +1,8 @@
 package org.joshy.gfx.node.layout;
 
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.util.u;
 
@@ -12,10 +14,11 @@ import org.joshy.gfx.util.u;
 * To change this template use File | Settings | File Templates.
 */
 public class VFlexBox extends FlexBox {
+    private Insets insets;
 
     @Override
     public void doPrefLayout() {
-        insets = cssSkin.getInsets(this);
+        insets = styleInfo.calcContentInsets();
 
         double totalHeight = 0;
         double maxWidth = 0;
@@ -42,6 +45,7 @@ public class VFlexBox extends FlexBox {
         } else {
             setHeight(getPrefHeight());
         }
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
 
     }
 
@@ -105,5 +109,6 @@ public class VFlexBox extends FlexBox {
             }
             c.doLayout();
         }
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
     }
 }

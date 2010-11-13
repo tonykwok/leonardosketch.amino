@@ -2,6 +2,7 @@ package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
@@ -65,6 +66,7 @@ public class TabPanel extends Panel {
             }
             c.doLayout();
         }
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
         setDrawingDirty();
     }
 
