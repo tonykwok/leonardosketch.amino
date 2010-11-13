@@ -242,6 +242,36 @@ public class MainCSSTest {
         assertTrue(set.findIntegerValue(m,"border-left-width")==11);
     }
 
+
+    @Test
+    public void borderRadius() {
+        CSSMatcher m = new CSSMatcher();
+        m.id = "border_radius_1";
+        assertTrue(set.findIntegerValue(m,"border-top-left-radius")==1);
+        assertTrue(set.findIntegerValue(m,"border-top-right-radius")==2);
+        assertTrue(set.findIntegerValue(m,"border-bottom-right-radius")==3);
+        assertTrue(set.findIntegerValue(m,"border-bottom-left-radius")==4);
+        m.id = "border_radius_2";
+        assertTrue(set.findIntegerValue(m,"border-top-left-radius")==1);
+        assertTrue(set.findIntegerValue(m,"border-top-right-radius")==1);
+        assertTrue(set.findIntegerValue(m,"border-bottom-right-radius")==1);
+        assertTrue(set.findIntegerValue(m,"border-bottom-left-radius")==1);
+        m.id = "border_radius_3";
+        assertTrue(set.findIntegerValue(m,"border-top-left-radius")==1);
+        assertTrue(set.findIntegerValue(m,"border-top-right-radius")==2);
+        assertTrue(set.findIntegerValue(m,"border-bottom-right-radius")==1);
+        assertTrue(set.findIntegerValue(m,"border-bottom-left-radius")==2);
+        m.id = "border_radius_4";
+        assertTrue(set.findIntegerValue(m,"border-top-left-radius")==1);
+        assertTrue(set.findIntegerValue(m,"border-top-right-radius")==2);
+        assertTrue(set.findIntegerValue(m,"border-bottom-right-radius")==3);
+        assertTrue(set.findIntegerValue(m,"border-bottom-left-radius")==2);
+        m.id = "border_radius_5";
+        assertTrue(set.findIntegerValue(m,"border-top-left-radius")==1);
+        assertTrue(set.findIntegerValue(m,"border-top-right-radius")==2);
+        assertTrue(set.findIntegerValue(m,"border-bottom-right-radius")==3);
+        assertTrue(set.findIntegerValue(m,"border-bottom-left-radius")==4);
+    }
     @Test
     public void constantTests() {
         CSSMatcher matcher = new CSSMatcher();

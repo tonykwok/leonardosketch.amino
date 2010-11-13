@@ -156,3 +156,17 @@ Button.classmatch3 {
     dummy-prop3: 80px;
 }*/
 
+
+
+/* border radius tests */
+#border_radius_1 {
+    border-top-left-radius: 1px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 4px;
+}
+#border_radius_2 { border-radius: 1px; } /* same as 1,1,1,1 */
+#border_radius_3 { border-radius: 1px 2px; } /* same as 1,2,1,2 */
+#border_radius_4 { border-radius: 1px 2px 3px; } /* same as 1,2,3,2 */
+#border_radius_5 { border-radius: 1px 2px 3px 4px; } /* same as 1,2,3,2 */
+

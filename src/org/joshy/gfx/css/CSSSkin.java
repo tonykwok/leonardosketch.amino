@@ -46,7 +46,7 @@ public abstract class CSSSkin {
         BoxPainter boxPainter = new BoxPainter();
         //background stuff
         BaseValue background = set.findValue(matcher,prefix+"background");
-        boxPainter.borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
+        boxPainter.borderRadius = getBorderRadius(matcher,prefix);
         boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
         if(!boxPainter.transparent) {
             boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"));
@@ -425,6 +425,14 @@ public abstract class CSSSkin {
         int border_top = set.findIntegerValue(matcher,prefix+"border-top-width");
         int border_bottom = set.findIntegerValue(matcher,prefix+"border-bottom-width");
         return new Insets(border_top,border_right,border_bottom,border_left);
+    }
+    protected Insets getBorderRadius(CSSMatcher matcher, String prefix) {
+        int border_top_left = set.findIntegerValue(matcher,prefix+"border-top-left-radius");
+        int border_top_right = set.findIntegerValue(matcher,prefix+"border-top-right-radius");
+        int border_bottom_right = set.findIntegerValue(matcher,prefix+"border-bottom-right-radius");
+        int border_bottom_left = set.findIntegerValue(matcher,prefix+"border-bottom-left-radius");
+        //TODO: we really should use a class other than Insets for this
+        return new Insets(border_top_left,border_top_right,border_bottom_right,border_bottom_left);
     }
 
     public void drawText(GFX g, CSSMatcher matcher, String prefix, Bounds b, String text) {

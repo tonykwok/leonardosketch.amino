@@ -55,7 +55,7 @@ public class CSSSkin2 extends CSSSkin {
         CSSMatcher matcher = createMatcher(control, state);
         BoxPainter boxPainter = new BoxPainter();
         String prefix = "";
-        boxPainter.borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
+        boxPainter.borderRadius = getBorderRadius(matcher,"");
         boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
         if(!boxPainter.transparent) {
             boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"));

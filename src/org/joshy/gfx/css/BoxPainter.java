@@ -12,7 +12,7 @@ import org.joshy.gfx.node.control.Control;
  * Paints a control laid out by the css boxmodel.
  */
 public class BoxPainter {
-    int borderRadius;
+    Insets borderRadius;
     Insets margin;
     public boolean transparent;
     public FlatColor background_color;
@@ -46,21 +46,36 @@ public class BoxPainter {
             if(gradient) {
                 g.setPaint(gradientFill);
             }
-            if(borderRadius == 0) {
+            if(borderRadius.allEquals(0)) {
                 g.fillRect(
                         0,
                         0,
                         bounds.getWidth(),
                         bounds.getHeight()
                         );
-            } else {
+            } else if(borderRadius.allEqual()) {
                 g.fillRoundRect(
-                        0+margin.getLeft(),
-                        0+margin.getTop(),
-                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                        bounds.getHeight()-margin.getTop()-margin.getBottom(),
-                        borderRadius,
-                        borderRadius);
+                        0,
+                        0,
+                        bounds.getWidth(),
+                        bounds.getHeight(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft());
+            } else {
+                g.fillCustomRoundRect(
+                        0,
+                        0,
+                        bounds.getWidth(),
+                        bounds.getHeight(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft()
+                );
             }
         }
         g.translate(-bounds.getX(),-bounds.getY());
@@ -73,7 +88,7 @@ public class BoxPainter {
 
         if(!borderWidth.allEquals(0)) {
             gfx.setPaint(border_color);
-            if(borderRadius == 0) {
+            if(borderRadius.allEquals(0)) {
                 if(borderWidth.allEqual()) {
                     gfx.setStrokeWidth(borderWidth.getLeft());
                     gfx.drawRect(
@@ -93,13 +108,29 @@ public class BoxPainter {
                         gfx.drawLine(bounds.getX(),bounds.getY(),bounds.getX()+bounds.getWidth(),bounds.getY());
                     }
                 }
-            } else {
+            } else if(borderRadius.allEqual()) {
+                gfx.setStrokeWidth(borderWidth.getLeft());
                 gfx.drawRoundRect(
-                        bounds.getX()+margin.getLeft(),
-                        bounds.getY()+margin.getTop(),
-                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                        bounds.getHeight()-margin.getTop()-margin.getBottom(),
-                        borderRadius,borderRadius
+                        bounds.getX(),
+                        bounds.getY(),
+                        bounds.getWidth(),
+                        bounds.getHeight(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft());
+            } else {
+                gfx.fillCustomRoundRect(
+                        bounds.getX(),
+                        bounds.getY(),
+                        bounds.getWidth(),
+                        bounds.getHeight(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft(),
+                        borderRadius.getLeft()
                 );
             }
         }
