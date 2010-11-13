@@ -193,7 +193,7 @@
     border-width: 1px;
     margin: 0px;
     padding: 0px;
-    border-radius: 6px;
+    border-radius: 16px 16px 0px 0px;
     color: #000000;
     text-align: center;
 }

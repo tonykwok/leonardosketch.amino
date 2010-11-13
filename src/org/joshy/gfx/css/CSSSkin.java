@@ -176,28 +176,43 @@ public abstract class CSSSkin {
         g.translate(bounds.getX(),bounds.getY());
         Insets margin = getMargin(matcher,prefix);
         BaseValue background = set.findValue(matcher,prefix+"background");
-        int radius = set.findIntegerValue(matcher,prefix+"border-radius");
+        Insets radius = getBorderRadius(matcher,prefix);
 
         if(!"transparent".equals(set.findStringValue(matcher,prefix+"background-color"))) {
             g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"background-color")));
             if(background instanceof LinearGradientValue) {
                 g.setPaint(toGradientFill((LinearGradientValue)background,bounds.getWidth(),bounds.getHeight()));
             }
-            if(radius == 0) {
+            if(radius.allEquals(0)) {
                 g.fillRect(
                         0+margin.getLeft(),
                         0+margin.getTop(),
                         bounds.getWidth()-margin.getLeft()-margin.getRight(),
                         bounds.getHeight()-margin.getTop()-margin.getBottom()
                         );
-            } else {
+            } else if(radius.allEqual()) {
                 g.fillRoundRect(
                         0+margin.getLeft(),
                         0+margin.getTop(),
                         bounds.getWidth()-margin.getLeft()-margin.getRight(),
                         bounds.getHeight()-margin.getTop()-margin.getBottom(),
-                        radius,
-                        radius);
+                        radius.getLeft(),
+                        radius.getRight());
+            } else {
+                g.fillCustomRoundRect(
+                        0+margin.getLeft(),
+                        0+margin.getTop(),
+                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                        bounds.getHeight()-margin.getTop()-margin.getBottom(),
+                        radius.getTop(),
+                        radius.getTop(),
+                        radius.getRight(),
+                        radius.getRight(),
+                        radius.getBottom(),
+                        radius.getBottom(),
+                        radius.getLeft(),
+                        radius.getLeft()
+                        );
             }
         }
         g.translate(-bounds.getX(),-bounds.getY());
@@ -206,10 +221,10 @@ public abstract class CSSSkin {
     public void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, Bounds bounds) {
         Insets margin = getMargin(matcher,prefix);
         Insets borderWidth = getBorderWidth(matcher,prefix);
-        int borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
+        Insets radius = getBorderRadius(matcher,prefix);
         if(!borderWidth.allEquals(0)) {
             gfx.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
-            if(borderRadius <= 0) {
+            if(radius.allEquals(0)) {
                 if(borderWidth.allEqual()) {
                     if(borderWidth.getLeft() >0) {
                         gfx.setStrokeWidth(borderWidth.getLeft());
@@ -244,13 +259,37 @@ public abstract class CSSSkin {
                     }
                 }
             } else {
-                gfx.drawRoundRect(
+                /*gfx.drawRoundRect(
                         bounds.getX()+margin.getLeft(),
                         bounds.getY()+margin.getTop(),
                         bounds.getWidth()-margin.getLeft()-margin.getRight(),
                         bounds.getHeight()-margin.getTop()-margin.getBottom(),
                         borderRadius,borderRadius
-                );
+                );*/
+                if(radius.allEqual()) {
+                    gfx.drawRoundRect(
+                            bounds.getX()+margin.getLeft(),
+                            bounds.getY()+margin.getTop(),
+                            bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                            bounds.getHeight()-margin.getTop()-margin.getBottom(),
+                        radius.getLeft(),
+                        radius.getRight());
+                } else {
+                    gfx.drawCustomRoundRect(
+                            bounds.getX()+margin.getLeft(),
+                            bounds.getY()+margin.getTop(),
+                            bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                            bounds.getHeight()-margin.getTop()-margin.getBottom(),
+                        radius.getTop(),
+                        radius.getTop(),
+                        radius.getRight(),
+                        radius.getRight(),
+                        radius.getBottom(),
+                        radius.getBottom(),
+                        radius.getLeft(),
+                        radius.getLeft()
+                        );
+                }
             }
             gfx.setStrokeWidth(1);
         }
@@ -442,7 +481,7 @@ public abstract class CSSSkin {
         Insets padding = getPadding(matcher,prefix);
         g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"color")));
         double x = margin.getLeft() + borderWidth.getLeft() + padding.getLeft();
-        String textAlign = set.findStringValue(matcher.element,"text-align");
+        String textAlign = set.findStringValue(matcher,"text-align");
         double contentX = margin.getLeft()+borderWidth.getLeft()+padding.getLeft();
         double contentY = margin.getTop()+borderWidth.getTop()+padding.getTop();
         double textX = contentX;
