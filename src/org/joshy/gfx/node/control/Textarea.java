@@ -64,7 +64,7 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
             state = CSSSkin.State.Focused;
         }        
         boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, state);
-        CSSMatcher matcher = CSSSkin2.createMatcher(this, state);
+        CSSMatcher matcher = CSSSkin.createMatcher(this, state);
         selectionColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"selection-color"));
         cursorColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"cursor-color"));
     }

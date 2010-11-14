@@ -16,7 +16,7 @@ import java.net.URI;
  * This class is usually a singleton and should hold no state. All state
  * comes from the BoxStage instance passed in along with the control.
  */
-public abstract class CSSSkin {
+public class CSSSkin {
     protected CSSRuleSet set;
     private Font defaultFont = Font.name("Arial").size(13).resolve();
 
@@ -29,8 +29,95 @@ public abstract class CSSSkin {
         Pressed, Hover, Selected, Disabled, Focused, None
     }
 
-    public abstract BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state);
-    public abstract BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state, String prefix);
+    public StyleInfo getStyleInfo(Control control, Font realFont) {
+        return getStyleInfo(control,realFont,"");
+    }
+    public StyleInfo getStyleInfo(Control control, Font realFont, String prefix) {
+        CSSMatcher matcher = createMatcher(control, CSSSkin.State.None);
+        StyleInfo info = new StyleInfo();
+        info.margin = getMargin(matcher,prefix);
+        info.padding = getPadding(matcher,prefix);
+        info.borderWidth = getBorderWidth(matcher,prefix);
+        info.font = getFont(matcher);
+        if(realFont != null) {
+            info.font = realFont;
+        }
+        info.contentBaseline = info.font.getAscender();
+        return info;
+    }
+
+    public SizeInfo getSizeInfo(Control control, StyleInfo style, String content) {
+        return getSizeInfo(control,style,content,"");
+    }
+
+    public SizeInfo getSizeInfo(Control control, StyleInfo style, String content, String prefix) {
+        CSSMatcher matcher = createMatcher(control, State.None);
+        SizeInfo size = new SizeInfo();
+        size.contentWidth = control.getWidth()-style.margin.getLeft()-style.margin.getRight()-style.padding.getLeft()-style.padding.getRight();
+        size.contentHeight = control.getHeight()-style.margin.getTop()-style.margin.getBottom()-style.padding.getTop()-style.padding.getBottom();
+
+        Image icon = getIcon(matcher);
+        //calc the sizes
+        if("true".equals(set.findStringValue(matcher,"shrink-to-fit"))) {
+            size.contentWidth = style.font.calculateWidth(content);
+            size.contentHeight = style.font.calculateHeight(content);
+            if(icon != null) {
+                size.contentWidth += icon.getWidth();
+                size.contentHeight = Math.max(size.contentHeight,icon.getHeight());
+            }
+            size.width = style.margin.getLeft()+style.margin.getRight()+style.borderWidth.getLeft()+style.borderWidth.getRight()+style.padding.getLeft()+style.padding.getRight()+size.contentWidth;
+            size.height = style.margin.getTop()+style.margin.getBottom()+style.borderWidth.getTop()+style.borderWidth.getBottom()+style.padding.getTop()+style.padding.getBottom()+size.contentHeight;
+            double fh = style.font.calculateHeight(content);
+            size.contentBaseline = (size.contentHeight-fh)/2 + fh;
+        } else {
+            size.contentBaseline = size.contentHeight;
+            size.width = set.findIntegerValue(matcher,"width");
+            size.height = set.findIntegerValue(matcher,"height");
+        }
+        return size;
+    }
+
+    public BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state) {
+        return createBoxPainter(control,style,size,text,state,"");
+    }
+
+    public BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, State state, String prefix) {
+        CSSMatcher matcher = createMatcher(control, state);
+        BoxPainter boxPainter = new BoxPainter();
+        boxPainter.borderRadius = getBorderRadius(matcher,prefix);
+        boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
+        if(!boxPainter.transparent) {
+            boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"));
+        } else {
+            boxPainter.background_color = FlatColor.BLACK;
+        }
+        BaseValue background = set.findValue(matcher,prefix+"background");
+
+
+        double backWidth = size.width-style.margin.getLeft()-style.margin.getRight();
+        double backHeight = size.height-style.margin.getTop()-style.margin.getBottom();
+        Bounds bounds = new Bounds(style.margin.getLeft(),style.margin.getTop(),backWidth,backHeight);
+        if(background instanceof LinearGradientValue) {
+            boxPainter.gradient = true;
+            boxPainter.gradientFill = toGradientFill((LinearGradientValue)background,bounds.getWidth(),bounds.getHeight());
+        }
+
+        //border stuff
+        boxPainter.margin = getMargin(matcher);
+        boxPainter.borderWidth = getBorderWidth(matcher,"");
+        if(!boxPainter.borderWidth.allEquals(0)) {
+            boxPainter.border_color = (new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
+        }
+
+        //content stuff
+        boxPainter.icon = getIcon(matcher);
+        boxPainter.font = style.font;
+        boxPainter.textAlign = set.findStringValue(matcher.element,"text-align");
+        boxPainter.color = new FlatColor(set.findColorValue(matcher,"color"));
+        boxPainter.text_shadow = set.findValue(matcher, "text-shadow");
+
+        return boxPainter;
+    }
 
     protected Font getFont(CSSMatcher matcher) {
         int fontSize = set.findIntegerValue(matcher, "font-size");
@@ -184,10 +271,6 @@ public abstract class CSSSkin {
 
 
 
-    public abstract StyleInfo getStyleInfo(Control control, Font realFont);
-    public abstract StyleInfo getStyleInfo(Control control, Font realFont, String prefix);
-    public abstract SizeInfo getSizeInfo(Control control, StyleInfo style, String content);
-    public abstract SizeInfo getSizeInfo(Control control, StyleInfo style, String content, String prefix);
 
     protected Insets getPadding(CSSMatcher matcher) {
         return getPadding(matcher,"");
@@ -247,12 +330,6 @@ public abstract class CSSSkin {
         } else {
             Font.drawCenteredVertically(g,text,font,textX,contentY,b.getWidth(),b.getHeight(),true);
         }
-        /*
-        Font font = getDefaultFont();
-        double tw = font.getWidth(text);
-        double th = font.getAscender();
-        double ty = 0 + (b.getHeight() -th)/2 + font.getAscender();
-        g.drawText(text,font,x, ty);*/
         g.translate(-b.getX(),-b.getY());
     }
 
