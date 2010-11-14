@@ -1,14 +1,15 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.OldStyleInfo;
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
+import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.ProgressUpdate;
-import org.joshy.gfx.node.Bounds;
 
 /**  The ProgressBar is a control which shows the progress of some process, usually a background
  * task. It shows the progress as a bar of increasing width.
@@ -37,7 +38,12 @@ import org.joshy.gfx.node.Bounds;
  */
 public class ProgressBar extends Control {
     double percentage = 0.0;
-    private OldStyleInfo size;
+    private StyleInfo styleInfo;
+    private StyleInfo barStyleInfo;
+    private SizeInfo sizeInfo;
+    private SizeInfo barSizeInfo;
+    private BoxPainter boxPainter;
+    private BoxPainter barPainter;
 
     public ProgressBar() {
     }
@@ -45,40 +51,39 @@ public class ProgressBar extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
+        styleInfo = cssSkin.getStyleInfo(this, null);
+        barStyleInfo = cssSkin.getStyleInfo(this,null,"bar-");
         setLayoutDirty();
     }
 
     @Override
-    public void doLayout() {
-    }
-    
-    @Override
     public void doPrefLayout() {
         if(cssSkin != null) {
-            size = cssSkin.getSize(this,"ASDFASDFASDF");
+            sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
             if(prefWidth != CALCULATED) {
                 setWidth(prefWidth);
-                size.width = prefWidth;
+                sizeInfo.width = prefWidth;
             } else {
-                setWidth(size.width);
+                setWidth(sizeInfo.width);
             }
-            setHeight(size.height);
+            setHeight(sizeInfo.height);
         }
+        barSizeInfo = cssSkin.getSizeInfo(this,barStyleInfo,"","bar-");
     }
+
+    @Override
+    public void doLayout() {
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
+        barPainter = cssSkin.createBoxPainter(this, barStyleInfo, barSizeInfo, "", CSSSkin.State.None, "bar-");
+    }
+    
 
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
-        if(cssSkin != null) {
-            if(size == null) {
-                doPrefLayout();
-            }
-            CSSMatcher matcher = new CSSMatcher(this);
-            cssSkin.drawBackground(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
-            cssSkin.drawBorder(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
-            cssSkin.drawBackground(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
-            cssSkin.drawBorder(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
-        }
+        boxPainter.draw(g,styleInfo,sizeInfo,this,"");
+        barSizeInfo.width = getWidth()*percentage;
+        barPainter.draw(g,barStyleInfo,barSizeInfo,this,"");
     }
 
 

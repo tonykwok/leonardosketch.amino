@@ -111,7 +111,9 @@
 /* ============= Progress Bar and Slider =========== */
 
 .-class-ProgressBar {
-    shrink-to-fit: true;
+    width: 100px;
+    height: 20px;
+    shrink-to-fit: false;
     padding: 3px;
     
     background-color: #a0a0a0;
@@ -122,11 +124,22 @@
     border-radius: 11px;
     
     bar-background-color: #0000ff;
-    bar-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    bar-margin: 2px;
     bar-border-color: #f0f0f0;
-    bar-border-width: 1px;
-    bar-border-radius: 10px;
+    bar-border-left-width: 1px;
+    bar-border-right-width: 1px;
+    bar-border-top-width: 1px;
+    bar-border-bottom-width: 1px;
+    bar-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    
+    bar-margin-left: 1px;
+    bar-margin-right: 1px;
+    bar-margin-top: 1px;
+    bar-margin-bottom: 1px;
+
+    bar-border-top-left-radius: 10px;
+    bar-border-top-right-radius: 10px;
+    bar-border-bottom-right-radius: 10px;
+    bar-border-bottom-left-radius: 10px;
 }
 
 
