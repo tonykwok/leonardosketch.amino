@@ -2,15 +2,12 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.LinearGradientValue;
-import org.joshy.gfx.css.values.ShadowValue;
 import org.joshy.gfx.css.values.URLValue;
 import org.joshy.gfx.draw.*;
-import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
-import org.joshy.gfx.util.GraphicsUtil;
 
 import java.net.URI;
 
@@ -35,66 +32,13 @@ public abstract class CSSSkin {
     public abstract BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state);
     public abstract BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, CSSSkin.State state, String prefix);
 
-    public BoxPainter createBoxPainter(Control control, OldStyleInfo boxState, String text, CSSSkin.State state) {
-
-        CSSMatcher matcher = createMatcher(control, state);
-        double backWidth = boxState.width-boxState.margin.getLeft()-boxState.margin.getRight();
-        double backHeight = boxState.height-boxState.margin.getTop()-boxState.margin.getBottom();
-
-        Bounds bounds = new Bounds(boxState.margin.getLeft(),boxState.margin.getTop(),backWidth,backHeight);
-        String prefix = "";
-
-        BoxPainter boxPainter = new BoxPainter();
-        //background stuff
-        BaseValue background = set.findValue(matcher,prefix+"background");
-        boxPainter.borderRadius = getBorderRadius(matcher,prefix);
-        boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
-        if(!boxPainter.transparent) {
-            boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"));
-        } else {
-            boxPainter.background_color = FlatColor.BLACK;
-        }
-        if(background instanceof LinearGradientValue) {
-            boxPainter.gradient = true;
-            boxPainter.gradientFill = toGradientFill((LinearGradientValue)background,bounds.getWidth(),bounds.getHeight());
-        }
-
-        //border stuff
-        boxPainter.margin = getMargin(matcher);
-        boxPainter.borderWidth = getBorderWidth(matcher,"");
-        if(!boxPainter.borderWidth.allEquals(0)) {
-            boxPainter.border_color = (new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
-        }
-
-        //content stuff
-        boxPainter.icon = getIcon(matcher);
-        boxPainter.font = getFont(matcher);
-        boxPainter.textAlign = set.findStringValue(matcher.element,"text-align");
-        boxPainter.color = new FlatColor(set.findColorValue(matcher,"color"));
-        boxPainter.text_shadow = set.findValue(matcher, "text-shadow");
-
-        return boxPainter;
-    }
-
-
     protected Font getFont(CSSMatcher matcher) {
         int fontSize = set.findIntegerValue(matcher, "font-size");
         Font font = Font.name("Arial").size(fontSize).resolve();
         return font;
     }
 
-    public void draw(GFX gfx, OldStyleInfo box, Control control, String content, State state) {
-        CSSMatcher matcher = createMatcher(control,state);
-        //draw background
-        drawBackground(gfx, matcher, "", box);
-        //draw content
-        drawContent(gfx, matcher, "", box, content);
-        //draw border
-        drawBorder(gfx,matcher,"",box);
-        //debug overlay
-        drawDebugOverlay(gfx,matcher,"",box);
-    }
-
+    /*
     private void drawDebugOverlay(GFX gfx, CSSMatcher matcher, String prefix, OldStyleInfo box) {
         Insets borderWidth = getBorderWidth(matcher,"");
 
@@ -119,60 +63,9 @@ public abstract class CSSSkin {
                     box.height-box.margin.getTop()-box.margin.getBottom()-borderWidth.getTop()-borderWidth.getBottom());
         }
     }
+    */
 
-    private void drawContent(GFX gfx, CSSMatcher matcher, String prefix, OldStyleInfo box, String content) {
-        Image icon = getIcon(matcher);
-        Font font = getFont(matcher);
 
-        Insets borderWidth = getBorderWidth(matcher,"");
-        //draw the internal content
-        double contentX = box.margin.getLeft()+borderWidth.getLeft()+box.padding.getLeft();
-        double contentY = box.margin.getTop()+borderWidth.getTop()+box.padding.getTop();
-        String textAlign = set.findStringValue(matcher.element,"text-align");
-        gfx.setPaint(new FlatColor(set.findColorValue(matcher,"color")));
-
-        double textX = contentX;
-        double textWidth = box.contentWidth;
-        if(icon != null) {
-            textX += icon.getWidth();
-            textWidth -= icon.getWidth();
-        }
-        //do drop shadow on text content
-        if(content != null && content.length() > 0) {
-            BaseValue value = set.findValue(matcher, "text-shadow");
-            if(value instanceof ShadowValue) {
-                ShadowValue shadow = (ShadowValue) value;
-                ImageBuffer buf = gfx.createBuffer((int)textWidth,(int)box.contentHeight);
-                if(buf != null) {
-                GFX g2 = buf.getGFX();
-                g2.setPaint(new FlatColor(shadow.getColor(),0.3));
-                g2.translate(-textX,-contentY);
-                Font.drawCentered(g2,content,font,textX,contentY,textWidth,box.contentHeight,true);
-                buf.apply(new BlurEffect(3,3));
-                gfx.draw(buf,textX+shadow.getXoffset(),contentY+shadow.getYoffset());
-                }
-            }
-        }
-
-        if("center".equals(textAlign)) {
-            Font.drawCentered(gfx,content,font,textX,contentY,textWidth,box.contentHeight,true);
-        } else {
-            Font.drawCenteredVertically(gfx,content,font,textX,contentY,textWidth,box.contentHeight,true);
-        }
-
-        if(icon != null) {
-            gfx.drawImage(icon,contentX,contentY);
-        }
-
-    }
-
-    private void drawBackground(GFX g, CSSMatcher matcher, String prefix, OldStyleInfo box) {
-        double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
-        double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
-        Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
-        drawBackground(g, matcher, prefix, bounds);
-    }
-    
     public void drawBackground(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
         g.translate(bounds.getX(),bounds.getY());
         Insets margin = getMargin(matcher,prefix);
@@ -260,13 +153,6 @@ public abstract class CSSSkin {
                     }
                 }
             } else {
-                /*gfx.drawRoundRect(
-                        bounds.getX()+margin.getLeft(),
-                        bounds.getY()+margin.getTop(),
-                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                        bounds.getHeight()-margin.getTop()-margin.getBottom(),
-                        borderRadius,borderRadius
-                );*/
                 if(radius.allEqual()) {
                     gfx.drawRoundRect(
                             bounds.getX()+margin.getLeft(),
@@ -296,144 +182,12 @@ public abstract class CSSSkin {
         }
     }
 
-    private void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, OldStyleInfo box) {
-        double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
-        double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
-        Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
 
-        Insets margin = getMargin(matcher);
-        Insets borderWidth = getBorderWidth(matcher,"");
-        /*if(prefix != null && !prefix.trim().equals("")) {
-            margin = new Insets(set.findIntegerValue(matcher.element, prefix+"margin"));
-            borderWidth = new Insets(set.findIntegerValue(matcher.element, prefix+"border-width"));
-        }*/
-        int borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
-        if(!borderWidth.allEquals(0)) {
-            gfx.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
-            if(borderRadius == 0) {
-                if(borderWidth.allEqual()) {
-                    gfx.setStrokeWidth(borderWidth.getLeft());
-                    gfx.drawRect(
-                            bounds.getX()+margin.getLeft(),
-                            bounds.getY()+margin.getTop(),
-                            bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                            bounds.getHeight()-margin.getTop()-margin.getBottom()
-                    );
-                    gfx.setStrokeWidth(1);
-                } else {
-                    if(borderWidth.getLeft()>0) {
-                        gfx.setStrokeWidth(borderWidth.getLeft());
-                        gfx.drawLine(bounds.getX(),bounds.getY(),bounds.getX(),bounds.getY()+bounds.getHeight());
-                    }
-                    if(borderWidth.getTop()>0) {
-                        gfx.setStrokeWidth(borderWidth.getTop());
-                        gfx.drawLine(bounds.getX(),bounds.getY(),bounds.getX()+bounds.getWidth(),bounds.getY());
-                    }
-                }
-            } else {
-                gfx.drawRoundRect(
-                        bounds.getX()+margin.getLeft(),
-                        bounds.getY()+margin.getTop(),
-                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                        bounds.getHeight()-margin.getTop()-margin.getBottom(),
-                        borderRadius,borderRadius
-                );
-            }
-        }
-    }
 
-    public void draw(GFX g, Scrollbar scrollbar, OldStyleInfo size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
-        if(set == null) {
-            g.setPaint(FlatColor.BLUE);
-            g.fillRect(0,0,20,20);
-            return;
-        }
-        CSSMatcher matcher = createMatcher(scrollbar,null);
-        if(scrollbar.isVertical()) {
-            matcher.pseudo = "vertical";
-        }
-        Insets margin = getMargin(matcher);
-
-        double backWidth = size.width-margin.getLeft()-margin.getRight();
-        double backHeight = size.height-margin.getTop()-margin.getBottom();
-        Bounds backBounds = new Bounds(margin.getLeft(),margin.getTop(),backWidth,backHeight);
-        //draw the background
-        drawBackground(g,matcher,"",backBounds);
-        drawBorder(    g,matcher,"",backBounds);
-        //draw the track
-        //draw the arrows
-        drawBackground(g,matcher,"left-arrow-",leftArrowBounds);
-        drawBackground(g,matcher,"right-arrow-",rightArrowBounds);
-        drawBorder(g,matcher,"left-arrow-",leftArrowBounds);
-        drawBorder(g,matcher,"right-arrow-",rightArrowBounds);
-        g.setPaint(FlatColor.BLACK);
-        if(scrollbar.isVertical()) {
-            GraphicsUtil.fillUpArrow(g,3,3,14);
-            GraphicsUtil.fillDownArrow(g,3,scrollbar.getHeight()-3-14,14);
-        } else {
-            GraphicsUtil.fillLeftArrow(g,2,3,14);
-            GraphicsUtil.fillRightArrow(g,scrollbar.getWidth()-2-14,3,14);
-        }
-
-        //draw the thumb
-        drawBackground(g, matcher, "thumb-", thumbBounds);
-        drawBorder(    g,matcher,"thumb-",thumbBounds);
-    }
-
-    public OldStyleInfo getSize(Control control) {
-        CSSMatcher matcher = createMatcher(control, State.None);
-        OldStyleInfo size = new OldStyleInfo();
-
-        if(set == null) {
-            size.width = 100;
-            size.height = 100;
-            return size;
-        }
-
-        size.width = set.findIntegerValue(matcher,"width");
-        size.height = set.findIntegerValue(matcher,"height");
-
-        size.margin = getMargin(matcher);
-        size.padding = getPadding(matcher);
-        size.contentWidth = control.getWidth()-size.margin.getLeft()-size.margin.getRight()-size.padding.getLeft()-size.padding.getRight();
-        size.contentHeight = control.getHeight()-size.margin.getTop()-size.margin.getBottom()-size.padding.getTop()-size.padding.getBottom();
-        return size;
-    }
-
-    
     public abstract StyleInfo getStyleInfo(Control control, Font realFont);
     public abstract StyleInfo getStyleInfo(Control control, Font realFont, String prefix);
     public abstract SizeInfo getSizeInfo(Control control, StyleInfo style, String content);
     public abstract SizeInfo getSizeInfo(Control control, StyleInfo style, String content, String prefix);
-
-    public OldStyleInfo getSize(Control control, String content) {
-        OldStyleInfo size = getSize(control);
-        CSSMatcher matcher = createMatcher(control,null);
-        Image icon = getIcon(matcher);
-        size.margin = getMargin(matcher);
-        size.padding = getPadding(matcher);
-        size.borderWidth = getBorderWidth(matcher,"");
-        size.contentWidth =  control.getWidth()-size.margin.getLeft()-size.margin.getRight()-size.padding.getLeft()-size.padding.getRight();
-        size.contentHeight = control.getHeight()-size.margin.getTop()-size.margin.getBottom()-size.padding.getTop()-size.padding.getBottom();
-
-        //calc the sizes
-        if("true".equals(set.findStringValue(matcher,"shrink-to-fit"))) {
-            Font font = getFont(matcher);
-            size.contentWidth = font.calculateWidth(content);
-            size.contentHeight = font.calculateHeight(content);
-            if(icon != null) {
-                size.contentWidth += icon.getWidth();
-                size.contentHeight = Math.max(size.contentHeight,icon.getHeight());
-            }
-            size.width = size.margin.getLeft()+size.margin.getRight()+size.borderWidth.getLeft()+size.borderWidth.getRight()+size.padding.getLeft()+size.padding.getRight()+size.contentWidth;
-            size.height = size.margin.getTop()+size.margin.getBottom()+size.borderWidth.getTop()+size.borderWidth.getBottom()+size.padding.getTop()+size.padding.getBottom()+size.contentHeight;
-            double fh = font.calculateHeight(content);
-            size.contentBaseline = (size.contentHeight-fh)/2 + fh;
-        } else {
-            size.contentBaseline = size.contentHeight;
-        }
-        return size;
-    }
 
     protected Insets getPadding(CSSMatcher matcher) {
         return getPadding(matcher,"");
