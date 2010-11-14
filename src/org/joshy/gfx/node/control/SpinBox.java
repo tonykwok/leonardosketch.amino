@@ -104,7 +104,7 @@ public class SpinBox<E extends Number> extends Container {
 
     @Override
     public void doPrefLayout() {
-        setHeight(31);
+        setHeight(30);
         setWidth(100);
         super.doPrefLayout();
     }
@@ -112,7 +112,7 @@ public class SpinBox<E extends Number> extends Container {
 
     @Override
     public void doLayout() {
-        double h = 31;
+        double h = 30;
         double l = 40;
 
         valueBox.setTranslateX(0);
