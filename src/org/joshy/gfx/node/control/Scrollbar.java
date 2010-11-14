@@ -1,7 +1,10 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.css.OldStyleInfo;
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
+import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
@@ -34,7 +37,18 @@ public class Scrollbar extends Control {
     private double span = 0;
     private Point2D.Double startPX;
     private double offPX;
-    private OldStyleInfo size;
+    private StyleInfo styleInfo;
+    private SizeInfo sizeInfo;
+    private BoxPainter boxPainter;
+    private StyleInfo leftArrowStyleInfo;
+    private SizeInfo leftArrowSizeInfo;
+    private BoxPainter leftArrowPainter;
+    private StyleInfo rightArrowStyleInfo;
+    private SizeInfo rightArrowSizeInfo;
+    private BoxPainter rightArrowPainter;
+    private StyleInfo thumbStyleInfo;
+    private SizeInfo thumbSizeInfo;
+    private BoxPainter thumbPainter;
 
     public Scrollbar() {
         this(false);
@@ -163,43 +177,82 @@ public class Scrollbar extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
+        styleInfo = cssSkin.getStyleInfo(this, null);
+        leftArrowStyleInfo = cssSkin.getStyleInfo(this,null,"left-arrow-");
+        rightArrowStyleInfo = cssSkin.getStyleInfo(this,null,"right-arrow-");
+        thumbStyleInfo = cssSkin.getStyleInfo(this,null,"thumb-");
         setLayoutDirty();
     }
 
     @Override
     public void doPrefLayout() {
-        if(cssSkin != null) {
-            size = cssSkin.getSize(this);
-            setWidth(size.width);
-            setHeight(size.height);
-        }
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
+        setWidth(sizeInfo.width);
+        setHeight(sizeInfo.height);
+        leftArrowSizeInfo = cssSkin.getSizeInfo(this,leftArrowStyleInfo,"","left-arrow-");
+        rightArrowSizeInfo = cssSkin.getSizeInfo(this,rightArrowStyleInfo,"","right-arrow-");
+        thumbSizeInfo = cssSkin.getSizeInfo(this,thumbStyleInfo,"","thumb-");
     }
 
     @Override
     public void doLayout() {
-        size.width = getWidth();
-        size.height = getHeight();
+        sizeInfo.width = getWidth();
+        sizeInfo.height = getHeight();
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
+        leftArrowPainter = cssSkin.createBoxPainter(this, leftArrowStyleInfo, leftArrowSizeInfo, "", CSSSkin.State.None, "left-arrow-");
+        rightArrowPainter = cssSkin.createBoxPainter(this, rightArrowStyleInfo, rightArrowSizeInfo, "", CSSSkin.State.None, "right-arrow-");
+        thumbPainter = cssSkin.createBoxPainter(this, thumbStyleInfo, thumbSizeInfo, "", CSSSkin.State.None, "thumb-");
     }
 
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
-        //draw the background
-
-        Bounds thumbBounds = calculateThumbBounds();
+        boxPainter.draw(g,styleInfo,sizeInfo,this,"");
         Bounds leftArrowBounds = new Bounds(0,0,arrowLength,getHeight());
         Bounds rightArrowBounds = new Bounds(getWidth()-arrowLength,0,arrowLength,getHeight());
+        Bounds thumbBounds = calculateThumbBounds();
         if(isVertical()) {
             leftArrowBounds = new Bounds(0,0,getWidth(),arrowLength);
-            rightArrowBounds = new Bounds(0, getHeight()-arrowLength,getWidth(),arrowLength);           
+            rightArrowBounds = new Bounds(0, getHeight()-arrowLength,getWidth(),arrowLength);
         }
+        leftArrowSizeInfo.width = leftArrowBounds.getWidth();
+        leftArrowSizeInfo.height = leftArrowBounds.getHeight();
+        leftArrowPainter.draw(g,leftArrowStyleInfo,leftArrowSizeInfo,this,"");
+
+        g.translate(rightArrowBounds.getX(),rightArrowBounds.getY());
+        rightArrowSizeInfo.width = rightArrowBounds.getWidth();
+        rightArrowSizeInfo.height = rightArrowBounds.getHeight();
+        rightArrowPainter.draw(g,rightArrowStyleInfo,rightArrowSizeInfo,this,"");
+        g.translate(-rightArrowBounds.getX(),-rightArrowBounds.getY());
+
+        g.translate(thumbBounds.getX(),thumbBounds.getY());
+        thumbSizeInfo.width = thumbBounds.getWidth();
+        thumbSizeInfo.height = thumbBounds.getHeight();
+        thumbPainter.draw(g,thumbStyleInfo,thumbSizeInfo,this,"");
+        g.translate(-thumbBounds.getX(),-thumbBounds.getY());
+
+        //draw the arrows
+        g.setPaint(FlatColor.BLACK);
+        if(isVertical()) {
+            GraphicsUtil.fillUpArrow(g,3,3,14);
+            GraphicsUtil.fillDownArrow(g,3,getHeight()-3-14,14);
+        } else {
+            GraphicsUtil.fillLeftArrow(g,2,3,14);
+            GraphicsUtil.fillRightArrow(g,getWidth()-2-14,3,14);
+        }
+        //draw the background
+
+//        Bounds thumbBounds = calculateThumbBounds();
+//        Bounds leftArrowBounds = new Bounds(0,0,arrowLength,getHeight());
+//        Bounds rightArrowBounds = new Bounds(getWidth()-arrowLength,0,arrowLength,getHeight());
+//        if(isVertical()) {
+//            leftArrowBounds = new Bounds(0,0,getWidth(),arrowLength);
+//            rightArrowBounds = new Bounds(0, getHeight()-arrowLength,getWidth(),arrowLength);
+//        }
 
         //draw using css
-        if(cssSkin != null) {
-            cssSkin.draw(g,this,size,thumbBounds, leftArrowBounds, rightArrowBounds);
-            return;
-        }
-
+        //cssSkin.draw(g,this,size,thumbBounds, leftArrowBounds, rightArrowBounds);
+        /*
         g.setPaint(FlatColor.GRAY);
         g.fillRoundRect(0,0,getWidth(),getHeight(),10,10);
 
@@ -220,7 +273,7 @@ public class Scrollbar extends Control {
             arc = thumbBounds.getWidth();
         }
         g.fillRoundRect(thumbBounds.getX(),thumbBounds.getY(),thumbBounds.getWidth(),thumbBounds.getHeight(),
-                arc,arc);
+                arc,arc);*/
     }
 
     Bounds calculateThumbBounds() {
@@ -309,7 +362,6 @@ public class Scrollbar extends Control {
         setDrawingDirty();
     }
 
-
     public boolean isProportional() {
         return isProportional;
     }
@@ -321,7 +373,6 @@ public class Scrollbar extends Control {
     public double getSpan() {
         return span;
     }
-
 
     public double getSmallScrollAmount() {
         return smallScroll;

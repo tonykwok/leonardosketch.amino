@@ -242,26 +242,53 @@
     border-width: 1px;
     border-color: #000000;
     background-color: #a0a0a0;
+    border-radius: 10px;
 
     thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     thumb-background-color: #888888;
     thumb-border-color: #000000;
-    thumb-border-radius: 5px;
+
+    thumb-border-top-left-radius: 10px;
+    thumb-border-top-right-radius: 10px;
+    thumb-border-bottom-right-radius: 10px;
+    thumb-border-bottom-left-radius: 10px;
     thumb-border-width: 1px;
 
     thumb-margin-left: 0px;
-    thumb-margin-right: 1px;
+    thumb-margin-right: 0px;
     thumb-margin-top: 0px;
-    thumb-margin-bottom: 1px;
+    thumb-margin-bottom: 0px;
 
     left-arrow-background-color: #888888;
     left-arrow-border-color: #000000;
     left-arrow-border-width: 1px;
-    left-arrow-margin: 0px;
+
+    left-arrow-margin-top: 0px;
+    left-arrow-margin-right: 0px;
+    left-arrow-margin-bottom: 0px;
+    left-arrow-margin-left: 0px;
+
+    left-arrow-border-top-left-radius: 10px;
+    left-arrow-border-top-right-radius: 10px;
+    left-arrow-border-bottom-left-radius: 10px;
+    left-arrow-border-bottom-right-radius: 10px;
+
     right-arrow-background-color: #888888;
     right-arrow-border-color: #000000;
     right-arrow-border-width: 1px;
     right-arrow-margin: 0px;
+
+    right-arrow-margin-top: 0px;
+    right-arrow-margin-right: 0px;
+    right-arrow-margin-bottom: 0px;
+    right-arrow-margin-left: 0px;
+
+    right-arrow-border-top-left-radius: 10px;
+    right-arrow-border-top-right-radius: 10px;
+    right-arrow-border-bottom-left-radius: 10px;
+    right-arrow-border-bottom-right-radius: 10px;
+
+
 }
 
 .-class-Scrollbar:vertical {

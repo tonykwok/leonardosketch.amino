@@ -58,16 +58,14 @@ public class ProgressBar extends Control {
 
     @Override
     public void doPrefLayout() {
-        if(cssSkin != null) {
-            sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
-            if(prefWidth != CALCULATED) {
-                setWidth(prefWidth);
-                sizeInfo.width = prefWidth;
-            } else {
-                setWidth(sizeInfo.width);
-            }
-            setHeight(sizeInfo.height);
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
+        if(prefWidth != CALCULATED) {
+            setWidth(prefWidth);
+            sizeInfo.width = prefWidth;
+        } else {
+            setWidth(sizeInfo.width);
         }
+        setHeight(sizeInfo.height);
         barSizeInfo = cssSkin.getSizeInfo(this,barStyleInfo,"","bar-");
     }
 
