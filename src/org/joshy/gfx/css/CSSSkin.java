@@ -272,10 +272,6 @@ public class CSSSkin {
 
 
 
-    protected Insets getPadding(CSSMatcher matcher) {
-        return getPadding(matcher,"");
-    }
-
     protected Insets getPadding(CSSMatcher matcher, String prefix) {
         int padding_left = set.findIntegerValue(matcher,prefix+"padding-left");
         int padding_right = set.findIntegerValue(matcher,prefix+"padding-right");
@@ -296,7 +292,6 @@ public class CSSSkin {
         return new Insets(margin_top,margin_right,margin_bottom,margin_left);
     }
 
-
     protected Insets getBorderWidth(CSSMatcher matcher, String prefix) {
         int border_left = set.findIntegerValue(matcher,prefix+"border-left-width");
         int border_right = set.findIntegerValue(matcher,prefix+"border-right-width");
@@ -304,6 +299,7 @@ public class CSSSkin {
         int border_bottom = set.findIntegerValue(matcher,prefix+"border-bottom-width");
         return new Insets(border_top,border_right,border_bottom,border_left);
     }
+
     protected Insets getBorderRadius(CSSMatcher matcher, String prefix) {
         int border_top_left = set.findIntegerValue(matcher,prefix+"border-top-left-radius");
         int border_top_right = set.findIntegerValue(matcher,prefix+"border-top-right-radius");
@@ -340,6 +336,7 @@ public class CSSSkin {
         Insets padding = getPadding(matcher,"");
         return new Insets(margin,border,padding);
     }
+
     public void setRuleSet(CSSRuleSet set) {
         this.set = set;
     }
@@ -403,9 +400,8 @@ public class CSSSkin {
         }
         return gf;
     }
+
     public Font getDefaultFont() {
         return defaultFont;
     }
-
-
 }
