@@ -1,5 +1,7 @@
 package org.joshy.gfx.test.partyboard;
 
+import com.joshondesign.xml.Doc;
+import com.joshondesign.xml.Elem;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.animation.Animateable;
 import org.joshy.gfx.animation.AnimationDriver;
@@ -7,6 +9,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.PeriodicTask;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Button;
@@ -15,7 +18,10 @@ import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
+import org.joshy.gfx.util.xml.XMLRequest;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +39,10 @@ public class PartyBoard implements Runnable {
     private AnimationDriver anim;
     private double width;
     private double height;
+    private XMLRequest twitterFeed;
 
     public static void main(String ... args) throws Exception {
         Core.init();
-        //Core.setDebugCSS(new File("/Users/joshmarinacci/projects/personal/amino/test.css"));
         Core.getShared().defer(new PartyBoard());
     }
 
@@ -118,6 +124,54 @@ public class PartyBoard implements Runnable {
         });
         anim.setFPS(40);
         anim.start();
+        final String hashTag = "#webos";
+
+        new PeriodicTask(10*1000)
+                .call(new Callback(){
+                    @Override
+                    public void call(Object event) throws Exception {
+                        searchTweet(hashTag);                        
+                    }
+                }).start();
+
+        searchTweet(hashTag);
+    }
+
+    private void searchTweet(String hashTag) {
+        if(twitterFeed == null || twitterFeed.isDone()) {
+            try {
+
+                twitterFeed = new XMLRequest()
+                        .setURL("http://search.twitter.com/search.atom")
+                        .setParameter("q",hashTag)
+                        .setMethod(XMLRequest.METHOD.GET)
+                        .onComplete(new Callback<Doc>(){
+                            @Override
+                            public void call(Doc doc) throws Exception {
+                                String firstTweet = "";
+                                for(Elem e : doc.xpath("/feed/entry")) {
+                                    //u.p("entry = " + e.xpathString("title/text()"));
+                                    firstTweet = e.xpathString("title/text()");
+                                    break;
+                                }
+                                u.p("first tweet = " + firstTweet);
+                            }
+                        })
+                        .onError(new Callback<Throwable>(){
+                            @Override
+                            public void call(Throwable event) throws Exception {
+                                u.p("error!: " + event);
+                                event.printStackTrace();
+                            }
+                        })
+                        ;
+                twitterFeed.start();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
     }
 
     public static class ParticleSimulator extends Node {

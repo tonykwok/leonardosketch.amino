@@ -9,6 +9,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.Node;
+import org.joshy.gfx.util.u;
 
 public class Panel extends Container {
     protected FlatColor fill = null;
@@ -90,7 +91,9 @@ public class Panel extends Container {
             g.drawRect(0,0,getWidth(),getHeight());
             return;
         }
-        
+        if(boxPainter == null) {
+            u.p("Panel invoked in an improper way.  this = " + this);
+        }
         boxPainter.draw(g, styleInfo, sizeInfo, this, "");
         return;
     }

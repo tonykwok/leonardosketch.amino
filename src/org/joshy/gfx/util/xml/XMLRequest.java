@@ -38,7 +38,7 @@ import java.util.Map;
 * To change this template use File | Settings | File Templates.
 */
 public class XMLRequest extends BackgroundTask<String, Doc> {
-    private Exception error;
+    private Throwable error;
 
     public enum METHOD { GET, POST };
 
@@ -47,11 +47,12 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
     private String username;
     private String password;
     private Callback<Doc> callback;
-    private Callback<Exception> errorCallback;
+    private Callback<Throwable> errorCallback;
     private METHOD method = METHOD.GET;
     private boolean multiPart = false;
     private boolean useUserPass = false;
     private File file;
+    private boolean done = false;
 
     public XMLRequest() {
         parameters = new HashMap<String,String>();
@@ -62,7 +63,7 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
         return this;
     }
 
-    public XMLRequest onError(Callback<Exception> callback) {
+    public XMLRequest onError(Callback<Throwable> callback) {
         this.errorCallback = callback;
         return this;
     }
@@ -165,8 +166,8 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
             Doc doc = XMLParser.parse(entity.getContent());
             httpclient.getConnectionManager().shutdown();
             return doc;
-        } catch (Exception e) {
-            //u.p(e);
+        } catch (Throwable e) {
+            u.p(e);
             this.error = e;
         }
         u.p("done with background work");
@@ -177,13 +178,20 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
     @Override
     protected void onEnd(Doc document) {
         try {
+            done = true;
             if(error != null && errorCallback != null) {
                 errorCallback.call(error);
+            } else {
+                if(callback == null) return;
+                callback.call(document);
             }
-            if(callback == null) return;
-            callback.call(document);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    public boolean isDone() {
+        return done;
+    }
+
 }

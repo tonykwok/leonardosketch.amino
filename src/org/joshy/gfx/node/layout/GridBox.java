@@ -84,7 +84,7 @@ public class GridBox extends Panel {
 
     @Override
     public void doLayout() {
-        
+        super.doLayout();
         //lay out the columns first
         //calc min width first
         double minWidth = 0;
