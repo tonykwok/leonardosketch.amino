@@ -47,6 +47,7 @@ public class PartyBoard implements Runnable {
     Double gravity = 1.0;
     Double spring = 0.05;
     Double color = 1.0;
+    private long lastMouseMove;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -127,17 +128,24 @@ public class PartyBoard implements Runnable {
 
 
         controlPanel = new VFlexBox()
-                .add(new Label("speed").setColor(FlatColor.WHITE))
+                .add(new Label("speed").setColor(FlatColor.BLACK))
                 .add(new Slider(false).setMin(0).setMax(2.0).setValue(1.0).setId("speed"))
-                .add(new Label("gravity").setColor(FlatColor.WHITE))
+                .add(new Label("gravity").setColor(FlatColor.BLACK))
                 .add(new Slider(false).setMin(0).setMax(3.0).setValue(1.0).setId("gravity"))
-                .add(new Label("spring").setColor(FlatColor.WHITE))
+                .add(new Label("spring").setColor(FlatColor.BLACK))
                 .add(new Slider(false).setMin(0).setMax(0.20).setValue(0.05).setId("spring"))
-                .add(new Label("color speed").setColor(FlatColor.WHITE))
+                .add(new Label("color speed").setColor(FlatColor.BLACK))
                 .add(new Slider(false).setMin(0).setMax(5).setValue(1).setId("color"))
                 ;
-        controlPanel.setPrefHeight(300);
-        controlPanel.setTranslateX(50).setTranslateY(height-controlPanel.getPrefHeight());
+
+        controlPanel
+                .setFill(FlatColor.WHITE)
+                .setPrefHeight(300)
+                ;
+        controlPanel.
+                setTranslateX(50)
+                .setTranslateY(height-controlPanel.getPrefHeight())
+                .setVisible(true);
 
         fullscreen.setContent(new Panel().add(sim,tweetLabel,tweetText,messageLabel, controlPanel));
 
@@ -162,6 +170,14 @@ public class PartyBoard implements Runnable {
             }
         });
 
+        EventBus.getSystem().addListener(MouseEvent.MouseMoved, new Callback<MouseEvent>() {
+            @Override
+            public void call(MouseEvent event) throws Exception {
+                lastMouseMove = System.currentTimeMillis();
+                controlPanel.setVisible(true);
+            }
+        });
+
         anim = new AnimationDriver(new Animateable() {
 
             @Override
@@ -171,6 +187,9 @@ public class PartyBoard implements Runnable {
 
             @Override
             public void update(long currentTime) {
+                if(System.currentTimeMillis() - lastMouseMove > 5*1000) {
+                    controlPanel.setVisible(false);
+                }
                 sim.update();
             }
 
