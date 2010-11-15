@@ -5,6 +5,7 @@ import com.joshondesign.xml.Elem;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.animation.Animateable;
 import org.joshy.gfx.animation.AnimationDriver;
+import org.joshy.gfx.animation.KeyFrameAnimator;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
@@ -210,6 +211,25 @@ public class PartyBoard implements Runnable {
         });
         anim.setFPS(30);
         anim.start();
+        KeyFrameAnimator kf1 = new KeyFrameAnimator(tweetText)
+                .property("opacity")
+                .keyFrame(0,1.0)
+                .keyFrame(3,1.0)
+                .keyFrame(4,0.0)
+                .keyFrame(8,0.0)
+                .keyFrame(10,1.0)
+                .repeat(KeyFrameAnimator.INFINITE);
+        KeyFrameAnimator kf2 = new KeyFrameAnimator(messageLabel)
+                .property("opacity")
+                .keyFrame(0,0.0)
+                .keyFrame(3,0.0)
+                .keyFrame(4,1.0)
+                .keyFrame(8,1.0)
+                .keyFrame(10,0.0)
+                .repeat(KeyFrameAnimator.INFINITE);
+
+        AnimationDriver.start(kf1);
+        AnimationDriver.start(kf2);
 
         new PeriodicTask(10*1000)
                 .call(new Callback(){

@@ -69,6 +69,11 @@ public class Label extends Control {
         if(sizeInfo == null) {
             doPrefLayout();
         }
+
+        double oldOpacity = g.getOpacity();
+        if(getOpacity() != 1.0) {
+            g.setOpacity(getOpacity());
+        }
         boxPainter.draw(g, styleInfo, sizeInfo, this, "");
         g.setPaint(boxPainter.color);
         if(color != null) {
@@ -81,6 +86,9 @@ public class Label extends Control {
         for(TextLayoutModel.LayoutLine line : _layout_model.lines()) {
             g.drawText(line.getString(),styleInfo.font,x,y);
             y+= line.getHeight();
+        }
+        if(getOpacity() != 1.0) {
+            g.setOpacity(oldOpacity);
         }
         //g.setPaint(FlatColor.RED);
         //g.drawRect(0,0,getWidth(),getHeight());

@@ -217,6 +217,11 @@ public class JOGLGFX extends GFX {
     }
 
     @Override
+    public double getOpacity() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void setOpacity(double opacity) {
         //To change body of implemented methods use File | Settings | File Templates.
     }

@@ -17,7 +17,10 @@ public abstract class GFX {
     
     public abstract void setPaint(Paint paint);
     public abstract void setStrokeWidth(double strokeWidth);
+
+    public abstract double getOpacity();
     public abstract void setOpacity(double opacity);
+
     public abstract void setPureStrokes(boolean pureStrokes);
 
     public abstract void drawRect(double x, double y, double width, double height);

@@ -324,9 +324,19 @@ public class SwingGFX extends GFX {
         g.setStroke(new BasicStroke((float) strokeWidth));
     }
 
+
     @Override
     public void setOpacity(double opacity) {
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) opacity));
+    }
+    @Override
+    public double getOpacity() {
+        Composite comp = g.getComposite();
+        if(comp instanceof AlphaComposite) {
+            AlphaComposite alpha = (AlphaComposite) comp;
+            return alpha.getAlpha();
+        }
+        return 1.0;
     }
 
     @Override

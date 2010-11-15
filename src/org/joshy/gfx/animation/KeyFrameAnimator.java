@@ -93,7 +93,7 @@ public class KeyFrameAnimator implements Animateable {
         }
         if(currentFrame > keyFrames.size()-2) {
             count++;
-            if(count < repeat) {
+            if(repeat == INFINITE || count < repeat) {
                 currentFrame = 0;
                 startTime = new Date().getTime();
                 done = false;
