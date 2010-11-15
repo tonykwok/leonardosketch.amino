@@ -106,7 +106,7 @@
     <target name="dist" depends="build-core, core-docs, build-src, build-demos">
     </target>
     
-    <target name="build-demos" depends="build-grandtour, build-mailapp">
+    <target name="build-demos" depends="build-grandtour, build-mailapp, build-partyboard">
     </target>
     
     <target name="build-grandtour" depends="build-core">
@@ -128,9 +128,20 @@
             <arg value="--target=onejar"/>
             <arg value="--outdir=dist/"/>
             <arg value="--jardir=build/jars/"/>
-        </java>        
+        </java>
     </target>
-    
+
+    <target name="build-partyboard" depends="build-core">
+        <java
+            classpath="lib/AppBundler.jar;lib/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=partyboard-bundler.xml"/>
+            <arg value="--target=onejar"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=build/jars/"/>
+        </java>
+    </target>
+
     <target name="build-src" depends="init">
         <mkdir dir="dist"/>
         <zip destfile="dist/amino.src.zip">
@@ -174,6 +185,7 @@
                     <ul>
                         <li><a href="GrandTour.onejar.jar">Grand Tour</a> double click jar</li>
                         <li><a href="MailApp.onejar.jar">Mail.app Mockup</a> double click jar</li>
+                        <li><a href="PartyBoard.onejar.jar">PartyBoard</a> double click jar</li>
                     </ul>
                 </body>
             </html>
