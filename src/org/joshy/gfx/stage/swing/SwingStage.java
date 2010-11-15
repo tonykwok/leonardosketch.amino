@@ -29,6 +29,7 @@ public class SwingStage extends Stage {
     protected Container contentLayer;
     private Node contentNode;
     private String id;
+    private DisplayMode oldDisplayMode;
 
     @Override
     public void setUndecorated(boolean undecorated) {
@@ -74,7 +75,41 @@ public class SwingStage extends Stage {
 
     @Override
     public void setFullScreen(boolean fullScreen) {
-        
+        if(fullScreen) {
+
+            JFrame newFrame = new JFrame("stage");
+            newFrame.setUndecorated(true);
+            newFrame.setResizable(false);
+
+            newFrame.setSize(frame.getSize());
+            newFrame.setLocation(frame.getLocation());
+            newFrame.add(scene);
+            frame.remove(scene);
+            frame.setVisible(false);
+            newFrame.setJMenuBar(frame.getJMenuBar());
+
+            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            oldDisplayMode = gd.getDisplayMode();
+            gd.setFullScreenWindow(newFrame);
+            newFrame.setVisible(true);
+
+            frame = newFrame;
+            scene.requestFocus();
+        } else {
+            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            gd.setDisplayMode(oldDisplayMode);
+            JFrame newFrame = new JFrame("stage");
+            newFrame.setUndecorated(false);
+            newFrame.setResizable(true);
+            newFrame.setSize(frame.getSize());
+            newFrame.setLocation(frame.getLocation());
+            newFrame.add(scene);
+            frame.remove(scene);
+            frame.setVisible(false);
+            newFrame.setJMenuBar(frame.getJMenuBar());
+            frame = newFrame;
+            scene.requestFocus();
+        }
     }
 
     public SwingStage() {
