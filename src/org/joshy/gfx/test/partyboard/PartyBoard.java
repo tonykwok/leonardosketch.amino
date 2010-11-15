@@ -234,6 +234,7 @@ public class PartyBoard implements Runnable {
                 .keyFrame(5,1.0)
                 .keyFrame(8,1.0)
                 .keyFrame(9,0.0)
+                .keyFrame(10,0.0)
                 .repeat(KeyFrameAnimator.INFINITE);
 
         AnimationDriver.start(kf1);
