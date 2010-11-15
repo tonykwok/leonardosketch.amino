@@ -41,7 +41,7 @@ public class MailApp implements Runnable {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         Control content = null;
-        content = test1();
+        content = buildGUI();
         //content = test2();
         Stage stage = Stage.createStage();
         stage.setContent(content);
@@ -50,7 +50,7 @@ public class MailApp implements Runnable {
 
     }
 
-    private FlexBox test1() {
+    public static FlexBox buildGUI() {
 
         ArrayListModel<String> mailboxModel = new ArrayListModel<String>();
         mailboxModel.add("Inbox");
