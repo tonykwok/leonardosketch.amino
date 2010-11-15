@@ -216,20 +216,29 @@ public class PartyBoard implements Runnable {
                 .keyFrame(0,1.0)
                 .keyFrame(3,1.0)
                 .keyFrame(4,0.0)
-                .keyFrame(8,0.0)
+                .keyFrame(9,0.0)
+                .keyFrame(10,1.0)
+                .repeat(KeyFrameAnimator.INFINITE);
+        KeyFrameAnimator kf3 = new KeyFrameAnimator(tweetLabel)
+                .property("opacity")
+                .keyFrame(0,1.0)
+                .keyFrame(3,1.0)
+                .keyFrame(4,0.0)
+                .keyFrame(9,0.0)
                 .keyFrame(10,1.0)
                 .repeat(KeyFrameAnimator.INFINITE);
         KeyFrameAnimator kf2 = new KeyFrameAnimator(messageLabel)
                 .property("opacity")
                 .keyFrame(0,0.0)
-                .keyFrame(3,0.0)
-                .keyFrame(4,1.0)
+                .keyFrame(4,0.0)
+                .keyFrame(5,1.0)
                 .keyFrame(8,1.0)
-                .keyFrame(10,0.0)
+                .keyFrame(9,0.0)
                 .repeat(KeyFrameAnimator.INFINITE);
 
         AnimationDriver.start(kf1);
         AnimationDriver.start(kf2);
+        AnimationDriver.start(kf3);
 
         new PeriodicTask(10*1000)
                 .call(new Callback(){
