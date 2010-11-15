@@ -72,6 +72,11 @@ public class SwingStage extends Stage {
         frame.setLocation(pt.x-(int)getWidth()/2,pt.y-(int)getHeight()/2);
     }
 
+    @Override
+    public void setFullScreen(boolean fullScreen) {
+        
+    }
+
     public SwingStage() {
         super();
         frame = new JFrame("stage");

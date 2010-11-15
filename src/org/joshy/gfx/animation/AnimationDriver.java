@@ -17,6 +17,7 @@ public class AnimationDriver {
     private boolean running;
     protected long startTime;
     private Timer timer;
+    private int fps = 30;
 
     protected long now() {
         return new Date().getTime();
@@ -28,7 +29,7 @@ public class AnimationDriver {
 
     public void start() {
         running = true;
-        int fps = 1000/30;
+        int fps = 1000/this.fps;
         timer = new Timer(fps, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 long currentTime = now() - startTime;
@@ -48,5 +49,9 @@ public class AnimationDriver {
 
     public static void start(Animateable animateable) {
         new AnimationDriver(animateable).start();
+    }
+
+    public void setFPS(int fps) {
+        this.fps = fps;
     }
 }

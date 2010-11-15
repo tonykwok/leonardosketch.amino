@@ -112,6 +112,11 @@ public class TestingStage extends Stage {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public void setFullScreen(boolean fullScreen) {
+
+    }
+
     public Parent getRoot() {
         return root;
     }

@@ -89,7 +89,7 @@ public class PerformanceTracker {
             for(Long l : times) {
                 total += l;
             }
-            u.p("avg "+name+" time = " + (total/times.size()));
+            //u.p("avg "+name+" time = " + (total/times.size()));
             times.clear();
         }
     }

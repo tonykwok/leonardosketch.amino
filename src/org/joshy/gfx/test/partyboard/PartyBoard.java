@@ -1,8 +1,8 @@
 package org.joshy.gfx.test.partyboard;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.animation.Animateable;
 import org.joshy.gfx.animation.AnimationDriver;
-import org.joshy.gfx.animation.KeyFrameAnimator;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
@@ -14,11 +14,8 @@ import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
-import org.joshy.gfx.node.shape.Oval;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,15 +30,20 @@ public class PartyBoard implements Runnable {
     private Callback<ActionEvent> quitHandler;
     private Callback<ActionEvent> startHandler;
     private ParticleSimulator sim;
+    private AnimationDriver anim;
+    private double width;
+    private double height;
 
     public static void main(String ... args) throws Exception {
         Core.init();
-        Core.setDebugCSS(new File("/Users/joshmarinacci/projects/personal/amino/test.css"));
+        //Core.setDebugCSS(new File("/Users/joshmarinacci/projects/personal/amino/test.css"));
         Core.getShared().defer(new PartyBoard());
     }
 
     @Override
     public void run() {
+        width = 1100;
+        height = 800;
 
         quitHandler = new Callback<ActionEvent>() {
             @Override
@@ -80,25 +82,59 @@ public class PartyBoard implements Runnable {
     private void startSim() {
         Stage fullscreen = Stage.createStage();
         fullscreen.setUndecorated(true);
-        fullscreen.setWidth(1024);
-        fullscreen.setHeight(768);
-        sim = new ParticleSimulator();
+        fullscreen.setWidth(width);
+        fullscreen.setHeight(height);
+        fullscreen.setFullScreen(true);
+        width = fullscreen.getWidth();
+        height = fullscreen.getHeight();
+        sim = new ParticleSimulator(this);
         fullscreen.setContent(sim);
-        AnimationDriver.start(
-            KeyFrameAnimator.create(sim,"update")
-                .repeat(KeyFrameAnimator.INFINITE)
-                .keyFrame(0,0)
-                .keyFrame(10,30000)
-        );
+        anim = new AnimationDriver(new Animateable() {
+
+            @Override
+            public void onStart(long current) {
+
+            }
+
+            @Override
+            public void update(long currentTime) {
+                sim.update();
+            }
+
+            @Override
+            public void onStop(long currentTime) {
+
+            }
+
+            @Override
+            public void loop() {
+
+            }
+
+            @Override
+            public boolean isDone() {
+                return false;
+            }
+        });
+        anim.setFPS(40);
+        anim.start();
     }
 
     public static class ParticleSimulator extends Node {
+        private int tick;
+        private double grav = 0;
+        private PartyBoard main;
+
+        public ParticleSimulator(PartyBoard main) {
+            this.main = main;
+        }
+
         @Override
         public void draw(GFX g) {
+            g.setPaint(FlatColor.BLACK);
+            g.fillRect(0,0,main.width,main.height);
             for(Particle p : parts) {
-                g.translate(p.getTranslateX(),p.getTranslateY());
                 p.draw(g);
-                g.translate(-p.getTranslateX(),-p.getTranslateY());
             }
         }
 
@@ -112,36 +148,30 @@ public class PartyBoard implements Runnable {
             return getVisualBounds();
         }
 
-        class Particle extends Oval {
-            public double vx;
-            public double vy;
-        }
         private List<Particle> parts = new ArrayList<Particle>();
-        public void setUpdate(double value) {
+        public void update() {
+            this.tick++;
+            grav = Math.sin(Math.toRadians(tick)/2)*0.8;
+
             if(parts.size() < 20) {
                 Particle particle = new Particle();
-                particle.setFill(FlatColor.GREEN)
-                        .setTranslateX(100)
-                        .setTranslateY(100);
-                particle.vx = (Math.random()*2.0-1.0)*4;
-                particle.vy = (Math.random()*2.0-1.0)*4;
+                particle.setFill(FlatColor.GREEN);
+                particle.x = main.width/2;
+                particle.y = main.height/2;
+                particle.vx = (Math.random()*2.0-1.0)*1;
+                particle.vy = (Math.random()*2.0-1.0)*1;
+                particle.radius = 30+Math.random()*10;
+                particle.setIndex(parts.size());
                 parts.add(particle);
             }
-            u.p("size = " + parts.size());
-
             for(Particle part : parts) {
-                double x = part.getTranslateX()+part.vx;
-                //flip direction
-                if(x < 0 || x > 1024) {
-                    x -= part.vx;
-                    part.vx *= -1;
-                }
-                part.setTranslateX(x);
-                part.setTranslateY(part.getTranslateY()+part.vy);
+                part.collide(parts,0.05,main.width,main.height);
+                part.move(grav,main.width,main.height);
+                part.updateColor();
             }
-
             setDrawingDirty();
             
         }
     }
+
 }

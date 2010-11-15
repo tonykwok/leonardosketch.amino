@@ -1,7 +1,5 @@
 package org.joshy.gfx.draw;
 
-import org.joshy.gfx.util.u;
-
 import java.awt.*;
 
 /**
@@ -116,5 +114,9 @@ public class FlatColor implements Paint {
 
     public FlatColor deriveWithAlpha(double alpha) {
         return new FlatColor(this.red,this.green,this.blue,alpha);
+    }
+
+    public static FlatColor fromRGBInts(int r, int g, int b) {
+        return new FlatColor(r/255.0,g/255.0,b/255.0, 1.0);
     }
 }

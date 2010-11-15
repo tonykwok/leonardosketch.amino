@@ -173,6 +173,11 @@ public class JOGLStage extends Stage {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public void setFullScreen(boolean fullScreen) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 
     @Override
     public double getHeight() {

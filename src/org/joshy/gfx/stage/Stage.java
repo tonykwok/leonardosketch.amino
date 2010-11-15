@@ -61,5 +61,7 @@ public abstract class Stage {
     public abstract Stage setId(String id);
 
     public abstract void centerOnScreen();
+
+    public abstract void setFullScreen(boolean fullScreen);
 }
 
