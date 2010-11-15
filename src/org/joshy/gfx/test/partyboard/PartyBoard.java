@@ -6,24 +6,21 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.animation.Animateable;
 import org.joshy.gfx.animation.AnimationDriver;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.PeriodicTask;
-import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.Node;
+import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Label;
+import org.joshy.gfx.node.control.Slider;
 import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.HFlexBox;
+import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,9 +34,19 @@ public class PartyBoard implements Runnable {
     private Callback<ActionEvent> startHandler;
     private ParticleSimulator sim;
     private AnimationDriver anim;
-    private double width;
-    private double height;
+    double width;
+    double height;
     private XMLRequest twitterFeed;
+    private Label tweetText;
+    private Label tweetLabel;
+    private Textbox hashBox;
+    private Label messageLabel;
+    private Textbox messageBox;
+    private FlexBox controlPanel;
+    Double speed = 1.0;
+    Double gravity = 1.0;
+    Double spring = 0.05;
+    Double color = 1.0;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -48,8 +55,10 @@ public class PartyBoard implements Runnable {
 
     @Override
     public void run() {
-        width = 1100;
-        height = 800;
+        width = 1400;
+        height = 900;
+        hashBox = new Textbox("#webos");
+        messageBox = new Textbox("Welcome to the Pleasure Dome");
 
         quitHandler = new Callback<ActionEvent>() {
             @Override
@@ -61,7 +70,7 @@ public class PartyBoard implements Runnable {
         startHandler = new Callback<ActionEvent>() {
             @Override
             public void call(ActionEvent event) {
-                startSim();
+                startSim(hashBox.getText(),messageBox.getText());
             }
         };
 
@@ -72,12 +81,12 @@ public class PartyBoard implements Runnable {
                 .add(new HFlexBox()
                     .setBoxAlign(HFlexBox.Align.Stretch)
                     .add(new Label("Twitter Hashcode"))
-                    .add(new Textbox("#webos"),1)
+                    .add(hashBox,1)
                 )
                 .add(new HFlexBox()
                     .setBoxAlign(HFlexBox.Align.Stretch)
                     .add(new Label("message"))
-                    .add(new Textbox("Welcome to the Pleasure Dome"),1))
+                    .add(messageBox,1))
                 .add(new HFlexBox()
                     .add(new Button("quit").onClicked(quitHandler))
                     .add(new Button("start").onClicked(startHandler)))
@@ -85,7 +94,7 @@ public class PartyBoard implements Runnable {
         );
     }
 
-    private void startSim() {
+    private void startSim(final String hashTag, String message) {
         Stage fullscreen = Stage.createStage();
         fullscreen.setUndecorated(true);
         fullscreen.setWidth(width);
@@ -94,7 +103,65 @@ public class PartyBoard implements Runnable {
         width = fullscreen.getWidth();
         height = fullscreen.getHeight();
         sim = new ParticleSimulator(this);
-        fullscreen.setContent(sim);
+        tweetLabel = new Label("Most recent tweet to " + hashTag);
+        tweetLabel.setFont(Font.name("Arial").size(40).resolve())
+                .setColor(new FlatColor(0.8,0.8,0.8,1.0))
+                .setTranslateX(50)
+                .setTranslateY(50)
+                ;
+
+        tweetText = new Label("This is a tweet that is super crazy long");
+        tweetText.setFont(Font.name("Arial").size(60).resolve());
+        tweetText.setPrefWidth(width/2-100)
+                .setTranslateX(50)
+                .setTranslateY(120);
+        tweetText.setColor(FlatColor.WHITE);
+
+
+        messageLabel = new Label(message);
+        messageLabel.setFont(Font.name("Arial").size(60).resolve())
+                .setColor(FlatColor.WHITE)
+                .setPrefWidth(width/2-100)
+                .setTranslateX(width/2+50)
+                .setTranslateY(height/2);
+
+
+        controlPanel = new VFlexBox()
+                .add(new Label("speed").setColor(FlatColor.WHITE))
+                .add(new Slider(false).setMin(0).setMax(2.0).setValue(1.0).setId("speed"))
+                .add(new Label("gravity").setColor(FlatColor.WHITE))
+                .add(new Slider(false).setMin(0).setMax(3.0).setValue(1.0).setId("gravity"))
+                .add(new Label("spring").setColor(FlatColor.WHITE))
+                .add(new Slider(false).setMin(0).setMax(0.20).setValue(0.05).setId("spring"))
+                .add(new Label("color speed").setColor(FlatColor.WHITE))
+                .add(new Slider(false).setMin(0).setMax(5).setValue(1).setId("color"))
+                ;
+        controlPanel.setPrefHeight(300);
+        controlPanel.setTranslateX(50).setTranslateY(height-controlPanel.getPrefHeight());
+
+        fullscreen.setContent(new Panel().add(sim,tweetLabel,tweetText,messageLabel, controlPanel));
+
+        EventBus.getSystem().addListener(ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
+            @Override
+            public void call(ChangedEvent event) throws Exception {
+                if(event.getSource() instanceof Slider) {
+                    Slider sl = (Slider) event.getSource();
+                    if("speed".equals(sl.getId())) {
+                        speed = (Double)event.getValue();
+                    }
+                    if("gravity".equals(sl.getId())) {
+                        gravity = (Double)event.getValue();
+                    }
+                    if("spring".equals(sl.getId())) {
+                        spring = (Double)event.getValue();
+                    }
+                    if("color".equals(sl.getId())) {
+                        color = (Double)event.getValue();
+                    }
+                }
+            }
+        });
+
         anim = new AnimationDriver(new Animateable() {
 
             @Override
@@ -122,9 +189,8 @@ public class PartyBoard implements Runnable {
                 return false;
             }
         });
-        anim.setFPS(40);
+        anim.setFPS(30);
         anim.start();
-        final String hashTag = "#webos";
 
         new PeriodicTask(10*1000)
                 .call(new Callback(){
@@ -150,11 +216,11 @@ public class PartyBoard implements Runnable {
                             public void call(Doc doc) throws Exception {
                                 String firstTweet = "";
                                 for(Elem e : doc.xpath("/feed/entry")) {
-                                    //u.p("entry = " + e.xpathString("title/text()"));
                                     firstTweet = e.xpathString("title/text()");
                                     break;
                                 }
                                 u.p("first tweet = " + firstTweet);
+                                tweetText.setText(firstTweet);
                             }
                         })
                         .onError(new Callback<Throwable>(){
@@ -167,64 +233,10 @@ public class PartyBoard implements Runnable {
                         ;
                 twitterFeed.start();
             } catch (MalformedURLException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
-        }
-    }
-
-    public static class ParticleSimulator extends Node {
-        private int tick;
-        private double grav = 0;
-        private PartyBoard main;
-
-        public ParticleSimulator(PartyBoard main) {
-            this.main = main;
-        }
-
-        @Override
-        public void draw(GFX g) {
-            g.setPaint(FlatColor.BLACK);
-            g.fillRect(0,0,main.width,main.height);
-            for(Particle p : parts) {
-                p.draw(g);
-            }
-        }
-
-        @Override
-        public Bounds getVisualBounds() {
-            return new Bounds(0,0,100,100);
-        }
-
-        @Override
-        public Bounds getInputBounds() {
-            return getVisualBounds();
-        }
-
-        private List<Particle> parts = new ArrayList<Particle>();
-        public void update() {
-            this.tick++;
-            grav = Math.sin(Math.toRadians(tick)/2)*0.8;
-
-            if(parts.size() < 20) {
-                Particle particle = new Particle();
-                particle.setFill(FlatColor.GREEN);
-                particle.x = main.width/2;
-                particle.y = main.height/2;
-                particle.vx = (Math.random()*2.0-1.0)*1;
-                particle.vy = (Math.random()*2.0-1.0)*1;
-                particle.radius = 30+Math.random()*10;
-                particle.setIndex(parts.size());
-                parts.add(particle);
-            }
-            for(Particle part : parts) {
-                part.collide(parts,0.05,main.width,main.height);
-                part.move(grav,main.width,main.height);
-                part.updateColor();
-            }
-            setDrawingDirty();
-            
         }
     }
 

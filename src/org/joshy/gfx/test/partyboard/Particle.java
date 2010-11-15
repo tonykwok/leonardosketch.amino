@@ -22,6 +22,11 @@ class Particle extends Node {
     public double radius = 20;
     private FlatColor fill = FlatColor.BLACK;
     public int index;
+    private PartyBoard main;
+
+    public Particle(PartyBoard main) {
+        this.main = main;
+    }
 
     @Override
     public void draw(GFX g) {
@@ -69,8 +74,8 @@ class Particle extends Node {
 
     public void move(double grav, double width, double height) {
         vy += grav;
-        x+=vx;
-        y+=vy;
+        x+=vx*main.speed;
+        y+=vy*main.speed;
         if(x+radius > width) {
             x = width-radius;
             vx *= -0.9; //bounce and lose 10% energy
@@ -88,20 +93,20 @@ class Particle extends Node {
         }
 
     }
-    int r = 0;
-    int g = 0;
-    int b = 0;
+    double r = 0;
+    double g = 0;
+    double b = 0;
     public void updateColor() {
-        r = (r + 1) % 255;
-        g = (g + 2) % 255;
-        b = (r + g) % 255;
-        fill = FlatColor.fromRGBInts(r,g,b);
+        r = r + 1.0/255.0*main.color; if(r > 1.0) r = r-1.0;
+        g = g + 2.0/255.0*main.color; if(g > 1.0) g = g-1.0;
+        b = r + g; if(b > 1.0) b = b-1.0;
+        fill = new FlatColor(r,g,b,1.0);
     }
 
     public void setIndex(int index) {
         this.index = index;
-        this.r = index*2;
-        this.g = index*5;
+        this.r = (index/255.0)*2;
+        this.g = (index/255.0)*5;
         this.b = 0;
     }
 }

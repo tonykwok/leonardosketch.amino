@@ -5,6 +5,7 @@ import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.css.SizeInfo;
 import org.joshy.gfx.css.StyleInfo;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
@@ -17,11 +18,14 @@ public class Label extends Control {
     private BoxPainter boxPainter;
     private Font realFont;
     public TextLayoutModel _layout_model;
+    private FlatColor color;
 
     public Label(String text) {
         this.text = text;
     }
-
+    public Label() {
+        this.text = "";
+    }
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
@@ -67,6 +71,9 @@ public class Label extends Control {
         }
         boxPainter.draw(g, styleInfo, sizeInfo, this, "");
         g.setPaint(boxPainter.color);
+        if(color != null) {
+            g.setPaint(color);
+        }
         double y = styleInfo.font.getAscender();
         Insets insets = styleInfo.calcContentInsets();
         y+=insets.getTop();
@@ -106,6 +113,13 @@ public class Label extends Control {
     public Label setFont(Font font) {
         this.realFont = font;
         setSkinDirty();
+        return this;
+    }
+
+
+    public Label setColor(FlatColor color) {
+        this.color = color;
+        setDrawingDirty();
         return this;
     }
 }
