@@ -1,6 +1,7 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class TextLayoutModel {
             if(isNewLine(ch) && allowMultiline) {
                 LayoutLine line = new LayoutLine();
                 line.string = buf.toString();
+                line.newline = true;
                 lines.add(line);
                 buf = new StringBuffer();
                 wordStart = 0;
@@ -69,7 +71,7 @@ public class TextLayoutModel {
         lines.add(line);
 
         for(LayoutLine l : lines) {
-//            u.p("line = " + l.getString());
+            u.p("line = " + l.getString() + (l.newline?"\\n":""));
         }
     }
 
@@ -98,6 +100,7 @@ public class TextLayoutModel {
 
     public class LayoutLine {
         public String string;
+        public boolean newline = false;
 
         public int letterCount() {
             return string.length();

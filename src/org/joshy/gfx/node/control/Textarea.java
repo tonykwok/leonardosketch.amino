@@ -194,7 +194,6 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
         _layout_model.layout(width,height);
         Insets insets = styleInfo.calcContentInsets();
         double h =  _layout_model.calculatedHeight()+insets.getTop()+insets.getBottom();
-        u.p("returning " + h);
         return h;
     }
 

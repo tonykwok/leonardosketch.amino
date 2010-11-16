@@ -182,11 +182,14 @@ public abstract class TextControl extends Control implements Focusable {
             } else {
                 //split, then remove text in the middle
                 int splitPoint = cursor.getIndex();
-                if(del) {
-                    splitPoint++;
-                }
+                int altSplitPoint = cursor.rowColToIndex(cursor.getRow(),cursor.getCol());
                 String[] parts = cursor.splitText(splitPoint);
-                parts[0] = parts[0].substring(0,cursor.getIndex()-1);
+                if(del) {
+                    parts[1] = parts[1].substring(1);
+                }
+                if(bs) {
+                    parts[0] = parts[0].substring(0,cursor.getIndex()-1);
+                }
                 setText(parts[0]+parts[1]);
                 if(bs) {
                     cursor.moveLeft(1);
@@ -212,6 +215,7 @@ public abstract class TextControl extends Control implements Focusable {
             }
             cursor.moveLeft(1);
             setDrawingDirty();
+            return;
         }
 
         //right arrow
@@ -284,11 +288,14 @@ public abstract class TextControl extends Control implements Focusable {
         if(selection.isActive()) {
             String[] parts = cursor.splitSelectedText();
             setText(parts[0]+generatedText+parts[2]);
-            cursor.setIndex(parts[0].length() + generatedText.length());
+            if(!"\n".equals(generatedText)) {
+                cursor.setIndex(parts[0].length() + generatedText.length());
+            }
             selection.clear();
         } else {
             String[] parts = cursor.splitText(cursor.getIndex());
             setText(parts[0]+generatedText+parts[1]);
+            relayoutText();
             cursor.moveRight(1);
         }
     }
@@ -303,6 +310,16 @@ public abstract class TextControl extends Control implements Focusable {
         setLayoutDirty();
         setDrawingDirty();
         return this;
+    }
+
+    protected void relayoutText() {
+        if(getFont() == null) return;
+        int index = cursor.getIndex();
+        _layout_model = new TextLayoutModel(getFont(),getText(),allowMultiLine);
+        _layout_model.layout(width,height);
+        Insets insets = styleInfo.calcContentInsets();
+        setHeight(_layout_model.calculatedHeight()+insets.getTop()+insets.getBottom());
+        cursor.setIndex(index);
     }
 
     protected void layoutText(double width, double height) {
@@ -358,7 +375,7 @@ public abstract class TextControl extends Control implements Focusable {
         return cursor;
     }
 
-    public  class TextSelection {
+    public class TextSelection {
         private boolean active;
         public int startCol;
         public int endCol;
@@ -400,36 +417,6 @@ public abstract class TextControl extends Control implements Focusable {
             active = true;
             startCol = 0;
             endCol = text.length();
-        }
-
-        public void addRight(int i) {
-            if(endCol == startCol) {
-                //flip direction
-                direction = RIGHT;
-            }
-            if(direction == RIGHT) {
-                endCol++;
-                if(endCol > getText().length()) {
-                    endCol = getText().length();
-                }
-            }
-            if(direction == LEFT) {
-                startCol = getCursor().moveLeft(startCol,-i);
-            }
-        }
-
-        public void addLeft(int i) {
-            if(endCol == startCol) {
-                //flip direction
-                direction = LEFT;
-            }
-            if(direction == LEFT) {
-                startCol = getCursor().moveLeft(startCol,i);
-            }
-            if(direction == RIGHT) {
-                endCol--;
-                if(endCol <0) endCol=0;
-            }
         }
 
         public String toString() {
@@ -478,10 +465,23 @@ public abstract class TextControl extends Control implements Focusable {
                 }
                 rowCol[0]++;
                 n -= line.letterCount();
+                if(line.newline) n--;
             }
             rowCol[1] = n;
 
             return rowCol;
+        }
+        
+        private int rowColToIndex(int row, int col) {
+            int index = 0;
+            for(int i=0; i<row; i++) {
+                TextLayoutModel.LayoutLine line = _layout_model.line(i);
+                index += line.letterCount();
+                if(line.newline) index++;
+            }
+            index+=col;
+
+            return index;
         }
 
         public void setIndex(int i) {
@@ -492,15 +492,14 @@ public abstract class TextControl extends Control implements Focusable {
         }
 
         public void moveLeft(int i) {
-            index -= i;
             col -= i;
             TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
             //wrap back to prev row?
             if(col < 0 && row > 0) {
                 row--;
                 col = _layout_model.line(row).letterCount();
-                index+=1;
             }
+            index = rowColToIndex(row,col);
             if(index <0) {
                 index = 0;
                 col = 0;
@@ -509,16 +508,7 @@ public abstract class TextControl extends Control implements Focusable {
             cursorMoved();
         }
 
-        public int moveLeft(int n, int i) {
-            n -= i;
-            if(n <0) {
-                n = 0;
-            }
-            return n;
-        }
-
         public void moveRight(int i) {
-            index+=i;
             col+=i;
 
             TextLayoutModel.LayoutLine rowLine = _layout_model.line(row);
@@ -527,10 +517,9 @@ public abstract class TextControl extends Control implements Focusable {
                 if(row < _layout_model.lineCount()-1) {
                     row++;
                     col=0;
-                    index-=1;
                 }
             }
-            
+            index = rowColToIndex(row,col);
             String t = getText();
             if(index > t.length()) {
                 index = t.length();
@@ -697,17 +686,6 @@ public abstract class TextControl extends Control implements Focusable {
             index = rowColToIndex(row,col);
         }
 
-        private int rowColToIndex(int row, int col) {
-            int index = 0;
-            for(int i=0; i<row; i++) {
-                TextLayoutModel.LayoutLine line = _layout_model.line(i);
-                index += line.letterCount();
-            }
-            index+=col;
-
-//            u.p("turned row,col" + row + " " + col + " into index: " + index);
-            return index;
-        }
     }
 
     protected abstract void cursorMoved();
