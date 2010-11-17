@@ -125,10 +125,7 @@
     
     bar-background-color: #0000ff;
     bar-border-color: #f0f0f0;
-    bar-border-left-width: 1px;
-    bar-border-right-width: 1px;
-    bar-border-top-width: 1px;
-    bar-border-bottom-width: 1px;
+    bar-border-width: 1px;
     bar-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     
     bar-margin-left: 1px;
@@ -244,37 +241,21 @@
     thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     thumb-background-color: #888888;
     thumb-border-color: #000000;
-
     thumb-border-radius: 10px;
     thumb-border-width: 1px;
-
-    thumb-margin-left: 0px;
-    thumb-margin-right: 0px;
-    thumb-margin-top: 0px;
-    thumb-margin-bottom: 0px;
+    thumb-margin: 0px;
 
     left-arrow-background-color: #888888;
     left-arrow-border-color: #000000;
     left-arrow-border-width: 1px;
-
-    left-arrow-margin-top: 0px;
-    left-arrow-margin-right: 0px;
-    left-arrow-margin-bottom: 0px;
-    left-arrow-margin-left: 0px;
-
     left-arrow-border-radius: 10px;
+    left-arrow-margin: 0px;
 
     right-arrow-background-color: #888888;
     right-arrow-border-color: #000000;
     right-arrow-border-width: 1px;
-    right-arrow-margin: 0px;
-
-    right-arrow-margin-top: 0px;
-    right-arrow-margin-right: 0px;
-    right-arrow-margin-bottom: 0px;
-    right-arrow-margin-left: 0px;
-
     right-arrow-border-radius: 10px;
+    right-arrow-margin: 0px;
 
 
 }
@@ -383,10 +364,7 @@
     
     item-background-color: #f0f0f0;
     item-border-color: #00ff00;
-    item-border-left-width: 0px;
-    item-border-right-width: 0px;
-    item-border-top-width: 0px;
-    item-border-bottom-width: 0px;
+    item-border-width: 0px;
     item-color: #000000;
 
     selected-item-background-color: #0000ff;
@@ -394,14 +372,8 @@
     selected-item-border-color: #000000;
     selected-item-color: #ffffff;
     
-    selected-item-margin-top: 0px;
-    selected-item-margin-bottom: 1px;
-    selected-item-margin-left: 0px;
-    selected-item-margin-right: 0px;
-    selected-item-border-top-width:    1px;
-    selected-item-border-bottom-width: 1px;
-    selected-item-border-left-width:   0px;
-    selected-item-border-right-width:  0px;
+    selected-item-margin: 0px 0px 2px 0px;
+    selected-item-border-width: 1px 0px;
 }
 
 .-class-TableView {
@@ -412,22 +384,13 @@
 
     item-background-color: #f0f0f0;
     item-border-color: #00ff00;
-    item-border-left-width: 0px;
-    item-border-right-width: 0px;
-    item-border-top-width: 0px;
-    item-border-bottom-width: 0px;
+    item-border-width: 0px;
     item-color: #000000;
 
     selected-item-background-color: #0000ff;
     selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    selected-item-margin-top: 0px;
-    selected-item-margin-bottom: 1px;
-    selected-item-margin-left: 0px;
-    selected-item-margin-right: 0px;
-    selected-item-border-top-width:    1px;
-    selected-item-border-bottom-width: 1px;
-    selected-item-border-left-width:   0px;
-    selected-item-border-right-width:  0px;
+    selected-item-margin: 0px 0px 1px 0px;
+    selected-item-border-width: 1px 0px;
     selected-item-border-color: #000000;
     selected-item-color: #ffffff;
 }

@@ -240,6 +240,12 @@ public class MainCSSTest {
         assertTrue(set.findIntegerValue(m,"border-right-width")==11);
         assertTrue(set.findIntegerValue(m,"border-bottom-width")==12);
         assertTrue(set.findIntegerValue(m,"border-left-width")==11);
+
+        m.id = "border_test_6";
+        assertTrue(set.findIntegerValue(m,"thumb-border-top-width")==10);
+        assertTrue(set.findIntegerValue(m,"thumb-border-right-width")==11);
+        assertTrue(set.findIntegerValue(m,"thumb-border-bottom-width")==12);
+        assertTrue(set.findIntegerValue(m,"thumb-border-left-width")==11);
     }
 
 

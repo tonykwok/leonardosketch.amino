@@ -115,6 +115,9 @@ Button.classmatch3 {
 #border_test_5 {
     border-width: 10px 11px 12px; /* top, left&right, bottom */
 }
+#border_test_6 {
+    thumb-border-width: 10px 11px 12px; /* top, left&right, bottom */
+}
 
 
 /* advanced CSS class tests */

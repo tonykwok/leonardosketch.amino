@@ -2,7 +2,6 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.css.values.*;
 import org.joshy.gfx.css.values.StringValue;
-import org.joshy.gfx.util.u;
 import org.parboiled.*;
 import org.parboiled.annotations.DontLabel;
 import org.parboiled.annotations.SuppressNode;
@@ -104,7 +103,7 @@ public class CSSParser extends BaseParser<Object> {
                 //margin shortcut
                 Sequence(
                     Spacing(),
-                    "margin",
+                    OneOrMore(LetterOrDash()),toString,propName.set((String) value()),
                     Spacing(),
                     COLON,
                     Spacing(),
@@ -113,12 +112,12 @@ public class CSSParser extends BaseParser<Object> {
                     ),toString,propValue.set(value()),
                     Spacing(),
                     SEMICOLON,
-                    new InsetsRuleAction("margin","",propValue)
+                    new InsetsRuleAction("margin","",propName,propValue)
                 ),
                 //padding shortcut
                 Sequence(
                     Spacing(),
-                    "padding",
+                    OneOrMore(LetterOrDash()),toString,propName.set((String) value()),
                     Spacing(),
                     COLON,
                     Spacing(),
@@ -127,12 +126,12 @@ public class CSSParser extends BaseParser<Object> {
                     ),toString,propValue.set(value()),
                     Spacing(),
                     SEMICOLON,
-                    new InsetsRuleAction("padding","",propValue)
+                    new InsetsRuleAction("padding","",propName,propValue)
                 ),
                 //border-width shortcut
                 Sequence(
                     Spacing(),
-                    "border-width",
+                    OneOrMore(LetterOrDash()),toString,propName.set((String) value()),
                     Spacing(),
                     COLON,
                     Spacing(),
@@ -141,7 +140,7 @@ public class CSSParser extends BaseParser<Object> {
                     ),toString,propValue.set(value()),
                     Spacing(),
                     SEMICOLON,
-                    new InsetsRuleAction("border","-width",propValue)
+                    new InsetsRuleAction("border","-width",propName,propValue)
                 ),
                 BorderRadiusShortcut(),
                 //other property name
@@ -560,24 +559,30 @@ public class CSSParser extends BaseParser<Object> {
         private Var propValue;
         private String prefix;
         private String suffix;
+        private Var propName;
 
-        public InsetsRuleAction(String prefix, String suffix, Var propValue) {
+        public InsetsRuleAction(String prefix, String suffix, Var propName, Var propValue) {
             this.prefix = prefix;
             this.suffix = suffix;
+            this.propName = propName;
             this.propValue = propValue;
         }
 
         public boolean run(Context context) {
+            String pn = propName.get()+"";
+            if(!pn.endsWith(prefix+suffix)) return false;
+            String pre_prefix = pn.substring(0,pn.indexOf(prefix+suffix));
+            
             String[] parts = (""+propValue.get()).split(" ");
 
             CSSProperty right = new CSSProperty();
             CSSProperty left = new CSSProperty();
             CSSProperty top = new CSSProperty();
             CSSProperty bottom = new CSSProperty();
-            right.name = prefix+"-right"+suffix;
-            left.name = prefix+"-left"+suffix;
-            top.name = prefix+"-top"+suffix;
-            bottom.name = prefix+"-bottom"+suffix;
+            right.name = pre_prefix+prefix+"-right"+suffix;
+            left.name = pre_prefix+prefix+"-left"+suffix;
+            top.name = pre_prefix+prefix+"-top"+suffix;
+            bottom.name = pre_prefix+prefix+"-bottom"+suffix;
             if(parts.length == 1) {
                 top.value = new IntegerPixelValue(parts[0]);
                 right.value = new IntegerPixelValue(parts[0]);
