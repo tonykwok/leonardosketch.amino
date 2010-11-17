@@ -271,6 +271,8 @@ public class MainCSSTest {
         assertTrue(set.findIntegerValue(m,"border-top-right-radius")==2);
         assertTrue(set.findIntegerValue(m,"border-bottom-right-radius")==3);
         assertTrue(set.findIntegerValue(m,"border-bottom-left-radius")==4);
+        m.id = "border_radius_6";
+        assertTrue(set.findIntegerValue(m,"thumb-border-top-left-radius")==1);
     }
     @Test
     public void constantTests() {

@@ -136,10 +136,7 @@
     bar-margin-top: 1px;
     bar-margin-bottom: 1px;
 
-    bar-border-top-left-radius: 10px;
-    bar-border-top-right-radius: 10px;
-    bar-border-bottom-right-radius: 10px;
-    bar-border-bottom-left-radius: 10px;
+    bar-border-radius: 10px;
 }
 
 
@@ -248,10 +245,7 @@
     thumb-background-color: #888888;
     thumb-border-color: #000000;
 
-    thumb-border-top-left-radius: 10px;
-    thumb-border-top-right-radius: 10px;
-    thumb-border-bottom-right-radius: 10px;
-    thumb-border-bottom-left-radius: 10px;
+    thumb-border-radius: 10px;
     thumb-border-width: 1px;
 
     thumb-margin-left: 0px;
@@ -268,10 +262,7 @@
     left-arrow-margin-bottom: 0px;
     left-arrow-margin-left: 0px;
 
-    left-arrow-border-top-left-radius: 10px;
-    left-arrow-border-top-right-radius: 10px;
-    left-arrow-border-bottom-left-radius: 10px;
-    left-arrow-border-bottom-right-radius: 10px;
+    left-arrow-border-radius: 10px;
 
     right-arrow-background-color: #888888;
     right-arrow-border-color: #000000;
@@ -283,10 +274,7 @@
     right-arrow-margin-bottom: 0px;
     right-arrow-margin-left: 0px;
 
-    right-arrow-border-top-left-radius: 10px;
-    right-arrow-border-top-right-radius: 10px;
-    right-arrow-border-bottom-left-radius: 10px;
-    right-arrow-border-bottom-right-radius: 10px;
+    right-arrow-border-radius: 10px;
 
 
 }

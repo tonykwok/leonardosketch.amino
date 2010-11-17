@@ -143,20 +143,7 @@ public class CSSParser extends BaseParser<Object> {
                     SEMICOLON,
                     new InsetsRuleAction("border","-width",propValue)
                 ),
-                //border-radius shortcut
-                Sequence(
-                    Spacing(),
-                    "border-radius",
-                    Spacing(),
-                    COLON,
-                    Spacing(),
-                    OneOrMore(
-                        Sequence(OneOrMore(Number()),FirstOf("px","pt"),Spacing())
-                    ),toString,propValue.set(value()),
-                    Spacing(),
-                    SEMICOLON,
-                    new BorderRadiusAction(propValue)
-                ),
+                BorderRadiusShortcut(),
                 //other property name
                 Sequence(
                     Spacing(),
@@ -169,6 +156,25 @@ public class CSSParser extends BaseParser<Object> {
                     SEMICOLON
                     ,new PropertyRuleAction(propName,propValue)
                 )
+        );
+    }
+
+    public Rule BorderRadiusShortcut() {
+        final Var propName = new Var();
+        final Var propValue = new Var();
+        return Sequence(
+            Spacing(),
+            OneOrMore(LetterOrDash()),toString,propName.set(value())
+            ,Spacing(),
+            COLON,
+            Spacing(),
+            OneOrMore(
+                Sequence(OneOrMore(Number()),FirstOf("px","pt"),Spacing())
+            )
+            ,toString,propValue.set(value()),
+            Spacing(),
+            SEMICOLON,
+            new BorderRadiusAction(propName,propValue)
         );
     }
 
@@ -607,24 +613,33 @@ public class CSSParser extends BaseParser<Object> {
     }
     
     public class BorderRadiusAction implements Action {
+        private Var propName;
         private Var propValue;
 
-        public BorderRadiusAction(Var propValue) {
+        public BorderRadiusAction(Var propName, Var propValue) {
+            this.propName = propName;
             this.propValue = propValue;
         }
 
         @Override
         public boolean run(Context context) {
+            String pn = propName.get()+"";
+            //u.p("propname = " + pn);
+            if(!pn.endsWith("border-radius")) return false;
+            
+            //u.p("doing border radius expansion");
             String[] parts = (""+propValue.get()).split(" ");
+            String prefix = pn.substring(0,pn.indexOf("border-radius"));
+            //u.p("prefix = " + prefix);
 
             CSSProperty tl = new CSSProperty();
             CSSProperty tr = new CSSProperty();
             CSSProperty br = new CSSProperty();
             CSSProperty bl = new CSSProperty();
-            tl.name = "border-top-left-radius";
-            tr.name = "border-top-right-radius";
-            br.name = "border-bottom-right-radius";
-            bl.name = "border-bottom-left-radius";
+            tl.name = prefix+"border-top-left-radius";
+            tr.name = prefix+"border-top-right-radius";
+            br.name = prefix+"border-bottom-right-radius";
+            bl.name = prefix+"border-bottom-left-radius";
             if(parts.length == 1) {
                 tl.value = new IntegerPixelValue(parts[0]);
                 tr.value = new IntegerPixelValue(parts[0]);
@@ -649,7 +664,6 @@ public class CSSParser extends BaseParser<Object> {
                 br.value = new IntegerPixelValue(parts[2]);
                 bl.value = new IntegerPixelValue(parts[3]);
             }
-
             CSSPropertySet set = new CSSPropertySet();
             set.add(tl,tr,br,bl);
             context.setNodeValue(set);

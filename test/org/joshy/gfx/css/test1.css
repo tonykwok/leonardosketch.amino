@@ -168,5 +168,8 @@ Button.classmatch3 {
 #border_radius_2 { border-radius: 1px; } /* same as 1,1,1,1 */
 #border_radius_3 { border-radius: 1px 2px; } /* same as 1,2,1,2 */
 #border_radius_4 { border-radius: 1px 2px 3px; } /* same as 1,2,3,2 */
-#border_radius_5 { border-radius: 1px 2px 3px 4px; } /* same as 1,2,3,2 */
-
+#border_radius_5 { border-radius: 1px 2px 3px 4px; }
+#border_radius_6 {
+    thumb-border-radius: 1px 2px 3px 4px;
+    /*thumb-border-top-left-radius: 1px;*/
+}
