@@ -70,9 +70,9 @@ public class TextLayoutModel {
         line.string = buf.toString();
         lines.add(line);
 
-        for(LayoutLine l : lines) {
+        /*for(LayoutLine l : lines) {
             u.p("line = " + l.getString() + (l.newline?"\\n":""));
-        }
+        }*/
     }
 
     private boolean isWhitespaceChar(char ch) {
