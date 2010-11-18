@@ -11,6 +11,13 @@ import org.joshy.gfx.stage.Stage;
 
 import java.awt.geom.Point2D;
 
+/**
+ * A PopupMenuButton is a type safe button that opens a popup to let the user choose
+ * from one of a set of values.  It is like a combobox but doesn't let the user type
+ * into a text field. The user can only choose from one of the set of available values.
+ * It uses a typesafe ListModel as it's data model.
+ * @param <E>
+ */
 public class PopupMenuButton<E> extends Button implements SelectableControl {
     private ListModel model;
     private int selectedIndex;

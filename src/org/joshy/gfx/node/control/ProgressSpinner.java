@@ -9,7 +9,8 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.ProgressUpdate;
 import org.joshy.gfx.util.u;
 
-/**  The ProgressSpinner is a control which shows the progress of some process, usually a background
+/**
+ * The ProgressSpinner is a control which shows the progress of some process, usually a background
  * task. It shows the progress by constantly spinning, or by showing a percentage
  * complete as a piechart.
  *

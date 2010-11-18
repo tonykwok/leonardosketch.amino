@@ -1,11 +1,9 @@
 package org.joshy.gfx.node.control;
 
 /**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Jan 26, 2010
- * Time: 4:00:43 PM
- * To change this template use File | Settings | File Templates.
+ * An interface which indicates that a control can receive the focus.
+ * Any control implementing Focusable should implement 'isFocused' to
+ * check with the focus manager if it is currently the focus.
  */
 public interface Focusable {
     public boolean isFocused();

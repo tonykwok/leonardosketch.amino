@@ -1,12 +1,8 @@
 package org.joshy.gfx.node.control;
 
-/**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Feb 4, 2010
- * Time: 1:37:26 PM
- * To change this template use File | Settings | File Templates.
- */
+ /**
+  * A basic checkbox. It's a selectable button with custom styling.
+  */
 public class Togglebutton extends Button {
     public Togglebutton(String text) {
         super(text);

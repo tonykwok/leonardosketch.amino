@@ -9,11 +9,10 @@ import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.Container;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Oct 27, 2010
- * Time: 3:05:12 PM
- * To change this template use File | Settings | File Templates.
+ * A disclosure panel is a panel which contains one child along with a disclosure button
+ * (usually a + or a triangle). When the user clicks on the button the child control will
+ * be show or hidden.  The panel will resize itself to the size of the child, causing
+ * the proper reflow when the user shows/hides the child.
  */
 public class DisclosurePanel extends Container {
     private Control title;

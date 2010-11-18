@@ -1,5 +1,8 @@
 package org.joshy.gfx.node.control;
 
+/**
+ * a subclass of Textbox that renders the text with bullets
+ */
 public class Passwordbox extends Textbox {
     private String passwordChar = "\u2022";
 

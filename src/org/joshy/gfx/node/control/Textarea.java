@@ -1,13 +1,19 @@
 package org.joshy.gfx.node.control;
 
-import org.joshy.gfx.css.*;
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
-import org.joshy.gfx.util.u;
 
+/**
+ * The TextArea is a text control for editing multiline text. The text is
+ * drawn with only one font style.
+ */
 public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;

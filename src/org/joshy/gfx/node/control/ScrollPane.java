@@ -14,11 +14,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Feb 1, 2010
- * Time: 10:58:53 AM
- * To change this template use File | Settings | File Templates.
+ * A scrollpane is a panel which can have one large child element. It will render
+ * scrollbars on the sides to let the user pan around the child. The scroll bars
+ * will be visible as needed, or can be hidden or made to always be visible by setting
+ * the policy properties.
+ *
+ *
+ * Certain controls are scrolling aware, meaning they implement the ScrollingAware interface.
+ * These controls implement their ow panning mechanism to draw more efficiently. They can also
+ * resize their contents base on the size of the scroll pane as desired.  Currently, lists and
+ * tables are scrolling aware.
  */
 public class ScrollPane extends AbstractPane {
     private Scrollbar vscroll;

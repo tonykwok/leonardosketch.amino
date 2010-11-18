@@ -1,11 +1,8 @@
 package org.joshy.gfx.node.control;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Jul 1, 2010
- * Time: 3:49:13 PM
- * To change this template use File | Settings | File Templates.
+ * SelectableControl is an interface implemented by controls that have some
+ * concept of a selected item, such as list views, and table views.
  */
 public interface SelectableControl {
     public int getSelectedIndex();

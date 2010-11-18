@@ -1,12 +1,14 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The class used by TextControls to do the actual visual layout of text.
+ */
 public class TextLayoutModel {
     private String originalText;
     private Font font;

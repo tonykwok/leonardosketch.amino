@@ -13,6 +13,10 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.stage.Stage;
 
+/**
+ * The Textbox is a text control for editing a single line of text.
+ * It will scroll the contents horizontally as needed.
+ */
 public class Textbox extends TextControl {
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;

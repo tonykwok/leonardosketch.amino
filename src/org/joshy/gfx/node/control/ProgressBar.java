@@ -11,7 +11,8 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.ProgressUpdate;
 
-/**  The ProgressBar is a control which shows the progress of some process, usually a background
+/**
+ *  The ProgressBar is a control which shows the progress of some process, usually a background
  * task. It shows the progress as a bar of increasing width.
  * It was designed with background tasks in mind and can be easily attached to a background
  * task. For example, the following code will attach a progress bar to a background task.

@@ -6,11 +6,9 @@ import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.Container;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Oct 14, 2010
- * Time: 8:44:11 PM
- * To change this template use File | Settings | File Templates.
+ * The SpinBox is a small text box with up and down buttons that let the user
+ * edit a numeric value using the buttons or the arrow keys.
+ *
  */
 public class SpinBox<E extends Number> extends Container {
     private Textbox valueBox;

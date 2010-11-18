@@ -15,11 +15,9 @@ import org.joshy.gfx.node.Bounds;
 import java.util.Date;
 
 /**
-* Created by IntelliJ IDEA.
-* User: joshmarinacci
-* Date: May 3, 2010
-* Time: 10:46:03 AM
-* To change this template use File | Settings | File Templates.
+* A PopupMenu is a popup control that can be used for context menus or dropdowns.
+* It takes a ListModel for the list of items but draws them with a menu like
+ * style by default. It fires ChangedEvents when the selected item changes. 
 */
 public class PopupMenu extends Control {
     private ListModel model;

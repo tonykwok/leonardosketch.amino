@@ -1,11 +1,7 @@
 package org.joshy.gfx.node.control;
 
 /**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Feb 4, 2010
- * Time: 1:21:41 PM
- * To change this template use File | Settings | File Templates.
+ * A basic radio button. It's a selectable button with custom styling.
  */
 public class Radiobutton extends Button {
 

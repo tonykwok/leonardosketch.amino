@@ -39,7 +39,10 @@ import java.util.Date;
  the textcontrol implements the actual drawing and input handleing 
 */
 
-
+/**
+ * The TextControl class is the base class for all text controls in Amino. It
+ * implements the core cursor, selecting, and editing logic.
+ */
 public abstract class TextControl extends Control implements Focusable {
     protected boolean focused;
     protected String text = "";

@@ -1,11 +1,7 @@
 package org.joshy.gfx.node.control;
 
 /**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Jan 20, 2010
- * Time: 11:04:38 PM
- * To change this template use File | Settings | File Templates.
+ * A basic checkbox. It's a selectable button with custom styling.
  */
 public class Checkbox extends Button {
 

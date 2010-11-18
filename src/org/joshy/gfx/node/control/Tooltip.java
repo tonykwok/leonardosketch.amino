@@ -16,11 +16,8 @@ import org.joshy.gfx.stage.Stage;
 import java.awt.geom.Point2D;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Oct 25, 2010
- * Time: 10:22:59 PM
- * To change this template use File | Settings | File Templates.
+ * Tooltip is a small popup window that appears when a user hovers the mouse
+ * over the target control.
  */
 public class Tooltip extends Control {
     private Control target;

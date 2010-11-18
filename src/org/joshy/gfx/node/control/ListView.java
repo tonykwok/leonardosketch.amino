@@ -11,6 +11,39 @@ import org.joshy.gfx.node.Bounds;
 
 import java.util.List;
 
+/**
+ * ListView is the classic list control that uses lightweight renderers.  If is scrolling
+ * aware so you can drop it into a Scrollpane and it will do the right thing.  Put data into
+ * the list by setting it's list model. You can customize the look of the list view in one of two ways:
+ *
+ * If you just want to do text formating on the list items
+ * then set the textRenderer with your own implementation. ex:
+ *
+ * myListView.setTextRenderer(new TextRenderer<Song>(){
+ *           public String toString(SelectableControl view, Song item, int index) {
+ *               if(item == null) return "";
+ *               return item.getArtist() + " - " + item.getTitle();
+ *           }
+ *       });
+ *
+ *
+ * If you want to do custom drawing, then install your own ItemRenderer. ex:
+ *
+ * myListView.setRenderer(ItemRenderer<Song>() {
+ *    public void draw(GFX gfx, ListView listView, Song item, int index, double x, double y, double width, double height) {
+ *      gfx.drawRect(x,y,width,height);
+ *      gfx.drawImage(song.getArtwork(),0,0,75,75);
+ *      gfx.drawText(item.getTitle(), 100, 20;
+ *   }
+ * }
+ *
+ * Your renderer function will be called each time an item needs to be drawn on the screen.
+ * If you need a list containing real UI controls that work (like buttons) rather than just custom
+ * styling, then you should use the CompoundLlistView instead.
+ *
+ *
+ * @param <E>
+ */
 public class ListView<E> extends Control implements Focusable, ScrollPane.ScrollingAware, SelectableControl {
 
     public static int NO_SELECTION = -1;

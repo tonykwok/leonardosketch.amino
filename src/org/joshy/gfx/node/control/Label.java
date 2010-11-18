@@ -11,6 +11,12 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 
+/**
+ * A text label. It can have only one font style, but can be single or multiple lines.
+ * A label will naturally stretch out to one long line unless the width is constrained
+ * by a parent or by setting the preferred width.  You can also force line breaks
+ * by putting the newline character, \n, in your string.
+ */
 public class Label extends Control {
     private String text = "Label";
     private StyleInfo styleInfo;

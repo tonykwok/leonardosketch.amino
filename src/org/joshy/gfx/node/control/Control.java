@@ -10,7 +10,25 @@ import java.util.Set;
 
 /**
  * The base of all UI controls. It defines the layout contract, and
- * size values
+ * size values. It also installs two prefab CSS classes each for the control and
+ * it's parent classes.  For example, the Checkbox class inherits from button
+ * which inherits from control, so it would have these css classes:
+ *
+ * -class-org.joshy.gfx.node.control.Control
+ * -class-Control
+ * -class-org.joshy.gfx.node.control.Button
+ * -class-Button
+ * -class-org.joshy.gfx.node.control.Checkbox
+ * -class-Checkbox
+ *
+ *
+ * This allows style to be shared between subclasses, including when you create
+ * anonymous subclasses like this:
+ *
+ * Button b = new Button() {
+ *    //do something custom
+ * };
+ * 
  */
 public abstract class Control extends Node {
     public static final double CALCULATED = -1;

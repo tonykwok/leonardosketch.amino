@@ -16,6 +16,10 @@ import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.Point2D;
 
+/**
+ * A slider to the the user select multiple values. It has a min, max, and current value,
+ * which can be any number, positive or negative, and can have floating point values.
+ */
 public class Slider extends Control {
     private boolean vertical = false;
     private double value = 50;

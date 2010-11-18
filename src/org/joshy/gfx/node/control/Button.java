@@ -13,6 +13,24 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 
+/**
+ * a basic button. It is the base class for other specialty buttons like
+ * the checkbox, radio button, and link button. It can optionally have
+ * a selected state by subclassing and setting the selectable field to true.
+ * If you do this you must make sure you have css which uses the ":selected"
+ * selector to actually draw the selected state.
+ *
+ * Example of use:
+ *
+ * Button button = new Button("a button")
+ *      .onClicked(new Callback<ActionEvent>() {
+ *      });
+ *
+ * calling onClicked with a callback does not actually attach the callback to the button.
+ * It is simply shorthand for adding it to the EventBus with the button as the target. It is
+ * provided to help when doing nested method chains in UI construction.
+ }
+ */
 public class Button extends Control {
     private String text;
     private boolean pressed = false;

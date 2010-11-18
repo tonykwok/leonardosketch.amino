@@ -5,6 +5,19 @@ import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
+/**
+ * A basic link button. It's a selectable button with custom styling.
+ * The button only 'looks' like a hyperlink (ie, has underlined text). To make
+ * it actually open the user's browser when you click on it, you must add an
+ * event handler like so:
+ * Button button = new Button("a button")
+ *      .onClicked(new Callback<ActionEvent>() {
+ *          public void call(ActionEvent event) {
+ *              OSUtil.openBrowser("http://www.eatmorepixels.com");
+ *          }
+ *      });
+ */
+
 public class Linkbutton extends Button {
     public Linkbutton(String text) {
         super(text);

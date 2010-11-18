@@ -9,7 +9,9 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 
-/** A table with columns and rows. Used for displaying tabular data.
+/** A table with columns and rows. Used for displaying tabular data. it has a model
+ * for the columns and a model for the actual data. Styling can be done with
+ * item renderers and text renderers just like the ListView. 
  */
 public class TableView extends Control implements Focusable, ScrollPane.ScrollingAware, SelectableControl {
     private TableModel model;
