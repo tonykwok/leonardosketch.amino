@@ -192,22 +192,24 @@
     title-padding-bottom: 3px;
     title-background-color: #e8e8e8;
 }
-
+.-class-TabPanel {
+    /*border-width: 1px 1px 0px 1px;*/
+}
 .-class-TabTop {
     background-color: #d0d0d0;
-    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    /*background: linear-gradient(center top, #04acec 0%, #0186ba 100%);*/
     border-color: black;
-    border-width: 1px;
+    border-width: 0px;/*1px 1px 0px 0px;*/
     margin: 0px;
     padding: 0px;
     border-radius: 16px 16px 0px 0px;
-    color: #000000;
+    color: #606060;
     text-align: center;
 }
 .-class-TabTop:selected {
     background-color: #ffaaaa;
-    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    color: #ffffff;
+    background: linear-gradient(center top, #ebebeb 0%, #ededed 100%);
+    color: black;
 }
 
 .-class-SplitPane {
