@@ -155,7 +155,12 @@ public class Button extends Control {
         } else {
             setWidth(sizeInfo.width);
         }
-        setHeight(sizeInfo.height);
+        if(prefHeight != CALCULATED) {
+            setHeight(prefHeight);
+            sizeInfo.height = prefHeight;
+        } else {
+            setHeight(sizeInfo.height);
+        }
     }
 
     @Override

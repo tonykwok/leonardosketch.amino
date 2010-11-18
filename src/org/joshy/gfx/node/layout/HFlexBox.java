@@ -113,8 +113,8 @@ public class HFlexBox extends FlexBox {
     @Override
     protected void drawSelf(GFX g) {
         super.drawSelf(g);
-//        g.setPaint(FlatColor.RED);
-//        g.drawLine(0,insets.getTop()+maxBaseline,getWidth(),insets.getTop()+maxBaseline);
+        //g.setPaint(FlatColor.RED);
+        //g.drawLine(0,insets.getTop()+maxBaseline,getWidth(),insets.getTop()+maxBaseline);
     }
 
 }

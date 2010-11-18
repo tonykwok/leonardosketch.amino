@@ -8,6 +8,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class SwatchColorPicker extends Button {
 
     public SwatchColorPicker() {
         super();
+        setPrefWidth(25);
+        setPrefHeight(25);
     }
 
     public void setOutsideColorCallback(ColorCallback outsideColorCallback) {
@@ -55,11 +58,6 @@ public class SwatchColorPicker extends Button {
         }
     }
 
-    @Override
-    public void doLayout() {
-        setWidth(40);
-        setHeight(20);
-    }
 
     @Override
     public void draw(GFX g) {
@@ -69,7 +67,7 @@ public class SwatchColorPicker extends Button {
         g.setPaint(FlatColor.BLACK);
         g.drawRect(0, 0, getWidth(), getHeight());
         g.setPaint(selectedColor);
-        g.fillRect(inset, inset, getWidth() - inset*2+1, getHeight() - inset*2+1);
+        g.fillRect(inset, inset, getWidth() - inset*2, getHeight() - inset*2);
     }
 
     public FlatColor getSelectedColor() {

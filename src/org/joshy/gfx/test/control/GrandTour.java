@@ -172,6 +172,7 @@ public class GrandTour implements Runnable {
             public Control build() throws IOException {
                 PopupMenuButton popup = new PopupMenuButton();
                 SwatchColorPicker color1 = new SwatchColorPicker();
+                SwatchColorPicker color2 = new SwatchColorPicker();
                 popup.setModel(ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}));
 
                 ListView listView = new ListView();
@@ -209,7 +210,7 @@ public class GrandTour implements Runnable {
 
                 FlexBox box = new VFlexBox()
                         .add(popup)
-                        .add(color1)
+                        .add(new HFlexBox().add(color1,color2))
                         .add(new Label("List View"))
                         .add(sp)
                         .add(new Label("Compounds List View"))
