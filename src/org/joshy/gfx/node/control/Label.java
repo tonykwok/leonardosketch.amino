@@ -136,4 +136,8 @@ public class Label extends Control {
         setDrawingDirty();
         return this;
     }
+
+    public Font getFont() {
+        return realFont;
+    }
 }

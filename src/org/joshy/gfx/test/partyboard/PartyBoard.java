@@ -49,6 +49,7 @@ public class PartyBoard implements Runnable {
     Double spring = 0.05;
     Double color = 1.0;
     private long lastMouseMove;
+    private Double fontSize = 40.0;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -137,6 +138,8 @@ public class PartyBoard implements Runnable {
                 .add(new Slider(false).setMin(0).setMax(0.20).setValue(0.05).setId("spring"))
                 .add(new Label("color speed").setColor(FlatColor.BLACK))
                 .add(new Slider(false).setMin(0).setMax(5).setValue(1).setId("color"))
+                .add(new Label("font size").setColor(FlatColor.BLACK))
+                .add(new Slider(false).setMin(18).setMax(100).setValue(40).setId("fontsize"))
                 .add(new Button("quit").onClicked(new Callback<ActionEvent>(){
                     @Override
                     public void call(ActionEvent event) throws Exception {
@@ -172,6 +175,9 @@ public class PartyBoard implements Runnable {
                     }
                     if("color".equals(sl.getId())) {
                         color = (Double)event.getValue();
+                    }
+                    if("fontsize".equals(sl.getId())) {
+                        setFontSize((Double)event.getValue());
                     }
                 }
             }
@@ -295,4 +301,10 @@ public class PartyBoard implements Runnable {
         }
     }
 
+    public void setFontSize(double fontSize) {
+        this.fontSize = fontSize;
+        tweetLabel.setFont(Font.name("Arial").size((float) fontSize).resolve());
+        tweetText.setFont(Font.name("Arial").size((float) fontSize).resolve());
+        messageLabel.setFont(Font.name("Arial").size((float) fontSize).resolve());
+    }
 }
