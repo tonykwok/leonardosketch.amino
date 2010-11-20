@@ -50,6 +50,7 @@ public class PartyBoard implements Runnable {
     Double color = 1.0;
     private long lastMouseMove;
     private Double fontSize = 40.0;
+    private Label tweetUser;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -113,16 +114,23 @@ public class PartyBoard implements Runnable {
                 .setTranslateY(50)
                 ;
 
+        Font font = Font.name("Arial").size(60).resolve();
+        tweetUser = new Label("@username (realname) :");
+        tweetUser.setColor(new FlatColor(0xa0a0a0));
+        tweetUser.setFont(font);
+        tweetUser.setTranslateX(50);
+        tweetUser.setTranslateY(140);
+
         tweetText = new Label("This is a tweet that is super crazy long");
-        tweetText.setFont(Font.name("Arial").size(60).resolve());
+        tweetText.setFont(font);
         tweetText.setPrefWidth(width/2-100)
                 .setTranslateX(50)
-                .setTranslateY(120);
+                .setTranslateY(140+60);
         tweetText.setColor(FlatColor.WHITE);
 
 
         messageLabel = new Label(message);
-        messageLabel.setFont(Font.name("Arial").size(60).resolve())
+        messageLabel.setFont(font)
                 .setColor(FlatColor.WHITE)
                 .setPrefWidth(width/2-100)
                 .setTranslateX(width/2+50)
@@ -157,7 +165,12 @@ public class PartyBoard implements Runnable {
                 .setTranslateY(height-controlPanel.getPrefHeight())
                 .setVisible(true);
 
-        fullscreen.setContent(new Panel().add(sim,tweetLabel,tweetText,messageLabel, controlPanel));
+        fullscreen.setContent(new Panel().add(sim
+                ,tweetLabel
+                ,tweetUser
+                ,tweetText
+                ,messageLabel
+                ,controlPanel));
 
         EventBus.getSystem().addListener(ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
             @Override
@@ -231,7 +244,15 @@ public class PartyBoard implements Runnable {
                 .keyFrame(9,0.0)
                 .keyFrame(10,1.0)
                 .repeat(KeyFrameAnimator.INFINITE);
-        KeyFrameAnimator kf3 = new KeyFrameAnimator(tweetLabel)
+        KeyFrameAnimator kf3 = new KeyFrameAnimator(tweetUser)
+                .property("opacity")
+                .keyFrame(0,1.0)
+                .keyFrame(3,1.0)
+                .keyFrame(4,0.0)
+                .keyFrame(9,0.0)
+                .keyFrame(10,1.0)
+                .repeat(KeyFrameAnimator.INFINITE);
+        KeyFrameAnimator kf3a = new KeyFrameAnimator(tweetLabel)
                 .property("opacity")
                 .keyFrame(0,1.0)
                 .keyFrame(3,1.0)
@@ -252,6 +273,7 @@ public class PartyBoard implements Runnable {
         AnimationDriver.start(kf1);
         AnimationDriver.start(kf2);
         AnimationDriver.start(kf3);
+        AnimationDriver.start(kf3a);
 
         new PeriodicTask(10*1000)
                 .call(new Callback(){
@@ -275,13 +297,19 @@ public class PartyBoard implements Runnable {
                         .onComplete(new Callback<Doc>(){
                             @Override
                             public void call(Doc doc) throws Exception {
+                                //doc.dump();
                                 String firstTweet = "";
+                                String firstUser = "";
                                 for(Elem e : doc.xpath("/feed/entry")) {
+                                    //u.p("text = " + e.xpathString("title/text()").trim());
+                                    //u.p("user = " + e.xpathString("author/name/text()").trim());
                                     firstTweet = e.xpathString("title/text()");
+                                    firstUser = e.xpathString("author/name/text()").trim();
                                     break;
                                 }
                                 u.p("first tweet = " + firstTweet);
                                 tweetText.setText(firstTweet);
+                                tweetUser.setText("@"+firstUser+" :");
                             }
                         })
                         .onError(new Callback<Throwable>(){
@@ -303,8 +331,10 @@ public class PartyBoard implements Runnable {
 
     public void setFontSize(double fontSize) {
         this.fontSize = fontSize;
-        tweetLabel.setFont(Font.name("Arial").size((float) fontSize).resolve());
-        tweetText.setFont(Font.name("Arial").size((float) fontSize).resolve());
-        messageLabel.setFont(Font.name("Arial").size((float) fontSize).resolve());
+        Font font = Font.name("Arial").size(((float)fontSize)).resolve();
+        tweetLabel.setFont(font);//Font.name("Arial").size((float) fontSize).resolve());
+        tweetText.setFont(font);//Font.name("Arial").size((float) fontSize).resolve());
+        messageLabel.setFont(font);//Font.name("Arial").size((float) fontSize).resolve());
+        tweetUser.setFont(font);
     }
 }
