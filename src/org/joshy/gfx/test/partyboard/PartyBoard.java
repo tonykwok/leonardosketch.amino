@@ -59,8 +59,8 @@ public class PartyBoard implements Runnable {
     public void run() {
         width = 1400;
         height = 900;
-        hashBox = new Textbox("#webos");
-        messageBox = new Textbox("Welcome to the Pleasure Dome");
+        hashBox = new Textbox("#webosdev");
+        messageBox = new Textbox("Welcome to the Party");
 
         quitHandler = new Callback<ActionEvent>() {
             @Override
@@ -137,6 +137,12 @@ public class PartyBoard implements Runnable {
                 .add(new Slider(false).setMin(0).setMax(0.20).setValue(0.05).setId("spring"))
                 .add(new Label("color speed").setColor(FlatColor.BLACK))
                 .add(new Slider(false).setMin(0).setMax(5).setValue(1).setId("color"))
+                .add(new Button("quit").onClicked(new Callback<ActionEvent>(){
+                    @Override
+                    public void call(ActionEvent event) throws Exception {
+                        System.exit(0);
+                    }
+                }))
                 ;
 
         controlPanel
