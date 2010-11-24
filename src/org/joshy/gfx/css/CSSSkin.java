@@ -103,7 +103,7 @@ public class CSSSkin {
         }
 
         //border stuff
-        boxPainter.margin = getMargin(matcher);
+        boxPainter.margin = getMargin(matcher,prefix);
         boxPainter.borderWidth = getBorderWidth(matcher,prefix);
         if(!boxPainter.borderWidth.allEquals(0)) {
             boxPainter.border_color = (new FlatColor(set.findColorValue(matcher,prefix+"border-color")));

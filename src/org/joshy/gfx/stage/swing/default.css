@@ -368,13 +368,15 @@
     item-margin: 0px;
     item-border-color: #000000;
     item-border-width: 0px;
+    item-border-radius: 0px;
 
-    selected-item-margin: 0px;
+    selected-item-margin: 1px 0px 1px 0px;
     selected-item-background-color: #0000ff;
     selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     selected-item-color: #ffffff;
     selected-item-border-color: #000000;
-    selected-item-border-width: 1px;
+    selected-item-border-width: 1px 0px 1px 0px;
+    selected-item-border-radius: 0px;
 }
 
 

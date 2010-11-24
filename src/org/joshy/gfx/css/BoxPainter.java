@@ -12,7 +12,7 @@ import org.joshy.gfx.node.control.Control;
  * Paints a control laid out by the css boxmodel.
  */
 public class BoxPainter {
-    Insets borderRadius;
+    public Insets borderRadius;
     Insets margin;
     public boolean transparent;
     public FlatColor background_color;
@@ -99,14 +99,23 @@ public class BoxPainter {
                     );
                     gfx.setStrokeWidth(1);
                 } else {
-                    if(borderWidth.getLeft()>0) {
-                        gfx.setStrokeWidth(borderWidth.getLeft());
-                        gfx.drawLine(bounds.getX(),bounds.getY(),bounds.getX(),bounds.getY()+bounds.getHeight());
-                    }
                     if(borderWidth.getTop()>0) {
                         gfx.setStrokeWidth(borderWidth.getTop());
                         gfx.drawLine(bounds.getX(),bounds.getY(),bounds.getX()+bounds.getWidth(),bounds.getY());
                     }
+                    if(borderWidth.getRight()>0) {
+                        gfx.setStrokeWidth(borderWidth.getRight());
+                        gfx.drawLine(bounds.getX()+bounds.getWidth(),bounds.getY(),bounds.getX()+bounds.getWidth(),bounds.getY()+bounds.getHeight());
+                    }
+                    if(borderWidth.getBottom()>0) {
+                        gfx.setStrokeWidth(borderWidth.getBottom());
+                        gfx.drawLine(bounds.getX(),bounds.getY()+bounds.getHeight(),bounds.getX()+bounds.getWidth(),bounds.getY()+bounds.getHeight());
+                    }
+                    if(borderWidth.getLeft()>0) {
+                        gfx.setStrokeWidth(borderWidth.getLeft());
+                        gfx.drawLine(bounds.getX(),bounds.getY(),bounds.getX(),bounds.getY()+bounds.getHeight());
+                    }
+
                 }
             } else if(borderRadius.allEqual()) {
                 gfx.setStrokeWidth(borderWidth.getLeft());

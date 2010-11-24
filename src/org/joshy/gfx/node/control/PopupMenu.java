@@ -1,16 +1,16 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.*;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -24,6 +24,15 @@ public class PopupMenu extends Control {
     private int hoverRow = -1;
     private long openTime;
     private ListView.TextRenderer textRenderer;
+    private StyleInfo styleInfo;
+    private StyleInfo itemStyleInfo;
+    private StyleInfo selectedItemStyleInfo;
+    private SizeInfo sizeInfo;
+    private SizeInfo itemSizeInfo;
+    private SizeInfo selectedItemSizeInfo;
+    private BoxPainter boxPainter;
+    private BoxPainter itemPainter;
+    private BoxPainter selectedItemPainter;
 
     public PopupMenu() {
         setVisible(true);
@@ -88,65 +97,60 @@ public class PopupMenu extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
+        styleInfo = cssSkin.getStyleInfo(this, null);
+        itemStyleInfo = cssSkin.getStyleInfo(this,null,"item-");
+        selectedItemStyleInfo = cssSkin.getStyleInfo(this,null,"selected-item-");
         setLayoutDirty();
     }
 
     @Override
     public void doPrefLayout() {
-        //noop
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
+        itemSizeInfo = cssSkin.getSizeInfo(this,itemStyleInfo,"","item-");
+        selectedItemSizeInfo = cssSkin.getSizeInfo(this,selectedItemStyleInfo,"","selected-item-");
     }
 
     @Override
     public void doLayout() {
         setHeight( rowHeight * model.size() + spacer*2);
+        sizeInfo.width = getWidth();
+        sizeInfo.height = getHeight();
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
+        itemPainter = cssSkin.createBoxPainter(this, itemStyleInfo, itemSizeInfo, "", CSSSkin.State.None, "item-");
+        selectedItemPainter = cssSkin.createBoxPainter(this, selectedItemStyleInfo, selectedItemSizeInfo, "", CSSSkin.State.None, "selected-item-");
     }
 
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
 
-        Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
+        //Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
         CSSMatcher matcher = new CSSMatcher(this);
 
-        if(cssSkin != null) {
-            cssSkin.drawBackground(g,matcher,"",bounds);
-            cssSkin.drawBorder(g,matcher,"",bounds);
-        } else {
-            g.setPaint(FlatColor.WHITE);
-            g.fillRoundRect(0,0,getWidth(),getHeight(),arc,arc);
-            g.setPaint(FlatColor.BLACK);
-            g.drawRoundRect(0,0,getWidth(),getHeight(),arc,arc);
-        }
+        boxPainter.draw(g,styleInfo,sizeInfo,this,"");
 
         for(int i=0; i<model.size(); i++) {
             Object o = model.get(i);
             double rowy = i*rowHeight;
-            Paint bg = FlatColor.WHITE;
-            Paint fg = FlatColor.BLACK;
-            if(i == hoverRow) {
-                bg = FlatColor.BLUE;
-                fg = FlatColor.WHITE;
-            } else {
-                bg = FlatColor.WHITE;
-                fg = FlatColor.BLACK;
-            }
             Bounds itemBounds = new Bounds(1, rowy + spacer, getWidth() - 2, rowHeight);
-            if(cssSkin != null) {
-                String prefix = "item-";
-                if(i == hoverRow) {
-                    prefix = "selected-item-";
-                }
-                cssSkin.drawBackground(g,matcher,prefix,itemBounds);
-                cssSkin.drawBorder(g,matcher,prefix,itemBounds);
-                int col = cssSkin.getCSSSet().findColorValue(matcher, prefix+"color");
-                g.setPaint(new FlatColor(col));
-                drawText(g, o, rowy, i);
+            String prefix = "item-";
+            if(i == hoverRow) {
+                prefix = "selected-item-";
+                selectedItemSizeInfo.width= itemBounds.getWidth();
+                selectedItemSizeInfo.height = itemBounds.getHeight();
+                g.translate(itemBounds.getX(),itemBounds.getY());
+                selectedItemPainter.draw(g,selectedItemStyleInfo,selectedItemSizeInfo,this,"");
+                g.translate(-itemBounds.getX(),-itemBounds.getY());
             } else {
-                g.setPaint(bg);
-                g.fillRect(1,rowy+spacer,getWidth()-1,rowHeight);
-                g.setPaint(fg);
-                drawText(g, o, rowy, i);
+                itemSizeInfo.width= itemBounds.getWidth();
+                itemSizeInfo.height = itemBounds.getHeight();
+                g.translate(itemBounds.getX(),itemBounds.getY());
+                itemPainter.draw(g,itemStyleInfo,itemSizeInfo,this,"");
+                g.translate(-itemBounds.getX(),-itemBounds.getY());
             }
+            int col = cssSkin.getCSSSet().findColorValue(matcher, prefix+"color");
+            g.setPaint(new FlatColor(col));
+            drawText(g, o, rowy, i);
         }
     }
 
