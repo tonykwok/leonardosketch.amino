@@ -243,34 +243,51 @@
     border-width: 1px;
     border-color: #000000;
     background-color: #a0a0a0;
-    border-radius: 10px;
+    background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    border-radius: 0px;
 
     thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     thumb-background-color: #888888;
-    thumb-border-color: #000000;
-    thumb-border-radius: 10px;
+    thumb-border-color: #666666;
+    thumb-border-radius: 18px;
     thumb-border-width: 1px;
-    thumb-margin: 0px;
+    thumb-margin: 1px 0px 1px 0px;
 
-    left-arrow-background-color: #888888;
-    left-arrow-border-color: #000000;
-    left-arrow-border-width: 1px;
-    left-arrow-border-radius: 10px;
-    left-arrow-margin: 0px;
+    /*track-background: linear-gradient(center top, #ffffff 0%, #808080 100%);*/
+    track-background-color: #a0a0a0;
+    track-background: linear-gradient(center top, #808080 0%, #ffffff 100%);
+    track-border-color: #000000;
+    track-border-radius: 18px;
+    track-border-width: 0px;
+    track-margin: 1px 0px 0px 0px;
 
-    right-arrow-background-color: #888888;
-    right-arrow-border-color: #000000;
-    right-arrow-border-width: 1px;
-    right-arrow-border-radius: 10px;
-    right-arrow-margin: 0px;
+    left-arrow-background-color: #a0a0a0;
+    left-arrow-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    left-arrow-border-color: red;
+    left-arrow-border-width: 0px;
+    left-arrow-border-radius: 0px;
+    left-arrow-margin: 1px;
+
+    right-arrow-background-color: #a0a0a0;
+    right-arrow-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    right-arrow-border-color: #a0a0a0;
+    right-arrow-border-width: 0px;
+    right-arrow-border-radius: 0px;
+    right-arrow-margin: 1px;
 
 
 }
 
 .-class-Scrollbar:vertical {
-    thumb-background: linear-gradient(left center, #ffffff 0%, #808080 100%);    
     width: 20px;
     height: 100px;
+    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    thumb-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    left-arrow-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    right-arrow-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    track-background: linear-gradient(left center, #808080 0%, #ffffff 100%);
+    thumb-margin: 0px 1px 0px 1px;
+    track-margin: 1px 1px 0px 1px;
 }
 
 /* ============== text boxes ============= */

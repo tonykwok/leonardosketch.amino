@@ -49,6 +49,9 @@ public class Scrollbar extends Control {
     private StyleInfo thumbStyleInfo;
     private SizeInfo thumbSizeInfo;
     private BoxPainter thumbPainter;
+    private StyleInfo trackStyleInfo;
+    private SizeInfo trackSizeInfo;
+    private BoxPainter trackPainter;
 
     public Scrollbar() {
         this(false);
@@ -181,6 +184,7 @@ public class Scrollbar extends Control {
         leftArrowStyleInfo = cssSkin.getStyleInfo(this,null,"left-arrow-");
         rightArrowStyleInfo = cssSkin.getStyleInfo(this,null,"right-arrow-");
         thumbStyleInfo = cssSkin.getStyleInfo(this,null,"thumb-");
+        trackStyleInfo = cssSkin.getStyleInfo(this,null,"track-");
         setLayoutDirty();
     }
 
@@ -192,6 +196,7 @@ public class Scrollbar extends Control {
         leftArrowSizeInfo = cssSkin.getSizeInfo(this,leftArrowStyleInfo,"","left-arrow-");
         rightArrowSizeInfo = cssSkin.getSizeInfo(this,rightArrowStyleInfo,"","right-arrow-");
         thumbSizeInfo = cssSkin.getSizeInfo(this,thumbStyleInfo,"","thumb-");
+        trackSizeInfo = cssSkin.getSizeInfo(this,trackStyleInfo,"","track-");
     }
 
     @Override
@@ -202,12 +207,14 @@ public class Scrollbar extends Control {
         leftArrowPainter = cssSkin.createBoxPainter(this, leftArrowStyleInfo, leftArrowSizeInfo, "", CSSSkin.State.None, "left-arrow-");
         rightArrowPainter = cssSkin.createBoxPainter(this, rightArrowStyleInfo, rightArrowSizeInfo, "", CSSSkin.State.None, "right-arrow-");
         thumbPainter = cssSkin.createBoxPainter(this, thumbStyleInfo, thumbSizeInfo, "", CSSSkin.State.None, "thumb-");
+        trackPainter = cssSkin.createBoxPainter(this, trackStyleInfo, trackSizeInfo, "", CSSSkin.State.None, "track-");
     }
 
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
         boxPainter.draw(g,styleInfo,sizeInfo,this,"");
+
         Bounds leftArrowBounds = new Bounds(0,0,arrowLength,getHeight());
         Bounds rightArrowBounds = new Bounds(getWidth()-arrowLength,0,arrowLength,getHeight());
         Bounds thumbBounds = calculateThumbBounds();
@@ -215,6 +222,14 @@ public class Scrollbar extends Control {
             leftArrowBounds = new Bounds(0,0,getWidth(),arrowLength);
             rightArrowBounds = new Bounds(0, getHeight()-arrowLength,getWidth(),arrowLength);
         }
+
+        Bounds trackBounds = getTrackBounds();
+        trackSizeInfo.width= trackBounds.getWidth();
+        trackSizeInfo.height = trackBounds.getHeight();
+        g.translate(trackBounds.getX(),trackBounds.getY());
+        trackPainter.draw(g,trackStyleInfo,trackSizeInfo,this,"");
+        g.translate(-trackBounds.getX(),-trackBounds.getY());
+
         leftArrowSizeInfo.width = leftArrowBounds.getWidth();
         leftArrowSizeInfo.height = leftArrowBounds.getHeight();
         leftArrowPainter.draw(g,leftArrowStyleInfo,leftArrowSizeInfo,this,"");
@@ -232,48 +247,14 @@ public class Scrollbar extends Control {
         g.translate(-thumbBounds.getX(),-thumbBounds.getY());
 
         //draw the arrows
-        g.setPaint(FlatColor.BLACK);
+        g.setPaint(new FlatColor(0x303030));
         if(isVertical()) {
-            GraphicsUtil.fillUpArrow(g,3,3,14);
-            GraphicsUtil.fillDownArrow(g,3,getHeight()-3-14,14);
+            GraphicsUtil.fillUpArrow(g,4,4,12);
+            GraphicsUtil.fillDownArrow(g,4,getHeight()-3-12,12);
         } else {
-            GraphicsUtil.fillLeftArrow(g,2,3,14);
-            GraphicsUtil.fillRightArrow(g,getWidth()-2-14,3,14);
+            GraphicsUtil.fillLeftArrow(g,2,4,12);
+            GraphicsUtil.fillRightArrow(g,getWidth()-2-12,4,12);
         }
-        //draw the background
-
-//        Bounds thumbBounds = calculateThumbBounds();
-//        Bounds leftArrowBounds = new Bounds(0,0,arrowLength,getHeight());
-//        Bounds rightArrowBounds = new Bounds(getWidth()-arrowLength,0,arrowLength,getHeight());
-//        if(isVertical()) {
-//            leftArrowBounds = new Bounds(0,0,getWidth(),arrowLength);
-//            rightArrowBounds = new Bounds(0, getHeight()-arrowLength,getWidth(),arrowLength);
-//        }
-
-        //draw using css
-        //cssSkin.draw(g,this,size,thumbBounds, leftArrowBounds, rightArrowBounds);
-        /*
-        g.setPaint(FlatColor.GRAY);
-        g.fillRoundRect(0,0,getWidth(),getHeight(),10,10);
-
-        //draw the arrows
-        g.setPaint(FlatColor.BLACK);
-        if(vertical) {
-            GraphicsUtil.fillUpArrow(g,3,3,14);
-            GraphicsUtil.fillDownArrow(g,3,getHeight()-3-14,14);
-        } else {
-            GraphicsUtil.fillLeftArrow(g,2,3,14);
-            GraphicsUtil.fillRightArrow(g,getWidth()-2-14,3,14);
-        }
-
-        //draw the thumb
-        g.setPaint(FlatColor.BLACK);
-        double arc = thumbBounds.getHeight();
-        if(isVertical()) {
-            arc = thumbBounds.getWidth();
-        }
-        g.fillRoundRect(thumbBounds.getX(),thumbBounds.getY(),thumbBounds.getWidth(),thumbBounds.getHeight(),
-                arc,arc);*/
     }
 
     Bounds calculateThumbBounds() {
