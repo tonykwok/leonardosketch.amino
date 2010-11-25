@@ -52,7 +52,7 @@
 .-class-Button, .-class-Togglebutton {
     background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
     /* a black shadow offset by 3,2 with a blur radius of 4 */
-    text-shadow: #000000 0px 1px 4px;
+    text-shadow: 0px 1px 4px #000000;
 }
 
 .-class-Checkbox {
