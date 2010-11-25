@@ -115,6 +115,7 @@ public class CSSSkin {
         boxPainter.textAlign = set.findStringValue(matcher.element,"text-align");
         boxPainter.color = new FlatColor(set.findColorValue(matcher,"color"));
         boxPainter.text_shadow = set.findValue(matcher, "text-shadow");
+        boxPainter.box_shadow = set.findValue(matcher, "box-shadow");
 
         return boxPainter;
     }

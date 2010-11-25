@@ -25,6 +25,7 @@ public class BoxPainter {
     public String textAlign;
     public FlatColor color;
     public BaseValue text_shadow;
+    public BaseValue box_shadow;
     private String oldText;
     private ImageBuffer oldBuf;
 
@@ -41,11 +42,31 @@ public class BoxPainter {
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
         g.translate(bounds.getX(),bounds.getY());
 
-        if(!transparent) {
-            g.setPaint(background_color);
-            if(gradient) {
-                g.setPaint(gradientFill);
+        //shadow first
+        if(box_shadow instanceof ShadowValue) {
+            ShadowValue shadow = (ShadowValue) box_shadow;
+            ImageBuffer buf = g.createBuffer(100,100);
+            int br = shadow.getBlurRadius();
+            if(buf != null) {
+                GFX g2 = buf.getGFX();
+                g2.setPaint(new FlatColor(shadow.getColor(),1.0));
+                g2.translate(br,br);
+                drawBG(g2, bounds);
+                buf.apply(new BlurEffect(br,br));
+                g2.translate(-br,-br);
             }
+            g.draw(buf,shadow.getXoffset()-br,shadow.getYoffset()-br);
+        }
+        g.setPaint(background_color);
+        if(gradient) {
+            g.setPaint(gradientFill);
+        }
+        drawBG(g,bounds);
+        g.translate(-bounds.getX(),-bounds.getY());
+    }
+
+    private void drawBG(GFX g, Bounds bounds) {
+        if(!transparent) {
             if(borderRadius.allEquals(0)) {
                 g.fillRect(
                         0,
@@ -78,7 +99,7 @@ public class BoxPainter {
                 );
             }
         }
-        g.translate(-bounds.getX(),-bounds.getY());
+
     }
 
     protected void drawBorder(GFX gfx, StyleInfo box, SizeInfo size) {
