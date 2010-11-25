@@ -82,13 +82,6 @@ public class MainCSSTest {
         assertTrue("bold".equals(set.findStringValue("button","font-weight")));
         assertTrue(set.findIntegerValue(matcher,"font-size") == 12);
 
-        //shadow
-        BaseValue shadow = set.findValue(new CSSMatcher("shadowtest"), "text-shadow");
-        assertTrue(shadow instanceof ShadowValue);
-        ShadowValue sv = (ShadowValue)shadow;
-        assertTrue(sv.getXoffset()==3);
-        assertTrue(sv.getYoffset()==2);
-        assertTrue(sv.getBlurRadius()==4);
 
 
         //tests for id and class matching
@@ -280,6 +273,26 @@ public class MainCSSTest {
         m.id = "border_radius_6";
         assertTrue(set.findIntegerValue(m,"thumb-border-top-left-radius")==1);
     }
+
+    @Test
+    public void shadow() {
+        //shadow
+        BaseValue shadow = set.findValue(new CSSMatcher("shadowtest"), "text-shadow");
+        assertTrue(shadow instanceof ShadowValue);
+        ShadowValue sv = (ShadowValue)shadow;
+        assertTrue(sv.getXoffset()==3);
+        assertTrue(sv.getYoffset()==2);
+        assertTrue(sv.getBlurRadius()==4);
+        
+        CSSMatcher m = new CSSMatcher();
+        m.id = "box_shadow_1";
+        assertTrue(set.findValue(m,"box-shadow") instanceof ShadowValue);
+        m.id = "text_shadow_1";
+        assertTrue(set.findValue(m,"text-shadow") instanceof ShadowValue);
+        
+    }
+
+    
     @Test
     public void constantTests() {
         CSSMatcher matcher = new CSSMatcher();

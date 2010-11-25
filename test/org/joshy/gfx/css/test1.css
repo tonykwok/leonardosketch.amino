@@ -27,7 +27,7 @@ transptest {
 
 shadowtest {
     /* a black shadow offset by 3,2 with a blur radius of 4 */
-    text-shadow: #000000 3px 2px 4px;
+    text-shadow: 3px 2px 4px #000000;
 }
 #shad{
 
@@ -175,4 +175,12 @@ Button.classmatch3 {
 #border_radius_6 {
     thumb-border-radius: 1px 2px 3px 4px;
     /*thumb-border-top-left-radius: 1px;*/
+}
+
+/* shadow tests */
+#box_shadow_1 {
+    box-shadow: 1px 2px 3px #000000;
+}
+#text_shadow_1 {
+    text-shadow: 2px 2px 0px #ff0000;
 }

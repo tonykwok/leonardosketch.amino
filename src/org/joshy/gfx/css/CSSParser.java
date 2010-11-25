@@ -223,13 +223,13 @@ public class CSSParser extends BaseParser<Object> {
                     ")"),
                     new LinearGradientAction(pos1,pos2,stops)
                     ),
-            //text shadows
+            //box and text shadows
             Sequence(Sequence(
-                    HexValue(),textShadowColor.set(lastText()),Spacing(),
                     PixelValue(),shadowXoff.set(lastText()),Spacing(),
                     PixelValue(),shadowYoff.set(lastText()),Spacing(),
                     PixelValue(),blurRadius.set(lastText()),Spacing()),
-                    new TextShadowAction(textShadowColor,shadowXoff,shadowYoff,blurRadius)
+                    HexValue(),textShadowColor.set(lastText()),Spacing(),
+                    new ShadowAction(textShadowColor,shadowXoff,shadowYoff,blurRadius)
                     ),
             //image URL
             Sequence(Sequence("url(",OneOrMore(URLChar()),")"), new ImageURLAction()),
@@ -536,13 +536,13 @@ public class CSSParser extends BaseParser<Object> {
         }
     }
 
-    public static class TextShadowAction implements Action {
+    public static class ShadowAction implements Action {
         private Var<String> color;
         private Var<String> xoff;
         private Var<String> yoff;
         private Var<String> radius;
 
-        public TextShadowAction(Var<String> textShadowColor, Var<String> shadowXoff, Var<String> shadowYoff, Var<String> blurRadius) {
+        public ShadowAction(Var<String> textShadowColor, Var<String> shadowXoff, Var<String> shadowYoff, Var<String> blurRadius) {
             this.color = textShadowColor;
             this.xoff = shadowXoff;
             this.yoff = shadowYoff;
