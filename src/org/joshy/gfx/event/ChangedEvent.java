@@ -6,6 +6,7 @@ public class ChangedEvent extends Event {
     public static final EventType ColorChanged = new EventType("ColorChanged");
     public static final EventType IntegerChanged = new EventType("IntegerChanged");
     public static final EventType BooleanChanged = new EventType("BooleanChanged");
+    public static final EventType FinalChange = new EventType("FinalChange");
     private Object value;
 
     public ChangedEvent(EventType type, Object value, Object source) {

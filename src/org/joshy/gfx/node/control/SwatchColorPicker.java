@@ -8,7 +8,6 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -119,6 +118,7 @@ public class SwatchColorPicker extends Button {
             if (event.getType() == MouseEvent.MouseReleased) {
                 setDrawingDirty();
                 setVisible(false);
+                SwatchColorPicker.this.setFinalColor(getSelectedColor());
             }
 
         }
@@ -213,6 +213,10 @@ public class SwatchColorPicker extends Button {
             g.drawRect(0, 0, getWidth(), getHeight());
         }
 
+    }
+
+    private void setFinalColor(FlatColor selectedColor) {
+        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.FinalChange,selectedColor,this));
     }
 
     public void setSelectedColor(FlatColor flatColor) {
