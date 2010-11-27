@@ -87,7 +87,7 @@ public class CSSSkin {
         boxPainter.borderRadius = getBorderRadius(matcher,prefix);
         boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
         if(!boxPainter.transparent) {
-            boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"));
+            boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"),true);
         } else {
             boxPainter.background_color = FlatColor.BLACK;
         }

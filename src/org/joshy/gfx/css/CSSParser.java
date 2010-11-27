@@ -442,7 +442,7 @@ public class CSSParser extends BaseParser<Object> {
             try {
                 context.setNodeValue(new URLValue(context.getPrevText()));
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             return true;
         }

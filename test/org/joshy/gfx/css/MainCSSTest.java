@@ -328,6 +328,8 @@ public class MainCSSTest {
         assertTrue(set.findColorValue(matcher,"prop3")==0xffff8000);
         u.p("value = " + Integer.toHexString(set.findColorValue(matcher,"prop4")));
         assertTrue(set.findColorValue(matcher,"prop4")==0x80008000);
+        u.p("value = " + Integer.toHexString(set.findColorValue(matcher,"prop5")));
+        assertTrue(set.findColorValue(matcher,"prop5")==0xFF00FF00);
     }
 
     /* -------------- support -------------- */

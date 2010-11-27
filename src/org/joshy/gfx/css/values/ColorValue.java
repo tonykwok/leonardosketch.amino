@@ -35,7 +35,7 @@ public class ColorValue extends BaseValue {
             this.rgb = colorMap.get(text.toLowerCase());
             return;
         }
-        this.rgb = Integer.parseInt(text.substring(1),16);
+        this.rgb = 0XFF000000 | Integer.parseInt(text.substring(1),16);
     }
 
     @Override
