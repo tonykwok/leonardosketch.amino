@@ -2,6 +2,7 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.css.values.*;
 import org.joshy.gfx.css.values.StringValue;
+import org.joshy.gfx.util.u;
 import org.parboiled.*;
 import org.parboiled.annotations.DontLabel;
 import org.parboiled.annotations.SuppressNode;
@@ -237,6 +238,7 @@ public class CSSParser extends BaseParser<Object> {
             ColorConstant(),
                 //hex color values: #abc067
             HexValue(),
+            RGBAValue(),
                 //pixel values: 90px
             Sequence(Sequence(OneOrMore(Number()),FirstOf("px","pt")),
                     new PixelValueAction()
@@ -285,6 +287,23 @@ public class CSSParser extends BaseParser<Object> {
                 );
     }
 
+    public Rule RGBAValue() {
+        //final Var<String> blahasd = new Var<String>();
+        final Var<String> red = new Var<String>();
+        final Var<String> green = new Var<String>();
+        final Var<String> blue = new Var<String>();
+        final Var<String> alpha = new Var<String>();
+        return Sequence(Sequence("rgba("
+                ,Spacing(),Number(),Spacing(),red.set(lastText()),","
+                ,Spacing(),Number(),Spacing(),green.set(lastText()),","
+                ,Spacing(),Number(),Spacing(),blue.set(lastText()),","
+                ,Spacing(),FloatNumber(),alpha.set(lastText()),Spacing()
+                ,")"),
+            new RGBAAction(red,green,blue,alpha)
+        );
+    }
+
+
     public Rule ColorConstant() {
         return Sequence(FirstOf(
                 "red","green","blue",
@@ -332,6 +351,11 @@ public class CSSParser extends BaseParser<Object> {
 
     public Rule Number() {
         return OneOrMore(CharRange('0', '9'));
+    }
+    public Rule FloatNumber() {
+        return Sequence(OneOrMore(CharRange('0', '9')),
+                Optional(Sequence('.',OneOrMore(CharRange('0','9'))))
+        );
     }
     @SuppressNode
     public Rule Letter() {
@@ -382,6 +406,33 @@ public class CSSParser extends BaseParser<Object> {
 
         public boolean run(Context context) {
             context.setNodeValue(new GradientStopValue(hex.get(),percentage.get()));
+            return true;
+        }
+    }
+
+    public class RGBAAction implements Action {
+        private Var<String> red;
+        private Var<String> green;
+        private Var<String> blue;
+        private Var<String> alpha;
+
+        public RGBAAction(Var<String> red, Var<String> green, Var<String> blue, Var<String> alpha) {
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
+            this.alpha = alpha;
+        }
+
+        @Override
+        public boolean run(Context context) {
+            int r = Integer.parseInt(red.get());
+            int g = Integer.parseInt(green.get());
+            int b = Integer.parseInt(blue.get());
+            double a = Double.parseDouble(alpha.get());
+            int ia = (int)(a * 256);
+            if(ia == 256) ia = 255;
+            int rgba = ia << 24 | r << 16 | g << 8 | b;
+            context.setNodeValue(new ColorValue(rgba,true));
             return true;
         }
     }

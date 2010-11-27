@@ -184,3 +184,13 @@ Button.classmatch3 {
 #text_shadow_1 {
     text-shadow: 2px 2px 0px #ff0000;
 }
+
+
+
+/* color tests */
+#color_rgba_1 {
+    prop1: rgba(255,255,255,1.0);
+    prop2: rgba( 255 ,255,255,1.0);
+    prop3: rgba( 255 ,128 , 0, 1.0);
+    prop4: rgba( 0 ,128 , 0, 0.5);
+}

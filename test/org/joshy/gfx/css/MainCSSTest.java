@@ -319,6 +319,17 @@ public class MainCSSTest {
         assertTrue(set.findIntegerValue(matcher,"dummy-prop3")==199);
     }
 
+    @Test
+    public void colorTests() {
+        CSSMatcher matcher = new CSSMatcher();
+        matcher.id = "color_rgba_1";
+        assertTrue(set.findColorValue(matcher,"prop1")==0xffffffff);
+        assertTrue(set.findColorValue(matcher,"prop2")==0xffffffff);
+        assertTrue(set.findColorValue(matcher,"prop3")==0xffff8000);
+        u.p("value = " + Integer.toHexString(set.findColorValue(matcher,"prop4")));
+        assertTrue(set.findColorValue(matcher,"prop4")==0x80008000);
+    }
+
     /* -------------- support -------------- */
     private static void condense(Node<?> node, CSSRuleSet set, URI uri) {
         if(node == null) return;

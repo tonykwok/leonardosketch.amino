@@ -23,6 +23,13 @@ public class ColorValue extends BaseValue {
     }
     private int rgb;
 
+    public ColorValue(int rgba, boolean hasAlpha) {
+        this.rgb = rgba;
+        //chop the alpha off if needed
+        if(!hasAlpha) {
+            this.rgb = rgb & 0x00FFFFFF;
+        }
+    }
     public ColorValue(String text) {
         if(colorMap.containsKey(text.toLowerCase())) {
             this.rgb = colorMap.get(text.toLowerCase());
