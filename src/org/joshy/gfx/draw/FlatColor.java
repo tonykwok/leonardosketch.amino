@@ -100,6 +100,12 @@ public class FlatColor implements Paint {
         return alpha;
     }
 
+    public double getHue() {
+        java.awt.Color col = new java.awt.Color((float) getRed(), (float) getGreen(), (float) getBlue(), (float) getAlpha());
+        float[] comps = java.awt.Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), null);
+        return comps[0]*360;
+    }
+
     /**
      * 
      */
