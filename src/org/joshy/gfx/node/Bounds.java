@@ -74,9 +74,9 @@ public final class Bounds {
     public Bounds union(Bounds bounds) {
         double minx = Math.min(getX(),bounds.getX());
         double miny = Math.min(getY(),bounds.getY());
-        double maxw = Math.max(getWidth(),bounds.getWidth());
-        double maxh = Math.max(getHeight(),bounds.getHeight());
-        return new Bounds(minx, miny, maxw, maxh);
+        double maxx2 = Math.max(getX()+getWidth(),bounds.getX()+bounds.getWidth());
+        double maxy2 = Math.max(getY()+getHeight(),bounds.getY()+bounds.getHeight());
+        return new Bounds(minx, miny, maxx2-minx, maxy2-miny);
     }
 
     public boolean intersects(Bounds bounds) {
