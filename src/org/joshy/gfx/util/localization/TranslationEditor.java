@@ -84,6 +84,7 @@ public class TranslationEditor extends VFlexBox {
                 }
                 xml.end();
                 xml.close();
+                StandardDialogs.showAlert("Translation has been exported to \n " + file.getAbsolutePath());
             }
         };
 
