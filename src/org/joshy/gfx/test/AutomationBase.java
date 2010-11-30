@@ -90,6 +90,7 @@ public class AutomationBase {
                             KeyEvent.KeyPressed,
                             KeyEvent.getKeyCodeFromChar(ch),
                             node,
+                            ch,
                             false,false,false,false);
                     EventBus.getSystem().publish(evt);
                 }
