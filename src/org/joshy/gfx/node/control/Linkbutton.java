@@ -19,7 +19,7 @@ import org.joshy.gfx.node.Bounds;
  */
 
 public class Linkbutton extends Button {
-    public Linkbutton(String text) {
+    public Linkbutton(CharSequence text) {
         super(text);
         selectable = false;
     }

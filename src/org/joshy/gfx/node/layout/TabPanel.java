@@ -27,13 +27,13 @@ import java.util.Map;
 public class TabPanel extends Panel {
     private TabTop tabtop = new TabTop();
     private List<Control> tabs = new ArrayList<Control>();
-    private Map<Control,String> titleMap = new HashMap<Control,String>();
+    private Map<Control,CharSequence> titleMap = new HashMap<Control,CharSequence>();
 
     public TabPanel() {
         add(tabtop);
     }
 
-    public void add(String title, Control control) {
+    public void add(CharSequence title, Control control) {
         add(control);
         if(!tabs.isEmpty()) {
             control.setVisible(false);
@@ -116,10 +116,10 @@ public class TabPanel extends Panel {
                     matcher.pseudo = "selected";
                 }
                 Bounds bounds = new Bounds(x,0,size,30);
-                String title = titleMap.get(c);
+                CharSequence title = titleMap.get(c);
                 cssSkin.drawBackground(g,matcher,"",bounds);
                 cssSkin.drawBorder(g,matcher,"",bounds);
-                cssSkin.drawText(g,matcher,"",bounds,title);
+                cssSkin.drawText(g,matcher,"",bounds,title.toString());
                 x+=size;
             }
         }

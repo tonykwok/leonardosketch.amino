@@ -18,7 +18,7 @@ import org.joshy.gfx.node.Insets;
  * by putting the newline character, \n, in your string.
  */
 public class Label extends Control {
-    private String text = "Label";
+    private CharSequence text = "Label";
     private StyleInfo styleInfo;
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
@@ -26,7 +26,7 @@ public class Label extends Control {
     public TextLayoutModel _layout_model;
     private FlatColor color;
 
-    public Label(String text) {
+    public Label(CharSequence text) {
         this.text = text;
     }
     public Label() {
@@ -41,7 +41,7 @@ public class Label extends Control {
 
     @Override
     public void doPrefLayout() {
-        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,text);
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,text.toString());
         if(prefWidth != CALCULATED) {
             setWidth(prefWidth);
             sizeInfo.width = prefWidth;
@@ -59,11 +59,11 @@ public class Label extends Control {
             sizeInfo.width = getWidth();
             sizeInfo.height = getHeight();
         }
-        boxPainter = cssSkin.createBoxPainter(this,styleInfo,sizeInfo,text,CSSSkin.State.None);
+        boxPainter = cssSkin.createBoxPainter(this,styleInfo,sizeInfo,text.toString(),CSSSkin.State.None);
     }
 
     private void layoutText() {
-        _layout_model = new TextLayoutModel(styleInfo.font,getText(), true);
+        _layout_model = new TextLayoutModel(styleInfo.font,getText().toString(), true);
         _layout_model.layout(getWidth(),getHeight());
         Insets insets = styleInfo.calcContentInsets();
         setHeight(_layout_model.calculatedHeight()+insets.getTop()+insets.getBottom());
@@ -107,7 +107,7 @@ public class Label extends Control {
         return this;
     }
 
-    public String getText() {
+    public CharSequence getText() {
         return this.text;
     }
 

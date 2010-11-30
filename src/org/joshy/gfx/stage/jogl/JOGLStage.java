@@ -143,8 +143,8 @@ public class JOGLStage extends Stage {
     }
 
     @Override
-    public void setTitle(String title) {
-        frame.setTitle(title);
+    public void setTitle(CharSequence title) {
+        frame.setTitle(title.toString());
     }
 
     @Override
