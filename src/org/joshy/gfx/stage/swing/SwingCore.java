@@ -8,6 +8,7 @@ import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.PeriodicTask;
+import org.joshy.gfx.event.SkinEvent;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.stage.Stage;
@@ -91,6 +92,7 @@ public class SwingCore extends Core {
                 ((Control)root).doSkins();
             }
         }
+        EventBus.getSystem().publish(new SkinEvent(SkinEvent.SystemWideReload));
     }
 
     @Override
