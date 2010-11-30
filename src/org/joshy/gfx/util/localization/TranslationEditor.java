@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class TranslationEditor extends VFlexBox {
+public class TranslationEditor<E> extends VFlexBox {
 
     public TranslationEditor() {
 
@@ -52,9 +52,10 @@ public class TranslationEditor extends VFlexBox {
         
         final ArrayListModel<Prefix> prefixList = new ArrayListModel<Prefix>();
         prefixList.addAll(prefixes.values());
+
         
         final ListView<Prefix> prefixView = new ListView<Prefix>();
-        prefixView.setModel(prefixList);
+        prefixView.setModel(ListUtil.toAlphaListModel(prefixList));
         final ListView<Key> keyView = new ListView<Key>();
         keyView.setModel(new ArrayListModel<Key>());
         final ListView<String> langView = new ListView<String>();
@@ -68,7 +69,7 @@ public class TranslationEditor extends VFlexBox {
                 XMLWriter xml = new XMLWriter(file);
                 xml.header();
                 xml.start("sets");
-                for(Prefix prefix : prefixes.values()) {
+                for(Prefix prefix : ListUtil.toAlphaCollection(prefixes.values())) {
                     xml.start("set","name",prefix.prefix);
                     for(Key key : prefix.keys) {
                         xml.start("key","name",key.keyString.getKeyname());
@@ -89,30 +90,31 @@ public class TranslationEditor extends VFlexBox {
         };
 
         final PopupMenuButton<String> currentLocalePopup = new PopupMenuButton<String>()
-                .setModel(currentLocaleModel);
+                .setModel(ListUtil.toAlphaListModel(currentLocaleModel));
 
         EventBus.getSystem().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>(){
             public void call(SelectionEvent selectionEvent) throws Exception {
                 if(selectionEvent.getView() instanceof ListView) {
                     if(selectionEvent.getView() == prefixView) {
-                        Prefix pf = prefixList.get(selectionEvent.getView().getSelectedIndex());
-                        keyView.setModel(pf.keys);
+                        Prefix pf = prefixView.getModel().get(selectionEvent.getView().getSelectedIndex());
+                        keyView.setModel(ListUtil.toAlphaListModel(pf.keys));
                         keyView.setSelectedIndex(-1);
                         langView.setSelectedIndex(-1);
                         editBox.setText("");
                     }
                     if(selectionEvent.getView() == keyView) {
-                        Prefix prefix = prefixList.get(prefixView.getSelectedIndex());
-                        Key key = prefix.keys.get(keyView.getSelectedIndex());
+                        //Prefix prefix = prefixView.getModel().get(prefixView.getSelectedIndex());
+                        Key key = keyView.getModel().get(keyView.getSelectedIndex());
                         ArrayListModel<String> m = new ArrayListModel<String>();
                         m.addAll(key.keyString.translations.keySet());
-                        langView.setModel(m);
+                        langView.setModel(ListUtil.toAlphaListModel(m));
                         langView.setSelectedIndex(-1);
                         editBox.setText("");
                     }
                     if(selectionEvent.getView() == langView) {
-                        Prefix prefix = prefixList.get(prefixView.getSelectedIndex());
-                        Key key = prefix.keys.get(keyView.getSelectedIndex());
+                        //Prefix prefix = prefixView.getModel().get(prefixView.getSelectedIndex());
+                        Key key = keyView.getModel().get(keyView.getSelectedIndex());
+                        //Key key = prefix.keys.get(keyView.getSelectedIndex());
                         String lang = langView.getModel().get(langView.getSelectedIndex());
                         String val = key.keyString.translations.get(lang);
                         editBox.setText(val);
@@ -145,7 +147,7 @@ public class TranslationEditor extends VFlexBox {
                 key.keyString.addTranslation(newLang,"---");
                 ArrayListModel<String> m = new ArrayListModel<String>();
                 m.addAll(key.keyString.translations.keySet());
-                langView.setModel(m);
+                langView.setModel(ListUtil.toAlphaListModel(m));
             }
         };
 
@@ -191,7 +193,7 @@ public class TranslationEditor extends VFlexBox {
             .add(exportButton));
     }
 
-    class Prefix {
+    class Prefix implements Comparable<Prefix> {
         ArrayListModel<Key> keys = new ArrayListModel<Key>();
         private String prefix;
         public Map<String,Key> keyMap = new HashMap<String,Key>();
@@ -204,9 +206,14 @@ public class TranslationEditor extends VFlexBox {
         public String toString() {
             return prefix;
         }
+
+        @Override
+        public int compareTo(Prefix prefix) {
+            return this.prefix.compareTo(prefix.prefix);
+        }
     }
 
-    class Key {
+    class Key implements Comparable<Key>{
         private String key;
         public Localization.KeyString keyString;
 
@@ -215,6 +222,11 @@ public class TranslationEditor extends VFlexBox {
         }
         public String toString() {
             return key;
+        }
+
+        @Override
+        public int compareTo(Key key) {
+            return this.key.compareTo(key.key);
         }
     }
 }
