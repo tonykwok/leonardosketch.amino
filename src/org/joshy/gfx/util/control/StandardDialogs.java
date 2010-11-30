@@ -12,7 +12,7 @@ import javax.swing.*;
  * To change this template use File | Settings | File Templates.
  */
 public class StandardDialogs {
-    
+
     public static enum Result {Yes, No, Cancel};
     public static Result showYesNoCancel(String text, String yesText, String noText, String cancelText) {
         int result = JOptionPane.showOptionDialog(null
@@ -36,5 +36,8 @@ public class StandardDialogs {
     public static String showEditText(String text, String value) {
         String result = JOptionPane.showInputDialog(text,value);
         return result;
+    }
+    public static void showAlert(String s) {
+        JOptionPane.showMessageDialog(null,s);
     }
 }

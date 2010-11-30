@@ -30,7 +30,7 @@ public class Localization {
                 KeyString keyString = new KeyString(prefix,keyName);
                 for(Elem value : key.xpath("value")) {
                     String language = value.attr("language");
-                    String translationValue = value.text();
+                    String translationValue = value.text().trim();
                     if(language.length() <= 0) {
                         language = "DEFAULT";
                     }
