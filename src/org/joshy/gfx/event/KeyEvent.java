@@ -276,6 +276,9 @@ public class KeyEvent extends Event {
 
     
     public String getGeneratedText() {
+        if(getType() == KeyTyped) {
+            return ""+keyChar;
+        }
         if(isTextKey()) {
             char ch = keyCode.getChar();
 //            u.p("char code = " + ch);
