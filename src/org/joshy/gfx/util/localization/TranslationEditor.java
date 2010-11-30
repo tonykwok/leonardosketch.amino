@@ -185,11 +185,9 @@ public class TranslationEditor extends VFlexBox {
                 )
             ,1);
 
-        Button applyButton = new Button("Apply");
         Button exportButton = new Button("export").onClicked(exportTranslation);
 
         this.add(new HFlexBox()
-            .add(applyButton)
             .add(exportButton));
     }
 
