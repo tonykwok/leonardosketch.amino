@@ -1,5 +1,6 @@
 package org.joshy.gfx.util.localization;
 
+import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
@@ -10,12 +11,15 @@ import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.control.StandardDialogs;
+import org.joshy.gfx.util.u;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class TranslationEditor extends VFlexBox {
+
     public TranslationEditor() {
 
         final Textbox editBox = new Textbox();
@@ -56,6 +60,32 @@ public class TranslationEditor extends VFlexBox {
         final ListView<String> langView = new ListView<String>();
         langView.setModel(new ArrayListModel<String>());
 
+        Callback<ActionEvent> exportTranslation = new Callback<ActionEvent>() {
+            @Override
+            public void call(ActionEvent event) throws Exception {
+                File file = new File("test.xml");
+                u.p("writing to file: " + file.getAbsolutePath());
+                XMLWriter xml = new XMLWriter(file);
+                xml.header();
+                xml.start("sets");
+                for(Prefix prefix : prefixes.values()) {
+                    xml.start("set","name",prefix.prefix);
+                    for(Key key : prefix.keys) {
+                        xml.start("key","name",key.keyString.getKeyname());
+                        for(String lang : key.keyString.translations.keySet()) {
+                            xml.start("value")
+                                    .attr("language",lang)
+                                    .text(key.keyString.translations.get(lang))
+                                    .end();
+                        }
+                        xml.end();
+                    }
+                    xml.end();
+                }
+                xml.end();
+                xml.close();
+            }
+        };
 
         final PopupMenuButton<String> currentLocalePopup = new PopupMenuButton<String>()
                 .setModel(currentLocaleModel);
@@ -155,7 +185,7 @@ public class TranslationEditor extends VFlexBox {
             ,1);
 
         Button applyButton = new Button("Apply");
-        Button exportButton = new Button("export");
+        Button exportButton = new Button("export").onClicked(exportTranslation);
 
         this.add(new HFlexBox()
             .add(applyButton)
