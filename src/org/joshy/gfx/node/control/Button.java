@@ -147,7 +147,7 @@ public class Button extends Control {
 
     @Override
     public void doPrefLayout() {
-        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,new StringBuffer(text).toString());
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,text.toString());
 
         if(prefWidth != CALCULATED) {
             setWidth(prefWidth);
