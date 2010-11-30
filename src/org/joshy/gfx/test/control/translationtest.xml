@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<sets>
+
+
+    <set name="test">
+
+    <!-- this is an example of a string with a default and a translation -->
+        <key name="button.text">
+            <value>Button</value>
+            <value language="en-US">Button en-US</value>
+            <value language="de-DE">Button de-DE</value>
+        </key>
+        <key name="textbox.hint">
+            <value>Button</value>
+            <value language="en-US">Button en-US</value>
+            <value language="de-DE">Button de-DE</value>
+        </key>
+        <key name="checkbox.text">
+            <value>Button</value>
+            <value language="en-US">Button en-US</value>
+            <value language="de-DE">Button de-DE</value>
+        </key>
+        <key name="popup1">
+            <value>popup value 1</value>
+        </key>
+        <key name="popup2">
+            <value>popup value 2</value>
+        </key>
+        <key name="popup3">
+            <value>popup value 3</value>
+        </key>
+    </set>
+
+    <set name="foo">
+        <key name="blah">
+            <value>blah value</value>
+        </key>
+    </set>
+</sets>

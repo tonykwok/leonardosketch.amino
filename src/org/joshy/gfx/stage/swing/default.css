@@ -1,0 +1,422 @@
+* {
+    margin: 1px;
+    padding: 2px;
+    background-color: #ffffff;
+    color: #000000;
+    border-width: 1px;
+    border-color: #000000;
+    text-align: left;
+    border-radius: 0px;
+    shrink-to-fit: false;
+    font-size: 12pt;
+    font-family: Arial, serif;
+    font-weight: normal;
+
+    /* turn these on to draw lines showing the box dimensions */
+    debug-margin:   false;
+    debug-border:   false;
+    debug-padding:  false;
+}
+
+/* =========== buttons =========== */
+.-class-Button { /* this selects all subclasses of Button as well */
+    margin: 3px;
+    padding: 8px;
+    background-color: #c0c0c0;
+    border-width: 1px;
+    color: #444444;
+    border-color: #808080;
+    border-radius: 11px;
+    text-align: center;
+    shrink-to-fit: true;
+}
+
+.-class-SwatchColorPicker {
+    margin: 0px;
+    padding: 0px;
+}
+
+.-class-Tooltip {
+    background-color: #444444;
+    color: white;
+    shrink-to-fit: true;
+}
+
+.-class-Label {
+    border-width: 0px;
+    background-color: transparent;
+    shrink-to-fit: true;
+    color: black;
+}
+
+.-class-Button, .-class-Togglebutton {
+    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    /* a black shadow offset by 3,2 with a blur radius of 4 */
+    text-shadow: 0px 1px 4px #000000;
+}
+
+.-class-Checkbox {
+    border-width: 0px;
+    background-color: transparent;
+    icon: url(images/checkbox_normal.png);
+    icon-position: left;
+}
+
+.-class-Checkbox:selected {
+    icon: url(images/checkbox_selected.png);
+}
+
+.-class-Radiobutton {
+    border-width: 0px;
+    border-radius: 0px;
+    background-color: transparent;
+    icon: url(images/radiobutton_normal.png);
+}
+
+.-class-Radiobutton:selected {
+    icon: url(images/radiobutton_selected.png);
+}
+
+.-class-Togglebutton {
+    border-radius: 3px;
+}
+
+.-class-Button:hover, .-class-Togglebutton:hover {
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    color: #ffffff;
+    border-color: #808080;
+}
+
+.-class-Button:disabled, .-class-Togglebutton:disabled {
+    background: none;
+    background-color: #a0a0a0;
+    text-shadow: none;
+}
+
+.-class-Togglebutton:selected {
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    color: #ffffff;
+    border-color: #808080;
+}
+
+.-class-Linkbutton {
+    background-color: transparent;
+    shrink-to-fit: true;
+    color: #000000;
+    border-width: 0px;
+    margin: 2px;
+    padding: 3px;
+}
+
+.-class-Linkbutton:hover {
+    color: #5050ff;
+}
+
+
+/* ============= Progress Bar and Slider =========== */
+
+.-class-ProgressBar {
+    width: 100px;
+    height: 20px;
+    shrink-to-fit: false;
+    padding: 3px;
+    
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    border-width: 1px;
+    color: #444444;
+    border-color: #808080;
+    border-radius: 11px;
+    
+    bar-background-color: #0000ff;
+    bar-border-color: #f0f0f0;
+    bar-border-width: 1px;
+    bar-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    
+    bar-margin-left: 1px;
+    bar-margin-right: 1px;
+    bar-margin-top: 1px;
+    bar-margin-bottom: 1px;
+
+    bar-border-radius: 10px;
+}
+
+
+.-class-Slider {
+    width: 100px;
+    height: 20px;
+    background-color: black;
+    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    margin: 5px 1px 5px 1px;
+
+    border-width: 1px;
+    border-color: black;
+    border-radius: 10px;
+
+
+    thumb-background-color: white;
+    thumb-height: 40px;
+    thumb-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    thumb-border-color: black;
+    thumb-border-radius: 0px;
+    thumb-margin-left:   1px;
+    thumb-margin-right:  1px;
+    thumb-margin-top:    2px;
+    thumb-margin-bottom: 2px;
+    thumb-border-left-width: 1px;
+    thumb-border-right-width: 1px;
+    thumb-border-top-width: 1px;
+    thumb-border-bottom-width: 1px;
+}
+
+
+/* =========== panels ======== */
+.-class-Panel, .-class-TitlePanel, .-class-HFlexBox, .-class-VFlexBox, .-class-GridBox, .-class-Panel {
+    background-color: transparent;
+    border-width: 0px;
+    border-color: black;
+    margin: 0px;
+    padding: 3px;
+}
+
+.-class-HFlexBox, .-class-VFlexBox, .-class-GridBox {
+    spacing: 3px;
+}
+
+.-class-TitlePanel {
+    background-color: transparent;
+    border-width: 1px;
+    margin: 6px;
+    padding: 6px;
+    title-color: black;
+    title-border-color: black;
+    title-margin: 0px;
+    title-padding-left:   3px;
+    title-padding-right: 15px;
+    title-padding-top:    3px;
+    title-padding-bottom: 3px;
+    title-background-color: #e8e8e8;
+}
+.-class-TabPanel {
+    /*border-width: 1px 1px 0px 1px;*/
+}
+.-class-TabTop {
+    background-color: #d0d0d0;
+    /*background: linear-gradient(center top, #04acec 0%, #0186ba 100%);*/
+    border-color: black;
+    border-width: 0px;/*1px 1px 0px 0px;*/
+    margin: 0px;
+    padding: 0px;
+    border-radius: 16px 16px 0px 0px;
+    color: #606060;
+    text-align: center;
+}
+.-class-TabTop:selected {
+    background-color: #ffaaaa;
+    background: linear-gradient(center top, #ebebeb 0%, #ededed 100%);
+    color: black;
+}
+
+.-class-SplitPane {
+    divider-background-color: #00ff00;
+    divider-background: linear-gradient(left center, #888888 0%, #222222 100%);
+    divider-border-color: #000000;
+    divider-border-left-width: 1px;
+    divider-border-right-width: 1px;
+    divider-border-top-width: 1px;
+    divider-border-bottom-width: 1px;
+}
+.-class-SplitPane:vertical {
+    divider-background: linear-gradient(center top, #888888 0%, #222222 100%);
+}
+
+.-root {
+    background-color: #d0d0d0;
+}
+
+/* =========== scroll bars ========== */
+.-class-Scrollbar {
+    width: 100px;
+    height: 20px;
+    margin: 0px;
+    padding: 0px;
+    border-width: 1px;
+    border-color: #000000;
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    border-radius: 0px;
+
+    thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    thumb-background-color: #888888;
+    thumb-border-color: #666666;
+    thumb-border-radius: 18px;
+    thumb-border-width: 1px;
+    thumb-margin: 1px 0px 1px 0px;
+
+    /*track-background: linear-gradient(center top, #ffffff 0%, #808080 100%);*/
+    track-background-color: #a0a0a0;
+    track-background: linear-gradient(center top, #808080 0%, #ffffff 100%);
+    track-border-color: #000000;
+    track-border-radius: 18px;
+    track-border-width: 0px;
+    track-margin: 1px 0px 0px 0px;
+
+    left-arrow-background-color: #a0a0a0;
+    left-arrow-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    left-arrow-border-color: red;
+    left-arrow-border-width: 0px;
+    left-arrow-border-radius: 0px;
+    left-arrow-margin: 1px;
+
+    right-arrow-background-color: #a0a0a0;
+    right-arrow-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    right-arrow-border-color: #a0a0a0;
+    right-arrow-border-width: 0px;
+    right-arrow-border-radius: 0px;
+    right-arrow-margin: 1px;
+
+
+}
+
+.-class-Scrollbar:vertical {
+    width: 20px;
+    height: 100px;
+    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    thumb-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    left-arrow-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    right-arrow-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    track-background: linear-gradient(left center, #808080 0%, #ffffff 100%);
+    thumb-margin: 0px 1px 0px 1px;
+    track-margin: 1px 1px 0px 1px;
+}
+
+/* ============== text boxes ============= */
+
+.-class-Textbox, .-class-Passwordbox, .-class-Textarea {
+    margin: 3px;
+    padding: 5px;
+    border-color: #888888;
+    border-width: 1px;
+    background-color: #e0e0e0;
+    shrink-to-fit: true;
+    selection-color : #c0c0c0;
+    cursor-color: #000000;
+}
+
+.-class-Textbox:focused, .-class-Passwordbox:focused, .-class-Textarea:focused {
+    background-color: #ffffff;
+    selection-color: #99bbff;
+}
+
+.-class-SpinButton {
+    margin: 0px;
+    padding: 0px;
+    border-radius: 0px;
+}
+
+.-class-SpinButton:hover {
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    color: #ffffff;
+    border-color: #808080;
+}
+
+.-SpinButton-top {
+    margin: 3px 0px 0px 0px;
+    icon: url(images/arrow_up.png);
+}
+
+.-SpinButton-bottom {
+    margin: 0px 0px 2px 0px;
+    padding: 0px;
+    icon: url(images/arrow_down.png);
+}
+
+.-SpinButton-box {
+    margin: 3px 0px 3px 3px;
+    padding: 3px 3px 6px 3px;
+    border-color: #808080;
+    background-color: #d0d0d0;
+}
+
+.searchbox {
+    border-color: #888888;
+    border-radius: 20px;
+    padding: 5px 10px 5px 10px;
+}
+
+/* ===========  Popups ============== */
+.-class-PopupMenuButton {
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    border-width: 1px;
+    color: #444444;
+    border-color: #808080;
+    border-radius: 11px;
+    padding: 3px;
+}
+
+.-class-PopupMenu {
+    background-color: #f0f0f0;
+    border-radius: 11px;
+    border-width: 1px;
+    border-color: #808080;
+    color: #444444;
+    margin: 0px;
+
+    item-background-color: #f0f0f0;
+    item-color: #444444;
+    item-margin: 0px;
+    item-border-color: #000000;
+    item-border-width: 0px;
+    item-border-radius: 0px;
+
+    selected-item-margin: 1px 0px 1px 0px;
+    selected-item-background-color: #0000ff;
+    selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    selected-item-color: #ffffff;
+    selected-item-border-color: #000000;
+    selected-item-border-width: 1px 0px 1px 0px;
+    selected-item-border-radius: 0px;
+}
+
+
+
+/* ============ List and Table =========== */
+.-class-ListView {
+    margin: 0px;
+    border-width: 1px;
+    border-color: #a0a0a0;
+    background-color:#f0f0f0;
+    
+    item-background-color: #f0f0f0;
+    item-border-color: #00ff00;
+    item-border-width: 0px;
+    item-color: #000000;
+
+    selected-item-background-color: #0000ff;
+    selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    selected-item-border-color: #000000;
+    selected-item-color: #ffffff;
+    
+    selected-item-margin: 0px 0px 2px 0px;
+    selected-item-border-width: 1px 0px;
+}
+
+.-class-TableView {
+    margin: 0px;
+    border-width: 1px;
+    border-color: #a0a0a0;
+    background-color:#f0f0f0;
+
+    item-background-color: #f0f0f0;
+    item-border-color: #00ff00;
+    item-border-width: 0px;
+    item-color: #000000;
+
+    selected-item-background-color: #0000ff;
+    selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    selected-item-margin: 0px 0px 1px 0px;
+    selected-item-border-width: 1px 0px;
+    selected-item-border-color: #000000;
+    selected-item-color: #ffffff;
+}
