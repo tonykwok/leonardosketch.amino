@@ -7,6 +7,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -71,13 +72,6 @@ public abstract class TextControl extends Control implements Focusable {
             }
         });
 
-        /*
-        EventBus.getSystem().addListener(this, MouseEvent.MouseDragged, new Callback<MouseEvent>(){
-            public void call(MouseEvent event) {
-            }
-        });
-        */
-
         EventBus.getSystem().addListener(FocusEvent.All, new Callback<FocusEvent>(){
             public void call(FocusEvent event) {
                 if(event.getType() == FocusEvent.Lost && event.getSource() == TextControl.this) {
@@ -94,6 +88,16 @@ public abstract class TextControl extends Control implements Focusable {
         EventBus.getSystem().addListener(this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
             public void call(KeyEvent event) {
                 processKeyEvent(event);
+            }
+        });
+        EventBus.getSystem().addListener(this, KeyEvent.KeyReleased, new Callback<KeyEvent>() {
+            public void call(KeyEvent event) {
+                processKeyEvent(event);
+            }
+        });
+        EventBus.getSystem().addListener(this, KeyEvent.KeyTyped, new Callback<KeyEvent>() {
+            public void call(KeyEvent event) {
+                processKeyTyped(event);
             }
         });
 
@@ -124,8 +128,15 @@ public abstract class TextControl extends Control implements Focusable {
         return x;
     }
 
-    protected void processKeyEvent(KeyEvent event) {
+    private void processKeyTyped(KeyEvent event) {
+        u.p("event: " + event.getType() + " typed event");
+        u.p("generated text = " + event.getGeneratedText());
+        //regular keys
+        insertText(event.getGeneratedText());
+    }
 
+    protected void processKeyEvent(KeyEvent event) {
+        u.p("event: " + event.getType());
         //Paste
         if(event.getKeyCode().equals(KeyEvent.KeyCode.KEY_V) && event.isSystemPressed()) {
             insertText(OSUtil.getClipboardAsString());
@@ -146,12 +157,6 @@ public abstract class TextControl extends Control implements Focusable {
                 OSUtil.setStringToClipboard(selection.getSelectedText());
                 insertText("");
             }
-            return;
-        }
-
-        //regular keys
-        if(event.isTextKey()) {
-            insertText(event.getGeneratedText());
             return;
         }
 
