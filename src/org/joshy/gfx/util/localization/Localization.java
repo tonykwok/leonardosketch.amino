@@ -4,7 +4,6 @@ import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -43,9 +42,7 @@ public class Localization {
     }
 
     public static CharSequence getString(String key) {
-        u.p("getting string: " + key);
         KeyString v = translations.get(key);
-        //u.p("value = " + v.getLocalizedValue());
         return v;
     }
 
