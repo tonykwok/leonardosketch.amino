@@ -50,7 +50,7 @@ public abstract class Stage {
 
     public abstract Object getNativeWindow();
 
-    public abstract void setTitle(String title);
+    public abstract void setTitle(CharSequence title);
 
     public abstract void setUndecorated(boolean undecorated);
 

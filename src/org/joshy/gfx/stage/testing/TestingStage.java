@@ -83,7 +83,7 @@ public class TestingStage extends Stage {
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(CharSequence title) {
     }
 
     @Override
