@@ -9,7 +9,7 @@ public class Checkbox extends Button {
         selectable = true;
     }
 
-    public Checkbox(String s) {
+    public Checkbox(CharSequence s) {
         this();
         setText(s);
     }

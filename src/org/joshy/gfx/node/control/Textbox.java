@@ -20,7 +20,7 @@ import org.joshy.gfx.stage.Stage;
 public class Textbox extends TextControl {
     private SizeInfo sizeInfo;
     private BoxPainter boxPainter;
-    private String hintText = "";
+    private CharSequence hintText = "";
     private FlatColor selectionColor;
     private FlatColor cursorColor;
 
@@ -48,7 +48,7 @@ public class Textbox extends TextControl {
         setText(text);
     }
 
-    public Textbox setHintText(String text) {
+    public Textbox setHintText(CharSequence text) {
         this.hintText = text;
         return this;
     }
@@ -172,7 +172,7 @@ public class Textbox extends TextControl {
         double x = insets.getLeft();
         if(!focused && text.length() == 0) {
             g.setPaint(new FlatColor(0x6080a0));
-            g.drawText(hintText, getFont(), x + xoff, y);
+            g.drawText(hintText.toString(), getFont(), x + xoff, y);
         }
         g.setPaint(FlatColor.BLACK);
         g.drawText(text, getFont(), x + xoff, y);

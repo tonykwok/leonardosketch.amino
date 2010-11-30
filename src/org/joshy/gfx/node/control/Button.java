@@ -32,7 +32,7 @@ import org.joshy.gfx.node.Bounds;
  }
  */
 public class Button extends Control {
-    private String text;
+    private CharSequence text;
     private boolean pressed = false;
     private boolean hovered = false;
     private boolean selected;
@@ -130,7 +130,7 @@ public class Button extends Control {
         this.pressed = pressed;
     }
 
-    public Button(String text) {
+    public Button(CharSequence text) {
         this();
         this.text = text;        
     }
@@ -147,7 +147,7 @@ public class Button extends Control {
 
     @Override
     public void doPrefLayout() {
-        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,text);
+        sizeInfo = cssSkin.getSizeInfo(this,styleInfo,new StringBuffer(text).toString());
 
         if(prefWidth != CALCULATED) {
             setWidth(prefWidth);
@@ -170,7 +170,7 @@ public class Button extends Control {
             sizeInfo.height = getHeight();
         }
         State state = calculateState();
-        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text, buttonStateToCssState(state));
+        boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, text.toString(), buttonStateToCssState(state));
     }
     
     private CSSSkin.State buttonStateToCssState(State state) {
@@ -192,7 +192,7 @@ public class Button extends Control {
         if(!isVisible()) return;
         g.setPaint(new FlatColor(1,0,0,1));
 
-        boxPainter.draw(g, styleInfo, sizeInfo, this, text);
+        boxPainter.draw(g, styleInfo, sizeInfo, this, text.toString());
     }
 
     private State calculateState() {
@@ -231,10 +231,10 @@ public class Button extends Control {
     }
 
     public String getText() {
-        return text;
+        return text.toString();
     }
 
-    public void setText(String text) {
+    public void setText(CharSequence text) {
         this.text = text;
         setLayoutDirty();
         setDrawingDirty();
