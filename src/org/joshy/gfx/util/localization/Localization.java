@@ -4,50 +4,49 @@ import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Aug 19, 2010
- * Time: 2:15:26 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Localization {
     private static String masterLocaleName;
-    private static HashMap<String, DynamicString> translations;
+    private static HashMap<String, KeyString> translations;
+
+    public static void setCurrentLocale(String locale) {
+        masterLocaleName = locale;
+    }
 
     public static void init(URL translationStore, String localeName) throws Exception {
         masterLocaleName = localeName;
-        translations = new HashMap<String,DynamicString>();
+        translations = new HashMap<String,KeyString>();
         Doc doc = XMLParser.parse(translationStore.openStream());
         for(Elem set : doc.xpath("//set")) {
             String prefix = set.attr("name");
             for(Elem key : set.xpath("key")) {
                 String keyName = key.attr("name");
+                KeyString keyString = new KeyString(prefix,keyName);
                 for(Elem value : key.xpath("value")) {
                     String language = value.attr("language");
-                    String translationKey = prefix+"."+ keyName+"."+language;
                     String translationValue = value.text();
                     if(language.length() <= 0) {
-                        translationKey = prefix+"."+keyName;
+                        language = "DEFAULT";
                     }
-                    translations.put(translationKey,new DynamicString(prefix,keyName,language,translationValue));
+                    keyString.addTranslation(language,translationValue);
                 }
+                translations.put(prefix+"."+keyName,keyString);
             }
         }
         
     }
 
     public static CharSequence getString(String key) {
-        if(translations.containsKey(key+"."+masterLocaleName)) {
-            return translations.get(key+"."+masterLocaleName);
-        }
-        DynamicString s = translations.get(key);
-        return s;
+        u.p("getting string: " + key);
+        KeyString v = translations.get(key);
+        //u.p("value = " + v.getLocalizedValue());
+        return v;
     }
 
 
@@ -62,16 +61,66 @@ public class Localization {
         return translations.keySet();
     }
 
-    public static DynamicString getDynamicString(String key) {
+    public static KeyString getKeyString(String key) {
         return translations.get(key);
     }
 
-    public static DynamicString createDynamicString(String prefix, String key, String lang, String value) {
-        DynamicString ds = new DynamicString(prefix, key, lang, value);
-        translations.put(prefix+"."+key+"."+lang,ds);
-        return ds;
-    }
 
+    public static class KeyString implements CharSequence {
+        Map<String,String> translations = new HashMap<String, String>();
+        private String prefix;
+        private String keyName;
+
+        public KeyString(String prefix, String keyName) {
+            this.prefix = prefix;
+            this.keyName = keyName;
+        }
+
+        public void addTranslation(String language, String translationValue) {
+            translations.put(language,translationValue);
+        }
+
+        public void setTranslation(String lang, String value) {
+            translations.put(lang,value);
+        }
+
+        @Override
+        public int length() {
+            return getLocalizedValue().length();
+        }
+
+        private String getLocalizedValue() {
+            //u.p("getting: "+ Localization.masterLocaleName + " from " + translations);
+            if(translations.containsKey(Localization.masterLocaleName)) {
+                return translations.get(Localization.masterLocaleName);
+            }
+            return translations.get("DEFAULT");
+        }
+
+        @Override
+        public char charAt(int i) {
+            return getLocalizedValue().charAt(i);
+        }
+
+        @Override
+        public CharSequence subSequence(int i, int i1) {
+            return getLocalizedValue().subSequence(i,i1);
+        }
+
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public String getKeyname() {
+            return keyName;
+        }
+
+        public String toString() {
+            return getLocalizedValue();
+        }
+
+    }
+    
     public static class DynamicString implements CharSequence {
         private String key;
         private String prefix;

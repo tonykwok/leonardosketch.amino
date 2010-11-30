@@ -7,9 +7,12 @@
 
     <!-- this is an example of a string with a default and a translation -->
         <key name="button.text">
-            <value>Button</value>
+            <value>Button default</value>
             <value language="en-US">Button en-US</value>
             <value language="de-DE">Button de-DE</value>
+            <value language="hr-HR">Button hr-HR</value>
+            <value language="fr-FR">Button fr-FR</value>
+            <value language="tr-TR">Button tr-TR</value>
         </key>
         <key name="textbox.hint">
             <value>Button</value>

@@ -5,10 +5,7 @@ import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.ListView;
-import org.joshy.gfx.node.control.ScrollPane;
-import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
@@ -28,29 +25,25 @@ public class TranslationEditor extends VFlexBox {
         final Set<String> keys = Localization.getAllKeys();
 
         final Map<String,Prefix> prefixes = new HashMap<String, Prefix>();
+        ArrayListModel<String> currentLocaleModel = new ArrayListModel<String>();
         for(String dsKey : keys) {
-            Localization.DynamicString ds = Localization.getDynamicString(dsKey);
-            if(!prefixes.containsKey(ds.getPrefix())) {
-                prefixes.put(ds.getPrefix(),new Prefix(ds.getPrefix()));
+            Localization.KeyString ks = Localization.getKeyString(dsKey);
+            if(!prefixes.containsKey(ks.getPrefix())) {
+                prefixes.put(ks.getPrefix(),new Prefix(ks.getPrefix()));
             }
-            Prefix pf = prefixes.get(ds.getPrefix());
-            if(!pf.keyMap.containsKey(ds.getKey())) {
-                Key k = new Key(ds.getKey());
-                pf.keyMap.put(ds.getKey(),k);
+            Prefix pf = prefixes.get(ks.getPrefix());
+            if(!pf.keyMap.containsKey(ks.getKeyname())) {
+                Key k = new Key(ks.getKeyname());
+                pf.keyMap.put(ks.getKeyname(),k);
                 pf.keys.add(k);
             }
-            Key key = pf.keyMap.get(ds.getKey());
-            String lang = ds.getLang();
-            u.p("lang = " + lang);
-            if(lang == null || "".equals(lang.trim())) {
-                lang = "DEFAULT";
+            Key key = pf.keyMap.get(ks.getKeyname());
+            key.keyString = ks;
+            for(String lang : key.keyString.translations.keySet()) {
+                if(!currentLocaleModel.contains(lang)) {
+                    currentLocaleModel.add(lang);
+                }
             }
-            Localization.DynamicString value = ds;
-            if(!key.langMap.containsKey(lang)) {
-                key.langMap.put(lang,value);
-                key.langs.add(lang);
-            }
-
         }
 
         
@@ -63,75 +56,94 @@ public class TranslationEditor extends VFlexBox {
         final ListView<String> langView = new ListView<String>();
 
 
+        final PopupMenuButton<String> currentLocalePopup = new PopupMenuButton<String>()
+                .setModel(currentLocaleModel);
+
         EventBus.getSystem().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>(){
             public void call(SelectionEvent selectionEvent) throws Exception {
-                u.p("changed: " + selectionEvent.getSource());
-
+                u.p("change source = " + selectionEvent.getView());
                 if(selectionEvent.getView() instanceof ListView) {
                     if(selectionEvent.getView() == prefixView) {
                         Prefix pf = prefixList.get(selectionEvent.getView().getSelectedIndex());
-                        u.p("updating the model");
-                        u.p("pf = " + pf);
                         keyView.setModel(pf.keys);
+                        keyView.setSelectedIndex(-1);
+                        langView.setSelectedIndex(-1);
+                        editBox.setText("");
                     }
                     if(selectionEvent.getView() == keyView) {
                         Prefix prefix = prefixList.get(prefixView.getSelectedIndex());
                         Key key = prefix.keys.get(keyView.getSelectedIndex());
-                        langView.setModel(key.langs);
+                        ArrayListModel<String> m = new ArrayListModel<String>();
+                        m.addAll(key.keyString.translations.keySet());
+                        langView.setModel(m);
+                        langView.setSelectedIndex(-1);
+                        editBox.setText("");
                     }
                     if(selectionEvent.getView() == langView) {
                         Prefix prefix = prefixList.get(prefixView.getSelectedIndex());
                         Key key = prefix.keys.get(keyView.getSelectedIndex());
-                        String lang = key.langs.get(langView.getSelectedIndex());
-                        Localization.DynamicString ds = key.langMap.get(lang);
-                        editBox.setText(ds.toString());
+                        String lang = langView.getModel().get(langView.getSelectedIndex());
+                        String val = key.keyString.translations.get(lang);
+                        editBox.setText(val);
                     }
+                }
+                if(selectionEvent.getView() == currentLocalePopup) {
+                    String locale = currentLocalePopup.getModel().get(currentLocalePopup.getSelectedIndex());
+                    u.p("setting locale to " + locale);
+                    Localization.setCurrentLocale(locale);
+                    Core.getShared().reloadSkins();
                 }
             }
         });
+
         Callback<ActionEvent> setString = new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
                 Key key = keyView.getModel().get(keyView.getSelectedIndex());
                 String lang = langView.getModel().get(langView.getSelectedIndex());
                 String value = editBox.getText();
-                key.langMap.get(lang).setValue(value);
+                key.keyString.setTranslation(lang,value);
                 Core.getShared().reloadSkins();
             }
         };
-        this.setBoxAlign(Align.Stretch);
+
+
         Callback<ActionEvent> addLangAction = new Callback<ActionEvent>(){
             @Override
             public void call(ActionEvent event) throws Exception {
-                Prefix prefix = prefixView.getModel().get(prefixView.getSelectedIndex());
                 String newLang = StandardDialogs.showEditText("New Locale","en-US");
                 Key key = keyView.getModel().get(keyView.getSelectedIndex());
-                Localization.DynamicString ds = Localization.createDynamicString(
-                        prefix.prefix, key.key, newLang, "---"
-                );
-                key.langMap.put(newLang,ds);
-                key.langs.add(newLang);
+                key.keyString.addTranslation(newLang,"---");
+                ArrayListModel<String> m = new ArrayListModel<String>();
+                m.addAll(key.keyString.translations.keySet());
+                langView.setModel(m);
             }
         };
-        this.add(
-                new HFlexBox()
-                        .setBoxAlign(Align.Stretch)
-                        .add(new ScrollPane(prefixView)
-                                .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
-                                .setPrefWidth(150))
-                        .add(new ScrollPane(keyView)
-                                .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
-                                .setPrefWidth(150))
-                        .add(new VFlexBox()
-                            .add(new ScrollPane(langView)
-                                    .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
-                                    .setPrefWidth(100)
-                                    .setPrefHeight(100),1)
-                            .add(new Button("Add Lang").onClicked(addLangAction))
-                            .add(new Button("Del Lang"))
-                        )
-                        .add(editBox)
-                        .add(new Button("Set").onClicked(setString))
-        ,1);
+
+
+        this.setBoxAlign(Align.Stretch);
+        this.add(new HFlexBox()
+                .add(new Label("Current Locale"))
+                .add(currentLocalePopup)
+            ,0);
+        this.add(new HFlexBox()
+                .setBoxAlign(Align.Stretch)
+                .add(new ScrollPane(prefixView)
+                        .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
+                        .setPrefWidth(150))
+                .add(new ScrollPane(keyView)
+                        .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
+                        .setPrefWidth(150))
+                .add(new VFlexBox()
+                    .add(new ScrollPane(langView)
+                            .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
+                            .setPrefWidth(100)
+                            .setPrefHeight(100),1)
+                    .add(new Button("Add Lang").onClicked(addLangAction))
+                    .add(new Button("Del Lang"))
+                )
+                .add(editBox)
+                .add(new Button("Set").onClicked(setString))
+            ,1);
 
         Button applyButton = new Button("Apply");
         Button exportButton = new Button("export");
@@ -158,8 +170,9 @@ public class TranslationEditor extends VFlexBox {
 
     class Key {
         private String key;
-        ArrayListModel<String> langs = new ArrayListModel<String>();
-        private Map<String, Localization.DynamicString> langMap = new HashMap<String, Localization.DynamicString>();
+        //ArrayListModel<String> langs = new ArrayListModel<String>();
+        //private Map<String, Localization.DynamicString> langMap = new HashMap<String, Localization.DynamicString>();
+        public Localization.KeyString keyString;
 
         public Key(String key) {
             this.key = key;

@@ -43,7 +43,7 @@ public class TranslationTest implements Runnable {
         popupModel.add(getString("test.popup2"));
         popupModel.add(getString("test.popup3"));
         stage.setContent(new VFlexBox()
-                .add(new Button(Localization.getString("test.button.text")))
+                .add(new Button(getString("test.button.text")))
                 .add(new Textbox().setHintText(getString("test.textbox.hint")).setPrefWidth(100))
                 .add(new Checkbox(getString("test.checkbox.text")))
                 .add(new PopupMenuButton<CharSequence>().setModel(popupModel))
