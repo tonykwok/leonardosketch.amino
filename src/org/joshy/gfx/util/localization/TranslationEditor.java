@@ -10,7 +10,6 @@ import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.control.StandardDialogs;
-import org.joshy.gfx.util.u;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +52,9 @@ public class TranslationEditor extends VFlexBox {
         final ListView<Prefix> prefixView = new ListView<Prefix>();
         prefixView.setModel(prefixList);
         final ListView<Key> keyView = new ListView<Key>();
+        keyView.setModel(new ArrayListModel<Key>());
         final ListView<String> langView = new ListView<String>();
+        langView.setModel(new ArrayListModel<String>());
 
 
         final PopupMenuButton<String> currentLocalePopup = new PopupMenuButton<String>()
@@ -61,7 +62,6 @@ public class TranslationEditor extends VFlexBox {
 
         EventBus.getSystem().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>(){
             public void call(SelectionEvent selectionEvent) throws Exception {
-                u.p("change source = " + selectionEvent.getView());
                 if(selectionEvent.getView() instanceof ListView) {
                     if(selectionEvent.getView() == prefixView) {
                         Prefix pf = prefixList.get(selectionEvent.getView().getSelectedIndex());
@@ -89,7 +89,6 @@ public class TranslationEditor extends VFlexBox {
                 }
                 if(selectionEvent.getView() == currentLocalePopup) {
                     String locale = currentLocalePopup.getModel().get(currentLocalePopup.getSelectedIndex());
-                    u.p("setting locale to " + locale);
                     Localization.setCurrentLocale(locale);
                     Core.getShared().reloadSkins();
                 }
@@ -127,13 +126,20 @@ public class TranslationEditor extends VFlexBox {
             ,0);
         this.add(new HFlexBox()
                 .setBoxAlign(Align.Stretch)
-                .add(new ScrollPane(prefixView)
-                        .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
-                        .setPrefWidth(150))
-                .add(new ScrollPane(keyView)
-                        .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
-                        .setPrefWidth(150))
                 .add(new VFlexBox()
+                        .add(new Label("Category"),0)
+                        .add(new ScrollPane(prefixView)
+                                .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
+                                .setPrefWidth(150),1)
+                )
+                .add(new VFlexBox()
+                        .add(new Label("Key"),0)
+                        .add(new ScrollPane(keyView)
+                                .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
+                                .setPrefWidth(150),1)
+                )
+                .add(new VFlexBox()
+                    .add(new Label("Locale"))
                     .add(new ScrollPane(langView)
                             .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
                             .setPrefWidth(100)
@@ -141,8 +147,11 @@ public class TranslationEditor extends VFlexBox {
                     .add(new Button("Add Lang").onClicked(addLangAction))
                     .add(new Button("Del Lang"))
                 )
-                .add(editBox)
-                .add(new Button("Set").onClicked(setString))
+                .add(new VFlexBox()
+                    .add(new Label("Translation"))
+                    .add(editBox)
+                    .add(new Button("Set").onClicked(setString))
+                )
             ,1);
 
         Button applyButton = new Button("Apply");
@@ -164,21 +173,19 @@ public class TranslationEditor extends VFlexBox {
 
         @Override
         public String toString() {
-            return "prefix: " + prefix;
+            return prefix;
         }
     }
 
     class Key {
         private String key;
-        //ArrayListModel<String> langs = new ArrayListModel<String>();
-        //private Map<String, Localization.DynamicString> langMap = new HashMap<String, Localization.DynamicString>();
         public Localization.KeyString keyString;
 
         public Key(String key) {
             this.key = key;
         }
         public String toString() {
-            return "key: " + key;
+            return key;
         }
     }
 }
