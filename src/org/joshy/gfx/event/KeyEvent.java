@@ -12,6 +12,7 @@ public class KeyEvent extends Event {
     private boolean altPressed;
     private boolean commandPressed;
     private boolean accepted = false;
+    private char keyChar;
 
     public boolean isAccepted() {
         return accepted;
@@ -102,21 +103,27 @@ public class KeyEvent extends Event {
     
     public static final EventType KeyPressed = new EventType("KeyPressed");
     public static final EventType KeyReleased = new EventType("KeyReleased");
+    public static final EventType KeyTyped = new EventType("KeyTyped");
     public static final EventType KeyAll = new EventType("KeyAll") {
         @Override
         public boolean matches(EventType type) {
             if(type == KeyPressed) return true;
             if(type == KeyReleased) return true;
+            if(type == KeyTyped) return true;
             return super.matches(type);
         }
     };
 
-    public KeyEvent(EventType type, KeyCode keyCode, Node node,
-        boolean shiftPressed,
-        boolean controlPressed,
-        boolean altPressed,
-        boolean commandPressed) {
+    public KeyEvent(EventType type,
+                    KeyCode keyCode,
+                    Node node,
+                    char keyChar,
+                    boolean shiftPressed,
+                    boolean controlPressed,
+                    boolean altPressed,
+                    boolean commandPressed) {
         super(type);
+        this.keyChar = keyChar;
         this.keyCode = keyCode;
         this.source = node;
         this.shiftPressed = shiftPressed;

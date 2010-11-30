@@ -147,8 +147,21 @@ public class AWTEventPublisher extends EventPublisher implements MouseListener, 
         }
         EventBus.getSystem().publish(new ScrollEvent(type,node,rotation));
     }
+    
     public void keyTyped(KeyEvent e) {
-
+        logEvent("KeyTyped",e);
+        Node node = Core.getShared().getFocusManager().findFocusedNode(parent);
+        org.joshy.gfx.event.KeyEvent evt = new org.joshy.gfx.event.KeyEvent(
+                org.joshy.gfx.event.KeyEvent.KeyTyped,
+                org.joshy.gfx.event.KeyEvent.getKeyCodeFromAWT(e.getKeyCode()),
+                node,
+                e.getKeyChar(),
+                e.isShiftDown(),
+                e.isControlDown(),
+                e.isAltDown(),
+                e.isMetaDown()
+                );
+        EventBus.getSystem().publish(evt);
     }
 
     public void keyPressed(KeyEvent e) {
@@ -158,6 +171,7 @@ public class AWTEventPublisher extends EventPublisher implements MouseListener, 
                 org.joshy.gfx.event.KeyEvent.KeyPressed,
                 org.joshy.gfx.event.KeyEvent.getKeyCodeFromAWT(e.getKeyCode()),
                 node,
+                e.getKeyChar(),
                 e.isShiftDown(),
                 e.isControlDown(),
                 e.isAltDown(),
@@ -172,6 +186,7 @@ public class AWTEventPublisher extends EventPublisher implements MouseListener, 
                 org.joshy.gfx.event.KeyEvent.KeyReleased,
                 org.joshy.gfx.event.KeyEvent.getKeyCodeFromAWT(e.getKeyCode()),
                 node,
+                e.getKeyChar(),
                 e.isShiftDown(),
                 e.isControlDown(),
                 e.isAltDown(),
