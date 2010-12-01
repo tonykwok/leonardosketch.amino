@@ -33,13 +33,14 @@ public class TabPanel extends Panel {
         add(tabtop);
     }
 
-    public void add(CharSequence title, Control control) {
+    public TabPanel add(CharSequence title, Control control) {
         add(control);
         if(!tabs.isEmpty()) {
             control.setVisible(false);
         }
         tabs.add(control);
         titleMap.put(control,title);
+        return this;
     }
 
     @Override

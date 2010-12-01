@@ -3,7 +3,7 @@ package org.joshy.gfx.util.localization;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
-import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -42,17 +42,15 @@ public class Localization {
     }
 
     public static CharSequence getString(String key) {
+        if(!translations.containsKey(key)) {
+            u.p("ERROR!!  key '" + key + "' not found!");
+            return "--";
+        }
         KeyString v = translations.get(key);
         return v;
     }
 
 
-    public static void launchEditor() {
-        Stage stage = Stage.createStage();
-        stage.setContent(new TranslationEditor());
-        stage.setWidth(700);
-        stage.setHeight(400);
-    }
 
     public static Set<String> getAllKeys() {
         return translations.keySet();
@@ -64,7 +62,7 @@ public class Localization {
 
 
     public static class KeyString implements CharSequence {
-        Map<String,String> translations = new HashMap<String, String>();
+        public Map<String,String> translations = new HashMap<String, String>();
         private String prefix;
         private String keyName;
 

@@ -41,7 +41,7 @@ public class Linkbutton extends Button {
             Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
             cssSkin.drawBackground(g, matcher, "", bounds);
             cssSkin.drawBorder(g, matcher, "", bounds);
-            cssSkin.drawText(g,matcher,"",bounds,getText());
+            cssSkin.drawText(g,matcher,"",bounds,getText().toString());
             return;
         }
     }

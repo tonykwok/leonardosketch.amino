@@ -1,4 +1,4 @@
-package org.joshy.gfx.util.localization;
+package org.joshy.gfx.sidehatch;
 
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.Core;
@@ -11,6 +11,8 @@ import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.control.StandardDialogs;
+import org.joshy.gfx.sidehatch.ListUtil;
+import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
 
 import java.io.File;
