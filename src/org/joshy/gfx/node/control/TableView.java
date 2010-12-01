@@ -201,7 +201,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         return selectedRow;
     }
 
-    private TableModel getModel() {
+    public TableModel getModel() {
         return model;
     }
 
@@ -235,6 +235,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     final int headerHeight = 20;
     @Override
     public void draw(GFX g) {
+        if(!isVisible()) return;
         CSSMatcher matcher = new CSSMatcher(this);
 
         Bounds clip = g.getClipRect();
@@ -309,6 +310,10 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
     public int getSelectedIndex() {
         return getSelectedRow();
+    }
+
+    public double getRowHeight() {
+        return rowHeight;
     }
 
 
