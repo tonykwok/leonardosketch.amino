@@ -9,6 +9,11 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
+
+import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.Map;
 
 /** A table with columns and rows. Used for displaying tabular data. it has a model
  * for the columns and a model for the actual data. Styling can be done with
@@ -19,6 +24,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     private DataRenderer renderer;
     private int selectedRow = -1;
     private HeaderRenderer headerRenderer;
+    private static final int headerHeight = 20;
     private int selectedColumn = -1;
     private boolean focused;
     private double defaultColumnWidth = 50;
@@ -27,6 +33,124 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     final double rowHeight = 20;
     private ScrollPane scrollPane;
     private Font font;
+    private Map<Integer, Double> columnSizes = new HashMap<Integer,Double>();
+
+    public static enum ResizeMode {
+        Proportional,
+        Manual
+    }
+    private static ResizeMode resizeMode = ResizeMode.Proportional;
+
+    
+    private Callback<? extends Event> mouseListener = new Callback<MouseEvent>(){
+        public int resizeColumnLeft = -1;
+        public Point2D start;
+
+        public void call(MouseEvent event) {
+            if(event.getType() == MouseEvent.MouseMoved) {
+                if(event.getY() < headerHeight) {
+                    if(isOverLeftColumnEdge(event)) {
+                    }
+                    if(isOverRightColumnEdge(event)) {
+                    }
+                }
+            }
+
+            if(event.getType() == MouseEvent.MousePressed) {
+                if(event.getY() < headerHeight) {
+                    setSelectedColumn(mouseToColumn(event));
+                    if(isOverLeftColumnEdge(event)) {
+                        resizeColumnLeft = mouseToColumn(event)-1;
+                        start = event.getPointInNodeCoords(TableView.this);
+                    }
+                    if(isOverRightColumnEdge(event)) {
+                        resizeColumnLeft = mouseToColumn(event);
+                        start = event.getPointInNodeCoords(TableView.this);
+                    }
+                } else {
+                    int startRow = (int)(-scrollY/rowHeight);
+                    setSelectedRow((int)((event.getY()-headerHeight)/20)+startRow);
+                }
+                Core.getShared().getFocusManager().setFocusedNode(TableView.this);
+            }
+
+            if(event.getType() == MouseEvent.MouseDragged && resizeColumnLeft != -1) {
+                Point2D current = event.getPointInNodeCoords(TableView.this);
+                double dx = current.getX()-start.getX();
+                start = current;
+                columnSizes.put(resizeColumnLeft,columnSizes.get(resizeColumnLeft)+dx);
+                setDrawingDirty();
+            }
+            
+            if(event.getType() == MouseEvent.MouseReleased) {
+                resizeColumnLeft = -1;
+            }
+        }
+
+        private int mouseToColumn(MouseEvent event) {
+            if(resizeMode == ResizeMode.Proportional) {
+                double columnWidth = getWidth() / model.getColumnCount();
+                int column = (int)(event.getX()/columnWidth);
+                return column;
+            }
+            if(resizeMode == ResizeMode.Manual) {
+                double x = 0;
+                for(int col = 0; col< getModel().getColumnCount(); col++) {
+                    double w = getColumnWidth(col);
+                    if(event.getX()>x && event.getX()<x+w) {
+                        return col;
+                    }
+                    x+=w;
+                }                   
+            }
+            return -1;
+        }
+    };
+
+    private static final double gap = 10;
+    private boolean isOverRightColumnEdge(MouseEvent event) {
+        if(resizeMode == ResizeMode.Proportional){
+            double columnWidth = getWidth() / model.getColumnCount();
+            double my = event.getX() % columnWidth;
+            if(my > columnWidth-5 && my <= columnWidth) {
+                return true;
+            }
+            return false;
+        }
+        if(resizeMode == ResizeMode.Manual) {
+            double x = 0;
+            for(int col = 0; col< getModel().getColumnCount(); col++) {
+                double w = getColumnWidth(col);
+                if(event.getX()>x+w-gap && event.getX()<x+w) {
+                    return true;
+                }
+                x+=w;
+            }
+        }
+        return false;
+    }
+
+    private boolean isOverLeftColumnEdge(MouseEvent event) {
+        if(resizeMode == ResizeMode.Proportional){
+            double columnWidth = getWidth() / model.getColumnCount();
+            double my = event.getX() % columnWidth;
+            if(my >= 0 && my < 10) {
+                return true;
+            }
+            return false;
+        }
+        if(resizeMode == ResizeMode.Manual) {
+            double x = 0;
+            for(int col = 0; col< getModel().getColumnCount(); col++) {
+                double w = getColumnWidth(col);
+                if(event.getX()>x && event.getX()<x+gap) {
+                    return true;
+                }
+                x+=w;
+            }
+        }
+        return false;
+    }
 
     public TableView() {
         setWidth(300);
@@ -66,9 +190,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                     int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
                     g.setPaint(new FlatColor(col));
                     if(cell != null) {
-                        //String s = textRenderer.toString(listView, item, index);
                         String s = cell.toString();
-                        //g.drawText(s, font, x+2, y+15);
                         Font.drawCenteredVertically(g, s, font, x+2, y, width, height, true);
                     }
                     return;
@@ -117,19 +239,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         });
 
         // click listener
-        EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
-            public void call(MouseEvent event) {
-                if(event.getType() == MouseEvent.MousePressed) {
-                    if(event.getY() < 20) {
-                        setSelectedColumn((int)event.getX()/ (int)(getWidth()/model.getColumnCount()));
-                    } else {
-                        int startRow = (int)(-scrollY/rowHeight);
-                        setSelectedRow((int)((event.getY()-20)/20)+startRow);
-                    }
-                }
-                Core.getShared().getFocusManager().setFocusedNode(TableView.this);
-            }
-        });
+        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, mouseListener);
 
         EventBus.getSystem().addListener(FocusEvent.All, new Callback<FocusEvent>(){
             public void call(FocusEvent event) {
@@ -171,11 +281,19 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
             }
         });
 
-        setDefaultColumnWidth(50);
+        setDefaultColumnWidth(100);
+        setResizeMode(ResizeMode.Manual);
+    }
+
+    private void setResizeMode(ResizeMode newMode) {
+        if(resizeMode == ResizeMode.Proportional && newMode == ResizeMode.Manual) {
+            columnSizes.clear();// = new HashMap<Integer,Double>();
+        }
+        resizeMode = newMode;
+        setDrawingDirty();
     }
 
     private void setSelectedColumn(int selectedColumn) {
-        //u.p("selected createColumn set to " + selectedColumn);
         this.selectedColumn = selectedColumn;
         setDrawingDirty();
     }
@@ -240,7 +358,6 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         //do nothing. width and height are purely controlled by the container
     }
 
-    final int headerHeight = 20;
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
@@ -258,33 +375,59 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         }
 
         //draw headers
-        double columnWidth = getWidth()/model.getColumnCount();
-        for(int col = 0; col<model.getColumnCount(); col++) {
-            Object header = model.getColumnHeader(col);
-            headerRenderer.draw(g, this, header, col, col*columnWidth+scrollX, 0, columnWidth, headerHeight);
+        if(resizeMode == ResizeMode.Proportional) {
+            double columnWidth = getWidth()/model.getColumnCount();
+            for(int col = 0; col<model.getColumnCount(); col++) {
+                Object header = model.getColumnHeader(col);
+                headerRenderer.draw(g, this, header, col, col*columnWidth+scrollX, 0, columnWidth, headerHeight);
+            }
+        }
+        if(resizeMode == ResizeMode.Manual) {
+            double x = 0;
+            for(int col = 0; col<model.getColumnCount(); col++) {
+                Object header = model.getColumnHeader(col);
+                double columnWidth = getColumnWidth(col);
+                headerRenderer.draw(g, this, header, col, x+scrollX, 0, columnWidth, headerHeight);
+                x += columnWidth;
+            }
         }
 
         //draw data
+
         int startRow = (int)(-scrollY/rowHeight);
         for(int row=0; row*rowHeight+headerHeight < getHeight(); row++) {
+            double x = 0;
             for(int col=0; col<model.getColumnCount(); col++) {
                 Object item = null;
+                double columnWidth = getColumnWidth(col);
                 if(row+startRow < model.getRowCount()) {
                     item = model.get(row+startRow,col);
                 }
                 renderer.draw(g, this, item,
                         row+startRow, col,
-                        (int)(col*columnWidth+scrollX),
+                        (int)(x+scrollX),
                         (int)(row*20+1+20),
                         (int)columnWidth, rowHeight);
+                x+=columnWidth;
             }
         }
+
 
         //draw border
         g.setClipRect(clip);
         if(cssSkin != null) {
             cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
         }
+    }
+
+    private double getColumnWidth(int col) {
+        if(resizeMode == ResizeMode.Proportional) {
+            return getWidth()/getModel().getColumnCount();
+        }
+        if(!columnSizes.containsKey(col)) {
+            columnSizes.put(col,defaultColumnWidth);
+        }
+        return columnSizes.get(col);
     }
 
     public boolean isFocused() {
