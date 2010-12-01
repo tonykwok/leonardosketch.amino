@@ -8,9 +8,10 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
+import org.joshy.gfx.event.Event;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,17 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
     private static ResizeMode resizeMode = ResizeMode.Proportional;
 
-    
+    private void setCursor(Cursor cursor) {
+        Frame frame = (Frame) getParent().getStage().getNativeWindow();
+        frame.setCursor(cursor);
+    }
+
+    private void setDefaultCursor() {
+        Frame frame = (Frame) getParent().getStage().getNativeWindow();
+        frame.setCursor(Cursor.getDefaultCursor());
+    }
+
+    private Cursor resizeCursor = Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR);
     private Callback<? extends Event> mouseListener = new Callback<MouseEvent>(){
         public int resizeColumnLeft = -1;
         public Point2D start;
@@ -49,9 +60,10 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         public void call(MouseEvent event) {
             if(event.getType() == MouseEvent.MouseMoved) {
                 if(event.getY() < headerHeight) {
-                    if(isOverLeftColumnEdge(event)) {
-                    }
-                    if(isOverRightColumnEdge(event)) {
+                    if(isOverLeftColumnEdge(event) || isOverRightColumnEdge(event)) {
+                        setCursor(resizeCursor);
+                    } else {
+                        setDefaultCursor();
                     }
                 }
             }
@@ -97,7 +109,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                 double x = 0;
                 for(int col = 0; col< getModel().getColumnCount(); col++) {
                     double w = getColumnWidth(col);
-                    if(event.getX()>x && event.getX()<x+w) {
+                    if(event.getX()>=x && event.getX()<x+w) {
                         return col;
                     }
                     x+=w;
@@ -108,6 +120,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     };
 
     private static final double gap = 10;
+    
     private boolean isOverRightColumnEdge(MouseEvent event) {
         if(resizeMode == ResizeMode.Proportional){
             double columnWidth = getWidth() / model.getColumnCount();
@@ -143,7 +156,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
             double x = 0;
             for(int col = 0; col< getModel().getColumnCount(); col++) {
                 double w = getColumnWidth(col);
-                if(event.getX()>x && event.getX()<x+gap) {
+                if(event.getX()>=x && event.getX()<x+gap) {
                     return true;
                 }
                 x+=w;
