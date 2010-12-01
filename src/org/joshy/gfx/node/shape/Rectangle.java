@@ -104,11 +104,13 @@ public class Rectangle extends Shape {
         }
     }
 
-    public void setArcWidth(double arcWidth) {
+    public Rectangle setArcWidth(double arcWidth) {
         this.arcWidth = arcWidth;
+        return this;
     }
 
-    public void setArcHeight(double arcHeight) {
+    public Rectangle setArcHeight(double arcHeight) {
         this.arcHeight = arcHeight;
+        return this;
     }
 }

@@ -1,5 +1,6 @@
 package org.joshy.gfx.stage.swing;
 
+import com.sun.awt.AWTUtilities;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Node;
@@ -110,6 +111,28 @@ public class SwingStage extends Stage {
             frame = newFrame;
             scene.requestFocus();
         }
+    }
+
+    @Override
+    public void setOpacity(double v) {
+        JFrame newFrame = new JFrame("stage");
+        newFrame.setUndecorated(true);
+        newFrame.setTitle(frame.getTitle());
+        newFrame.getRootPane().putClientProperty("apple.awt.draggableWindowBackground",Boolean.FALSE);
+        AWTUtilities.setWindowOpaque(newFrame,false);
+        newFrame.setSize(frame.getSize());
+        newFrame.setLocation(frame.getLocation());
+        newFrame.add(scene);
+        frame.remove(scene);
+        frame.setVisible(false);
+        newFrame.setJMenuBar(frame.getJMenuBar());
+        newFrame.setVisible(true);
+        frame = newFrame;
+    }
+
+    @Override
+    public void setAlwaysOnTop(boolean b) {
+        frame.setAlwaysOnTop(b);
     }
 
     public SwingStage() {
@@ -270,8 +293,18 @@ public class SwingStage extends Stage {
     }
 
     @Override
+    public void setX(double v) {
+        this.frame.setLocation((int)v,this.frame.getY());
+    }
+
+    @Override
     public double getY() {
         return frame.getY();
+    }
+
+    @Override
+    public void setY(double v) {
+        this.frame.setLocation(this.frame.getX(), (int) v);
     }
 
     @Override

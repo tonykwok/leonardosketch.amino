@@ -40,7 +40,9 @@ public abstract class Stage {
     public abstract double getHeight();
 
     public abstract double getX();
+    public abstract void setX(double v);
     public abstract double getY();
+    public abstract void setY(double v);
 
 
     public abstract void setMinimumWidth(double width);
@@ -63,5 +65,10 @@ public abstract class Stage {
     public abstract void centerOnScreen();
 
     public abstract void setFullScreen(boolean fullScreen);
+
+    public abstract void setOpacity(double v);
+
+    public abstract void setAlwaysOnTop(boolean b);
+
 }
 
