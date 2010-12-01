@@ -134,4 +134,12 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         return model;
     }
 
+    @Override
+    public CharSequence getText() {
+        if(getModel().get(getSelectedIndex()) instanceof CharSequence) {
+            return (CharSequence)getModel().get(getSelectedIndex());
+        } else {
+            return super.getText();
+        }
+    }
 }

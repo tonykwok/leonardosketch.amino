@@ -20,6 +20,9 @@
             <value  language='hr-HR'
                 >Button hr-HR</value>
         </key>
+        <key name="label.text">
+            <value>label value</value>
+        </key>
         <key            name='checkbox.text'
             >            <value  language='de-DE'
                 >Button de-DE</value>

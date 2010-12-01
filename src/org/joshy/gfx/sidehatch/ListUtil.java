@@ -1,4 +1,4 @@
-package org.joshy.gfx.util.localization;
+package org.joshy.gfx.sidehatch;
 
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.util.ArrayListModel;

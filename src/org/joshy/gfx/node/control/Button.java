@@ -230,8 +230,8 @@ public class Button extends Control {
                 + styleInfo.contentBaseline;
     }
 
-    public String getText() {
-        return text.toString();
+    public CharSequence getText() {
+        return text;
     }
 
     public void setText(CharSequence text) {
