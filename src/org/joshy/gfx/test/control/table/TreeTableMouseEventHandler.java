@@ -11,7 +11,7 @@ import org.joshy.gfx.node.control.TableView;
 * Time: 2:22:07 AM
 * To change this template use File | Settings | File Templates.
 */
-public class TreeTableEventHandler implements Callback<MouseEvent> {
+public class TreeTableMouseEventHandler implements Callback<MouseEvent> {
     @Override
     public void call(MouseEvent event) throws Exception {
         TableView tb = (TableView) event.getSource();

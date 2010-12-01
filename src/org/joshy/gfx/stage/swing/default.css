@@ -409,14 +409,17 @@
     background-color:#f0f0f0;
 
     item-background-color: #f0f0f0;
-    item-border-color: #00ff00;
-    item-border-width: 0px;
+    item-border-color: #e0e0e0;
+    item-border-width: 1px;
+    item-border-top-width: 0px;
+    item-border-right-width: 1px;
     item-color: #000000;
+    text-align: center;
 
     selected-item-background-color: #0000ff;
     selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     selected-item-margin: 0px 0px 1px 0px;
     selected-item-border-width: 1px 0px;
-    selected-item-border-color: #000000;
+    selected-item-border-color: #04acec;
     selected-item-color: #ffffff;
 }

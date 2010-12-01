@@ -37,6 +37,10 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     private Map<Integer, Double> columnSizes = new HashMap<Integer,Double>();
     private Set<Integer> columnVisibles = new HashSet<Integer>();
 
+    public void redraw() {
+        setDrawingDirty();
+    }
+
     public static enum ResizeMode {
         Proportional,
         Manual
@@ -242,24 +246,24 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         //set default renderer
         setRenderer(new DataRenderer() {
             public void draw(GFX g, TableView table, Object cell, int row, int column, double x, double y, double width, double height) {
-                if(cssSkin != null) {
-                    CSSMatcher matcher = new CSSMatcher(table);
-                    Bounds bounds = new Bounds(x,y,width,height);
-                    String prefix = "item-";
-                    if(getSelectedIndex() == row) {
-                        prefix = "selected-item-";
-                    }
-                    cssSkin.drawBackground(g,matcher,prefix,bounds);
-                    cssSkin.drawBorder(g,matcher,prefix,bounds);
-                    int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
-                    g.setPaint(new FlatColor(col));
-                    if(cell != null) {
-                        String s = cell.toString();
-                        Font.drawCenteredVertically(g, s, font, x+2, y, width, height, true);
-                    }
-                    return;
+                //if(cssSkin != null) {
+                CSSMatcher matcher = new CSSMatcher(table);
+                Bounds bounds = new Bounds(x,y,width,height);
+                String prefix = "item-";
+                if(getSelectedIndex() == row) {
+                    prefix = "selected-item-";
                 }
-
+                cssSkin.drawBackground(g,matcher,prefix,bounds);
+                cssSkin.drawBorder(g,matcher,prefix,bounds);
+                int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
+                g.setPaint(new FlatColor(col));
+                if(cell != null) {
+                    String s = cell.toString();
+                    Font.drawCenteredVertically(g, s, font, x+2, y, width, height, true);
+                }
+                //return;
+                //}
+                  /*
                 g.setPaint(FlatColor.WHITE);
                 if(row % 2 == 0) {
                     g.setPaint(new FlatColor("#eeeeee"));
@@ -276,15 +280,15 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                 if(cell != null) {
                     Font.drawCenteredVertically(g, cell.toString(), Font.DEFAULT, x+2, y, width, height, true);
                 }
-                g.setPaint(new FlatColor("#d0d0d0"));
-                g.drawLine(x+width-1,y, x+width-1,y+height);
+                g.setPaint(new FlatColor(0xff0000));
+                g.drawLine(x+width-3,y, x+width-3,y+height);*/
             }
         });
 
         setHeaderRenderer(new HeaderRenderer() {
             public void draw(GFX g, TableView table, Object header, int column, double x, double y, double width, double height) {
                 if(column == table.getSelectedColumn()) {
-                    GradientFill grad = new GradientFill(new FlatColor(0xf0f0ff),new FlatColor(0x6060ff),
+                    GradientFill grad = new GradientFill(new FlatColor(0x44bcff),new FlatColor(0x0186ba),
                             0,true,0,0,0,height);
                     g.setPaint(grad);
                 } else {
@@ -295,7 +299,11 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                 g.fillRect(x,y,width,height);
                 g.setPaint(new FlatColor(0x808080));
                 g.drawRect(x,y,width,height);
+
                 g.setPaint(FlatColor.BLACK);
+                if(column == table.getSelectedColumn()) {
+                    g.setPaint(FlatColor.WHITE);
+                }
                 if(header != null) {
                     Font.drawCenteredVertically(g, header.toString(), Font.DEFAULT, x+2, y, width, height, true);
                 }
