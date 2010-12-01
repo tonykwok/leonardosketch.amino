@@ -113,6 +113,16 @@ public class PopupMenu extends Control {
     @Override
     public void doLayout() {
         setHeight( rowHeight * model.size() + spacer*2);
+        double maxWidth = 20;
+        for(int row = 0; row<getModel().size(); row++) {
+            Object o = getModel().get(row);
+            String s =o.toString();
+            if(textRenderer != null) {
+                s = textRenderer.toString(null,s,row);
+            }
+            maxWidth = Math.max(maxWidth,itemStyleInfo.font.calculateWidth(s)+15);
+        }
+        setWidth(maxWidth);
         sizeInfo.width = getWidth();
         sizeInfo.height = getHeight();
         boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
