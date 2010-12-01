@@ -6,6 +6,7 @@ import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 
@@ -96,11 +97,18 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
         setHeaderRenderer(new HeaderRenderer() {
             public void draw(GFX g, TableView table, Object header, int column, double x, double y, double width, double height) {
-                g.setPaint(new FlatColor("#d0d0d0"));
                 if(column == table.getSelectedColumn()) {
-                    g.setPaint(new FlatColor("#ddddff"));
+                    GradientFill grad = new GradientFill(new FlatColor(0xf0f0ff),new FlatColor(0x6060ff),
+                            0,true,0,0,0,height);
+                    g.setPaint(grad);
+                } else {
+                    GradientFill grad = new GradientFill(new FlatColor(0xffffff),new FlatColor(0xa0a0a0),
+                            0,true,0,0,0,height);
+                    g.setPaint(grad);
                 }
                 g.fillRect(x,y,width,height);
+                g.setPaint(new FlatColor(0x808080));
+                g.drawRect(x,y,width,height);
                 g.setPaint(FlatColor.BLACK);
                 if(header != null) {
                     Font.drawCenteredVertically(g, header.toString(), Font.DEFAULT, x+2, y, width, height, true);
