@@ -30,17 +30,17 @@ public class ITunes implements Runnable {
             stage.setMinimumHeight(400);
 
 
-            Button prevButton = new Button("");
+            Button prevButton = new Button("<");
 //            prevButton.setVariant("imageOnly");
 //            prevButton.setNormalIcon(new File("assets/itunes/prevButton.png").toURI().toURL());
 //            prevButton.setPressedIcon(new File("assets/itunes/prevButton_pressed.png").toURI().toURL());
             
-            Button playButton = new Button("");
+            Button playButton = new Button("p");
 //            playButton.setVariant("imageOnly");
 //            playButton.setNormalIcon(new File("assets/itunes/play_button.png").toURI().toURL());
 //            playButton.setPressedIcon(new File("assets/itunes/pause_button.png").toURI().toURL());
             
-            Button nextButton = new Button("");
+            Button nextButton = new Button(">");
 //            nextButton.setVariant("imageOnly");
 //            nextButton.setNormalIcon(new File("assets/itunes/nextButton.png").toURI().toURL());
 //            nextButton.setPressedIcon(new File("assets/itunes/nextButton_pressed.png").toURI().toURL());
@@ -141,7 +141,7 @@ public class ITunes implements Runnable {
                     super.doLayout();
                 }
             };
-            top.setFill(FlatColor.BLUE);
+            //top.setFill(FlatColor.BLUE);
 
             top.add(header, sourcePane, playPane, footer);
 

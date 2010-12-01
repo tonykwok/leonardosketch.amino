@@ -1,7 +1,5 @@
 package org.joshy.gfx.test.control.table;
 
-import org.joshy.gfx.test.control.TableTest;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +11,15 @@ import java.util.List;
 * To change this template use File | Settings | File Templates.
 */
 public class TreeNode {
-    private String title;
+    private String first;
     List<TreeNode> children;
+    private String last;
+    private int age;
 
-    public TreeNode(String title) {
-        this.title = title;
+    public TreeNode(String first, String last, int age) {
+        this.first = first;
+        this.last = last;
+        this.age = age;
         this.children = new ArrayList<TreeNode>();
     }
 
@@ -25,7 +27,15 @@ public class TreeNode {
         this.children.add(treeNode);
     }
 
-    public String getTitle() {
-        return title;
+    public String getFirst() {
+        return first;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public int getAge() {
+        return age;
     }
 }
