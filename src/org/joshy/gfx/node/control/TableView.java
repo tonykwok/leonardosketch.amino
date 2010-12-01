@@ -72,7 +72,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
             }
 
             if(event.getType() == MouseEvent.MousePressed) {
-                if(event.isControlPressed() || event.getButton() == 3) {
+                if(event.isControlPressed() || event.getButton() == 3 && event.getY() < HEADER_HEIGHT) {
                     showColumnFilterPopup(event);
                     Core.getShared().getFocusManager().setFocusedNode(TableView.this);
                     return;
@@ -135,9 +135,9 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         PopupMenu popup = new PopupMenu(new ListModel() {
             @Override
             public Object get(int col) {
-                String prefix = " ";
+                String prefix = "    ";
                 if(columnVisibles.contains(col)) {
-                    prefix = "^";
+                    prefix = "\u2713 ";
                 }
                 return prefix+getModel().getColumnHeader(col);
             }
