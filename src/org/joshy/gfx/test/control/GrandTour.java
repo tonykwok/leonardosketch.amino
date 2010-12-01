@@ -313,6 +313,7 @@ public class GrandTour implements Runnable {
         examples.add(new TransformTest("Transformed Controls"));
         examples.add(new ChartTest("Scenegraph Chart w/ 1000 data points"));
         examples.add(new OverlayTest("Interleave Controls and Shapes"));
+        examples.add(new StageTest("Stage Test"));
 
 
 

@@ -81,7 +81,7 @@ public class MailApp implements Runnable {
                         .add(new Button("").setId("note"))
                         .add(new Button("").setId("todo"))
                         .add(new Spacer(),1)
-                        .add(new Textbox("Search").setPrefWidth(150))
+                        .add(new Textbox("Search").addCSSClass("searchbox").setPrefWidth(150))
                         .setId("toolbar")
                  , 0)
             .add(new HFlexBox()

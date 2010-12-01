@@ -60,8 +60,18 @@ public class TestingStage extends Stage {
     }
 
     @Override
+    public void setX(double v) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public double getY() {
         return 0;
+    }
+
+    @Override
+    public void setY(double v) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -115,6 +125,16 @@ public class TestingStage extends Stage {
     @Override
     public void setFullScreen(boolean fullScreen) {
 
+    }
+
+    @Override
+    public void setOpacity(double v) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setAlwaysOnTop(boolean b) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public Parent getRoot() {

@@ -111,8 +111,18 @@ public class JOGLStage extends Stage {
     }
 
     @Override
+    public void setX(double v) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public double getY() {
         return frame.getY();
+    }
+
+    @Override
+    public void setY(double v) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -175,6 +185,16 @@ public class JOGLStage extends Stage {
 
     @Override
     public void setFullScreen(boolean fullScreen) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setOpacity(double v) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setAlwaysOnTop(boolean b) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
