@@ -168,7 +168,7 @@ public class GrandTour implements Runnable {
                 return box;
             }
         });
-        examples.add(new Example("Complex (list, table, dropdowns)") {
+        examples.add(new Example("Complex (lists & dropdowns)") {
             public Control build() throws IOException {
                 PopupMenuButton popup = new PopupMenuButton();
                 SwatchColorPicker color1 = new SwatchColorPicker();
@@ -202,11 +202,6 @@ public class GrandTour implements Runnable {
                 sp3.setWidth(300);
                 sp3.setHeight(200);
 
-                TableView table = new TableView();
-                ScrollPane sp2 = new ScrollPane();
-                sp2.setContent(table);
-                sp2.setWidth(300);
-                sp2.setHeight(200);
 
                 FlexBox box = new VFlexBox()
                         .add(popup)
@@ -215,7 +210,7 @@ public class GrandTour implements Runnable {
                         .add(sp)
                         .add(new Label("Compounds List View"))
                         .add(sp3)
-                        .add(sp2);
+                        ;
                 return box;
 
             }
@@ -314,6 +309,7 @@ public class GrandTour implements Runnable {
         examples.add(new ChartTest("Scenegraph Chart w/ 1000 data points"));
         examples.add(new OverlayTest("Interleave Controls and Shapes"));
         examples.add(new StageTest("Stage Test"));
+        examples.add(new TableTest("Tables and Tree and TreeTables"));
 
 
 

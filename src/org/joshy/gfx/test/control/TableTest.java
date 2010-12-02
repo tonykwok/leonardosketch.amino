@@ -11,21 +11,31 @@ import org.joshy.gfx.stage.Stage;
 
 import java.util.Comparator;
 
-public class TableTest implements Runnable {
-
+public class TableTest extends GrandTour.Example implements Runnable{
     public static void main(String ... args) throws Exception, InterruptedException {
         Core.setUseJOGL(false);
         Core.init();
-        Core.getShared().defer(new TableTest());
+        Core.getShared().defer(new TableTest("asdf"));
+    }
+
+    public TableTest(String s) {
+        super(s);
     }
 
     public void run() {
         Stage s = Stage.createStage();
-        s.setContent(new TabPanel()
+        try {
+            s.setContent(build());
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+    @Override
+    public Control build() throws Exception {
+        return new TabPanel()
                 .add("Sort Table",standardTable())
                 .add("Filter Table",filterTable())
-                .add("Tree Table",tree())
-        );
+                .add("Tree Table",tree());
     }
 
     private Control tree() {
