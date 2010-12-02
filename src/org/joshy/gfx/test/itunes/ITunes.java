@@ -2,6 +2,9 @@ package org.joshy.gfx.test.itunes;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
@@ -64,7 +67,6 @@ public class ITunes implements Runnable {
         search.setHintText("search");
         search.addCSSClass("searchbox")
                 .setPrefWidth(100);
-
         final Control header = new HFlexBox()
             .setBoxAlign(HFlexBox.Align.Baseline)
             .add(prevButton).add(playButton).add(nextButton)
@@ -104,10 +106,37 @@ public class ITunes implements Runnable {
         sourcePane.setContent(sourceList);
         sourcePane.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
 
-        final TableView playList = new TableView();
+        final TableView<Song, String> playList = new TableView<Song,String>();
         playList.setModel(new PlaylistModel());
         playList.setDefaultColumnWidth(150);
         playList.setRenderer(new PlaylistRenderer());
+        playList.setFilter(new TableView.Filter<Song,String>() {
+            @Override
+            public boolean matches(TableView.TableModel<Song,String> table, int row) {
+                String text = search.getText();
+                if(text.length() < 2) return true;
+                Song data = table.get(row,0);
+                if(data.name.toLowerCase().contains(text.toLowerCase())) {
+                    return true;
+                }
+                if(data.album.toLowerCase().contains(text.toLowerCase())) {
+                    return true;
+                }
+                if(data.artist.toLowerCase().contains(text.toLowerCase())) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        EventBus.getSystem().addListener(search, KeyEvent.KeyReleased,new Callback<KeyEvent>(){
+            @Override
+            public void call(KeyEvent event) throws Exception {
+                playList.refilter();
+            }
+        });
+
+
         final ScrollPane playPane = new ScrollPane();
         playPane.setContent(playList);
 

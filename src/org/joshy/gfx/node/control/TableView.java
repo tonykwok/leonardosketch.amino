@@ -21,13 +21,14 @@ import java.util.List;
  * for the columns and a model for the actual data. Styling can be done with
  * item renderers and text renderers just like the ListView. 
  */
-public class TableView extends Control implements Focusable, ScrollPane.ScrollingAware, SelectableControl {
+public class TableView<D,H> extends Control implements Focusable, ScrollPane.ScrollingAware, SelectableControl {
+    
     private static final int HEADER_HEIGHT = 20;
     private static final double RESIZE_THRESHOLD = 10;
-    private TableModel model;
-    private DataRenderer renderer;
+    private TableModel<D,H> model;
+    private DataRenderer<D> renderer;
     private int selectedRow = -1;
-    private HeaderRenderer headerRenderer;
+    private HeaderRenderer<H> headerRenderer;
     private int selectedColumn = -1;
     private boolean focused;
     private double defaultColumnWidth = 50;
@@ -38,11 +39,11 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     private Font font;
     private Map<Integer, Double> columnSizes = new HashMap<Integer,Double>();
     private Set<Integer> columnVisibles = new HashSet<Integer>();
-    private Sorter sorter;
+    private Sorter<D,H> sorter;
     private SortModel sortModel;
     private int sortColumn = -1;
     private boolean sortAscending;
-    private Filter filter;
+    private Filter<D,H> filter;
     private FilterModel filterModel;
 
     public void redraw() {
@@ -60,6 +61,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     public void refilter() {
         if(filterModel != null) {
             filterModel.refilter();
+            setLayoutDirty();
             setDrawingDirty();
         }
     }
@@ -433,15 +435,15 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         return selectedRow;
     }
 
-    public TableModel getModel() {
+    public TableModel<D,H> getModel() {
         return model;
     }
 
-    public void setRenderer(DataRenderer renderer) {
+    public void setRenderer(DataRenderer<D> renderer) {
         this.renderer = renderer;
     }
 
-    public void setModel(TableModel model) {
+    public void setModel(TableModel<D,H> model) {
         this.model = model;
         for(int i=0; i<model.getColumnCount();i++) {
             columnVisibles.add(i);
@@ -483,9 +485,9 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
         //draw headers
         double x = 0;
-        ListIterator it = getVisibleColumns();
+        ListIterator<H> it = getVisibleColumns();
         while(it.hasNext()) {
-            Object header = it.next();
+            H header = it.next();
             int col = it.previousIndex();
             double columnWidth = getColumnWidth(col);
             headerRenderer.draw(g, this, header, col, x+scrollX, 0, columnWidth, HEADER_HEIGHT);
@@ -500,7 +502,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
             while(lit.hasNext()) {
                 Object header = lit.next();
                 int col = lit.previousIndex();
-                Object item = null;
+                D item = null;
                 double columnWidth = getColumnWidth(col);
                 if(row+startRow < model.getRowCount()) {
                     item = getViewData(row+startRow,col);
@@ -522,15 +524,15 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         }
     }
     //returns cell data in view columns
-    private Object getViewData(int row, int col) {
+    private D getViewData(int row, int col) {
         col = columnViewToModel(col);
-        TableModel model = getViewModel();
-        Object item = model.get(row,col);
+        TableModel<D,H> model = getViewModel();
+        D item = model.get(row,col);
         return item;
     }
 
-    private TableModel getViewModel() {
-        TableModel m = getModel();
+    private TableModel<D,H> getViewModel() {
+        TableModel<D,H> m = getModel();
         if(filter != null) {
             if(filterModel == null) {
                 filterModel = new FilterModel(m,filter);
@@ -547,7 +549,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
 
     //returns only the view columns
-    private ListIterator getVisibleColumns() {
+    private ListIterator<H> getVisibleColumns() {
         ArrayList l = new ArrayList();
         for(int i=0; i<getModel().getColumnCount(); i++) {
             if(!columnVisibles.contains(i)) {
@@ -601,7 +603,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
     public void setDefaultColumnWidth(double defaultColumnWidth) {
         this.defaultColumnWidth = defaultColumnWidth;
-        setWidth(getModel().getColumnCount()*defaultColumnWidth);
+        setWidth(getViewModel().getColumnCount()*defaultColumnWidth);
     }
 
     public double getFullWidth(double width, double height) {
@@ -609,7 +611,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
 
     public double getFullHeight(double width, double height) {
-        return Math.max(getModel().getRowCount()*rowHeight,height);
+        return Math.max(getViewModel().getRowCount()*rowHeight,height);
     }
 
     public void setScrollX(double value) {
@@ -672,7 +674,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
 
     public static interface Filter<D,H> {
-        public boolean matches(TableModel table, int row);
+        public boolean matches(TableModel<D,H> table, int row);
     }
 
     private static class SortModel implements TableModel {
@@ -765,6 +767,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
             return this.model.get(realRow,column);
         }
     }
+
     private static class Row {
         int index;
         private TableModel model;
