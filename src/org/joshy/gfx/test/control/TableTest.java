@@ -1,11 +1,12 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.ScrollPane;
-import org.joshy.gfx.node.control.TableView;
-import org.joshy.gfx.node.control.TreeView;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.KeyEvent;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.TabPanel;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 
 import java.util.Comparator;
@@ -21,8 +22,9 @@ public class TableTest implements Runnable {
     public void run() {
         Stage s = Stage.createStage();
         s.setContent(new TabPanel()
-                .add("table",standardTable())
-                .add("tree",tree())
+                .add("Sort Table",standardTable())
+                .add("Filter Table",filterTable())
+                .add("Tree Table",tree())
         );
     }
 
@@ -56,6 +58,42 @@ public class TableTest implements Runnable {
         });
         table.setWidth(500);
         return new ScrollPane(table);
+    }
+
+    private Control filterTable() {
+        final TableView table = new TableView();
+        final Textbox filterBox = new Textbox()
+                .setHintText("filter text");
+        EventBus.getSystem().addListener(filterBox,KeyEvent.KeyReleased,new Callback<KeyEvent>(){
+            @Override
+            public void call(KeyEvent event) throws Exception {
+                table.refilter();
+            }
+        });
+        //filterBox.setPrefWidth(200);
+
+        //This will filter by the first column.
+        //It only applies if you type in at least 3 letters.
+        //It is not case sensitive.
+        table.setFilter(new TableView.Filter() {
+            @Override
+            public boolean matches(TableView.TableModel table, int row) {
+                String text = filterBox.getText();
+                if(text.length() < 3) return true;
+                Object data = table.get(row,0);
+                if(data.toString().toLowerCase().contains(text.toLowerCase())) {
+                    return true;
+                }
+                return false;
+            }
+        });
+        return new VFlexBox()
+                .setBoxAlign(VFlexBox.Align.Stretch)
+                .add(filterBox)
+                .add(new ScrollPane(table),1)
+                .setPrefWidth(100)
+                .setPrefHeight(100)
+                ;
     }
 
 }
