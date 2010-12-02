@@ -1,6 +1,5 @@
 package org.joshy.gfx.test.itunes;
 
-import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.TableView;
 
 import java.util.ArrayList;
@@ -20,6 +19,9 @@ class PlaylistModel implements TableView.TableModel<Song,String> {
         songs = new ArrayList<Song>();
         for(int i=0; i<15; i++) {
             songs.add(new Song(i+1,15,"song " + i, "The Album", "The Artist", (int)(Math.random()*300)));
+        }
+        for(int i=0; i<15; i++) {
+            songs.add(new Song(i+1,15,"nother " + i, "The Nother Album", "The Nother Artist", (int)(Math.random()*300)));
         }
     }
 
