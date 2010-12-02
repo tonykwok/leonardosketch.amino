@@ -8,6 +8,8 @@ import org.joshy.gfx.node.control.TreeView;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.stage.Stage;
 
+import java.util.Comparator;
+
 public class TableTest implements Runnable {
 
     public static void main(String ... args) throws Exception, InterruptedException {
@@ -32,6 +34,26 @@ public class TableTest implements Runnable {
 
     private Control standardTable() {
         TableView table = new TableView();
+        table.setSorter(new TableView.Sorter() {
+            @Override
+            public Comparator createComparator(TableView.TableModel table, int column, boolean ascending) {
+                if(ascending) {
+                return new Comparator<String>() {
+                    @Override
+                    public int compare(String s, String s1) {
+                        return s.compareTo(s1);
+                    }
+                };
+                } else {
+                    return new Comparator<String>() {
+                        @Override
+                        public int compare(String s, String s1) {
+                            return s1.compareTo(s);
+                        }
+                    };
+                }
+            }
+        });
         table.setWidth(500);
         return new ScrollPane(table);
     }

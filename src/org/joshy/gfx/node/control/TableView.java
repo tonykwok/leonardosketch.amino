@@ -10,10 +10,12 @@ import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.GraphicsUtil;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.List;
 
 /** A table with columns and rows. Used for displaying tabular data. it has a model
  * for the columns and a model for the actual data. Styling can be done with
@@ -36,9 +38,17 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     private Font font;
     private Map<Integer, Double> columnSizes = new HashMap<Integer,Double>();
     private Set<Integer> columnVisibles = new HashSet<Integer>();
+    private Sorter sorter;
+    private SortModel sortModel;
+    private int sortColumn = -1;
+    private boolean sortAscending;
 
     public void redraw() {
         setDrawingDirty();
+    }
+
+    public void setSorter(Sorter sorter) {
+        this.sorter = sorter;
     }
 
     public static enum ResizeMode {
@@ -169,7 +179,6 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         popup.setVisible(true);
     }
 
-
     private boolean isOverRightColumnEdge(MouseEvent event) {
         if(resizeMode == ResizeMode.Proportional){
             double columnWidth = getWidth() / model.getColumnCount();
@@ -224,10 +233,24 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         setWidth(300);
         setHeight(200);
 
+        final List<String> list = new ArrayList<String>();
+        for(int i=0; i<20; i++) {
+            int r = (int)(Math.random()*26);
+            r += 'a';
+            char cr = (char) r;
+            list.add(cr+"Data ");
+        }
+        final List<String> list2 = new ArrayList<String>();
+        for(int i=0; i<20; i++) {
+            int r = (int)(Math.random()*26);
+            r += 'a';
+            char cr = (char) r;
+            list2.add(cr+"Data ");
+        }
         //set default model
         setModel(new TableModel() {
             public int getRowCount() {
-                return 20;
+                return list.size();
             }
 
             public int getColumnCount() {
@@ -239,7 +262,8 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
             }
 
             public Object get(int row, int column) {
-                return "Data " + row + "," + column;
+                if(column == 0) return list.get(row) + " " + row + "," + column;
+                return list2.get(row)+" " + row + "," + column;
             }
         });
 
@@ -261,27 +285,6 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                     String s = cell.toString();
                     Font.drawCenteredVertically(g, s, font, x+2, y, width, height, true);
                 }
-                //return;
-                //}
-                  /*
-                g.setPaint(FlatColor.WHITE);
-                if(row % 2 == 0) {
-                    g.setPaint(new FlatColor("#eeeeee"));
-                }
-                if(row == table.getSelectedRow()) {
-                    if(table.focused) {
-                        g.setPaint(new FlatColor("#ddddff"));
-                    } else {
-                        g.setPaint(new FlatColor("#dddddd"));
-                    }
-                }
-                g.fillRect(x,y,width,height);
-                g.setPaint(FlatColor.BLACK);
-                if(cell != null) {
-                    Font.drawCenteredVertically(g, cell.toString(), Font.DEFAULT, x+2, y, width, height, true);
-                }
-                g.setPaint(new FlatColor(0xff0000));
-                g.drawLine(x+width-3,y, x+width-3,y+height);*/
             }
         });
 
@@ -306,6 +309,15 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                 }
                 if(header != null) {
                     Font.drawCenteredVertically(g, header.toString(), Font.DEFAULT, x+2, y, width, height, true);
+                }
+                if(sortColumn >= 0) {
+                    if(column == sortColumn) {
+                        if(sortAscending) {
+                            GraphicsUtil.fillDownArrow(g,x+width-15,y+5,10);
+                        } else {
+                            GraphicsUtil.fillUpArrow(g,x+width-15,y+5,10);
+                        }
+                    }
                 }
             }
         });
@@ -367,6 +379,15 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
     private void setSelectedColumn(int selectedColumn) {
         this.selectedColumn = selectedColumn;
+        if(sortModel != null) {
+            if(sortColumn == selectedColumn) {
+                sortAscending = !sortAscending;
+            } else {
+                sortAscending = true;
+            }
+            sortColumn = selectedColumn;
+            sortModel.reSort(selectedColumn,sortAscending);
+        }
         setDrawingDirty();
     }
 
@@ -490,8 +511,19 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     //returns cell data in view columns
     private Object getViewData(int row, int col) {
         col = columnViewToModel(col);
+        TableModel model = getViewModel();
         Object item = model.get(row,col);
         return item;
+    }
+
+    private TableModel getViewModel() {
+        if(sorter == null) {
+            return getModel();
+        }
+        if(sortModel == null) {
+            sortModel = new SortModel(getModel(),sorter);
+        }
+        return sortModel;
     }
 
     //returns only the view columns
@@ -613,5 +645,68 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
          * @param height
          */
         public void draw(GFX g, TableView table, D cellData, int row, int column, double x, double y, double width, double height);
+    }
+
+    public static interface Sorter<D,H> {
+        public Comparator createComparator(TableModel table, int column, boolean ascending);
+    }
+
+    private static class SortModel implements TableModel {
+        private TableModel model;
+        private Sorter sorter;
+        private List<Row> sortedList;
+
+        public SortModel(final TableModel model, Sorter sorter) {
+            this.model = model;
+            this.sorter = sorter;
+            List<Row> list = new ArrayList<Row>();
+            for(int row =0; row<model.getRowCount(); row++) {
+                list.add(new Row(row,model));
+            }
+            sortedList = list;
+        }
+
+        public void reSort(final int column, boolean sortAscending) {
+            final Comparator comp = sorter.createComparator(model, column, sortAscending);
+            Collections.sort(sortedList,new Comparator<Row>(){
+                @Override
+                public int compare(Row a, Row b) {
+                    Object ad = model.get(a.index,column);
+                    Object bd = model.get(b.index,column);
+                    return comp.compare(ad,bd);
+                }
+            });
+        }
+
+        private static class Row {
+            int index;
+            private TableModel model;
+
+            public Row(int row, TableModel model) {
+                this.index = row;
+                this.model = model;
+            }
+        }
+
+        @Override
+        public int getRowCount() {
+            return this.model.getRowCount();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return this.model.getColumnCount();
+        }
+
+        @Override
+        public Object getColumnHeader(int column) {
+            return this.model.getColumnHeader(column);
+        }
+
+        @Override
+        public Object get(int row, int column) {
+            int realRow = this.sortedList.get(row).index;
+            return this.model.get(realRow,column);
+        }
     }
 }
