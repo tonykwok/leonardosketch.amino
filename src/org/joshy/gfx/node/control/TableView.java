@@ -42,6 +42,8 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     private SortModel sortModel;
     private int sortColumn = -1;
     private boolean sortAscending;
+    private Filter filter;
+    private FilterModel filterModel;
 
     public void redraw() {
         setDrawingDirty();
@@ -49,6 +51,17 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
     public void setSorter(Sorter sorter) {
         this.sorter = sorter;
+    }
+
+    public void setFilter(Filter filter) {
+        this.filter = filter;
+    }
+
+    public void refilter() {
+        if(filterModel != null) {
+            filterModel.refilter();
+            setDrawingDirty();
+        }
     }
 
     public static enum ResizeMode {
@@ -517,13 +530,20 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
 
     private TableModel getViewModel() {
-        if(sorter == null) {
-            return getModel();
+        TableModel m = getModel();
+        if(filter != null) {
+            if(filterModel == null) {
+                filterModel = new FilterModel(m,filter);
+            }
+            m = filterModel;
         }
-        if(sortModel == null) {
-            sortModel = new SortModel(getModel(),sorter);
+        if(sorter != null) {
+            if(sortModel == null) {
+                sortModel = new SortModel(m,sorter);
+            }
+            m = sortModel;
         }
-        return sortModel;
+        return m;
     }
 
     //returns only the view columns
@@ -651,6 +671,10 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         public Comparator createComparator(TableModel table, int column, boolean ascending);
     }
 
+    public static interface Filter<D,H> {
+        public boolean matches(TableModel table, int row);
+    }
+
     private static class SortModel implements TableModel {
         private TableModel model;
         private Sorter sorter;
@@ -678,16 +702,6 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
             });
         }
 
-        private static class Row {
-            int index;
-            private TableModel model;
-
-            public Row(int row, TableModel model) {
-                this.index = row;
-                this.model = model;
-            }
-        }
-
         @Override
         public int getRowCount() {
             return this.model.getRowCount();
@@ -709,4 +723,56 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
             return this.model.get(realRow,column);
         }
     }
+
+    private static class FilterModel implements TableModel {
+        private TableModel model;
+        private List<Row> filteredList;
+        private Filter filter;
+
+        public FilterModel(TableModel model, Filter filter) {
+            this.model = model;
+            this.filter = filter;
+            refilter();
+        }
+        public void refilter() {
+            List<Row> list = new ArrayList<Row>();
+            for(int row =0; row<model.getRowCount(); row++) {
+                if(filter.matches(model,row)) {
+                    list.add(new Row(row,model));
+                }
+            }
+            filteredList = list;
+        }
+        @Override
+        public int getRowCount() {
+            return filteredList.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return model.getColumnCount();
+        }
+
+        @Override
+        public Object getColumnHeader(int column) {
+            return model.getColumnHeader(column);
+        }
+
+        @Override
+        public Object get(int row, int column) {
+            if(row >= filteredList.size()) return null;
+            int realRow = filteredList.get(row).index;
+            return this.model.get(realRow,column);
+        }
+    }
+    private static class Row {
+        int index;
+        private TableModel model;
+
+        public Row(int row, TableModel model) {
+            this.index = row;
+            this.model = model;
+        }
+    }
+
 }

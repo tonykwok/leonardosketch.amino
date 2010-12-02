@@ -207,7 +207,7 @@ public class Textbox extends TextControl {
         }
     }
 
-    public Control onAction(Callback<ActionEvent> callback) {
+    public Textbox onAction(Callback<ActionEvent> callback) {
         EventBus.getSystem().addListener(this,ActionEvent.Action,callback);
         return this;
     }
