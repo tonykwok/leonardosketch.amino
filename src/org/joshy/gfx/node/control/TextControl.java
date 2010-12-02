@@ -7,6 +7,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -128,14 +129,15 @@ public abstract class TextControl extends Control implements Focusable {
     }
 
     private void processKeyTyped(KeyEvent event) {
-//        u.p("event: " + event.getType() + " typed event");
-//        u.p("generated text = " + event.getGeneratedText());
+        if(event.isSystemShortcut()) return;
         //regular keys
         insertText(event.getGeneratedText());
     }
 
     protected void processKeyEvent(KeyEvent event) {
-        //u.p("event: " + event.getType());
+        //skip all key released events
+        if(event.getType() == KeyEvent.KeyReleased) return;
+        
         //Paste
         if(event.getKeyCode().equals(KeyEvent.KeyCode.KEY_V) && event.isSystemPressed()) {
             insertText(OSUtil.getClipboardAsString());
@@ -303,7 +305,7 @@ public abstract class TextControl extends Control implements Focusable {
             String[] parts = cursor.splitText(cursor.getIndex());
             setText(parts[0]+generatedText+parts[1]);
             relayoutText();
-            cursor.moveRight(1);
+            cursor.moveRight(generatedText.length());
         }
     }
 

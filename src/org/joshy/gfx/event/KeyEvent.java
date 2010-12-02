@@ -29,6 +29,12 @@ public class KeyEvent extends Event {
         return isControlPressed();
     }
 
+    public boolean isSystemShortcut() {
+        if(isCommandPressed() && OSUtil.isMac()) return true;
+        if(isControlPressed() && !OSUtil.isMac()) return true;
+        return false;
+    }
+
 
     public static enum KeyCode {
         //letters
