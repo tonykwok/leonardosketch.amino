@@ -20,9 +20,15 @@ class SourceListRenderer implements ListView.ItemRenderer {
     }
 
     public void draw(GFX gfx, ListView listView, Object item, int index, double x, double y, double width, double height) {
-        gfx.setPaint(new FlatColor(0xcddded));
+        gfx.setPaint(new FlatColor(0xf0e0ff));
+        if(listView.getSelectedIndex() == index) {
+            gfx.setPaint(new FlatColor(0x000088));
+        }
         gfx.fillRect(x,y,width,height);
         gfx.setPaint(FlatColor.BLACK);
+        if(listView.getSelectedIndex() == index) {
+            gfx.setPaint(FlatColor.WHITE);
+        }
         String source = (String) item;
         Font.drawCenteredVertically(gfx,source,font,x+3,y,width,height,false);
     }
