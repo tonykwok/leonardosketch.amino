@@ -46,6 +46,7 @@ public class TableTest extends GrandTour.Example implements Runnable{
 
     private Control standardTable() {
         TableView table = new TableView();
+        table.setAllowColumnResizing(false);
         table.setSorter(new TableView.Sorter() {
             @Override
             public Comparator createComparator(TableView.TableModel table, int column, boolean ascending) {
