@@ -11,6 +11,7 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GraphicsUtil;
+import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -396,10 +397,12 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                     if(isOverLeftColumnEdge(event) && allowColumnResizing) {
                         resizeColumn = mouseToViewColumn(event)-1;
                         start = event.getPointInNodeCoords(TableView.this);
+                        start = new Point2D.Double(start.getX()-scrollX,start.getY());
                     }
                     if(isOverRightColumnEdge(event) && allowColumnResizing) {
                         resizeColumn = mouseToViewColumn(event);
                         start = event.getPointInNodeCoords(TableView.this);
+                        start = new Point2D.Double(start.getX()-scrollX,start.getY());
                     }
                 } else {
                     int startRow = (int)(-scrollY/rowHeight);
@@ -410,10 +413,10 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
 
             if(event.getType() == MouseEvent.MouseDragged && resizeColumn != -1 && allowColumnResizing) {
                 Point2D current = event.getPointInNodeCoords(TableView.this);
+                current = new Point2D.Double(current.getX()-scrollX,current.getY());
                 double dx = current.getX()-start.getX();
                 start = current;
                 setColumnWidth(resizeColumn,getColumnWidth(resizeColumn)+dx);
-                setDrawingDirty();
             }
 
             if(event.getType() == MouseEvent.MouseReleased) {
@@ -422,9 +425,10 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         }
 
         private int mouseToViewColumn(MouseEvent event) {
+            double cx = event.getX()-scrollX;
             if(resizeMode == ResizeMode.Proportional) {
                 double columnWidth = getWidth() / model.getColumnCount();
-                int column = (int)(event.getX()/columnWidth);
+                int column = (int)(cx/columnWidth);
                 return column;
             }
             if(resizeMode == ResizeMode.Manual) {
@@ -434,7 +438,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                     Object header = it.next();
                     int col = it.previousIndex();
                     double w = getColumnWidth(col);
-                    if(event.getX()>=x && event.getX()<x+w) {
+                    if(cx>=x && cx<x+w) {
                         return col;
                     }
                     x+=w;
@@ -480,9 +484,10 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
     }
 
     private boolean isOverRightColumnEdge(MouseEvent event) {
+        double cx = event.getX() - scrollX;
         if(resizeMode == ResizeMode.Proportional){
             double columnWidth = getWidth() / model.getColumnCount();
-            double my = event.getX() % columnWidth;
+            double my = cx % columnWidth;
             if(my > columnWidth-5 && my <= columnWidth) {
                 return true;
             }
@@ -495,7 +500,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                 Object header = it.next();
                 int col = it.previousIndex();
                 double w = getColumnWidth(col);
-                if(event.getX()>=x+w-RESIZE_THRESHOLD && event.getX()<x+w) {
+                if(cx>=x+w-RESIZE_THRESHOLD && cx<x+w) {
                     return true;
                 }
                 x+=w;
@@ -505,9 +510,10 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
     }
 
     private boolean isOverLeftColumnEdge(MouseEvent event) {
+        double cx = event.getX() - scrollX;
         if(resizeMode == ResizeMode.Proportional){
             double columnWidth = getWidth() / model.getColumnCount();
-            double my = event.getX() % columnWidth;
+            double my = cx % columnWidth;
             if(my >= 0 && my < 10) {
                 return true;
             }
@@ -520,7 +526,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                 Object header = it.next();
                 int col = it.previousIndex();
                 double w = getColumnWidth(col);
-                if(event.getX()>=x && event.getX()<x+ RESIZE_THRESHOLD) {
+                if(cx>=x && cx<x+ RESIZE_THRESHOLD) {
                     return true;
                 }
                 x+=w;
@@ -662,6 +668,16 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         }
         col = columnViewToModel(col);
         columnSizes.put(col,v);
+        setDrawingDirty();
+        setLayoutDirty();
+    }
+
+    private double getTotalColumnWidth() {
+        double width = 0;
+        for(int col : columnSizes.keySet()) {
+            width += columnSizes.get(col);
+        }
+        return width;
     }
 
     //convert view columns to model columns
@@ -685,7 +701,11 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
     }
 
     /* =========== scrolling impl =========== */
+
     public double getFullWidth(double width, double height) {
+        if(resizeMode == ResizeMode.Manual) {
+            return getTotalColumnWidth();
+        }
         return getWidth();
     }
 
