@@ -21,6 +21,8 @@ public class MouseEvent extends Event {
     public static final EventType MouseReleased = new EventType("MouseReleased");
     public static final EventType MouseEntered = new EventType("MouseEntered");
     public static final EventType MouseExited = new EventType("MouseExited");
+    public static final EventType OpenContextMenu = new EventType("OpenContextMenu");
+    
     //public static final EventType MouseClicked = new EventType("MousePressed");
     public static final EventType MouseAll = new EventType("MouseAll") {
         @Override
@@ -32,6 +34,7 @@ public class MouseEvent extends Event {
             if(type == MouseDragged) return true;
             if(type == MouseDraggedRaw) return true;
             if(type == MouseReleased) return true;
+            if(type == OpenContextMenu) return true;
             return super.matches(type);
         }
     };
@@ -43,6 +46,7 @@ public class MouseEvent extends Event {
     private boolean controlPressed;
     private boolean commandPressed;
     private int button;
+
 
     public MouseEvent(EventType type, double x, double y, Node node) {
         super(type);

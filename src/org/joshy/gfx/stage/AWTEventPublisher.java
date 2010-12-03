@@ -6,6 +6,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.ScrollEvent;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 
 import java.awt.event.*;
@@ -72,6 +73,10 @@ public class AWTEventPublisher extends EventPublisher implements MouseListener, 
         org.joshy.gfx.event.MouseEvent evt = toEvent(e, point, node, org.joshy.gfx.event.MouseEvent.MousePressed);
         EventBus.getSystem().setPressedNode(node);
         EventBus.getSystem().publish(evt);
+        if(evt.isControlPressed() && OSUtil.isMac() || evt.getButton() == 3 || e.isPopupTrigger()) {
+            org.joshy.gfx.event.MouseEvent evt2 = toEvent(e, point, node, org.joshy.gfx.event.MouseEvent.OpenContextMenu);
+            EventBus.getSystem().publish(evt2);
+        }
     }
     private org.joshy.gfx.event.MouseEvent toEvent(MouseEvent e, Point2D point, Node node, Event.EventType type) {
         boolean meta = e.isMetaDown();

@@ -8,10 +8,8 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
-import org.joshy.gfx.event.Event;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GraphicsUtil;
-import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -370,7 +368,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         frame.setCursor(Cursor.getDefaultCursor());
     }
 
-    private Callback<? extends Event> mouseListener = new Callback<MouseEvent>(){
+    private Callback<MouseEvent> mouseListener = new Callback<MouseEvent>(){
         public int resizeColumn = -1;
         public Point2D start;
 
@@ -386,12 +384,14 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                 return;
             }
 
-            if(event.getType() == MouseEvent.MousePressed) {
-                if(event.isControlPressed() || event.getButton() == 3 && event.getY() < HEADER_HEIGHT) {
+            if(event.getType() == MouseEvent.OpenContextMenu) {
+                if(event.getY() < HEADER_HEIGHT) {
                     showColumnFilterPopup(event);
                     Core.getShared().getFocusManager().setFocusedNode(TableView.this);
                     return;
                 }
+            }
+            if(event.getType() == MouseEvent.MousePressed) {
                 if(event.getY() < HEADER_HEIGHT) {
                     setSelectedColumn(mouseToViewColumn(event));
                     if(isOverLeftColumnEdge(event) && allowColumnResizing) {
