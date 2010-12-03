@@ -7,7 +7,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.util.OSUtil;
-import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -130,6 +129,15 @@ public abstract class TextControl extends Control implements Focusable {
 
     private void processKeyTyped(KeyEvent event) {
         if(event.isSystemShortcut()) return;
+        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_UNKNOWN) {
+            switch(event.getKeyChar()) {
+                case '\u0008': return;
+                case '\u007f': return;
+            }
+            //u.p("text = " + event.getGeneratedText());
+            //u.p("char = " + event.getKeyChar());
+            //u.p("char = " + Integer.toHexString(event.getKeyChar()));
+        }
         //regular keys
         insertText(event.getGeneratedText());
     }

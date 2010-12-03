@@ -142,6 +142,10 @@ public class KeyEvent extends Event {
         return keyCode;
     }
 
+    public char getKeyChar() {
+        return keyChar;
+    }
+
 
     public boolean isShiftPressed() {
         return shiftPressed;
