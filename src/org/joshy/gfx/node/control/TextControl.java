@@ -133,10 +133,11 @@ public abstract class TextControl extends Control implements Focusable {
             switch(event.getKeyChar()) {
                 case '\u0008': return;
                 case '\u007f': return;
+                case 0xa: return;
             }
             //u.p("text = " + event.getGeneratedText());
             //u.p("char = " + event.getKeyChar());
-            //u.p("char = " + Integer.toHexString(event.getKeyChar()));
+            //u.p("hex = '\\u" + Integer.toHexString(event.getKeyChar())+"'");
         }
         //regular keys
         insertText(event.getGeneratedText());
