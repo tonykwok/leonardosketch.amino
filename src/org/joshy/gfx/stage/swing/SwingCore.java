@@ -64,18 +64,21 @@ public class SwingCore extends Core {
             app.setAboutHandler(new AboutHandler(){
                 @Override
                 public void handleAbout(AppEvent.AboutEvent aboutEvent) {
+                    u.p("got about");
                     EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.About));
                 }
             });
             app.setQuitHandler(new QuitHandler(){
                 @Override
                 public void handleQuitRequestWith(AppEvent.QuitEvent quitEvent, QuitResponse quitResponse) {
+                    u.p("got quit");
                     EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.Quit));
                 }
             });
             app.setPreferencesHandler(new PreferencesHandler(){
                 @Override
                 public void handlePreferences(AppEvent.PreferencesEvent preferencesEvent) {
+                    u.p("got prefs");
                     EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.Preferences));
                 }
             });
