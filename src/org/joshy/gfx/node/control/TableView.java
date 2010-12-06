@@ -203,11 +203,11 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         }
     }
 
-    private static ResizeMode resizeMode = ResizeMode.Proportional;
+    private ResizeMode resizeMode = ResizeMode.Proportional;
 
     public void setResizeMode(ResizeMode newMode) {
         if(resizeMode == ResizeMode.Proportional && newMode == ResizeMode.Manual) {
-            columnSizes.clear();// = new HashMap<Integer,Double>();
+            columnSizes.clear();
         }
         resizeMode = newMode;
         setDrawingDirty();

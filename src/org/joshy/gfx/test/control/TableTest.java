@@ -4,12 +4,15 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
+import org.joshy.gfx.event.SystemMenuEvent;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class TableTest extends GrandTour.Example implements Runnable{
     public static void main(String ... args) throws Exception, InterruptedException {
@@ -27,18 +30,77 @@ public class TableTest extends GrandTour.Example implements Runnable{
         try {
             s.setContent(build());
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
+        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>(){
+            @Override
+            public void call(SystemMenuEvent event) throws Exception {
+                System.exit(0);
+            }
+        });
     }
     @Override
     public Control build() throws Exception {
         return new TabPanel()
                 .add("Sort Table",standardTable())
                 .add("Filter Table",filterTable())
-                .add("Tree Table",tree());
+                .add("Tree",tree())
+                .add("Tree Table", treeTable())
+                ;
     }
 
+    private class MyTreeNode {
+        public String title;
+        public List<MyTreeNode> children = new ArrayList<MyTreeNode>();
+    }
     private Control tree() {
+        TreeView tv = new TreeView();
+        MyTreeNode n1 = new MyTreeNode();
+        n1.title = "a";
+        MyTreeNode n2 = new MyTreeNode();
+        n2.title = "b";
+        MyTreeNode n3 = new MyTreeNode();
+        n3.title = "c";
+        MyTreeNode n4 = new MyTreeNode();
+        n4.title = "d";
+        n1.children.add(n2);
+        n1.children.add(n3);
+        n2.children.add(n4);
+
+        TreeView.AbstractTreeTableModel<MyTreeNode, String> attm = new TreeView.AbstractTreeTableModel<MyTreeNode, String>() {
+            @Override
+            public int getColumnCount() {
+                return 1;
+            }
+
+            @Override
+            public boolean hasChildren(MyTreeNode node) {
+                return !node.children.isEmpty();
+            }
+
+            @Override
+            public Iterable<MyTreeNode> getChildren(MyTreeNode node) {
+                return node.children;
+            }
+
+            @Override
+            public String getColumnHeader(int column) {
+                return "name";
+            }
+
+            @Override
+            public String getColumnData(MyTreeNode node, int column) {
+                return node.title;
+            }
+        };
+        attm.setRoot(n1);
+        tv.setModel(attm);
+        tv.setWidth(500);
+        tv.setResizeMode(TreeView.ResizeMode.Proportional);
+        return new ScrollPane(tv);
+    }
+
+    private Control treeTable() {
         TreeView treeView = new TreeView();
         treeView.setWidth(500);
         return new ScrollPane(treeView);

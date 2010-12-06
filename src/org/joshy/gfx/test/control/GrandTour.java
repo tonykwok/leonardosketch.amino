@@ -4,10 +4,7 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.PatternPaint;
-import org.joshy.gfx.event.BackgroundTask;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.SelectionEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Group;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.*;
@@ -33,6 +30,12 @@ public class GrandTour implements Runnable {
     }
 
     public void run() {
+        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>() {
+            @Override
+            public void call(SystemMenuEvent event) throws Exception {
+                System.exit(0);
+            }
+        });
         List<Example> examples = new ArrayList<Example>();
         examples.add(new Example("Buttons") {
             public Control build() {
