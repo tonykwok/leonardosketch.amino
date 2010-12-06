@@ -12,7 +12,13 @@ import org.joshy.gfx.util.u;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 
-public class AWTEventPublisher extends EventPublisher implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, WindowListener {
+public class AWTEventPublisher extends EventPublisher
+        implements MouseListener,
+        MouseMotionListener,
+        MouseWheelListener,
+        KeyListener,
+        WindowListener,
+        WindowStateListener {
     private Node hoverNode;
 
     public AWTEventPublisher(Parent parent) {
@@ -201,7 +207,7 @@ public class AWTEventPublisher extends EventPublisher implements MouseListener, 
     }
 
     public void windowOpened(WindowEvent e) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        u.p("window opened");
     }
 
     public void windowClosing(WindowEvent e) {
@@ -214,7 +220,7 @@ public class AWTEventPublisher extends EventPublisher implements MouseListener, 
     }
 
     public void windowIconified(WindowEvent e) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        u.p("window iconified");
     }
 
     public void windowDeiconified(WindowEvent e) {
@@ -227,5 +233,10 @@ public class AWTEventPublisher extends EventPublisher implements MouseListener, 
 
     public void windowDeactivated(WindowEvent e) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void windowStateChanged(WindowEvent windowEvent) {
+        u.p("window stage changed: " + windowEvent);
     }
 }
