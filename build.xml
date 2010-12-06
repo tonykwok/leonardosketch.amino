@@ -7,7 +7,6 @@
     </target>
 
     <target name="init">
-        <echo message="in the translation branch"/>
         <echo message="basedir = ${basedir}"/>
         <buildnumber/>
         <tstamp>
