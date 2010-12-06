@@ -13,6 +13,7 @@ import org.joshy.gfx.stage.AWTEventPublisher;
 import org.joshy.gfx.stage.Camera;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.PerformanceTracker;
+import org.joshy.gfx.util.u;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,6 +52,11 @@ public class SwingStage extends Stage {
     @Override
     public void hide() {
         frame.setVisible(false);
+        u.p("displosing");
+        frame.dispose();
+    }
+
+    public void close() {
     }
 
     @Override
@@ -250,6 +256,7 @@ public class SwingStage extends Stage {
         frame.setVisible(true);
         scene.requestFocus();
         frame.addWindowListener(scene.publisher);
+        frame.addWindowStateListener(scene.publisher);
         ((SwingCore)Core.getShared()).addStage(this);
     }
 
