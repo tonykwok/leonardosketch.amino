@@ -1,17 +1,16 @@
 package org.joshy.gfx.stage.swing;
 
+import com.apple.eawt.*;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSProcessor;
 import org.joshy.gfx.css.CSSRuleSet;
 import org.joshy.gfx.css.CSSSkin;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.PeriodicTask;
-import org.joshy.gfx.event.SkinEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.parboiled.support.ParsingResult;
 
@@ -40,10 +39,47 @@ public class SwingCore extends Core {
     private ParsingResult<?> baseResult;
     private long lastScan;
     private URI baseResultURI;
+    private Application app;
 
     public SwingCore() {
         super();
+        initOSHooks();
+    }
 
+    private void initOSHooks() {
+        if(OSUtil.isMac()) {
+            app = Application.getApplication();
+            app.setOpenFileHandler(new OpenFilesHandler(){
+                @Override
+                public void openFiles(AppEvent.OpenFilesEvent openFilesEvent) {
+                    u.p("files were opened: " + openFilesEvent);
+                    u.p("search term = " + openFilesEvent.getSearchTerm());
+                    u.p("files = ");
+                    for(File f : openFilesEvent.getFiles()) {
+                        u.p("file = " + f.getAbsolutePath());
+                    }
+                    EventBus.getSystem().publish(new FileOpenEvent(openFilesEvent.getFiles()));
+                }
+            });
+            app.setAboutHandler(new AboutHandler(){
+                @Override
+                public void handleAbout(AppEvent.AboutEvent aboutEvent) {
+                    EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.About));
+                }
+            });
+            app.setQuitHandler(new QuitHandler(){
+                @Override
+                public void handleQuitRequestWith(AppEvent.QuitEvent quitEvent, QuitResponse quitResponse) {
+                    EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.Quit));
+                }
+            });
+            app.setPreferencesHandler(new PreferencesHandler(){
+                @Override
+                public void handlePreferences(AppEvent.PreferencesEvent preferencesEvent) {
+                    EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.Preferences));
+                }
+            });
+        }
     }
 
     @Override
