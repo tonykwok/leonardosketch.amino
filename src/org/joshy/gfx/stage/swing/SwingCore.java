@@ -1,6 +1,7 @@
 package org.joshy.gfx.stage.swing;
 
 import com.apple.eawt.*;
+import com.apple.eawt.Application;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSProcessor;
