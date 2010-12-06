@@ -96,7 +96,12 @@ public class TreeView<T,S> extends TableView{
             double rh = tb.getRowHeight();
             int row = (int) (event.getPointInNodeCoords(tb).getY()/rh);
             row--; //take off one to account for the column headers
-            model.toggleRow(row);
+            //toggle only if near the arrow
+            int depth = model.getDepth(row);
+            double x = depth*10;
+            if(event.getX() >= x && event.getX() <= x+12) {
+                model.toggleRow(row);
+            }
         }
     }
 
