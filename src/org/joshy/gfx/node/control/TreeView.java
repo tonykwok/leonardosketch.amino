@@ -21,18 +21,18 @@ import java.util.List;
  * Time: 2:18:21 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TreeView extends TableView{
+public class TreeView<T,S> extends TableView{
     public TreeView() {
-        setModel(new TreeTableModel());
+        setModel(new DummyTreeTableModel());
         setRenderer(new TreeTableDataRenderer());
         EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new TreeTableMouseEventHandler());
         EventBus.getSystem().addListener(this, KeyEvent.KeyPressed, new TreeTableKeyEventHandler());
     }
 
-    private static class TreeTableDataRenderer implements TableView.DataRenderer<TreeNode> {
+    private static class TreeTableDataRenderer<T,S> implements TableView.DataRenderer<T> {
 
     @Override
-    public void draw(GFX g, TableView table, TreeNode cellData, int row, int column, double x, double y, double width, double height) {
+    public void draw(GFX g, TableView table, T cellData, int row, int column, double x, double y, double width, double height) {
         //draw the background
         g.setPaint(FlatColor.WHITE);
         if(row == table.getSelectedRow()) {
@@ -48,9 +48,9 @@ public class TreeView extends TableView{
         g.drawLine(x,y,x,y+height);
 
         if(cellData != null) {
+            TreeTableModel model = (TreeTableModel) table.getModel();
             //draw the first column with nav arrows and indentation
             if(column == 0) {
-                TreeTableModel model = (TreeTableModel) table.getModel();
                 int depth = model.getDepth(row);
                 if(model.hasChildren(cellData)) {
                     g.setPaint(new FlatColor(0x606060));
@@ -67,17 +67,17 @@ public class TreeView extends TableView{
                 if(row == table.getSelectedRow()) {
                     g.setPaint(FlatColor.WHITE);
                 }
-                g.drawText(cellData.getFirst(), Font.DEFAULT,x+10*depth+12+5, y+13);
+                g.drawText(""+model.getColumnData(cellData,column), Font.DEFAULT,x+10*depth+12+5, y+13);
                 return;
             }
 
             //draw the rest of the columns
             String s = "";
             if(column == 1) {
-                s = cellData.getLast();
+                s = ""+model.getColumnData(cellData, column);
             }
             if(column == 2) {
-                s = ""+cellData.getAge();
+                s = ""+model.getColumnData(cellData, column);
             }
             g.setPaint(FlatColor.BLACK);
             if(row == table.getSelectedRow()) {
@@ -106,7 +106,7 @@ public class TreeView extends TableView{
             TableView tb = (TableView) event.getSource();
             TreeTableModel model = (TreeTableModel) tb.getModel();
             int index = tb.getSelectedRow();
-            TreeNode node = model.get(index, 0);
+            Object node = model.get(index, 0);
             //check for arrow up and down
             if(event.getKeyCode() == KeyEvent.KeyCode.KEY_RIGHT_ARROW) {
                 if(model.hasChildren(node) && model.isCollapsed(node)) {
@@ -123,24 +123,31 @@ public class TreeView extends TableView{
         }
     }
 
-    private static class TreeTableModel implements TableView.TableModel<TreeNode, String> {
-        private TreeNode root;
-        private HashSet<TreeNode> collapsedSet;
+    public static interface TreeTableModel<T, S> extends  TableView.TableModel {
+        public int getColumnCount();
+        public int getRowCount();
+        public boolean hasChildren(T node);
+        public Iterable<T> getChildren(T node);
+        public boolean isCollapsed(T node);
+        public S getColumnHeader(int column);
+        public void toggleRow(int row);
+        public T get(int row, int column);
+        public void open(T node);
+        public void close(T node);
+        public int getDepth(int row);
+        public S getColumnData(T node, int column);
+    }
 
-        public TreeTableModel() {
-            TreeNode r = new TreeNode("Master","Control Program",10000);
-            r.add(new TreeNode("Bart","Simpson",10));
-            r.add(new TreeNode("Lisa","Simpson",8));
-            TreeNode t3 = new TreeNode("Maggy","Simpson",1);
-            t3.add(new TreeNode("Snowball","Cat",5));
-            t3.add(new TreeNode("Santa's","Lil' helper",5));
-            r.add(t3);
-            r.add(new TreeNode("Mr.","Burns",100));
-            r.add(new TreeNode("Waylon","Smithers",45));
-            r.add(new TreeNode("Principle","Skinner",55));
-            r.add(new TreeNode("Jebadiah","Springfield",250));
-            this.root = r;
-            collapsedSet = new HashSet<TreeNode>();
+    public static abstract class AbstractTreeTableModel<T,S> implements TreeTableModel<T, S> {
+        private T root;
+        private HashSet<T> collapsedSet;
+
+        public AbstractTreeTableModel() {
+            collapsedSet = new HashSet<T>();
+        }
+
+        public void setRoot(T root) {
+            this.root = root;
         }
 
         @Override
@@ -152,20 +159,20 @@ public class TreeView extends TableView{
             return countBreadth(root);
         }
 
-        private int countBreadth(TreeNode root) {
+        private int countBreadth(T root) {
             int count = 1;
             if(!collapsedSet.contains(root)) {
-                for(TreeNode n : root.children) {
+                for(T n : getChildren(root)) {
                     count += countBreadth(n);
                 }
             }
             return count;
         }
 
-        private int getDepth(TreeNode root, Count row) {
+        public int getDepth(T root, Count row) {
             if(row.value == 0) return 1;
             if(!collapsedSet.contains(root)) {
-                for(TreeNode n : root.children) {
+                for(T n : getChildren(root)) {
                     row.value--;
                     int d = getDepth(n,row);
                     if(d >= 0) return d+1;
@@ -174,12 +181,12 @@ public class TreeView extends TableView{
             return -1;
         }
 
-        private TreeNode findNodeAtRow(TreeNode root, Count row) {
+        private T findNodeAtRow(T root, Count row) {
             if(row.value == 0) return root;
             if(!collapsedSet.contains(root)) {
-                for(TreeNode n : root.children) {
+                for(T n : getChildren(root)) {
                     row.value--;
-                    TreeNode result = findNodeAtRow(n, row);
+                    T result = findNodeAtRow(n, row);
                     if(result != null) return result;
                 }
             }
@@ -187,8 +194,79 @@ public class TreeView extends TableView{
         }
 
         @Override
+        public T get(int row, int column) {
+            T node = findNodeAtRow(root, new Count(row));
+            if(node == null) return null;
+            return node;
+        }
+
+        public void toggleRow(int row) {
+            T node = findNodeAtRow(root, new Count(row));
+            if(node == null) return;
+            if(!hasChildren(node)) return;
+            if(collapsedSet.contains(node)) {
+                collapsedSet.remove(node);
+            } else {
+                collapsedSet.add(node);
+            }
+        }
+
+        public int getDepth(int row) {
+            return getDepth(root,new Count(row));
+        }
+
+        public boolean isCollapsed(T cellData) {
+            return collapsedSet.contains(cellData);
+        }
+
+        public void open(T node) {
+            collapsedSet.remove(node);
+        }
+
+        public void close(T node) {
+            collapsedSet.add(node);
+        }
+
+        private class Count {
+            private int value;
+
+            public Count(int row) {
+                this.value = row;
+            }
+        }
+    }
+
+    private static class DummyTreeTableModel extends AbstractTreeTableModel<TreeNode,String> {
+        private DummyTreeTableModel() {
+            TreeNode r = new TreeNode("Master","Control Program",10000);
+            r.add(new TreeNode("Bart","Simpson",10));
+            r.add(new TreeNode("Lisa","Simpson",8));
+            TreeNode t3 = new TreeNode("Maggy","Simpson",1);
+            t3.add(new TreeNode("Snowball","Cat",5));
+            t3.add(new TreeNode("Santa's","Lil' helper",5));
+            r.add(t3);
+            r.add(new TreeNode("Mr.","Burns",100));
+            r.add(new TreeNode("Waylon","Smithers",45));
+            r.add(new TreeNode("Principle","Skinner",55));
+            r.add(new TreeNode("Jebadiah","Springfield",250));
+            this.setRoot(r);
+        }
+        @Override
         public int getColumnCount() {
             return 3;
+        }
+
+        @Override
+        public boolean hasChildren(TreeNode node) {
+            if(node.children.size()>0) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Iterable<TreeNode> getChildren(TreeNode node) {
+            return node.children;
         }
 
         @Override
@@ -202,54 +280,17 @@ public class TreeView extends TableView{
         }
 
         @Override
-        public TreeNode get(int row, int column) {
-            TreeNode node = findNodeAtRow(root, new Count(row));
-            if(node == null) return null;
-            return node;
-        }
-
-        public void toggleRow(int row) {
-            TreeNode node = findNodeAtRow(root, new Count(row));
-            if(node == null) return;
-            if(node.children.isEmpty()) return;
-            if(collapsedSet.contains(node)) {
-                collapsedSet.remove(node);
-            } else {
-                collapsedSet.add(node);
+        public String getColumnData(TreeNode cellData, int column) {
+            switch(column) {
+                case 0: return cellData.getFirst();
+                case 1: return cellData.getLast();
+                case 2: return ""+cellData.getAge();
             }
+            return "";
         }
 
-        public int getDepth(int row) {
-            return getDepth(root,new Count(row));
-        }
-
-        public boolean hasChildren(TreeNode treeNode) {
-            if(treeNode.children.size()>0) {
-                return true;
-            }
-            return false;
-        }
-
-        public boolean isCollapsed(TreeNode cellData) {
-            return collapsedSet.contains(cellData);
-        }
-
-        public void open(TreeNode node) {
-            collapsedSet.remove(node);
-        }
-
-        public void close(TreeNode node) {
-            collapsedSet.add(node);
-        }
-
-        private class Count {
-            private int value;
-
-            public Count(int row) {
-                this.value = row;
-            }
-        }
     }
+
     private static class TreeNode {
         private String first;
         List<TreeNode> children;
