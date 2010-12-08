@@ -8,7 +8,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 import java.util.List;
 
@@ -294,7 +293,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
                 if(i+ioff < model.size()) {
                     item = model.get(i+ioff);
                 }
-                renderer.draw(g, this, item, i,
+                renderer.draw(g, this, item, i+ioff,
                         x*colWidth+1+dx, y*rowHeight+1+dy,
                         colWidth, rowHeight);
             }
@@ -377,10 +376,11 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
             case VerticalWrap: return height;
             case Horizontal: return height;
             case HorizontalWrap:
-                if(getWidth() < 1) return height;
-                int rowLen = (int) (getWidth()/colWidth);
+                if(width < 1) return height;
+                int rowLen = (int) (width/colWidth);
                 if(rowLen < 1) rowLen = 1;
-                return Math.max(getModel().size()/rowLen*rowHeight,height);
+                double rowCount = getModel().size() / rowLen;
+                return Math.max(rowCount*rowHeight,height);
         }
         return height;
     }
@@ -496,31 +496,19 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
 
     ItemRenderer defaultItemRenderer =  new ItemRenderer<E>() {
         public void draw(GFX gfx, ListView listView, E item, int index, double x, double y, double width, double height) {
-            if(cssSkin != null) {
-                CSSMatcher matcher = new CSSMatcher(listView);
-                Bounds bounds = new Bounds(x,y,width,height);
-                String prefix = "item-";
-                if(listView.getSelectedIndex() == index) {
-                    prefix = "selected-item-";
-                }
-                cssSkin.drawBackground(gfx,matcher,prefix,bounds);
-                cssSkin.drawBorder(gfx,matcher,prefix,bounds);
-                int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
-                gfx.setPaint(new FlatColor(col));
-                if(item != null) {
-                    String s = textRenderer.toString(listView, item, index);
-                    gfx.drawText(s, font, x+2, y+15);
-                }
-            } else {
-                if(listView.getSelectedIndex() == index) {
-                    gfx.setPaint(new FlatColor(0xff00ff));
-                    gfx.fillRect(x,y,width,height);
-                }
-                gfx.setPaint(FlatColor.BLACK);
-                if(item != null) {
-                    String s = textRenderer.toString(listView, item, index);
-                    gfx.drawText(s, font, x+2, y+15);
-                }
+            CSSMatcher matcher = new CSSMatcher(listView);
+            Bounds bounds = new Bounds(x,y,width,height);
+            String prefix = "item-";
+            if(listView.getSelectedIndex() == index) {
+                prefix = "selected-item-";
+            }
+            cssSkin.drawBackground(gfx,matcher,prefix,bounds);
+            cssSkin.drawBorder(gfx,matcher,prefix,bounds);
+            int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
+            gfx.setPaint(new FlatColor(col));
+            if(item != null) {
+                String s = textRenderer.toString(listView, item, index);
+                gfx.drawText(s, font, x+2, y+15);
             }
         }
     };
