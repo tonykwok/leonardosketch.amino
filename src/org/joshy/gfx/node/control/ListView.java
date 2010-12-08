@@ -8,6 +8,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 import java.util.List;
 
@@ -368,6 +369,9 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     }
 
     public double getFullHeight(double width, double height) {
+        if(getModel().size() <= 0) {
+            return height;
+        }
         switch (orientation) {
             case Vertical:   return Math.max(getModel().size()*rowHeight,height);
             case VerticalWrap: return height;
@@ -375,6 +379,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
             case HorizontalWrap:
                 if(getWidth() < 1) return height;
                 int rowLen = (int) (getWidth()/colWidth);
+                if(rowLen < 1) rowLen = 1;
                 return Math.max(getModel().size()/rowLen*rowHeight,height);
         }
         return height;

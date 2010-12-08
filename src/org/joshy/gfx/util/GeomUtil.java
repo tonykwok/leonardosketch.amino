@@ -34,11 +34,11 @@ public class GeomUtil {
     /**
      *  calculate the angle of the line formed by the two points, in radians
      */
-    public static double calcAngle(Point2D prevPoint, Point2D pt) {
-        return Math.atan2(pt.getX()-prevPoint.getX(),pt.getY()-prevPoint.getY());
+    public static double calcAngle(Point2D point1, Point2D point2) {
+        return Math.atan2(point2.getX()-point1.getX(),point2.getY()-point1.getY());
     }
 
-    public static Point2D subtract(Point2D current, Point2D panZoomStart) {
-        return new Point2D.Double(current.getX()-panZoomStart.getX(),current.getY()-panZoomStart.getY());
+    public static Point2D subtract(Point2D point1, Point2D point2) {
+        return new Point2D.Double(point1.getX()-point2.getX(),point1.getY()-point2.getY());
     }
 }
