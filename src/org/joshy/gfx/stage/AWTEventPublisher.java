@@ -207,20 +207,20 @@ public class AWTEventPublisher extends EventPublisher
     }
 
     public void windowOpened(WindowEvent e) {
-        u.p("window opened");
+        //u.p("window opened");
     }
 
     public void windowClosing(WindowEvent e) {
-        u.p("window is closing");
+//        u.p("window is closing");
         EventBus.getSystem().publish(new org.joshy.gfx.event.WindowEvent(org.joshy.gfx.event.WindowEvent.Closing, parent.getStage()));
     }
 
     public void windowClosed(WindowEvent e) {
-        u.p("window is closed");
+//        u.p("window is closed");
     }
 
     public void windowIconified(WindowEvent e) {
-        u.p("window iconified");
+//        u.p("window iconified");
     }
 
     public void windowDeiconified(WindowEvent e) {

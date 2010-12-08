@@ -57,7 +57,7 @@ public class FontBuilder {
                 java.awt.Font fnt = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,file);
                 name = fnt.getFontName();
                 customRootFontCache.put(name,fnt);
-                System.out.println("loaded font from file : " + file.getAbsolutePath() + " name = " + name);
+                //System.out.println("loaded font from file : " + file.getAbsolutePath() + " name = " + name);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -68,7 +68,7 @@ public class FontBuilder {
                 java.awt.Font fnt = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,url.openStream());
                 name = fnt.getFontName();
                 customRootFontCache.put(name,fnt);
-                System.out.println("loaded font from url : " + url + " name = " + name);
+                //System.out.println("loaded font from url : " + url + " name = " + name);
             } catch (Exception e) {
                 e.printStackTrace();
             }

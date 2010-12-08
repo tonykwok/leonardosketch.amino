@@ -47,7 +47,6 @@ public abstract class Image {
         if(cache.containsKey(url)) {
             return cache.get(url);
         } else {
-            u.p("loading image from scratch: " + url);
             try {
                 Image image = create(ImageIO.read(url));
                 cache.put(url,image);
