@@ -105,7 +105,6 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
     protected Doc onWork(String data) {
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            u.p("creating client");
             //disable expect-continue because it breaks twitter and some proxies;
             httpclient.getParams().setBooleanParameter("http.protocol.expect-continue",Boolean.FALSE);
             if(useUserPass) {
@@ -115,12 +114,12 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
                 );
             }
 
-            u.p("requesting: " + url);
+            //u.p("requesting: " + url);
             HttpRequestBase request = null;
             if(method == METHOD.GET) {
                 StringBuffer query = new StringBuffer();
                 for(String key : parameters.keySet()) {
-                    u.p("adding parameter: '" + key + "' =  '" + parameters.get(key) + "'");
+                    //u.p("adding parameter: '" + key + "' =  '" + parameters.get(key) + "'");
                     query.append(key+"="+parameters.get(key)+"&");
                 }
                 URI origUri = url.toURI();
@@ -133,13 +132,13 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
                         ,query.toString()
                         ,origUri.getFragment());
                 request = new HttpGet(finalUri);
-                u.p("final url = " + request.getURI());
+                //u.p("final url = " + request.getURI());
             }
             if(method == METHOD.POST) {
                 HttpPost postrequest = new HttpPost(url.toURI());
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
                 for(String key : parameters.keySet()) {
-                    u.p("adding parameter: '" + key + "' =  '" + parameters.get(key) + "'");
+                    //u.p("adding parameter: '" + key + "' =  '" + parameters.get(key) + "'");
                     nameValuePairs.add(new BasicNameValuePair(key,parameters.get(key)));
                 }
                 if(multiPart) {
@@ -159,9 +158,9 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
 
             HttpResponse response = httpclient.execute(request);
             HttpEntity entity = response.getEntity();
-            u.p("------");
-            u.p("status = " + response.getStatusLine());
-            u.p("len = " + entity.getContentLength());
+            //u.p("------");
+            //u.p("status = " + response.getStatusLine());
+            //u.p("len = " + entity.getContentLength());
 
             Doc doc = XMLParser.parse(entity.getContent());
             httpclient.getConnectionManager().shutdown();
@@ -170,7 +169,7 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
             u.p(e);
             this.error = e;
         }
-        u.p("done with background work");
+        //u.p("done with background work");
         return null;
     }
 

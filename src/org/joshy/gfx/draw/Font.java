@@ -56,7 +56,6 @@ public class Font {
                 fnt = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, file);
                 fnt = fnt.deriveFont((float)size);
                 fnt = fnt.deriveFont(w|s);
-                u.p("final font = " + fnt);
             } catch (FontFormatException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -67,7 +66,6 @@ public class Font {
                 fnt = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, url.openStream());
                 fnt = fnt.deriveFont((float)size);
                 fnt = fnt.deriveFont(w|s);
-                u.p("final font = " + fnt);
             } catch (FontFormatException e) {
                 e.printStackTrace();
             } catch (IOException e) {

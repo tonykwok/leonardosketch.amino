@@ -26,7 +26,6 @@ public class OSUtil {
     }
 
     public static boolean isJava6() {
-//            return true;
         return (System.getProperty("java.version").startsWith("1.6"));
     }
 
@@ -68,7 +67,6 @@ public class OSUtil {
     }
 
     public static File getJavaWSExecutable() {
-        println("java.home = " + System.getProperty("java.home"));
         if(isMac()) {
             File javaws6 = new File("/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home/bin/javaws");
             if(javaws6.exists()) {
@@ -78,21 +76,11 @@ public class OSUtil {
         }
         return new File(System.getProperty("java.home"),"bin/javaws");
     }
-    /*
-    public static void launchWebstart(String url) {
-        openBrowser(url);
-    }
-
-    public static void log(Throwable ex) {
-        System.out.println(ex.getMessage());
-        ex.printStackTrace(System.out);
-    } */
 
 
     // launching code from http://www.centerkey.com/java/browser/
     public static void openBrowser(String url) {
         String os = System.getProperty("os.name");
-        println("os = " + os);
         String osName = System.getProperty("os.name");
         try {
             if (osName.startsWith("Mac OS")) {
@@ -123,41 +111,27 @@ public class OSUtil {
         }
     }
 
-    public static void println(String string) {
-        System.out.println(string);
-    }
-        /*
-    public static File getSupportDir() {
-        String base = getBaseStorageDir();
-        return new File(base,"MaiTai");
-    }*/
-
     public static String getBaseStorageDir() {
         String os = System.getProperty("os.name").toLowerCase();
         StringBuffer filepath = new StringBuffer(System.getProperty("user.home"));
-        System.out.println("os = " + os);
-        System.out.println("user.home = " + filepath);
         if(os.indexOf("windows xp") != -1) {
-            u.p("doing xp");
             filepath.append(File.separator);
             filepath.append("Local Settings");
             filepath.append(File.separator);
             filepath.append("Application Data");
         } else if (os.indexOf("vista") != -1) {
-            u.p("doing vista");
             filepath.append(File.separator);
             filepath.append("appdata");
             filepath.append(File.separator);
             filepath.append("locallow");
         } else if (os.startsWith("mac")) {
-            u.p("doing mac");
             filepath.append(File.separator);
             filepath.append("Library");
             filepath.append(File.separator);
             filepath.append("Preferences");
         }
         filepath.append(File.separator);
-        System.out.println("final filepath = " + filepath.toString());
+        System.out.println("final base storage dir = " + filepath.toString());
       return filepath.toString();
     }
 }

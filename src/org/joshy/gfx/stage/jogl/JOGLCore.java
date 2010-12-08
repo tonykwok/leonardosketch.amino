@@ -8,7 +8,6 @@ import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.stage.swing.SwingCore;
-import org.joshy.gfx.util.u;
 import org.parboiled.support.ParsingResult;
 
 import javax.swing.*;
@@ -32,13 +31,11 @@ public class JOGLCore extends Core {
     @Override
     protected void initSkinning() throws Exception {
         URL url = SwingCore.class.getResource("default.css");
-        u.p("css resource = " + url);
         ParsingResult<?> result = CSSProcessor.parseCSS(url.openStream());
         CSSRuleSet set = new CSSRuleSet();
         CSSSkin cssskin = new CSSSkin();
         cssskin.setRuleSet(set);
         CSSProcessor.condense(result.parseTreeRoot,set, url.toURI());
-        u.p("default css parsed from: " + url);
         SkinManager.getShared().setCSSSkin(cssskin);
     }
     

@@ -53,33 +53,33 @@ public class SwingCore extends Core {
             app.setOpenFileHandler(new OpenFilesHandler(){
                 @Override
                 public void openFiles(AppEvent.OpenFilesEvent openFilesEvent) {
-                    u.p("files were opened: " + openFilesEvent);
-                    u.p("search term = " + openFilesEvent.getSearchTerm());
-                    u.p("files = ");
-                    for(File f : openFilesEvent.getFiles()) {
-                        u.p("file = " + f.getAbsolutePath());
-                    }
+//                    u.p("files were opened: " + openFilesEvent);
+//                    u.p("search term = " + openFilesEvent.getSearchTerm());
+//                    u.p("files = ");
+//                    for(File f : openFilesEvent.getFiles()) {
+//                        u.p("file = " + f.getAbsolutePath());
+//                    }
                     EventBus.getSystem().publish(new FileOpenEvent(openFilesEvent.getFiles()));
                 }
             });
             app.setAboutHandler(new AboutHandler(){
                 @Override
                 public void handleAbout(AppEvent.AboutEvent aboutEvent) {
-                    u.p("got about");
+//                    u.p("got about");
                     EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.About));
                 }
             });
             app.setQuitHandler(new QuitHandler(){
                 @Override
                 public void handleQuitRequestWith(AppEvent.QuitEvent quitEvent, QuitResponse quitResponse) {
-                    u.p("got quit");
+//                    u.p("got quit");
                     EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.Quit));
                 }
             });
             app.setPreferencesHandler(new PreferencesHandler(){
                 @Override
                 public void handlePreferences(AppEvent.PreferencesEvent preferencesEvent) {
-                    u.p("got prefs");
+//                    u.p("got prefs");
                     EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.Preferences));
                 }
             });
@@ -94,13 +94,10 @@ public class SwingCore extends Core {
     @Override
     protected void initSkinning() throws Exception {
         URL url = SwingCore.class.getResource("default.css");
-        u.p("css resource = " + url);
         baseResult = CSSProcessor.parseCSS(url.openStream());
         baseResultURI = url.toURI();
         CSSRuleSet baseSet = new CSSRuleSet();
-        u.p("default css parsed from: " + url);
         CSSProcessor.condense(baseResult.parseTreeRoot, baseSet, url.toURI());
-
         CSSSkin cssskin = new CSSSkin();
         cssskin.setRuleSet(baseSet);
         SkinManager.getShared().setCSSSkin(cssskin);
@@ -112,7 +109,7 @@ public class SwingCore extends Core {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
-                    u.p("setting the thread " + Thread.currentThread());
+                    //u.p("setting the thread " + Thread.currentThread());
                     _gui_thread = Thread.currentThread();
                 }
             } );
@@ -151,18 +148,18 @@ public class SwingCore extends Core {
         CSSRuleSet set = new CSSRuleSet();
         //add in the old rules
         CSSProcessor.condense(baseResult.parseTreeRoot,set, baseResultURI);
-        u.p("rule count = " + set.rulesCount());
+        //u.p("rule count = " + set.rulesCount());
 
         //parse the new file
         ParsingResult<?> result = CSSProcessor.parseCSS(new FileInputStream(file));
 
         //add in the new rules
         CSSProcessor.condense(result.parseTreeRoot,set, file.toURI());
-        u.p("rule count = " + set.rulesCount());
+        //u.p("rule count = " + set.rulesCount());
 
         CSSSkin skin = SkinManager.getShared().getCSSSkin();
         skin.setRuleSet(set);
-        u.p("parsed. reloading skins");
+        //u.p("parsed. reloading skins");
         reloadSkins();
     }
 
@@ -172,25 +169,25 @@ public class SwingCore extends Core {
         CSSRuleSet set = new CSSRuleSet();
         //add in the old rules
         CSSProcessor.condense(baseResult.parseTreeRoot,set, baseResultURI);
-        u.p("rule count = " + set.rulesCount());
+        //u.p("rule count = " + set.rulesCount());
 
         //parse the new file
         ParsingResult<?> result = CSSProcessor.parseCSS(in);
 
         //add in the new rules
         CSSProcessor.condense(result.parseTreeRoot,set, uri.toURI());
-        u.p("rule count = " + set.rulesCount());
+        //u.p("rule count = " + set.rulesCount());
 
         CSSSkin skin = SkinManager.getShared().getCSSSkin();
         skin.setRuleSet(set);
-        u.p("parsed. reloading skins");
+        //u.p("parsed. reloading skins");
         reloadSkins();
     }
 
     private void checkDebugCSSFile(File file) {
         if(file.exists()) {
             if(file.lastModified() - lastScan > 1000 ) {
-                u.p("it's been more than a second");
+                //u.p("it's been more than a second");
                 lastScan = new Date().getTime();
             try {
                 //create a new set
