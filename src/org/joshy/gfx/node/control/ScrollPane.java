@@ -8,6 +8,7 @@ import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.AbstractPane;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -212,7 +213,9 @@ public class ScrollPane extends AbstractPane {
         Bounds cBounds = content.getVisualBounds();
         if(content instanceof ScrollingAware) {
             ScrollingAware sa = (ScrollingAware) content;
-            cBounds = new Bounds(0,0,sa.getFullWidth(getWidth(),getHeight()),sa.getFullHeight(getWidth(),getHeight()));
+            cBounds = new Bounds(0,0,
+                    sa.getFullWidth(getWidth()-hInset,getHeight()-vInset),
+                    sa.getFullHeight(getWidth()-hInset,getHeight()-vInset));
             if(sa instanceof Control) {
                 Control control = (Control) sa;
                 control.setWidth(getWidth()-hInset);
