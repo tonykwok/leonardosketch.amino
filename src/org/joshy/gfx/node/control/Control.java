@@ -194,6 +194,12 @@ public abstract class Control extends Node {
     public boolean isSkinDirty() {
         return skinsDirty;
     }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        setLayoutDirty();
+    }
 }
 
 
