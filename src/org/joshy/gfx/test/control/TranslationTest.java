@@ -3,6 +3,8 @@ package org.joshy.gfx.test.control;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.SystemMenuEvent;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
@@ -28,6 +30,12 @@ public class TranslationTest implements Runnable {
 
     @Override
     public void run() {
+        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>() {
+            @Override
+            public void call(SystemMenuEvent event) throws Exception {
+                System.exit(0);
+            }
+        });
         final Stage stage = Stage.createStage();
         try {
             Localization.init(TranslationTest.class.getResource("translationtest.xml"),"en-US");

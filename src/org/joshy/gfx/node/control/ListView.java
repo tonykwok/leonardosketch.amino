@@ -329,11 +329,11 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     }
 
     public void setSelectedIndex(int selectedIndex) {
-        if(selectedIndex < 0) return;
+        if(selectedIndex < -1) return;
         if(selectedIndex >= model.size()) return;
         this.selectedIndex = selectedIndex;
 
-        if(scrollPane != null) {
+        if(scrollPane != null && selectedIndex >= 0) {
             Bounds bounds = null;
             int colLen = (int) (getHeight()/rowHeight);
             int rowLen = (int) (getWidth()/colWidth);
