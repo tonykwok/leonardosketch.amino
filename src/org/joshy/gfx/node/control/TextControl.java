@@ -61,6 +61,7 @@ public abstract class TextControl extends Control implements Focusable {
 
         EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
+                if(!isEnabled()) return;
                 Core.getShared().getFocusManager().setFocusedNode(TextControl.this);
                 if(selection.isActive() && !event.isShiftPressed()) {
                     selection.clear();

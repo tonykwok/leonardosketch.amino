@@ -11,7 +11,6 @@ import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.control.StandardDialogs;
-import org.joshy.gfx.sidehatch.ListUtil;
 import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
 
@@ -25,6 +24,7 @@ public class TranslationEditor<E> extends VFlexBox {
     public TranslationEditor() {
 
         final Textbox editBox = new Textbox();
+        editBox.setEnabled(false);
         editBox.setPrefWidth(200);
 
         final Set<String> keys = Localization.getAllKeys();
@@ -103,23 +103,28 @@ public class TranslationEditor<E> extends VFlexBox {
                         keyView.setSelectedIndex(-1);
                         langView.setSelectedIndex(-1);
                         editBox.setText("");
+                        editBox.setEnabled(false);
                     }
                     if(selectionEvent.getView() == keyView) {
-                        //Prefix prefix = prefixView.getModel().get(prefixView.getSelectedIndex());
+                        if(keyView.getSelectedIndex() <0) return;
                         Key key = keyView.getModel().get(keyView.getSelectedIndex());
                         ArrayListModel<String> m = new ArrayListModel<String>();
                         m.addAll(key.keyString.translations.keySet());
                         langView.setModel(ListUtil.toAlphaListModel(m));
                         langView.setSelectedIndex(-1);
                         editBox.setText("");
+                        editBox.setEnabled(false);
                     }
                     if(selectionEvent.getView() == langView) {
-                        //Prefix prefix = prefixView.getModel().get(prefixView.getSelectedIndex());
+                        if(keyView.getSelectedIndex() < 0) return;
                         Key key = keyView.getModel().get(keyView.getSelectedIndex());
-                        //Key key = prefix.keys.get(keyView.getSelectedIndex());
+                        if(langView.getSelectedIndex() < 0) return;
                         String lang = langView.getModel().get(langView.getSelectedIndex());
                         String val = key.keyString.translations.get(lang);
                         editBox.setText(val);
+                        editBox.setEnabled(true);
+                        editBox.selectAll();
+                        Core.getShared().getFocusManager().setFocusedNode(editBox);                        
                     }
                 }
                 if(selectionEvent.getView() == currentLocalePopup) {
@@ -184,7 +189,7 @@ public class TranslationEditor<E> extends VFlexBox {
                 )
                 .add(new VFlexBox()
                     .add(new Label("Translation"))
-                    .add(editBox)
+                    .add(editBox.onAction(setString))
                     .add(new Button("Set").onClicked(setString))
                 )
             ,1);
