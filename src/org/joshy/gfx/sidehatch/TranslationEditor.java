@@ -30,6 +30,7 @@ public class TranslationEditor<E> extends VFlexBox {
     private ListView<Key> keyView = new ListView<Key>();
     private ListView<Lang> langView = new ListView<Lang>();
     private Textbox editBox = new Textbox();
+    private PopupMenuButton<String> currentLocalePopup;
 
     public TranslationEditor() {
 
@@ -78,7 +79,7 @@ public class TranslationEditor<E> extends VFlexBox {
         });
 
 
-        final PopupMenuButton<String> currentLocalePopup = new PopupMenuButton<String>()
+        currentLocalePopup = new PopupMenuButton<String>()
                 .setModel(ListUtil.toAlphaListModel(currentLocaleModel));
 
         EventBus.getSystem().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>(){
@@ -146,6 +147,7 @@ public class TranslationEditor<E> extends VFlexBox {
         this.add(new HFlexBox()
                 .add(new Label("Current Locale"))
                 .add(currentLocalePopup)
+                .add(new Button("Add Locale").onClicked(addLocale))
             ,0);
         this.add(new HFlexBox()
                 .setBoxAlign(Align.Stretch)
@@ -167,8 +169,8 @@ public class TranslationEditor<E> extends VFlexBox {
                             .setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never)
                             .setPrefWidth(100)
                             .setPrefHeight(100),1)
-                    .add(new Button("Add Lang").onClicked(addLangAction))
-                    .add(new Button("Del Lang"))
+                    //.add(new Button("Add Lang").onClicked(addLangAction))
+                    //.add(new Button("Del Lang"))
                 )
                 .add(new VFlexBox()
                     .add(new Label("Translation"))
@@ -182,7 +184,26 @@ public class TranslationEditor<E> extends VFlexBox {
         this.add(new HFlexBox()
             .add(exportButton));
     }
-    
+
+    Callback<ActionEvent> addLocale = new Callback<ActionEvent>() {
+
+        @Override
+        public void call(ActionEvent event) throws Exception {
+            String locale = StandardDialogs.showEditText("New Locale Name","xz-XZ");
+            u.p("locale = " + locale);
+            if(locale != null) {
+                currentLocaleModel.add(locale);
+                ListModel<String> mod = ListUtil.toAlphaListModel(currentLocaleModel);
+                currentLocalePopup.setModel(mod);
+                for(int i=0; i<mod.size(); i++) {
+                    if(mod.get(i) == locale) {
+                        currentLocalePopup.setSelectedIndex(i);
+                    }
+                }
+            }
+        }
+    };
+
     Callback<ActionEvent> exportTranslation = new Callback<ActionEvent>() {
         @Override
         public void call(ActionEvent event) throws Exception {
