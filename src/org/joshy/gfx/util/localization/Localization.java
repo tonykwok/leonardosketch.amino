@@ -62,6 +62,7 @@ public class Localization {
 
 
     public static class KeyString implements CharSequence {
+        //map of locale to value
         public Map<String,String> translations = new HashMap<String, String>();
         private String prefix;
         private String keyName;
