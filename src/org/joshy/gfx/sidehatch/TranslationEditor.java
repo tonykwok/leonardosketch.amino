@@ -20,76 +20,26 @@ import java.util.Map;
 import java.util.Set;
 
 public class TranslationEditor<E> extends VFlexBox {
+    private ArrayListModel<Prefix> prefixList;
+    private HashMap<String, Prefix> prefixes;
+    private ArrayListModel<String> currentLocaleModel;
+    
+    private ListView<Key> keyView = new ListView<Key>();
+    private ListView<String> langView = new ListView<String>();
+    private Textbox editBox = new Textbox();
 
     public TranslationEditor() {
 
-        final Textbox editBox = new Textbox();
         editBox.setEnabled(false);
         editBox.setPrefWidth(200);
 
-        final Set<String> keys = Localization.getAllKeys();
-
-        final Map<String,Prefix> prefixes = new HashMap<String, Prefix>();
-        ArrayListModel<String> currentLocaleModel = new ArrayListModel<String>();
-        for(String dsKey : keys) {
-            Localization.KeyString ks = Localization.getKeyString(dsKey);
-            if(!prefixes.containsKey(ks.getPrefix())) {
-                prefixes.put(ks.getPrefix(),new Prefix(ks.getPrefix()));
-            }
-            Prefix pf = prefixes.get(ks.getPrefix());
-            if(!pf.keyMap.containsKey(ks.getKeyname())) {
-                Key k = new Key(ks.getKeyname());
-                pf.keyMap.put(ks.getKeyname(),k);
-                pf.keys.add(k);
-            }
-            Key key = pf.keyMap.get(ks.getKeyname());
-            key.keyString = ks;
-            for(String lang : key.keyString.translations.keySet()) {
-                if(!currentLocaleModel.contains(lang)) {
-                    currentLocaleModel.add(lang);
-                }
-            }
-        }
-
-        
-        final ArrayListModel<Prefix> prefixList = new ArrayListModel<Prefix>();
-        prefixList.addAll(prefixes.values());
-
+        processKeys();
         
         final ListView<Prefix> prefixView = new ListView<Prefix>();
         prefixView.setModel(ListUtil.toAlphaListModel(prefixList));
-        final ListView<Key> keyView = new ListView<Key>();
         keyView.setModel(new ArrayListModel<Key>());
-        final ListView<String> langView = new ListView<String>();
         langView.setModel(new ArrayListModel<String>());
 
-        Callback<ActionEvent> exportTranslation = new Callback<ActionEvent>() {
-            @Override
-            public void call(ActionEvent event) throws Exception {
-                File file = new File("test.xml");
-                u.p("writing to file: " + file.getAbsolutePath());
-                XMLWriter xml = new XMLWriter(file);
-                xml.header();
-                xml.start("sets");
-                for(Prefix prefix : ListUtil.toAlphaCollection(prefixes.values())) {
-                    xml.start("set","name",prefix.prefix);
-                    for(Key key : prefix.keys) {
-                        xml.start("key","name",key.keyString.getKeyname());
-                        for(String lang : key.keyString.translations.keySet()) {
-                            xml.start("value")
-                                    .attr("language",lang)
-                                    .text(key.keyString.translations.get(lang))
-                                    .end();
-                        }
-                        xml.end();
-                    }
-                    xml.end();
-                }
-                xml.end();
-                xml.close();
-                StandardDialogs.showAlert("Translation has been exported to \n " + file.getAbsolutePath());
-            }
-        };
 
         final PopupMenuButton<String> currentLocalePopup = new PopupMenuButton<String>()
                 .setModel(ListUtil.toAlphaListModel(currentLocaleModel));
@@ -135,30 +85,6 @@ public class TranslationEditor<E> extends VFlexBox {
             }
         });
 
-        Callback<ActionEvent> setString = new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                Key key = keyView.getModel().get(keyView.getSelectedIndex());
-                String lang = langView.getModel().get(langView.getSelectedIndex());
-                String value = editBox.getText();
-                key.keyString.setTranslation(lang,value);
-                Core.getShared().reloadSkins();
-            }
-        };
-
-
-        Callback<ActionEvent> addLangAction = new Callback<ActionEvent>(){
-            @Override
-            public void call(ActionEvent event) throws Exception {
-                String newLang = StandardDialogs.showEditText("New Locale","en-US");
-                Key key = keyView.getModel().get(keyView.getSelectedIndex());
-                key.keyString.addTranslation(newLang,"---");
-                ArrayListModel<String> m = new ArrayListModel<String>();
-                m.addAll(key.keyString.translations.keySet());
-                langView.setModel(ListUtil.toAlphaListModel(m));
-            }
-        };
-
-
         this.setBoxAlign(Align.Stretch);
         this.add(new HFlexBox()
                 .add(new Label("Current Locale"))
@@ -198,6 +124,88 @@ public class TranslationEditor<E> extends VFlexBox {
 
         this.add(new HFlexBox()
             .add(exportButton));
+    }
+    
+    Callback<ActionEvent> exportTranslation = new Callback<ActionEvent>() {
+        @Override
+        public void call(ActionEvent event) throws Exception {
+            File file = new File("test.xml");
+            u.p("writing to file: " + file.getAbsolutePath());
+            XMLWriter xml = new XMLWriter(file);
+            xml.header();
+            xml.start("sets");
+            for(Prefix prefix : ListUtil.toAlphaCollection(prefixes.values())) {
+                xml.start("set","name",prefix.prefix);
+                for(Key key : prefix.keys) {
+                    xml.start("key","name",key.keyString.getKeyname());
+                    for(String lang : key.keyString.translations.keySet()) {
+                        xml.start("value")
+                                .attr("language",lang)
+                                .text(key.keyString.translations.get(lang))
+                                .end();
+                    }
+                    xml.end();
+                }
+                xml.end();
+            }
+            xml.end();
+            xml.close();
+            StandardDialogs.showAlert("Translation has been exported to \n " + file.getAbsolutePath());
+        }
+    };
+
+    Callback<ActionEvent> setString = new Callback<ActionEvent>() {
+        public void call(ActionEvent actionEvent) throws Exception {
+            Key key = keyView.getModel().get(keyView.getSelectedIndex());
+            String lang = langView.getModel().get(langView.getSelectedIndex());
+            String value = editBox.getText();
+            key.keyString.setTranslation(lang,value);
+            Core.getShared().reloadSkins();
+        }
+    };
+
+
+    Callback<ActionEvent> addLangAction = new Callback<ActionEvent>(){
+        @Override
+        public void call(ActionEvent event) throws Exception {
+            String newLang = StandardDialogs.showEditText("New Locale","en-US");
+            Key key = keyView.getModel().get(keyView.getSelectedIndex());
+            key.keyString.addTranslation(newLang,"---");
+            ArrayListModel<String> m = new ArrayListModel<String>();
+            m.addAll(key.keyString.translations.keySet());
+            langView.setModel(ListUtil.toAlphaListModel(m));
+        }
+    };
+
+
+    private void processKeys() {
+        //process all keys in the existing translation file
+        final Set<String> keys = Localization.getAllKeys();
+        prefixes = new HashMap<String, Prefix>();
+        currentLocaleModel = new ArrayListModel<String>();
+        for(String dsKey : keys) {
+            Localization.KeyString ks = Localization.getKeyString(dsKey);
+            if(!prefixes.containsKey(ks.getPrefix())) {
+                prefixes.put(ks.getPrefix(),new Prefix(ks.getPrefix()));
+            }
+            Prefix pf = prefixes.get(ks.getPrefix());
+            if(!pf.keyMap.containsKey(ks.getKeyname())) {
+                Key k = new Key(ks.getKeyname());
+                pf.keyMap.put(ks.getKeyname(),k);
+                pf.keys.add(k);
+            }
+            Key key = pf.keyMap.get(ks.getKeyname());
+            key.keyString = ks;
+            for(String lang : key.keyString.translations.keySet()) {
+                if(!currentLocaleModel.contains(lang)) {
+                    currentLocaleModel.add(lang);
+                }
+            }
+        }
+        prefixList = new ArrayListModel<Prefix>();
+        prefixList.addAll(prefixes.values());
+
+
     }
 
     class Prefix implements Comparable<Prefix> {
