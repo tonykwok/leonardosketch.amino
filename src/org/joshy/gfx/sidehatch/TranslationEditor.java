@@ -2,6 +2,9 @@ package org.joshy.gfx.sidehatch;
 
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.Core;
+import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -25,7 +28,7 @@ public class TranslationEditor<E> extends VFlexBox {
     private ArrayListModel<String> currentLocaleModel;
     
     private ListView<Key> keyView = new ListView<Key>();
-    private ListView<String> langView = new ListView<String>();
+    private ListView<Lang> langView = new ListView<Lang>();
     private Textbox editBox = new Textbox();
 
     public TranslationEditor() {
@@ -38,7 +41,41 @@ public class TranslationEditor<E> extends VFlexBox {
         final ListView<Prefix> prefixView = new ListView<Prefix>();
         prefixView.setModel(ListUtil.toAlphaListModel(prefixList));
         keyView.setModel(new ArrayListModel<Key>());
-        langView.setModel(new ArrayListModel<String>());
+        langView.setModel(new ArrayListModel<Lang>());
+
+        langView.setRenderer(new ListView.ItemRenderer<Lang>() {
+
+            @Override
+            public void draw(GFX gfx, ListView listView, Lang item, int index, double x, double y, double width, double height) {
+                if(item != null) {
+                    boolean selected = listView.getSelectedIndex() == index;
+                    gfx.setPaint(FlatColor.WHITE);
+                    if(selected) {
+                        gfx.setPaint(FlatColor.BLUE);
+                    }
+                    if(!item.isReal) {
+                        gfx.setPaint(FlatColor.RED);
+                        if(selected) {
+                            gfx.setPaint(new FlatColor(0xff8888));
+                        }
+                    }
+                    gfx.fillRect(x,y,width,height);
+
+
+                    gfx.setPaint(FlatColor.BLACK);
+                    if(selected) {
+                        gfx.setPaint(FlatColor.WHITE);
+                    }
+                    if(!item.isReal) {
+                        gfx.setPaint(FlatColor.BLACK);
+                        if(selected) {
+                            gfx.setPaint(FlatColor.BLACK);
+                        }
+                    }
+                    gfx.drawText(item.realLang, Font.DEFAULT, x+5, y+12);
+                }
+            }
+        });
 
 
         final PopupMenuButton<String> currentLocalePopup = new PopupMenuButton<String>()
@@ -58,8 +95,23 @@ public class TranslationEditor<E> extends VFlexBox {
                     if(selectionEvent.getView() == keyView) {
                         if(keyView.getSelectedIndex() <0) return;
                         Key key = keyView.getModel().get(keyView.getSelectedIndex());
-                        ArrayListModel<String> m = new ArrayListModel<String>();
-                        m.addAll(key.keyString.translations.keySet());
+                        ArrayListModel<Lang> m = new ArrayListModel<Lang>();
+                        for(String l : key.keyString.translations.keySet()) {
+                            m.add(new Lang(l,true));
+                        }
+                        //include stubs for the missing locales
+                        for(String locale : currentLocaleModel) {
+                            boolean found = false;
+                            for(Lang l : m) {
+                                if(l.realLang.equals(locale)) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if(!found) {
+                                m.add(new Lang(locale,false));
+                            }
+                        }
                         langView.setModel(ListUtil.toAlphaListModel(m));
                         langView.setSelectedIndex(-1);
                         editBox.setText("");
@@ -69,12 +121,17 @@ public class TranslationEditor<E> extends VFlexBox {
                         if(keyView.getSelectedIndex() < 0) return;
                         Key key = keyView.getModel().get(keyView.getSelectedIndex());
                         if(langView.getSelectedIndex() < 0) return;
-                        String lang = langView.getModel().get(langView.getSelectedIndex());
-                        String val = key.keyString.translations.get(lang);
-                        editBox.setText(val);
+                        Lang lang = langView.getModel().get(langView.getSelectedIndex());
+                        String val = key.keyString.translations.get(lang.realLang);
+                        u.p("val = " + val);
+                        if(val != null) {
+                            editBox.setText(val);
+                        } else {
+                            editBox.setText(key.keyString.translations.get("DEFAULT"));
+                        }
                         editBox.setEnabled(true);
                         editBox.selectAll();
-                        Core.getShared().getFocusManager().setFocusedNode(editBox);                        
+
                     }
                 }
                 if(selectionEvent.getView() == currentLocalePopup) {
@@ -157,9 +214,10 @@ public class TranslationEditor<E> extends VFlexBox {
     Callback<ActionEvent> setString = new Callback<ActionEvent>() {
         public void call(ActionEvent actionEvent) throws Exception {
             Key key = keyView.getModel().get(keyView.getSelectedIndex());
-            String lang = langView.getModel().get(langView.getSelectedIndex());
+            Lang lang = langView.getModel().get(langView.getSelectedIndex());
             String value = editBox.getText();
-            key.keyString.setTranslation(lang,value);
+            key.keyString.setTranslation(lang.realLang,value);
+            lang.isReal = true;
             Core.getShared().reloadSkins();
         }
     };
@@ -173,7 +231,7 @@ public class TranslationEditor<E> extends VFlexBox {
             key.keyString.addTranslation(newLang,"---");
             ArrayListModel<String> m = new ArrayListModel<String>();
             m.addAll(key.keyString.translations.keySet());
-            langView.setModel(ListUtil.toAlphaListModel(m));
+            //langView.setModel(ListUtil.toAlphaListModel(m));
         }
     };
 
@@ -242,6 +300,20 @@ public class TranslationEditor<E> extends VFlexBox {
         @Override
         public int compareTo(Key key) {
             return this.key.compareTo(key.key);
+        }
+    }
+    class Lang implements Comparable<Lang> {
+        String realLang;
+        boolean isReal;
+
+        public Lang(String locale, boolean b) {
+            this.realLang = locale;
+            this.isReal = b;
+        }
+
+        @Override
+        public int compareTo(Lang lang) {
+            return this.realLang.compareTo(lang.realLang);
         }
     }
 }
