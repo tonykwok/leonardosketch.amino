@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="core">
+    <output-path>$PROJECT_DIR$/out/artifacts/core</output-path>
+    <root id="archive" name="Amino-core.jar">
+      <element id="module-output" name="Amino" />
+    </root>
+  </artifact>
+</component>
