@@ -25,6 +25,7 @@ public class Group extends Node implements Parent {
 
     @Override
     public void draw(GFX g) {
+        if(!isVisible()) return;
         for(Node child : children) {
             g.translate(child.getTranslateX(),child.getTranslateY());
             child.draw(g);
