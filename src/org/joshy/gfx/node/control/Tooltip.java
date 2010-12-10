@@ -88,7 +88,7 @@ public class Tooltip extends Control {
         if(sizeInfo == null) {
             doPrefLayout();
         }
-        boxPainter.draw(g, styleInfo, sizeInfo, this, text);        
+        boxPainter.draw(g, styleInfo, sizeInfo, text);        
     }
 
     public String getText() {

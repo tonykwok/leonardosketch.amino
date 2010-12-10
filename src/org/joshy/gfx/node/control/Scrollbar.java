@@ -181,10 +181,10 @@ public class Scrollbar extends Control {
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
         styleInfo = cssSkin.getStyleInfo(this, null);
-        leftArrowStyleInfo = cssSkin.getStyleInfo(this,null,"left-arrow-");
-        rightArrowStyleInfo = cssSkin.getStyleInfo(this,null,"right-arrow-");
-        thumbStyleInfo = cssSkin.getStyleInfo(this,null,"thumb-");
-        trackStyleInfo = cssSkin.getStyleInfo(this,null,"track-");
+        leftArrowStyleInfo = cssSkin.getStyleInfo(this,null,"left-arrow");
+        rightArrowStyleInfo = cssSkin.getStyleInfo(this,null,"right-arrow");
+        thumbStyleInfo = cssSkin.getStyleInfo(this,null,"thumb");
+        trackStyleInfo = cssSkin.getStyleInfo(this,null,"track");
         setLayoutDirty();
     }
 
@@ -193,10 +193,10 @@ public class Scrollbar extends Control {
         sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
         setWidth(sizeInfo.width);
         setHeight(sizeInfo.height);
-        leftArrowSizeInfo = cssSkin.getSizeInfo(this,leftArrowStyleInfo,"","left-arrow-");
-        rightArrowSizeInfo = cssSkin.getSizeInfo(this,rightArrowStyleInfo,"","right-arrow-");
-        thumbSizeInfo = cssSkin.getSizeInfo(this,thumbStyleInfo,"","thumb-");
-        trackSizeInfo = cssSkin.getSizeInfo(this,trackStyleInfo,"","track-");
+        leftArrowSizeInfo = cssSkin.getSizeInfo(this,leftArrowStyleInfo,"","left-arrow");
+        rightArrowSizeInfo = cssSkin.getSizeInfo(this,rightArrowStyleInfo,"","right-arrow");
+        thumbSizeInfo = cssSkin.getSizeInfo(this,thumbStyleInfo,"","thumb");
+        trackSizeInfo = cssSkin.getSizeInfo(this,trackStyleInfo,"","track");
     }
 
     @Override
@@ -204,16 +204,16 @@ public class Scrollbar extends Control {
         sizeInfo.width = getWidth();
         sizeInfo.height = getHeight();
         boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
-        leftArrowPainter = cssSkin.createBoxPainter(this, leftArrowStyleInfo, leftArrowSizeInfo, "", CSSSkin.State.None, "left-arrow-");
-        rightArrowPainter = cssSkin.createBoxPainter(this, rightArrowStyleInfo, rightArrowSizeInfo, "", CSSSkin.State.None, "right-arrow-");
-        thumbPainter = cssSkin.createBoxPainter(this, thumbStyleInfo, thumbSizeInfo, "", CSSSkin.State.None, "thumb-");
-        trackPainter = cssSkin.createBoxPainter(this, trackStyleInfo, trackSizeInfo, "", CSSSkin.State.None, "track-");
+        leftArrowPainter = cssSkin.createBoxPainter(this, leftArrowStyleInfo, leftArrowSizeInfo, "", CSSSkin.State.None, "left-arrow");
+        rightArrowPainter = cssSkin.createBoxPainter(this, rightArrowStyleInfo, rightArrowSizeInfo, "", CSSSkin.State.None, "right-arrow");
+        thumbPainter = cssSkin.createBoxPainter(this, thumbStyleInfo, thumbSizeInfo, "", CSSSkin.State.None, "thumb");
+        trackPainter = cssSkin.createBoxPainter(this, trackStyleInfo, trackSizeInfo, "", CSSSkin.State.None, "track");
     }
 
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
-        boxPainter.draw(g,styleInfo,sizeInfo,this,"");
+        boxPainter.draw(g,styleInfo,sizeInfo,"");
 
         Bounds leftArrowBounds = new Bounds(0,0,arrowLength,getHeight());
         Bounds rightArrowBounds = new Bounds(getWidth()-arrowLength,0,arrowLength,getHeight());
@@ -227,23 +227,23 @@ public class Scrollbar extends Control {
         trackSizeInfo.width= trackBounds.getWidth();
         trackSizeInfo.height = trackBounds.getHeight();
         g.translate(trackBounds.getX(),trackBounds.getY());
-        trackPainter.draw(g,trackStyleInfo,trackSizeInfo,this,"");
+        trackPainter.draw(g,trackStyleInfo,trackSizeInfo,"");
         g.translate(-trackBounds.getX(),-trackBounds.getY());
 
         leftArrowSizeInfo.width = leftArrowBounds.getWidth();
         leftArrowSizeInfo.height = leftArrowBounds.getHeight();
-        leftArrowPainter.draw(g,leftArrowStyleInfo,leftArrowSizeInfo,this,"");
+        leftArrowPainter.draw(g,leftArrowStyleInfo,leftArrowSizeInfo,"");
 
         g.translate(rightArrowBounds.getX(),rightArrowBounds.getY());
         rightArrowSizeInfo.width = rightArrowBounds.getWidth();
         rightArrowSizeInfo.height = rightArrowBounds.getHeight();
-        rightArrowPainter.draw(g,rightArrowStyleInfo,rightArrowSizeInfo,this,"");
+        rightArrowPainter.draw(g,rightArrowStyleInfo,rightArrowSizeInfo,"");
         g.translate(-rightArrowBounds.getX(),-rightArrowBounds.getY());
 
         g.translate(thumbBounds.getX(),thumbBounds.getY());
         thumbSizeInfo.width = thumbBounds.getWidth();
         thumbSizeInfo.height = thumbBounds.getHeight();
-        thumbPainter.draw(g,thumbStyleInfo,thumbSizeInfo,this,"");
+        thumbPainter.draw(g,thumbStyleInfo,thumbSizeInfo,"");
         g.translate(-thumbBounds.getX(),-thumbBounds.getY());
 
         //draw the arrows

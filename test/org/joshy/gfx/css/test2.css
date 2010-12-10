@@ -36,4 +36,23 @@ Button {
     height: 100px;
 }
 
-
+/* check that class plus pseudo-class plus pseudo-element will work */
+.-class-Button:hover::micro {
+    prop5: 8px;
+}
+.-class-Scrollbar:vertical {
+    prop6: 20px;
+}
+.-class-Scrollbar::track {
+    prop6: 21px;
+}
+.-class-Scrollbar:vertical::thumb {
+    background: linear-gradient(left center, #808080 0%, #ffffff 100%);
+    prop6: 22px;
+    margin: 1px 1px 0px 1px;
+}
+.-class-Scrollbar:vertical::track {
+    background: linear-gradient(left center, #808080 0%, #ffffff 100%);
+    prop6: 23px;
+    margin: 1px 1px 0px 1px;
+}

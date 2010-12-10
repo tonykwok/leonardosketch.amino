@@ -115,8 +115,8 @@ Button.classmatch3 {
 #border_test_5 {
     border-width: 10px 11px 12px; /* top, left&right, bottom */
 }
-#border_test_6 {
-    thumb-border-width: 10px 11px 12px; /* top, left&right, bottom */
+#border_test_6::thumb {
+    border-width: 10px 11px 12px; /* top, left&right, bottom */
 }
 
 
@@ -172,8 +172,8 @@ Button.classmatch3 {
 #border_radius_3 { border-radius: 1px 2px; } /* same as 1,2,1,2 */
 #border_radius_4 { border-radius: 1px 2px 3px; } /* same as 1,2,3,2 */
 #border_radius_5 { border-radius: 1px 2px 3px 4px; }
-#border_radius_6 {
-    thumb-border-radius: 1px 2px 3px 4px;
+#border_radius_6::thumb {
+    border-radius: 1px 2px 3px 4px;
     /*thumb-border-top-left-radius: 1px;*/
 }
 

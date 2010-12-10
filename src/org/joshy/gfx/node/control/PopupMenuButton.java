@@ -91,12 +91,12 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
 
         CSSMatcher matcher = new CSSMatcher(this);
         Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
-        cssSkin.drawBackground(g,matcher,"", bounds);
+        cssSkin.drawBackground(g,matcher, bounds);
         int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
         g.setPaint(new FlatColor(col));
         drawText(g);
         drawTriangle(g);
-        cssSkin.drawBorder(g,matcher,"",bounds);
+        cssSkin.drawBorder(g,matcher,bounds);
     }
 
     private void drawTriangle(GFX g) {

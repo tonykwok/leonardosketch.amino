@@ -2,7 +2,6 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.css.values.*;
 import org.joshy.gfx.css.values.StringValue;
-import org.joshy.gfx.util.u;
 import org.parboiled.*;
 import org.parboiled.annotations.DontLabel;
 import org.parboiled.annotations.SuppressNode;
@@ -70,19 +69,21 @@ public class CSSParser extends BaseParser<Object> {
     // id, class, element, and pseudoelement selectors
     public Rule Selector() {
         final Var<String> elem = new Var<String>();
-        final Var<String> pseudo = new Var<String>();
+        final Var<String> pseudoClass = new Var<String>();
+        final Var<String> pseudoElement = new Var<String>();
         final Var<String> id = new Var<String>();
         final Var<String> cssClass = new Var<String>();
         return Sequence(
                 FirstOf(
-                    //#foo : match id
+                    //#foo : match id            = #A[A-0]*
                     Sequence(Hash(),Sequence(Letter(),ZeroOrMore(LetterOrDigit())),
                             toString, id.set((String)value())),
-                    //foo : match element name
+                    //foo : match element name   = A[A-0]* 
                     Sequence(Sequence(Letter(), ZeroOrMore(LetterOrDigit())),
                             toString,  elem.set((String) value())),
                     //the '*' character : match all
                     //TODO: Is this correct? Shouldn't it just be star instead of letter or star?
+                    //  = A|\*
                     Sequence(LetterOrStar(),
                             toString,elem.set((String)value())),
                     //.foo : match css class
@@ -91,9 +92,10 @@ public class CSSParser extends BaseParser<Object> {
                 )
 
                 //pseudo class
-                ,Optional(Sequence(':',Sequence(OneOrMore(Letter()),toString,pseudo.set((String) value()))))
+                ,Optional(Sequence(':',Sequence(OneOrMore(Letter()),toString, pseudoClass.set((String) value()))))
+                ,Optional(Sequence("::",Sequence(OneOrMore(LetterOrDash()),toString, pseudoElement.set((String) value()))))
                 //turn into a match expression
-                ,new MatchExpressionAction(elem, pseudo,id, cssClass)
+                ,new MatchExpressionAction(elem, pseudoClass, pseudoElement, id, cssClass)
                 );
     }
 
@@ -508,13 +510,20 @@ public class CSSParser extends BaseParser<Object> {
 
     public class MatchExpressionAction implements Action {
         private final Var<String> elem;
-        private final Var<String> pseudo;
+        private final Var<String> pseudoClass;
         private final Var<String> id;
         private final Var<String> cssClass;
+        private final Var<String> pseudoElement;
 
-        public MatchExpressionAction(Var<String> elem, Var<String> pseudo, Var<String> id, Var<String> cssClass) {
+        public MatchExpressionAction(Var<String> elem,
+                                     Var<String> pseudoClass,
+                                     Var<String> pseudoElement,
+                                     Var<String> id,
+                                     Var<String> cssClass) {
             this.elem = elem;
-            this.pseudo = pseudo;
+            this.pseudoClass = pseudoClass;
+            this.pseudoElement = pseudoElement;
+
             this.id = id;
             this.cssClass = cssClass;
         }
@@ -522,7 +531,8 @@ public class CSSParser extends BaseParser<Object> {
         public boolean run(Context context) {
             CSSMatcher match = new CSSMatcher();
             match.element = elem.get();
-            match.pseudo = pseudo.get();
+            match.pseudo = pseudoClass.get();
+            match.pseudoElement = pseudoElement.get();
             match.id = id.get();
             if(cssClass.get() != null) {
                 match.classes.add(cssClass.get());

@@ -118,9 +118,9 @@ public class TabPanel extends Panel {
                 }
                 Bounds bounds = new Bounds(x,0,size,30);
                 CharSequence title = titleMap.get(c);
-                cssSkin.drawBackground(g,matcher,"",bounds);
-                cssSkin.drawBorder(g,matcher,"",bounds);
-                cssSkin.drawText(g,matcher,"",bounds,title.toString());
+                cssSkin.drawBackground(g,matcher,bounds);
+                cssSkin.drawBorder(g,matcher,bounds);
+                cssSkin.drawText(g,matcher,bounds,title.toString());
                 x+=size;
             }
         }
