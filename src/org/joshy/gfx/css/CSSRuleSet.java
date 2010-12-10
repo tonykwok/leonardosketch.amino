@@ -18,6 +18,7 @@ public class CSSRuleSet {
     private List<CSSMatcher> idMatchers;
     private List<CSSMatcher> classMatchers;
     private List<CSSMatcher> classWithPseudoMatchers;
+    private List<CSSMatcher> classWithPseudoElementMatchers;
     private List<CSSMatcher> otherMatchers;
     private List<CSSRule> reverseRules;
 
@@ -27,6 +28,7 @@ public class CSSRuleSet {
         idMatchers = new ArrayList<CSSMatcher>();
         classMatchers = new ArrayList<CSSMatcher>();
         classWithPseudoMatchers = new ArrayList<CSSMatcher>();
+        classWithPseudoElementMatchers = new ArrayList<CSSMatcher>();
         otherMatchers = new ArrayList<CSSMatcher>();
     }
 
@@ -42,7 +44,9 @@ public class CSSRuleSet {
             if(m.id != null) {
                 idMatchers.add(0,m);
             } else if(!m.classes.isEmpty()) {
-                if(m.pseudo != null) {
+                if(m.pseudoElement != null) {
+                    classWithPseudoElementMatchers.add(0,m);
+                } else if(m.pseudo != null) {
                     classWithPseudoMatchers.add(0,m);
                 } else {
                     classMatchers.add(0,m);
@@ -88,6 +92,12 @@ public class CSSRuleSet {
             return rule;
         }
 
+        //go through class w/ pseudo element rules
+        rule = findMatchingRule(classWithPseudoElementMatchers, elem, propName);
+        if(rule != null) {
+            return rule;
+        }
+
         //go through class w/ pseudo rules
         rule = findMatchingRule(classWithPseudoMatchers, elem, propName);
         if(rule != null) {
@@ -112,6 +122,14 @@ public class CSSRuleSet {
                 return true;
             }
             return false;
+        }
+
+        if(matcher.pseudoElement != null) {
+            if(matchPseudoElement(matcher,elem)) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         if(matcher.id != null) {
@@ -144,9 +162,32 @@ public class CSSRuleSet {
         return false;
     }
 
+    private boolean matchPseudoElement(CSSMatcher matcher, CSSMatcher elem) {
+        if(!matcher.pseudoElement.equals(elem.pseudoElement)) return false;
+
+        for(String c1 : matcher.classes) {
+            if(!elem.classes.contains(c1)) {
+                return false;
+            }
+        }
+
+        if(matcher.element != null) {
+            if(!matcher.element.equals(elem.element)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private boolean matchPseudo(CSSMatcher matcher, CSSMatcher elem) {
         if(!matcher.pseudo.equals(elem.pseudo)) {
             return false;
+        }
+
+        if(matcher.pseudoElement != null) {
+            if(!matcher.pseudoElement.equals(elem.pseudoElement)) {
+                return false;
+            }
         }
 
         for(String c1 : matcher.classes) {

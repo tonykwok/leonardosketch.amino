@@ -95,7 +95,7 @@ public class Panel extends Container {
         if(boxPainter == null) {
             u.p("Panel invoked in an improper way.  this = " + this);
         }
-        boxPainter.draw(g, styleInfo, sizeInfo, this, "");
+        boxPainter.draw(g, styleInfo, sizeInfo, "");
         return;
     }
 

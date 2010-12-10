@@ -128,17 +128,19 @@
     border-color: #808080;
     border-radius: 11px;
     
-    bar-background-color: #0000ff;
-    bar-border-color: #f0f0f0;
-    bar-border-width: 1px;
-    bar-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    
-    bar-margin-left: 1px;
-    bar-margin-right: 1px;
-    bar-margin-top: 1px;
-    bar-margin-bottom: 1px;
+}
+.-class-ProgressBar::bar {
+    background-color: #0000ff;
+    border-color: #f0f0f0;
+    border-width: 1px;
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
 
-    bar-border-radius: 10px;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+
+    border-radius: 10px;
 }
 
 
@@ -154,21 +156,23 @@
     border-radius: 10px;
 
 
-    thumb-background-color: white;
-    thumb-height: 40px;
-    thumb-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    thumb-border-color: black;
-    thumb-border-radius: 0px;
-    thumb-margin-left:   1px;
-    thumb-margin-right:  1px;
-    thumb-margin-top:    2px;
-    thumb-margin-bottom: 2px;
-    thumb-border-left-width: 1px;
-    thumb-border-right-width: 1px;
-    thumb-border-top-width: 1px;
-    thumb-border-bottom-width: 1px;
 }
 
+.-class-Slider::thumb {
+    background-color: white;
+    height: 40px;
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    border-color: black;
+    border-radius: 0px;
+    margin-left:   1px;
+    margin-right:  1px;
+    margin-top:    2px;
+    margin-bottom: 2px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
 
 /* =========== panels ======== */
 .-class-Panel, .-class-TitlePanel, .-class-HFlexBox, .-class-VFlexBox, .-class-GridBox, .-class-Panel {
@@ -188,15 +192,18 @@
     border-width: 1px;
     margin: 6px;
     padding: 6px;
-    title-color: black;
-    title-border-color: black;
-    title-margin: 0px;
-    title-padding-left:   3px;
-    title-padding-right: 15px;
-    title-padding-top:    3px;
-    title-padding-bottom: 3px;
-    title-background-color: #e8e8e8;
 }
+.-class-TitlePanel::title {
+    color: black;
+    border-color: black;
+    margin: 0px;
+    padding-left:   3px;
+    padding-right: 15px;
+    padding-top:    3px;
+    padding-bottom: 3px;
+    background-color: #e8e8e8;
+}
+
 .-class-TabPanel {
     /*border-width: 1px 1px 0px 1px;*/
 }
@@ -217,17 +224,17 @@
     color: black;
 }
 
-.-class-SplitPane {
-    divider-background-color: #00ff00;
-    divider-background: linear-gradient(left center, #888888 0%, #222222 100%);
-    divider-border-color: #000000;
-    divider-border-left-width: 1px;
-    divider-border-right-width: 1px;
-    divider-border-top-width: 1px;
-    divider-border-bottom-width: 1px;
+.-class-SplitPane::divider {
+    background-color: #00ff00;
+    background: linear-gradient(left center, #888888 0%, #222222 100%);
+    border-color: #000000;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
 }
-.-class-SplitPane:vertical {
-    divider-background: linear-gradient(center top, #888888 0%, #222222 100%);
+.-class-SplitPane:vertical::divider {
+    background: linear-gradient(center top, #888888 0%, #222222 100%);
 }
 
 .-root {
@@ -245,49 +252,62 @@
     background-color: #a0a0a0;
     background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     border-radius: 0px;
+}
 
-    thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
-    thumb-background-color: #888888;
-    thumb-border-color: #666666;
-    thumb-border-radius: 18px;
-    thumb-border-width: 1px;
-    thumb-margin: 1px 0px 1px 0px;
-
-    /*track-background: linear-gradient(center top, #ffffff 0%, #808080 100%);*/
-    track-background-color: #a0a0a0;
-    track-background: linear-gradient(center top, #808080 0%, #ffffff 100%);
-    track-border-color: #000000;
-    track-border-radius: 18px;
-    track-border-width: 0px;
-    track-margin: 1px 0px 0px 0px;
-
-    left-arrow-background-color: #a0a0a0;
-    left-arrow-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
-    left-arrow-border-color: red;
-    left-arrow-border-width: 0px;
-    left-arrow-border-radius: 0px;
-    left-arrow-margin: 1px;
-
-    right-arrow-background-color: #a0a0a0;
-    right-arrow-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
-    right-arrow-border-color: #a0a0a0;
-    right-arrow-border-width: 0px;
-    right-arrow-border-radius: 0px;
-    right-arrow-margin: 1px;
-
-
+.-class-Scrollbar::thumb {
+    background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    background-color: #888888;
+    border-color: #666666;
+    border-radius: 18px;
+    border-width: 1px;
+    margin: 1px 0px 1px 0px;
+}
+.-class-Scrollbar::track {
+    /*background: linear-gradient(center top, #ffffff 0%, #808080 100%);*/
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #808080 0%, #ffffff 100%);
+    border-color: #000000;
+    border-radius: 18px;
+    border-width: 0px;
+    margin: 1px 0px 0px 0px;
+}
+.-class-Scrollbar::left-arrow{
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    border-color: red;
+    border-width: 0px;
+    border-radius: 0px;
+    margin: 1px;
+}
+.-class-Scrollbar::right-arrow {
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    border-color: #a0a0a0;
+    border-width: 0px;
+    border-radius: 0px;
+    margin: 1px;
 }
 
 .-class-Scrollbar:vertical {
     width: 20px;
     height: 100px;
     background: linear-gradient(left center, #ffffff 0%, #808080 100%);
-    thumb-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
-    left-arrow-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
-    right-arrow-background: linear-gradient(left center, #ffffff 0%, #808080 100%);
-    track-background: linear-gradient(left center, #808080 0%, #ffffff 100%);
-    thumb-margin: 0px 1px 0px 1px;
-    track-margin: 1px 1px 0px 1px;
+}
+.-class-Scrollbar:vertical::left-arrow {
+    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+}
+.-class-Scrollbar:vertical::right-arrow {
+    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+}
+.-class-Scrollbar:vertical::thumb {
+    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+    margin: 0px 1px 0px 1px;
+    prop8: 8px;
+}
+.-class-Scrollbar:vertical::track {
+    background: linear-gradient(left center, #808080 0%, #ffffff 100%);
+    margin: 1px 1px 0px 1px;
+    prop8: 9px;
 }
 
 /* ============== text boxes ============= */
@@ -362,23 +382,24 @@
     border-color: #808080;
     color: #444444;
     margin: 0px;
-
-    item-background-color: #f0f0f0;
-    item-color: #444444;
-    item-margin: 0px;
-    item-border-color: #000000;
-    item-border-width: 0px;
-    item-border-radius: 0px;
-
-    selected-item-margin: 1px 0px 1px 0px;
-    selected-item-background-color: #0000ff;
-    selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    selected-item-color: #ffffff;
-    selected-item-border-color: #000000;
-    selected-item-border-width: 1px 0px 1px 0px;
-    selected-item-border-radius: 0px;
 }
-
+.-class-PopupMenu::item {
+    background-color: #f0f0f0;
+    color: #444444;
+    margin: 0px;
+    border-color: #000000;
+    border-width: 0px;
+    border-radius: 0px;
+}
+.-class-PopupMenu::selected-item {
+    margin: 1px 0px 1px 0px;
+    background-color: #0000ff;
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    color: #ffffff;
+    border-color: #000000;
+    border-width: 1px 0px 1px 0px;
+    border-radius: 0px;
+}
 
 
 /* ============ List and Table =========== */
@@ -387,19 +408,20 @@
     border-width: 1px;
     border-color: #a0a0a0;
     background-color:#f0f0f0;
-    
-    item-background-color: #f0f0f0;
-    item-border-color: #00ff00;
-    item-border-width: 0px;
-    item-color: #000000;
-
-    selected-item-background-color: #0000ff;
-    selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    selected-item-border-color: #000000;
-    selected-item-color: #ffffff;
-    
-    selected-item-margin: 0px 0px 2px 0px;
-    selected-item-border-width: 1px 0px;
+}
+.-class-ListView::item {
+    background-color: #f0f0f0;
+    border-color: #00ff00;
+    border-width: 0px;
+    color: #000000;
+}
+.-class-ListView::selected-item {
+    background-color: #0000ff;
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    border-color: #000000;
+    color: #ffffff;
+    margin: 0px 0px 2px 0px;
+    border-width: 1px 0px;
 }
 
 .-class-TableView {
@@ -407,19 +429,21 @@
     border-width: 1px;
     border-color: #a0a0a0;
     background-color:#f0f0f0;
-
-    item-background-color: #f0f0f0;
-    item-border-color: #e0e0e0;
-    item-border-width: 1px;
-    item-border-top-width: 0px;
-    item-border-right-width: 1px;
-    item-color: #000000;
     text-align: center;
-
-    selected-item-background-color: #0000ff;
-    selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    selected-item-margin: 0px 0px 1px 0px;
-    selected-item-border-width: 1px 0px;
-    selected-item-border-color: #04acec;
-    selected-item-color: #ffffff;
+}
+.-class-TableView::item {
+    background-color: #f0f0f0;
+    border-color: #e0e0e0;
+    border-width: 1px;
+    border-top-width: 0px;
+    border-right-width: 1px;
+    color: #000000;
+}
+.-class-TableView::selected-item {
+    background-color: #0000ff;
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    margin: 0px 0px 1px 0px;
+    border-width: 1px 0px;
+    border-color: #04acec;
+    color: #ffffff;
 }

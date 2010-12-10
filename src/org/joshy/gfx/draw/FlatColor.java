@@ -106,6 +106,11 @@ public class FlatColor implements Paint {
         return comps[0]*360;
     }
 
+    @Override
+    public String toString() {
+        return "FlatColor{" + Integer.toHexString(getRGBA())+"}";
+    }
+
     /**
      * 
      */

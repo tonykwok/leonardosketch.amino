@@ -9,6 +9,7 @@ public class StyleInfo {
     public Insets padding;
     public double contentBaseline;
     public Font font;
+    public CSSMatcher matcher;
 
     public Insets calcContentInsets() {
         return new Insets(margin,borderWidth,padding);

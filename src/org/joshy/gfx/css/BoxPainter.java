@@ -6,7 +6,6 @@ import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
-import org.joshy.gfx.node.control.Control;
 
 /**
  * Paints a control laid out by the css boxmodel.
@@ -30,13 +29,13 @@ public class BoxPainter {
     private ImageBuffer oldBuf;
 
 
-    public void draw(GFX g, StyleInfo styleInfo, SizeInfo size, Control control, String text) {
-        drawBackground(g,styleInfo,size,control);
+    public void draw(GFX g, StyleInfo styleInfo, SizeInfo size, String text) {
+        drawBackground(g, styleInfo,size);
         drawContent(g, styleInfo, size,text);
         drawBorder(g, styleInfo,size);
     }
     
-    public void drawBackground(GFX g, StyleInfo box, SizeInfo size, Control control) {
+    public void drawBackground(GFX g, StyleInfo box, SizeInfo size) {
         double backWidth = size.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = size.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);

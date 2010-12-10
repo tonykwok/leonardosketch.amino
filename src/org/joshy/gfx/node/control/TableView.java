@@ -95,13 +95,13 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                 //if(cssSkin != null) {
                 CSSMatcher matcher = new CSSMatcher(table);
                 Bounds bounds = new Bounds(x,y,width,height);
-                String prefix = "item-";
+                matcher.pseudoElement = "item";
                 if(getSelectedIndex() == row) {
-                    prefix = "selected-item-";
+                    matcher.pseudoElement = "selected-item";
                 }
-                cssSkin.drawBackground(g,matcher,prefix,bounds);
-                cssSkin.drawBorder(g,matcher,prefix,bounds);
-                int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
+                cssSkin.drawBackground(g,matcher,bounds);
+                cssSkin.drawBorder(g,matcher,bounds);
+                int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
                 g.setPaint(new FlatColor(col));
                 if(cell != null) {
                     String s = cell.toString();
@@ -560,7 +560,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
 
         //draw bg
         if(cssSkin != null) {
-            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBackground(g,matcher,new Bounds(0,0,width,height));
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRect(0,0,width,height);
@@ -603,7 +603,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         //draw border
         g.setClipRect(clip);
         if(cssSkin != null) {
-            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBorder(g,matcher,new Bounds(0,0,width,height));
         }
     }
 

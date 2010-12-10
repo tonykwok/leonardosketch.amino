@@ -221,7 +221,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         CSSMatcher matcher = new CSSMatcher(this);
         
         if(cssSkin != null) {
-            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBackground(g,matcher,new Bounds(0,0,width,height));
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRect(0,0,width,height);
@@ -303,7 +303,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         
         g.setClipRect(oldClip);
         if(cssSkin != null) {
-            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBorder(g,matcher,new Bounds(0,0,width,height));
         }
 
     }
@@ -498,13 +498,13 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         public void draw(GFX gfx, ListView listView, E item, int index, double x, double y, double width, double height) {
             CSSMatcher matcher = new CSSMatcher(listView);
             Bounds bounds = new Bounds(x,y,width,height);
-            String prefix = "item-";
+            matcher.pseudoElement = "item";
             if(listView.getSelectedIndex() == index) {
-                prefix = "selected-item-";
+                matcher.pseudoElement = "selected-item";
             }
-            cssSkin.drawBackground(gfx,matcher,prefix,bounds);
-            cssSkin.drawBorder(gfx,matcher,prefix,bounds);
-            int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
+            cssSkin.drawBackground(gfx,matcher,bounds);
+            cssSkin.drawBorder(gfx,matcher,bounds);
+            int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
             gfx.setPaint(new FlatColor(col));
             if(item != null) {
                 String s = textRenderer.toString(listView, item, index);

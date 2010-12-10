@@ -30,14 +30,15 @@ public class CSSSkin {
     }
 
     public StyleInfo getStyleInfo(Control control, Font realFont) {
-        return getStyleInfo(control,realFont,"");
+        return getStyleInfo(control,realFont,null);
     }
-    public StyleInfo getStyleInfo(Control control, Font realFont, String prefix) {
-        CSSMatcher matcher = createMatcher(control, CSSSkin.State.None);
+    public StyleInfo getStyleInfo(Control control, Font realFont, String pseudoElement) {
+        CSSMatcher matcher = createMatcher(control, CSSSkin.State.None, pseudoElement);
         StyleInfo info = new StyleInfo();
-        info.margin = getMargin(matcher,prefix);
-        info.padding = getPadding(matcher,prefix);
-        info.borderWidth = getBorderWidth(matcher,prefix);
+        info.matcher = matcher;
+        info.margin = getMargin(matcher);
+        info.padding = getPadding(matcher);
+        info.borderWidth = getBorderWidth(matcher);
         info.font = getFont(matcher);
         if(realFont != null) {
             info.font = realFont;
@@ -45,13 +46,12 @@ public class CSSSkin {
         info.contentBaseline = info.font.getAscender();
         return info;
     }
-
     public SizeInfo getSizeInfo(Control control, StyleInfo style, String content) {
-        return getSizeInfo(control,style,content,"");
+        return getSizeInfo(control,style,content,null);
     }
 
-    public SizeInfo getSizeInfo(Control control, StyleInfo style, String content, String prefix) {
-        CSSMatcher matcher = createMatcher(control, State.None);
+    public SizeInfo getSizeInfo(Control control, StyleInfo style, String content, String pseudoElement) {
+        CSSMatcher matcher = createMatcher(control, State.None, pseudoElement);
         SizeInfo size = new SizeInfo();
         size.contentWidth = control.getWidth()-style.margin.getLeft()-style.margin.getRight()-style.padding.getLeft()-style.padding.getRight();
         size.contentHeight = control.getHeight()-style.margin.getTop()-style.margin.getBottom()-style.padding.getTop()-style.padding.getBottom();
@@ -81,17 +81,17 @@ public class CSSSkin {
         return createBoxPainter(control,style,size,text,state,"");
     }
 
-    public BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, State state, String prefix) {
-        CSSMatcher matcher = createMatcher(control, state);
+    public BoxPainter createBoxPainter(Control control, StyleInfo style, SizeInfo size, String text, State state, String pseudoElement) {
+        CSSMatcher matcher = createMatcher(control, state, pseudoElement);
         BoxPainter boxPainter = new BoxPainter();
-        boxPainter.borderRadius = getBorderRadius(matcher,prefix);
-        boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
+        boxPainter.borderRadius = getBorderRadius(matcher);
+        boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,"background-color"));
         if(!boxPainter.transparent) {
-            boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"),true);
+            boxPainter.background_color = new FlatColor(set.findColorValue(matcher,"background-color"),true);
         } else {
             boxPainter.background_color = FlatColor.BLACK;
         }
-        BaseValue background = set.findValue(matcher,prefix+"background");
+        BaseValue background = set.findValue(matcher,"background");
 
 
         double backWidth = size.width-style.margin.getLeft()-style.margin.getRight();
@@ -103,10 +103,10 @@ public class CSSSkin {
         }
 
         //border stuff
-        boxPainter.margin = getMargin(matcher,prefix);
-        boxPainter.borderWidth = getBorderWidth(matcher,prefix);
+        boxPainter.margin = getMargin(matcher);
+        boxPainter.borderWidth = getBorderWidth(matcher);
         if(!boxPainter.borderWidth.allEquals(0)) {
-            boxPainter.border_color = (new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
+            boxPainter.border_color = (new FlatColor(set.findColorValue(matcher,"border-color")));
         }
 
         //content stuff
@@ -126,42 +126,15 @@ public class CSSSkin {
         return font;
     }
 
-    /*
-    private void drawDebugOverlay(GFX gfx, CSSMatcher matcher, String prefix, OldStyleInfo box) {
-        Insets borderWidth = getBorderWidth(matcher,"");
 
-        //debugging
-        if("true".equals(set.findStringValue(matcher,"debug-margin"))) {
-            gfx.setPaint(FlatColor.RED);
-            gfx.drawRect(0,0,box.width,box.height);
-        }
-        if("true".equals(set.findStringValue(matcher,"debug-border"))) {
-            gfx.setPaint(FlatColor.GREEN);
-            gfx.drawRect(box.margin.getLeft(),
-                    box.margin.getTop(),
-                    box.width-box.margin.getLeft()-box.margin.getRight(),
-                    box.height-box.margin.getTop()-box.margin.getBottom());
-        }
-        if("true".equals(set.findStringValue(matcher,"debug-padding"))) {
-            gfx.setPaint(FlatColor.BLUE);
-            gfx.drawRect(
-                    box.margin.getLeft()+borderWidth.getLeft(),
-                    box.margin.getTop()+borderWidth.getTop(),
-                    box.width-box.margin.getLeft()-box.margin.getRight()-borderWidth.getLeft()-borderWidth.getRight(),
-                    box.height-box.margin.getTop()-box.margin.getBottom()-borderWidth.getTop()-borderWidth.getBottom());
-        }
-    }
-    */
-
-
-    public void drawBackground(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
+    public void drawBackground(GFX g, CSSMatcher matcher, Bounds bounds) {
         g.translate(bounds.getX(),bounds.getY());
-        Insets margin = getMargin(matcher,prefix);
-        BaseValue background = set.findValue(matcher,prefix+"background");
-        Insets radius = getBorderRadius(matcher,prefix);
+        Insets margin = getMargin(matcher);
+        BaseValue background = set.findValue(matcher,"background");
+        Insets radius = getBorderRadius(matcher);
 
-        if(!"transparent".equals(set.findStringValue(matcher,prefix+"background-color"))) {
-            g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"background-color")));
+        if(!"transparent".equals(set.findStringValue(matcher,"background-color"))) {
+            g.setPaint(new FlatColor(set.findColorValue(matcher,"background-color")));
             if(background instanceof LinearGradientValue) {
                 g.setPaint(toGradientFill((LinearGradientValue)background,bounds.getWidth(),bounds.getHeight()));
             }
@@ -200,12 +173,12 @@ public class CSSSkin {
         g.translate(-bounds.getX(),-bounds.getY());
     }
 
-    public void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, Bounds bounds) {
-        Insets margin = getMargin(matcher,prefix);
-        Insets borderWidth = getBorderWidth(matcher,prefix);
-        Insets radius = getBorderRadius(matcher,prefix);
+    public void drawBorder(GFX gfx, CSSMatcher matcher, Bounds bounds) {
+        Insets margin = getMargin(matcher);
+        Insets borderWidth = getBorderWidth(matcher);
+        Insets radius = getBorderRadius(matcher);
         if(!borderWidth.allEquals(0)) {
-            gfx.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
+            gfx.setPaint(new FlatColor(set.findColorValue(matcher,"border-color")));
             if(radius.allEquals(0)) {
                 if(borderWidth.allEqual()) {
                     if(borderWidth.getLeft() >0) {
@@ -273,49 +246,45 @@ public class CSSSkin {
 
 
 
-    protected Insets getPadding(CSSMatcher matcher, String prefix) {
-        int padding_left = set.findIntegerValue(matcher,prefix+"padding-left");
-        int padding_right = set.findIntegerValue(matcher,prefix+"padding-right");
-        int padding_top = set.findIntegerValue(matcher,prefix+"padding-top");
-        int padding_bottom = set.findIntegerValue(matcher,prefix+"padding-bottom");
+    private Insets getPadding(CSSMatcher matcher) {
+        int padding_left = set.findIntegerValue(matcher,"padding-left");
+        int padding_right = set.findIntegerValue(matcher,"padding-right");
+        int padding_top = set.findIntegerValue(matcher,"padding-top");
+        int padding_bottom = set.findIntegerValue(matcher,"padding-bottom");
         return new Insets(padding_top,padding_right,padding_bottom,padding_left);
     }
 
-    protected Insets getMargin(CSSMatcher matcher) {
-        return getMargin(matcher, "");
-    }
-
-    protected Insets getMargin(CSSMatcher matcher, String prefix) {
-        int margin_left = set.findIntegerValue(matcher,prefix+"margin-left");
-        int margin_right = set.findIntegerValue(matcher,prefix+"margin-right");
-        int margin_top = set.findIntegerValue(matcher,prefix+"margin-top");
-        int margin_bottom = set.findIntegerValue(matcher,prefix+"margin-bottom");
+    private Insets getMargin(CSSMatcher matcher) {
+        int margin_left = set.findIntegerValue(matcher,"margin-left");
+        int margin_right = set.findIntegerValue(matcher,"margin-right");
+        int margin_top = set.findIntegerValue(matcher,"margin-top");
+        int margin_bottom = set.findIntegerValue(matcher,"margin-bottom");
         return new Insets(margin_top,margin_right,margin_bottom,margin_left);
     }
 
-    protected Insets getBorderWidth(CSSMatcher matcher, String prefix) {
-        int border_left = set.findIntegerValue(matcher,prefix+"border-left-width");
-        int border_right = set.findIntegerValue(matcher,prefix+"border-right-width");
-        int border_top = set.findIntegerValue(matcher,prefix+"border-top-width");
-        int border_bottom = set.findIntegerValue(matcher,prefix+"border-bottom-width");
+    protected Insets getBorderWidth(CSSMatcher matcher) {
+        int border_left = set.findIntegerValue(matcher,"border-left-width");
+        int border_right = set.findIntegerValue(matcher,"border-right-width");
+        int border_top = set.findIntegerValue(matcher,"border-top-width");
+        int border_bottom = set.findIntegerValue(matcher,"border-bottom-width");
         return new Insets(border_top,border_right,border_bottom,border_left);
     }
 
-    protected Insets getBorderRadius(CSSMatcher matcher, String prefix) {
-        int border_top_left = set.findIntegerValue(matcher,prefix+"border-top-left-radius");
-        int border_top_right = set.findIntegerValue(matcher,prefix+"border-top-right-radius");
-        int border_bottom_right = set.findIntegerValue(matcher,prefix+"border-bottom-right-radius");
-        int border_bottom_left = set.findIntegerValue(matcher,prefix+"border-bottom-left-radius");
+    protected Insets getBorderRadius(CSSMatcher matcher) {
+        int border_top_left = set.findIntegerValue(matcher,"border-top-left-radius");
+        int border_top_right = set.findIntegerValue(matcher,"border-top-right-radius");
+        int border_bottom_right = set.findIntegerValue(matcher,"border-bottom-right-radius");
+        int border_bottom_left = set.findIntegerValue(matcher,"border-bottom-left-radius");
         //TODO: we really should use a class other than Insets for this
         return new Insets(border_top_left,border_top_right,border_bottom_right,border_bottom_left);
     }
 
-    public void drawText(GFX g, CSSMatcher matcher, String prefix, Bounds b, String text) {
+    public void drawText(GFX g, CSSMatcher matcher, Bounds b, String text) {
         g.translate(b.getX(),b.getY());
-        Insets margin = getMargin(matcher,prefix);
-        Insets borderWidth = getBorderWidth(matcher,prefix);
-        Insets padding = getPadding(matcher,prefix);
-        g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"color")));
+        Insets margin = getMargin(matcher);
+        Insets borderWidth = getBorderWidth(matcher);
+        Insets padding = getPadding(matcher);
+        g.setPaint(new FlatColor(set.findColorValue(matcher,"color")));
         double x = margin.getLeft() + borderWidth.getLeft() + padding.getLeft();
         String textAlign = set.findStringValue(matcher,"text-align");
         double contentX = margin.getLeft()+borderWidth.getLeft()+padding.getLeft();
@@ -332,9 +301,9 @@ public class CSSSkin {
 
     public Insets getInsets(Control control) {
         CSSMatcher matcher = createMatcher(control,null);
-        Insets margin = getMargin(matcher, "");
-        Insets border = getBorderWidth(matcher, "");
-        Insets padding = getPadding(matcher,"");
+        Insets margin = getMargin(matcher);
+        Insets border = getBorderWidth(matcher);
+        Insets padding = getPadding(matcher);
         return new Insets(margin,border,padding);
     }
 
@@ -361,6 +330,9 @@ public class CSSSkin {
     }
 
     public static CSSMatcher createMatcher(Control control, State state) {
+        return createMatcher(control,state,null);
+    }
+    public static CSSMatcher createMatcher(Control control, State state, String pseudoElement) {
         CSSMatcher matcher = new CSSMatcher(control);
         if(state == State.Disabled) {
             matcher.pseudo = "disabled";
@@ -382,6 +354,7 @@ public class CSSSkin {
                 matcher.pseudo = "vertical";
             }
         }
+        matcher.pseudoElement = pseudoElement;
         return matcher;
     }
 

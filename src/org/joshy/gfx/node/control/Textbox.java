@@ -134,7 +134,7 @@ public class Textbox extends TextControl {
     public void draw(GFX g) {
         if(!isVisible()) return;
         //draw background and border, but skip the text
-        boxPainter.draw(g, styleInfo, sizeInfo, this, "");
+        boxPainter.draw(g, styleInfo, sizeInfo, "");
 
         Insets insets = styleInfo.calcContentInsets();
         //set a new clip
