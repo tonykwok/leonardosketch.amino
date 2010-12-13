@@ -42,8 +42,19 @@ public class MasterImageCache {
         pool.shutdownNow();
     }
 
+    public File getCacheDir() {
+        return cacheDir;
+    }
+
     private File cacheDir;
-    
+
+    public void cleanCache() {
+        CacheUtil.recursiveDelete(cacheDir);
+        if(!cacheDir.exists()) {
+            cacheDir.mkdirs();
+        }
+    }
+
     private void initCache(String cacheName, boolean deleteOnStart) {
         String BASE_DIR = "/tmp/FXImageCache";
         BASE_DIR = org.joshy.gfx.util.OSUtil.getBaseStorageDir() + cacheName + File.separator;
