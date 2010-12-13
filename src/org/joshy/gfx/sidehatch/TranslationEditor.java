@@ -55,7 +55,7 @@ public class TranslationEditor<E> extends VFlexBox {
                         gfx.setPaint(FlatColor.BLUE);
                     }
                     if(!item.isReal) {
-                        gfx.setPaint(FlatColor.RED);
+                        gfx.setPaint(FlatColor.WHITE);
                         if(selected) {
                             gfx.setPaint(new FlatColor(0xff8888));
                         }
@@ -68,7 +68,7 @@ public class TranslationEditor<E> extends VFlexBox {
                         gfx.setPaint(FlatColor.WHITE);
                     }
                     if(!item.isReal) {
-                        gfx.setPaint(FlatColor.BLACK);
+                        gfx.setPaint(FlatColor.RED);
                         if(selected) {
                             gfx.setPaint(FlatColor.BLACK);
                         }
