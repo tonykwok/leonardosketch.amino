@@ -7,7 +7,12 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.util.u;
 
+import java.awt.event.InputMethodEvent;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.text.CharacterIterator;
 import java.util.Date;
 
 /*
@@ -43,7 +48,7 @@ import java.util.Date;
  * The TextControl class is the base class for all text controls in Amino. It
  * implements the core cursor, selecting, and editing logic.
  */
-public abstract class TextControl extends Control implements Focusable {
+public abstract class TextControl extends Control implements Focusable, FocusManager.IMETarget {
     protected boolean focused;
     protected String text = "";
 
@@ -53,6 +58,7 @@ public abstract class TextControl extends Control implements Focusable {
     TextLayoutModel _layout_model;
     private CursorPosition cursor;
     protected StyleInfo styleInfo;
+    private AttributedString composingText;
 
 
     protected TextControl() {
@@ -319,6 +325,7 @@ public abstract class TextControl extends Control implements Focusable {
         }
     }
 
+    //TODO: this might be a problem you can set text without it getting re-layedout
     public TextControl setText(String text) {
         this.text = text;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
@@ -330,6 +337,54 @@ public abstract class TextControl extends Control implements Focusable {
         setDrawingDirty();
         return this;
     }
+
+    public void setComposingText(InputMethodEvent ime) {
+        AttributedCharacterIterator text = ime.getText();
+        //u.p("ime text length = " + text.getBeginIndex() + " -> " + text.getEndIndex() + " , " + ime.getCommittedCharacterCount());
+        if(text.getEndIndex() - (text.getBeginIndex()+ime.getCommittedCharacterCount()) > 0) {
+            //u.p("there is some composing text right now: ");
+            composingText = new AttributedString(
+                    text,
+                    text.getBeginIndex()+ime.getCommittedCharacterCount(),
+                    text.getEndIndex(),
+                    IM_ATTRIBUTES
+            );
+        } else {
+            composingText = new AttributedString("");
+        }
+    }
+    public void appendCommittedText(InputMethodEvent inputMethodEvent) {
+        int count = inputMethodEvent.getCommittedCharacterCount();
+        //u.p("appending committed text : " + count + " chars");
+        StringBuffer sb = new StringBuffer();
+        AttributedCharacterIterator text = inputMethodEvent.getText();
+        char c = text.first();
+        while(count > 0) {
+            sb.append(c);
+            c = text.next();
+            count--;
+        }
+        //u.p("committed text now = " + sb.toString());
+        insertText(sb.toString());
+        //u.p("total text now = " + getText());
+    }
+
+    public String getCommittedText() {
+        return getText();
+    }
+    public String getComposingText() {
+        StringBuffer sb = new StringBuffer();
+        if(composingText != null) {
+            AttributedCharacterIterator it = composingText.getIterator();
+            for(char c = it.first(); c != CharacterIterator.DONE; c=it.next()) {
+                sb.append(c);
+                //graphics.drawString(""+c,60+i*60,120);
+                //i++;
+            }
+        }
+        return sb.toString();
+    }
+
 
     protected void relayoutText() {
         if(getFont() == null) return;

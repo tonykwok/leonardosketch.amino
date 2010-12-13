@@ -1,7 +1,10 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.css.*;
+import org.joshy.gfx.css.BoxPainter;
+import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SizeInfo;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -13,6 +16,8 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.stage.Stage;
 
+import java.text.AttributedString;
+
 /**
  * The Textbox is a text control for editing a single line of text.
  * It will scroll the contents horizontally as needed.
@@ -23,6 +28,7 @@ public class Textbox extends TextControl {
     private CharSequence hintText = "";
     private FlatColor selectionColor;
     private FlatColor cursorColor;
+    private AttributedString comp;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -146,7 +152,9 @@ public class Textbox extends TextControl {
                 getHeight()));
 
         //filter the text
-        String text = filterText(getText());
+        String text = getText();
+        text = text + getComposingText();
+        text = filterText(text);
 
         //draw the selection
         if(selection.isActive() && text.length() > 0) {
@@ -176,6 +184,14 @@ public class Textbox extends TextControl {
         }
         g.setPaint(FlatColor.BLACK);
         g.drawText(text, getFont(), x + xoff, y);
+
+        //draw the composing underline
+        if(getComposingText().length() > 0) {
+            double underlineLen = font.calculateWidth(getComposingText());
+            g.setPaint(FlatColor.RED);
+            double fullLen = font.calculateWidth(text);
+            g.drawLine(x+xoff+fullLen-underlineLen,y+2,x+xoff+fullLen,y+2);
+        }
 
         //draw the cursor
         if(isFocused()) {
@@ -211,4 +227,5 @@ public class Textbox extends TextControl {
         EventBus.getSystem().addListener(this,ActionEvent.Action,callback);
         return this;
     }
+
 }
