@@ -5,6 +5,10 @@ import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Focusable;
 import org.joshy.gfx.util.u;
 
+import java.awt.event.InputMethodEvent;
+import java.awt.font.TextAttribute;
+import java.text.AttributedCharacterIterator;
+
 /**
  * Created by IntelliJ IDEA.
  * User: josh
@@ -14,6 +18,7 @@ import org.joshy.gfx.util.u;
  */
 public class FocusManager {
     private Focusable focusedNode;
+    private IMETarget ime_target;
 
     public Node findFocusedNode(Parent parent) {
         if(focusedNode != null) return (Node) focusedNode;
@@ -34,6 +39,15 @@ public class FocusManager {
         EventBus.getSystem().publish(new FocusEvent(FocusEvent.Lost, focusedNode));
         focusedNode = focusableNode;
         EventBus.getSystem().publish(new FocusEvent(FocusEvent.Gained, focusedNode));
+        if(focusedNode instanceof IMETarget) {
+            ime_target = (IMETarget) focusedNode;
+        } else {
+            ime_target = null;
+        }
+    }
+
+    public void setIMETarget(IMETarget imeTarget) {
+        this.ime_target = imeTarget;
     }
 
 
@@ -70,4 +84,16 @@ public class FocusManager {
             }
         }
     }
+
+    public IMETarget getIMETarget() {
+        return ime_target;
+    }
+
+    public static interface IMETarget {
+        public void setComposingText(InputMethodEvent inputMethodEvent);
+        public void appendCommittedText(InputMethodEvent inputMethodEvent);
+        public String getCommittedText();
+        public final AttributedCharacterIterator.Attribute[] IM_ATTRIBUTES = { TextAttribute.INPUT_METHOD_HIGHLIGHT };
+    }
+
 }
