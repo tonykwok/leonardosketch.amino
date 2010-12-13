@@ -72,18 +72,16 @@ public class IntlTextTest {
             this.addFocusListener(new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent focusEvent) {
-                    //u.p("gained focus " + focusEvent);
                 }
 
                 @Override
                 public void focusLost(FocusEvent focusEvent) {
-                    //u.p("lost focus " + focusEvent);
                 }
             });
+
             this.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
-                    //To change body of implemented methods use File | Settings | File Templates.
                 }
 
                 @Override
@@ -94,17 +92,14 @@ public class IntlTextTest {
 
                 @Override
                 public void mouseReleased(MouseEvent mouseEvent) {
-                    //To change body of implemented methods use File | Settings | File Templates.
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent mouseEvent) {
-                    //To change body of implemented methods use File | Settings | File Templates.
                 }
 
                 @Override
                 public void mouseExited(MouseEvent mouseEvent) {
-                    //To change body of implemented methods use File | Settings | File Templates.
                 }
             });
             iml = new InputMethodListener(){
@@ -177,12 +172,11 @@ public class IntlTextTest {
             enableInputMethods(true);
         }
 
-        private static final AttributedCharacterIterator.Attribute[] IM_ATTRIBUTES =
-                { TextAttribute.INPUT_METHOD_HIGHLIGHT };
+        private static final AttributedCharacterIterator.Attribute[] IM_ATTRIBUTES = { TextAttribute.INPUT_METHOD_HIGHLIGHT };
 
         private void appendCommittedText(InputMethodEvent inputMethodEvent) {
             int count = inputMethodEvent.getCommittedCharacterCount();
-            u.p("appending committed text : " + count + " chars");
+            //u.p("appending committed text : " + count + " chars");
             AttributedCharacterIterator text = inputMethodEvent.getText();
             char c = text.first();
             while(count > 0) {
@@ -230,14 +224,22 @@ public class IntlTextTest {
             graphics.fillRect(0, 0, getWidth(), getHeight());
             graphics.setColor(Color.BLACK);
             graphics.setFont(graphics.getFont().deriveFont(25f));
+
+            //draw the regular text
             int len = committedText.length();
             graphics.drawString(committedText.toString(),20,30);
 
+            graphics.drawLine(15,32,500,32);
+
             if(composingText != null) {
                 int i=0;
+                graphics.setColor(Color.GRAY);
+                graphics.fillRoundRect(40,40,300,200,30,30);
+                graphics.setColor(Color.WHITE);
+                graphics.setFont(graphics.getFont().deriveFont(60f));
                 AttributedCharacterIterator it = composingText.getIterator();
                 for(char c = it.first(); c != CharacterIterator.DONE; c=it.next()) {
-                    graphics.drawString(""+c,20+i*30,60);
+                    graphics.drawString(""+c,60+i*60,120);
                     i++;
                 }
                 //graphics.drawString(composingText,20,20);
