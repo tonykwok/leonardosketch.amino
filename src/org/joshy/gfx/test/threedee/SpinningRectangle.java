@@ -4,10 +4,10 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.anim.PropertyAnimator;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Transform;
+import org.joshy.gfx.draw.TransformNode;
+import org.joshy.gfx.node.Group;
 import org.joshy.gfx.node.shape.Rectangle;
 import org.joshy.gfx.stage.Stage;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,11 +32,26 @@ public class SpinningRectangle implements Runnable {
         r.setTranslateY(200);
         //r.setRotationAxis(Transform.Y_AXIS);
         r.setFill(FlatColor.RED);
-        Stage s = Stage.createStage();
-        s.setContent(r);
 
-        PropertyAnimator anim = PropertyAnimator.target(r)
-                .property("rotation").startValue(0).endValue(360).seconds(10).repeat(PropertyAnimator.INDEFINITE);
+        TransformNode t = new TransformNode();
+        t.setContent(r);
+        t.setAxis(Transform.Y_AXIS);
+        t.setTranslateX(200);
+        t.setTranslateY(100);
+
+        Group g = new Group();
+
+        g.add(t);
+
+        Stage s = Stage.create3DStage();
+        s.setContent(g);
+
+        PropertyAnimator anim = PropertyAnimator.target(t)
+                .property("rotate")
+                .startValue(0)
+                .endValue(360)
+                .seconds(10)
+                .repeat(PropertyAnimator.INDEFINITE);
         anim.start();
     }
 }
