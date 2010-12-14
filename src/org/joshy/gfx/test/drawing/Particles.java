@@ -1,8 +1,6 @@
 package org.joshy.gfx.test.drawing;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.node.Bounds;
@@ -16,7 +14,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +34,7 @@ public class Particles implements Runnable {
     public void run() {
         try {
 
+        //draw a red circle
         BufferedImage bi = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
         Graphics2D gfx = bi.createGraphics();
         gfx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -55,15 +53,15 @@ public class Particles implements Runnable {
         final Group g = new Group();
         g2.add(g);
 
-        Button b = new Button();
-        b.setWidth(100); b.setHeight(40); b.setTranslateX(20); b.setTranslateY(20);
-        g2.add(b);
+//        Button b = new Button();
+//        b.setWidth(100); b.setHeight(40); b.setTranslateX(20); b.setTranslateY(20);
+//        g2.add(b);
         stage.setContent(g2);
 
 
         final double cx = 500;
         final double cy = 500;
-        Timer timer = new Timer(1000/60, new ActionListener() {
+        Timer timer = new Timer(1000/30, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(particles.size() < 5000) {
                     if(particles.size() % 100 == 0) {

@@ -20,6 +20,7 @@ public class TransformNode extends AbstractPane {
     private double scaleX = 1.0;
     private double scaleY = 1.0;
     private double rotate = 0.0;
+    private Transform axis = Transform.Z_AXIS;
 
     public TransformNode setContent(Node content) {
         this.content = content;
@@ -49,11 +50,16 @@ public class TransformNode extends AbstractPane {
     public void draw(GFX g) {
 //        g.translate(getTranslateX(),getTranslateY());
         g.scale(scaleX,scaleY);
-        g.rotate(rotate,Transform.Z_AXIS);
+        g.rotate(rotate,axis);
         content.draw(g);
-        g.rotate(-rotate,Transform.Z_AXIS);
+        g.rotate(-rotate,axis);
         g.scale(1/scaleX,1/scaleY);
 //        g.translate(-getTranslateX(),-getTranslateY());
+    }
+
+    public TransformNode setAxis(Transform axis) {
+        this.axis = axis;
+        return this;
     }
 
     @Override
