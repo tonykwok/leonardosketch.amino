@@ -46,8 +46,8 @@ public class SpinningRectangle implements Runnable {
                 .property("rotate")
                 .startValue(0)
                 .endValue(360)
-                .seconds(10)
+                .seconds(4)
                 .repeat(PropertyAnimator.INDEFINITE);
-        //anim.start();
+        anim.start();
     }
 }
