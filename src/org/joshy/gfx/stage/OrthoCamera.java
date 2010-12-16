@@ -13,6 +13,7 @@ import javax.media.opengl.GL2;
 public class OrthoCamera extends Camera {
     @Override
     public void configureDisplay(GL2 gl, Stage stage, double w, double h) {
+        //u.p("ortho configure");
         gl.glClearColor(1f, 1f, 1f, 0);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT);
         gl.glOrtho(0.0, w, h, 0.0, -100.0, 100.0);

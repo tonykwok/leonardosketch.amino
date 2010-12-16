@@ -5,8 +5,8 @@ import org.joshy.gfx.anim.PropertyAnimator;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.draw.TransformNode;
-import org.joshy.gfx.node.Group;
 import org.joshy.gfx.node.shape.Rectangle;
+import org.joshy.gfx.stage.PerspectiveCamera;
 import org.joshy.gfx.stage.Stage;
 
 /**
@@ -28,23 +28,19 @@ public class SpinningRectangle implements Runnable {
         Rectangle r = new Rectangle();
         r.setWidth(100);
         r.setHeight(100);
-        r.setTranslateX(200);
-        r.setTranslateY(200);
-        //r.setRotationAxis(Transform.Y_AXIS);
+        r.setTranslateX(-50);
+        r.setTranslateY(-50);
+        r.setTranslateZ(0);
         r.setFill(FlatColor.RED);
 
         TransformNode t = new TransformNode();
         t.setContent(r);
         t.setAxis(Transform.Y_AXIS);
-        t.setTranslateX(200);
-        t.setTranslateY(100);
-
-        Group g = new Group();
-
-        g.add(t);
-
+        t.setTranslateX(0);
+        t.setTranslateY(0);
         Stage s = Stage.create3DStage();
-        s.setContent(g);
+        s.setCamera(new PerspectiveCamera());
+        s.setContent(t);
 
         PropertyAnimator anim = PropertyAnimator.target(t)
                 .property("rotate")
@@ -52,6 +48,6 @@ public class SpinningRectangle implements Runnable {
                 .endValue(360)
                 .seconds(10)
                 .repeat(PropertyAnimator.INDEFINITE);
-        anim.start();
+        //anim.start();
     }
 }

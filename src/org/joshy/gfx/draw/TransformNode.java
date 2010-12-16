@@ -51,7 +51,9 @@ public class TransformNode extends AbstractPane {
 //        g.translate(getTranslateX(),getTranslateY());
         g.scale(scaleX,scaleY);
         g.rotate(rotate,axis);
+        g.translate(content.getTranslateX(),content.getTranslateY(),content.getTranslateZ());
         content.draw(g);
+        g.translate(-content.getTranslateX(),-content.getTranslateY(),-content.getTranslateZ());
         g.rotate(-rotate,axis);
         g.scale(1/scaleX,1/scaleY);
 //        g.translate(-getTranslateX(),-getTranslateY());
