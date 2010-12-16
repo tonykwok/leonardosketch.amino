@@ -24,7 +24,7 @@ public class JOGLCore extends Core {
 
     @Override
     public Iterable<Stage> getStages() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
 

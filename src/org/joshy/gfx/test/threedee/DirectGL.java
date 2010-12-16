@@ -1,21 +1,16 @@
 package org.joshy.gfx.test.threedee;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.shape.Rectangle;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Textbox;
-import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.stage.PerspectiveCamera;
 import org.joshy.gfx.stage.Stage;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
-import java.io.File;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,27 +30,28 @@ public class DirectGL implements Runnable {
     public void run() {
         try {
             //SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
-            Rectangle r = new Rectangle();
-            r.setTranslateX(100);
-            r.setFill(FlatColor.GREEN);
+            //Rectangle r = new Rectangle();
+            //r.setTranslateX(100);
+            //r.setFill(FlatColor.GREEN);
 
-            Panel panel = new Panel();
-            panel.add(r);
+            //Panel panel = new Panel();
+            //panel.add(r);
 
-            panel.add(new GLNode());
-            Button b = new Button();
-            b.setText("asdf");
-            panel.add(b);
+            //panel.add(new GLNode());
+            //Button b = new Button();
+            //b.setText("asdf");
+            //panel.add(b);
 
 
-            Textbox textbox = new Textbox();
-            textbox.setText("asdf");
-            textbox.setTranslateX(200);
-            textbox.setTranslateY(200);
-            panel.add(textbox);
+            //Textbox textbox = new Textbox();
+            //textbox.setText("asdf");
+            //textbox.setTranslateX(200);
+            //textbox.setTranslateY(200);
+            //panel.add(textbox);
 
             Stage stage = Stage.createStage();
-            stage.setContent(panel);
+            stage.setCamera(new PerspectiveCamera());
+            stage.setContent(new GLNode());
         } catch (Exception e) {
             e.printStackTrace();
         }
