@@ -1,14 +1,23 @@
 package org.joshy.gfx.stage;
 
+import org.joshy.gfx.draw.FlatColor;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 public class PerspectiveCamera extends Camera {
 
+    private FlatColor backgroundColor = FlatColor.BLACK;
+
     @Override
     public void configureDisplay(GL2 gl, Stage stage, double w, double h) {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        gl.glClearColor(
+                (float)backgroundColor.getRed(),
+                (float)backgroundColor.getGreen(),
+                (float)backgroundColor.getBlue(),
+                (float)backgroundColor.getAlpha());
         gl.glClear(GL.GL_COLOR_BUFFER_BIT|GL.GL_DEPTH_BUFFER_BIT);
 
         gl.glMatrixMode (GL2.GL_PROJECTION);
@@ -29,5 +38,10 @@ public class PerspectiveCamera extends Camera {
         float rotAngle = 0;
         gl.glRotatef (rotAngle, 0.0f, 1.0f, 0.0f);
         gl.glTranslated(0,0,-235);
+    }
+
+    public PerspectiveCamera setBackground(FlatColor color) {
+        this.backgroundColor = color;
+        return this;
     }
 }

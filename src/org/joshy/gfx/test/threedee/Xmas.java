@@ -40,37 +40,43 @@ public class Xmas implements Runnable {
             }
         };
         Stage s = Stage.create3DStage();
-        s.setCamera(new PerspectiveCamera());
+        s.setCamera(new PerspectiveCamera()
+                .setBackground(FlatColor.RED)
+        );
         s.setContent(parts);
         s.setWidth(1024);
         s.setHeight(768);
     }
 
     int maxFlakes = 200;
+    int particlesPerTick = 2;
 
     double minX = -200;
     double maxX = 200;
 
-    double startY = 250;
-    double endY = -200;
+    double startY = 300;
+    double endY = -300;
 
-    double minZ = -50;
-    double maxZ = 50;
+    double minZ = -100;
+    double maxZ = 100;
 
     double minYv = -0.5;
     double maxYv = -1.5;
     double minRotV = -3;
     double maxRotV = 3;
+
     private void updateParticles() {
-        if(parts.getChildCount() < maxFlakes) {
-            Flake p = new Flake();
-            p.setTranslateX(rand(minX,maxX));
-            p.setTranslateY(startY);
-            p.setTranslateZ(rand(minZ, maxZ));
-            p.setAxis(Transform.Y_AXIS);
-            p.yV = rand(minYv,maxYv);
-            p.rotV = rand(minRotV,maxRotV);
-            parts.add(p);
+        for(int n = 0; n<particlesPerTick; n++) {
+            if(parts.getChildCount() < maxFlakes) {
+                Flake p = new Flake();
+                p.setTranslateX(rand(minX,maxX));
+                p.setTranslateY(startY);
+                p.setTranslateZ(rand(minZ, maxZ));
+                p.setAxis(Transform.Y_AXIS);
+                p.yV = rand(minYv,maxYv);
+                p.rotV = rand(minRotV,maxRotV);
+                parts.add(p);
+            }
         }
 
         List<Flake> dead = new ArrayList<Flake>();
@@ -103,7 +109,8 @@ public class Xmas implements Runnable {
             setContent(new Rectangle()
                     .setWidth(10)
                     .setHeight(10)
-                    .setFill(FlatColor.RED)
+                    .setFill(FlatColor.WHITE)
+                    .setStroke(null)
                     .setTranslateX(-5)
                     .setTranslateY(-5));
         }
