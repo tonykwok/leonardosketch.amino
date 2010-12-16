@@ -25,7 +25,7 @@ public class PerspectiveCamera extends Camera {
         float aspect = (float) w/(float) h;
         GLU glu = new GLU ();
         final double NEAR = 1.0; // Z values < NEAR are clipped
-        final double FAR = 4.0;  // Z values > FAR are clipped
+        final double FAR = 8.0;  // Z values > FAR are clipped
         float s = 100;
         gl.glFrustum (-aspect*s, aspect*s, -1.0f*s, 1.0f*s, NEAR*s, FAR*s);
         //u.p("near = " + (NEAR * s) + " far = " + (FAR * s));
