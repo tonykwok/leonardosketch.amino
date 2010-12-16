@@ -27,9 +27,9 @@ public class Group extends Node implements Parent {
     public void draw(GFX g) {
         if(!isVisible()) return;
         for(Node child : children) {
-            g.translate(child.getTranslateX(),child.getTranslateY());
+            g.translate(child.getTranslateX(),child.getTranslateY(),child.getTranslateZ());
             child.draw(g);
-            g.translate(-child.getTranslateX(),-child.getTranslateY());
+            g.translate(-child.getTranslateX(),-child.getTranslateY(),-child.getTranslateZ());
         }
         this.drawingDirty = false;
     }
@@ -83,6 +83,9 @@ public class Group extends Node implements Parent {
         return this;
     }
 
+    public int getChildCount() {
+        return children.size();
+    }
 
     public void remove(Node node) {
         node.setParent(null);
