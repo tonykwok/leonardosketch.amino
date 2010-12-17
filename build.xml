@@ -106,7 +106,7 @@
     <target name="dist" depends="build-core, core-docs, build-src, build-demos">
     </target>
     
-    <target name="build-demos" depends="build-grandtour, build-mailapp, build-partyboard">
+    <target name="build-demos" depends="build-grandtour, build-mailapp, build-partyboard, build-xmassim">
     </target>
     
     <target name="build-grandtour" depends="build-core">
