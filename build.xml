@@ -142,6 +142,18 @@
         </java>
     </target>
 
+    <target name="build-xmassim" depends="build-core">
+        <java
+            classpath="lib/AppBundler.jar;lib/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=xmassim-bundler.xml"/>
+            <arg value="--target=onejar"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
+    </target>
+
     <target name="build-src" depends="init">
         <mkdir dir="dist"/>
         <zip destfile="dist/amino.src.zip">
