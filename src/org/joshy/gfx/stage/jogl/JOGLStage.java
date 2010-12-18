@@ -45,8 +45,8 @@ public class JOGLStage extends Stage {
         frame.setSize(500,500);
         caps = new GLCapabilities(null);
         //turn on anti-aliasing full screen
-        caps.setSampleBuffers(true);
-        caps.setNumSamples(4);
+        //caps.setSampleBuffers(true);
+        //caps.setNumSamples(4);
         
         canvas = new GLCanvas(caps);
         canvas.addGLEventListener(frame);
