@@ -152,6 +152,15 @@
             <arg value="--jardir=build/jars/"/>
             <arg value="--jardir=lib/"/>
         </java>
+        <zip destfile="dist/xmas/mac/XmasSim.app.zip">
+            <zipfileset dir="dist/xmas/mac">
+                <include name="XmasSim.app"/>
+                <include name="XmasSim.app/**"/>
+                <exclude name="XmasSim.app/Contents/MacOS/JavaApplicationStub"/>
+            </zipfileset>
+            <zipfileset dir="dist/xmas/mac" includes="XmasSim.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
+        </zip>        
+
     </target>
 
     <target name="build-src" depends="init">
@@ -198,7 +207,7 @@
                         <li><a href="GrandTour.onejar.jar">Grand Tour</a> double click jar</li>
                         <li><a href="MailApp.onejar.jar">Mail.app Mockup</a> double click jar</li>
                         <li><a href="PartyBoard.onejar.jar">PartyBoard</a> double click jar</li>
-			<li><a href="XmasSim.onejar.jar">Xmas Sim</a> double click jar (mac only)</li>
+			<li><a href="xmas/">Xmas Sim</a></li>
                     </ul>
                 </body>
             </html>
