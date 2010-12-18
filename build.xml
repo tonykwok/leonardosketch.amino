@@ -147,7 +147,16 @@
             classpath="lib/AppBundler.jar;lib/XMLLib.jar"
             classname="com.joshondesign.appbundler.Bundler" fork="true">
             <arg value="--file=xmassim-bundler.xml"/>
-            <arg value="--target=all"/>
+            <arg value="--target=mac"/>
+            <arg value="--outdir=dist/xmas"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
+        <java
+            classpath="lib/AppBundler.jar;lib/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=xmassim-bundler.xml"/>
+            <arg value="--target=onejar"/>
             <arg value="--outdir=dist/xmas"/>
             <arg value="--jardir=build/jars/"/>
             <arg value="--jardir=lib/"/>
