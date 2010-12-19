@@ -214,9 +214,9 @@ public class TranslationEditor<E> extends VFlexBox {
             xml.start("sets");
             for(Prefix prefix : ListUtil.toAlphaCollection(prefixes.values())) {
                 xml.start("set","name",prefix.prefix);
-                for(Key key : prefix.keys) {
+                for(Key key : ListUtil.toAlphaCollection(prefix.keys)) {
                     xml.start("key","name",key.keyString.getKeyname());
-                    for(String lang : key.keyString.translations.keySet()) {
+                    for(String lang : ListUtil.toAlphaCollection(key.keyString.translations.keySet())) {
                         xml.start("value")
                                 .attr("language",lang)
                                 .text(key.keyString.translations.get(lang))
