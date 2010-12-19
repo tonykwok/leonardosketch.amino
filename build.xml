@@ -156,6 +156,15 @@
             classpath="lib/AppBundler.jar;lib/XMLLib.jar"
             classname="com.joshondesign.appbundler.Bundler" fork="true">
             <arg value="--file=xmassim-bundler.xml"/>
+            <arg value="--target=win"/>
+            <arg value="--outdir=dist/xmas"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
+        <java
+            classpath="lib/AppBundler.jar;lib/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=xmassim-bundler.xml"/>
             <arg value="--target=onejar"/>
             <arg value="--outdir=dist/xmas"/>
             <arg value="--jardir=build/jars/"/>
@@ -168,6 +177,14 @@
                 <exclude name="XmasSim.app/Contents/MacOS/JavaApplicationStub"/>
             </zipfileset>
             <zipfileset dir="dist/xmas/mac" includes="XmasSim.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
+        </zip>        
+        <zip destfile="dist/xmas/win/XmasSim.exe.zip">
+            <zipfileset dir="dist/xmas/win" prefix="XmasSim">
+                <include name="XmasSim.exe"/>
+                <include name="lib/**"/>
+                <include name="msvcr71.dll"/>
+            </zipfileset>
+<!--            <zipfileset dir="dist/xmas/mac" includes="XmasSim.app/Contents/MacOS/JavaApplicationStub" filemode="755"/> -->
         </zip>        
 
     </target>
