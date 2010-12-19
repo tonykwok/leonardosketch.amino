@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <app name="XmasSim">
     <jar name="amino-core.jar" main-class="org.joshy.gfx.test.threedee.Xmas"/>
+    <jar name="MacStubs.jar"/>
     <jar name="XMLLib.jar"/>
     <jar name="commons-codec-1.4.jar"/>
     <jar name="apache-mime4j-0.6.jar"/>
