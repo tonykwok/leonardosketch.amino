@@ -7,14 +7,17 @@ import org.joshy.gfx.node.Bounds;
 import javax.media.opengl.GLAutoDrawable;
 import java.awt.*;
 import java.awt.Font;
+import java.awt.Paint;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class SwingGFX extends GFX {
     private org.joshy.gfx.draw.Paint fill;
     private Graphics2D g;
-    private AffineTransform prevTransform;
+    private Deque<GFXState> stateStack;
 
     public SwingGFX(Graphics2D graphics) {
         this.g = graphics;
@@ -22,6 +25,7 @@ public class SwingGFX extends GFX {
         this.g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         this.g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         //this.g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        stateStack = new ArrayDeque<GFXState>();
     }
 
     @Override
@@ -141,13 +145,14 @@ public class SwingGFX extends GFX {
     }
 
     @Override
-    public void pushMatrix() {
-        prevTransform = g.getTransform();
+    public void push() {
+        stateStack.push(new GFXState(g));
     }
 
     @Override
-    public void popMatrix() {
-        g.setTransform(prevTransform);
+    public void pop() {
+        GFXState s = stateStack.pop();
+        s.restore(g);
     }
 
     @Override
@@ -365,5 +370,18 @@ public class SwingGFX extends GFX {
     }
 
 
+    private class GFXState {
+        private AffineTransform oldTransform;
+        private Paint oldPaint;
 
+        public GFXState(Graphics2D g) {
+            this.oldTransform = g.getTransform();
+            this.oldPaint = g.getPaint();
+        }
+
+        public void restore(Graphics2D g) {
+            g.setTransform(oldTransform);
+            g.setPaint(oldPaint);
+        }
+    }
 }

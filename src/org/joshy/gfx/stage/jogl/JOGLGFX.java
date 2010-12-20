@@ -423,12 +423,12 @@ public class JOGLGFX extends GFX {
     }
 
     @Override
-    public void pushMatrix() {
+    public void push() {
         gl.glPushMatrix();
     }
 
     @Override
-    public void popMatrix() {
+    public void pop() {
         gl.glPopMatrix();
     }
 
