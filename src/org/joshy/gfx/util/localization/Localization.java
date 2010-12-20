@@ -6,9 +6,7 @@ import com.joshondesign.xml.XMLParser;
 import org.joshy.gfx.util.u;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Localization {
     private static String masterLocaleName;
@@ -60,6 +58,19 @@ public class Localization {
         return translations.get(key);
     }
 
+    public static List<String> getSupportedLocales() {
+        List<String> list = new ArrayList<String>();
+        final Set<String> keys = Localization.getAllKeys();
+        for(String dsKey : keys) {
+            Localization.KeyString ks = Localization.getKeyString(dsKey);
+            for(String lang : ks.translations.keySet()) {
+                if(!list.contains(lang)) {
+                    list.add(lang);
+                }
+            }
+        }
+        return list;
+    }
 
     public static class KeyString implements CharSequence {
         //map of locale to value
