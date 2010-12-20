@@ -8,9 +8,7 @@ import javax.media.opengl.GLAutoDrawable;
 import java.awt.*;
 import java.awt.Font;
 import java.awt.Paint;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
+import java.awt.geom.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -61,7 +59,8 @@ public class SwingGFX extends GFX {
 
     @Override
     public void fillRect(double x, double y, double width, double height) {
-        g.fillRect((int)x,(int)y,(int)width,(int)height);
+        Rectangle2D.Double r = new Rectangle2D.Double(x, y, width, height);
+        g.fill(r);
     }
 
     @Override
@@ -167,7 +166,8 @@ public class SwingGFX extends GFX {
 
     @Override
     public void fillOval(double x, double y, double width, double height) {
-        g.fillOval((int)x,(int)y,(int)width,(int)height);
+        Ellipse2D.Double o = new Ellipse2D.Double(x, y, width, height);
+        g.fill(o);
     }
 
     @Override
