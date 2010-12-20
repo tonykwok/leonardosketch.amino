@@ -232,12 +232,18 @@ public class GrandTour implements Runnable {
             @Override
             public Control build() throws Exception {
                 return new VFlexBox()
+                        .setBoxAlign(FlexBox.Align.Stretch)
                         .add(new DisclosurePanel()
                             .setTitle(new Label("click to disclose"))
                             .setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200))
                         )
                         .add(new DisclosurePanel()
                             .setTitle(new Label("click to disclose"))
+                            .setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200))
+                        )
+                        .add(new DisclosurePanel()
+                            .setTitle(new Label("Right"))
+                            .setPosition(DisclosurePanel.Position.Right)
                             .setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200))
                         )
                         ;
