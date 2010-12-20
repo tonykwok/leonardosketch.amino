@@ -54,7 +54,8 @@ public class SwingGFX extends GFX {
 
     @Override
     public void drawRect(double x, double y, double width, double height) {
-        g.drawRect((int)x,(int)y,(int)width,(int)height);
+        Rectangle2D.Double r = new Rectangle2D.Double(x, y, width, height);
+        g.draw(r);
     }
 
     @Override
@@ -172,7 +173,8 @@ public class SwingGFX extends GFX {
 
     @Override
     public void drawOval(double x, double y, double width, double height) {
-        g.drawOval((int)x,(int)y,(int)width,(int)height);
+        Ellipse2D.Double o = new Ellipse2D.Double(x, y, width, height);
+        g.draw(o);
     }
 
     @Override
