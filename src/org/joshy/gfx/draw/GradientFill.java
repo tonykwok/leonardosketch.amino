@@ -77,4 +77,20 @@ public class GradientFill implements Paint {
         this.end = flatColor;
         return this;
     }
+
+    public boolean isStretch() {
+        return stretch;
+    }
+
+    @Override
+    public String toString() {
+        return "GradientFill{" +
+                "start=" + start +
+                ", end=" + end +
+                ", (" + startX +
+                ", " + startY +
+                ") -> (" + endX +
+                ", " + endY + " )" +
+                '}';
+    }
 }
