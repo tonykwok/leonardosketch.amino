@@ -17,6 +17,9 @@ public class GradientFill implements Paint {
     public double angle;
     private boolean stretch;
 
+    public GradientFill() {
+
+    }
     public GradientFill(FlatColor start, FlatColor end, double angle, boolean stretch) {
         this(start,end,angle,stretch,0,0,0,0);
     }
@@ -43,5 +46,35 @@ public class GradientFill implements Paint {
 
     public GradientFill derive(FlatColor start, FlatColor end) {
         return new GradientFill(start,end,this.angle,this.stretch,this.startX,this.startY,this.endX,this.endY);
+    }
+
+    public GradientFill setStartX(double startX) {
+        this.startX = startX;
+        return this;
+    }
+
+    public GradientFill setEndX(double endX) {
+        this.endX = endX;
+        return this;
+    }
+
+    public GradientFill setStartY(double startY) {
+        this.startY = startY;
+        return this;
+    }
+
+    public GradientFill setEndY(double endY) {
+        this.endY = endY;
+        return this;
+    }
+
+    public GradientFill setStartColor(FlatColor flatColor) {
+        this.start = flatColor;
+        return this;
+    }
+
+    public GradientFill setEndColor(FlatColor flatColor) {
+        this.end = flatColor;
+        return this;
     }
 }

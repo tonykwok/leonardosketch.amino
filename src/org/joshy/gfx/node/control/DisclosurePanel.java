@@ -2,11 +2,12 @@ package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.Container;
 
 /**
@@ -88,8 +89,8 @@ public class DisclosurePanel extends Container {
                 break;
             case Right:
                 w1 = button.getLayoutBounds().getWidth();
-                w2 = title.getLayoutBounds().getWidth();
-                h1 = button.getLayoutBounds().getHeight() + title.getLayoutBounds().getHeight();
+                w2 = title.getLayoutBounds().getHeight();
+                h1 = button.getLayoutBounds().getHeight() + title.getLayoutBounds().getWidth();
                 if(isOpen()) {
                     double w3 = content.getLayoutBounds().getWidth();
                     w1 += w3;
@@ -103,7 +104,6 @@ public class DisclosurePanel extends Container {
 
     @Override
     public void doLayout() {
-        super.doLayout();
         Bounds bb = button.getLayoutBounds();
         Bounds tb = title.getLayoutBounds();
         content.setVisible(isOpen());
@@ -118,27 +118,75 @@ public class DisclosurePanel extends Container {
                 y = Math.max(y,tb.getY2());
                 content.setTranslateX(0);
                 content.setTranslateY(y);
+                content.setWidth(getWidth());
                 break;
             case Right:
+                double i = Math.max(bb.getWidth(), tb.getHeight());
                 button.setTranslateX(getWidth()-bb.getWidth());
                 button.setTranslateY(0);
-                title.setTranslateX(getWidth()-tb.getWidth());
+                title.setTranslateX(getWidth() - tb.getHeight());
                 title.setTranslateY(bb.getY2());
                 content.setTranslateX(0);
                 content.setTranslateY(0);
+                content.setWidth(getWidth()-i);
+                content.setHeight(getHeight());
                 break;
         }
 
-
+        super.doLayout();
     }
 
     @Override
     public void draw(GFX g) {
-        for(Node child : children) {
+        Bounds bb = button.getLayoutBounds();
+        Bounds tb = title.getLayoutBounds();
+        g.setPaint(new FlatColor(0xcccccc));
+        double cw = 0;
+        double ch = 0;
+        switch(pos) {
+            case Top:
+                cw = getWidth();
+                ch = Math.max(bb.getHeight(),tb.getHeight());
+                GradientFill gradTop = new GradientFill()
+                        .setStartX(0).setEndX(0)
+                        .setStartY(0).setEndY(ch)
+                        .setStartColor(new FlatColor(0xebebeb))
+                        .setEndColor(new FlatColor(0xa1a1a1));
+                g.setPaint(gradTop);
+                g.fillRect(0,0,cw,ch);
+                g.setPaint(FlatColor.GRAY);
+                g.drawRect(0,0,cw,ch);
+                break;
+            case Right:
+                cw = Math.max(bb.getWidth(),tb.getHeight());
+                GradientFill gradRight = new GradientFill()
+                        .setStartX(0).setEndX(cw)
+                        .setStartY(0).setEndY(0)
+                        .setStartColor(new FlatColor(0xebebeb))
+                        .setEndColor(new FlatColor(0xa1a1a1));
+                g.push();
+                g.translate(getWidth()-cw,0);
+                g.setPaint(gradRight);
+                g.fillRect(0,0, cw,getHeight());
+                g.setPaint(FlatColor.GRAY);
+                g.drawRect(0, 0, cw, getHeight());
+                g.pop();
+                break;
+        }
+        for(Control child : controlChildren()) {
             if(!child.isVisible()) continue;
-            g.translate(child.getTranslateX(),child.getTranslateY());
-            child.draw(g);
-            g.translate(-child.getTranslateX(),-child.getTranslateY());
+            if(child == title && pos == DisclosurePanel.Position.Right) {
+                g.push();
+                g.translate(child.getTranslateX(), child.getTranslateY());
+                g.rotate(90, Transform.Z_AXIS);
+                g.translate(0,-child.getLayoutBounds().getHeight());
+                child.draw(g);
+                g.pop();
+            } else {
+                g.translate(child.getTranslateX(),child.getTranslateY());
+                child.draw(g);
+                g.translate(-child.getTranslateX(), -child.getTranslateY());
+            }
         }
     }
 
@@ -165,9 +213,10 @@ public class DisclosurePanel extends Container {
         return open;
     }
 
-    public void setOpen(boolean open) {
+    public DisclosurePanel setOpen(boolean open) {
         this.open = open;
         setLayoutDirty();
-        button.setText(isOpen()?"-":"+");
+        button.setText(isOpen()?"+":"+");
+        return this;
     }
 }
