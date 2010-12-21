@@ -111,15 +111,24 @@ public class TableTest extends GrandTour.Example implements Runnable{
         table.setAllowColumnResizing(false);
         table.setSorter(new TableView.Sorter() {
             @Override
-            public Comparator createComparator(TableView.TableModel table, int column, boolean ascending) {
-                if(ascending) {
-                return new Comparator<String>() {
-                    @Override
-                    public int compare(String s, String s1) {
-                        return s.compareTo(s1);
-                    }
-                };
-                } else {
+            public Comparator createComparator(TableView.TableModel table, int column, TableView.SortOrder order) {
+                if(order == TableView.SortOrder.Default) {
+                    return new Comparator<String>() {
+                        @Override
+                        public int compare(String s, String s1) {
+                            return 0;
+                        }
+                    };
+                }
+                if(order == TableView.SortOrder.Ascending) {
+                    return new Comparator<String>() {
+                        @Override
+                        public int compare(String s, String s1) {
+                            return s.compareTo(s1);
+                        }
+                    };
+                }
+                if(order == TableView.SortOrder.Descending) {
                     return new Comparator<String>() {
                         @Override
                         public int compare(String s, String s1) {
@@ -127,6 +136,7 @@ public class TableTest extends GrandTour.Example implements Runnable{
                         }
                     };
                 }
+                return null;
             }
         });
         table.setWidth(500);
