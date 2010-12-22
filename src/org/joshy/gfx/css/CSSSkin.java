@@ -364,13 +364,13 @@ public class CSSSkin {
                 new FlatColor(grad.getStop(1).getColor()),
                 90, false
         );
-        gf.startX = 0;
-        gf.endX = 0;
-        gf.startY = 0;
-        gf.endY = backHeight;
+        gf.setStartX(0);
+        gf.setEndX(0);
+        gf.setStartY(0);
+        gf.setEndY(backHeight);
         if("left".equals(grad.getPosition1())) {
-            gf.endX = backWidth;
-            gf.endY = 0;
+            gf.setEndX(backWidth);
+            gf.setEndY(0);
         }
         return gf;
     }
