@@ -112,7 +112,6 @@ public class GradientFill implements Paint {
 
     public void setStartSnapped(boolean startSnapped) {
         this.startSnapped = startSnapped;
-        u.p("start snapped = " + startSnapped);
     }
 
     public boolean isEndSnapped() {
@@ -121,7 +120,6 @@ public class GradientFill implements Paint {
 
     public void setEndSnapped(boolean endSnapped) {
         this.endSnapped = endSnapped;
-        u.p("end snapped = " + endSnapped);
     }
 
     public double getStartX() {
