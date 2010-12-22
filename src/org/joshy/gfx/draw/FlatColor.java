@@ -22,6 +22,8 @@ public class FlatColor implements Paint {
     public static final FlatColor YELLOW = new FlatColor(0xffff00);
     public static final FlatColor PURPLE = new FlatColor(0xff00ff);
     public static final FlatColor GRAY = new FlatColor(0xa0a0a0);
+    public static final FlatColor WHITE_TRANSPARENT = new FlatColor(0x00FFFFFF,true);
+    public static final FlatColor BLACK_TRANSPARENT = new FlatColor(0x00000000,true);
 
     public FlatColor(String srgb) {
         if(srgb.startsWith("#")) {
