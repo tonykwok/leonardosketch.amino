@@ -197,6 +197,7 @@
                 <include name="lib/**"/>
                 <include name="src/**"/>
                 <include name="test/**"/>
+                <include name="LICENSE.TXT"/>
             </zipfileset>
 <!--            <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>-->
         </zip>        
