@@ -109,7 +109,7 @@ public class Button extends Control {
         return this;
     }
 
-    private void fireAction() {
+    protected void fireAction() {
         if(!isEnabled()) return;
         ActionEvent action = new ActionEvent(ActionEvent.Action, Button.this);
         EventBus.getSystem().publish(action);
