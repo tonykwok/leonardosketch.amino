@@ -48,6 +48,11 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
     }
 
     @Override
+    protected void fireAction() {
+        //super.fireAction();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
     protected void setPressed(boolean pressed) {
         super.setPressed(pressed);
         if(pressed) {
@@ -124,6 +129,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         this.setText(getSelectedItem().toString());
         EventBus.getSystem().publish(new SelectionEvent(SelectionEvent.Changed,this));
         setDrawingDirty();
+        super.fireAction();
     }
 
     public int getSelectedIndex() {
