@@ -132,4 +132,9 @@ public class FlatColor implements Paint {
     public static FlatColor fromRGBInts(int r, int g, int b) {
         return new FlatColor(r/255.0,g/255.0,b/255.0, 1.0);
     }
+
+    @Override
+    public Paint duplicate() {
+        return  new FlatColor(red,green,blue,alpha);
+    }
 }

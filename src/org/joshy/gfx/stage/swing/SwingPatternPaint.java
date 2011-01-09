@@ -1,5 +1,6 @@
 package org.joshy.gfx.stage.swing;
 
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.draw.PatternPaint;
 
 import javax.imageio.ImageIO;
@@ -24,5 +25,14 @@ public class SwingPatternPaint extends PatternPaint {
 
     public SwingPatternPaint(URL resource) throws IOException {
         image = ImageIO.read(resource);
+    }
+
+    private SwingPatternPaint(BufferedImage img) {
+        this.image = img;
+    }
+
+    @Override
+    public Paint duplicate() {
+        return new SwingPatternPaint(image);
     }
 }
