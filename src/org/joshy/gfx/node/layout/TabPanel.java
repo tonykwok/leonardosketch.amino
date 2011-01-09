@@ -71,12 +71,20 @@ public class TabPanel extends Panel {
         setDrawingDirty();
     }
 
-    public void setSelected(Node node) {
+    public TabPanel setSelected(Node node) {
         for(Control c : tabs){
             c.setVisible(false);
         }
         node.setVisible(true);
         setDrawingDirty();
+        return this;
+    }
+
+    public Control getSelected() {
+        for(Control c : tabs) {
+            if(c.isVisible()) return c;
+        }
+        return null;
     }
 
     private class TabTop extends Control {

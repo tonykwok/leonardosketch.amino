@@ -2,6 +2,7 @@ package org.joshy.gfx.stage.jogl;
 
 import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.awt.AWTTextureIO;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.draw.PatternPaint;
 
 import javax.imageio.ImageIO;
@@ -32,6 +33,10 @@ public class JOGLPatternPaint extends PatternPaint {
         this.image = ImageIO.read(resource);
         initialized = false;
     }
+    public JOGLPatternPaint(BufferedImage img) {
+        this.image = img;
+        initialized = false;
+    }
 
     public void initialize() {
         if(!initialized) {
@@ -42,5 +47,10 @@ public class JOGLPatternPaint extends PatternPaint {
             texture.setTexParameteri(GL.GL_TEXTURE_WRAP_S,GL.GL_REPEAT);
             texture.setTexParameteri(GL.GL_TEXTURE_WRAP_T,GL.GL_REPEAT);
         }
+    }
+
+    @Override
+    public Paint duplicate() {
+        return new JOGLPatternPaint(image);
     }
 }

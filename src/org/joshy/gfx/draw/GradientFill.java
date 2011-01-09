@@ -1,6 +1,6 @@
 package org.joshy.gfx.draw;
 
-import org.joshy.gfx.util.u;
+import org.joshy.gfx.node.Bounds;
 
 /**
 * Created by IntelliJ IDEA.
@@ -52,6 +52,30 @@ public class GradientFill implements Paint {
 
     public GradientFill derive(FlatColor start, FlatColor end) {
         return new GradientFill(start,end,this.angle,this.stretch, this.getStartX(), this.getStartY(), this.getEndX(), this.getEndY());
+    }
+
+    public GradientFill translate(double x, double y) {
+        GradientFill gf = new GradientFill(start,end,angle,stretch);
+        gf.setStartX(startX+x);
+        gf.setStartY(startY+y);
+        gf.setEndX(endX+x);
+        gf.setEndY(endY+y);
+        gf.startSnapped = startSnapped;
+        gf.endSnapped = endSnapped;
+        return gf;
+    }
+
+    public GradientFill resize(Bounds curr, Bounds newb) {
+        GradientFill gf = new GradientFill();
+        gf.start = start;
+        gf.end = end;
+        gf.startX = startX/curr.getWidth()*newb.getWidth();
+        gf.startY = startY/curr.getHeight()*newb.getHeight();
+        gf.endX = endX/curr.getWidth()*newb.getWidth();
+        gf.endY = endY/curr.getHeight()*newb.getHeight();
+        gf.startSnapped = startSnapped;
+        gf.endSnapped = endSnapped;
+        return gf;
     }
 
     public GradientFill setStartX(double startX) {
@@ -136,5 +160,17 @@ public class GradientFill implements Paint {
 
     public double getEndY() {
         return endY;
+    }
+
+    @Override
+    public Paint duplicate() {
+        GradientFill gf = new GradientFill(start,end,angle,stretch);
+        gf.setStartX(startX);
+        gf.setStartY(startY);
+        gf.setEndX(endX);
+        gf.setEndY(endY);
+        gf.startSnapped = startSnapped;
+        gf.endSnapped = endSnapped;
+        return gf;
     }
 }

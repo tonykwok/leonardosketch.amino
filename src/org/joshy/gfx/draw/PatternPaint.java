@@ -15,7 +15,8 @@ import java.net.URL;
  * Time: 9:16:24 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PatternPaint implements Paint {
+public abstract class PatternPaint implements Paint {
+
     protected PatternPaint() {
     }
 
@@ -34,4 +35,5 @@ public class PatternPaint implements Paint {
             return new SwingPatternPaint(resource);
         }
     }
+
 }
