@@ -7,6 +7,7 @@ import org.joshy.gfx.draw.PatternPaint;
 
 import javax.imageio.ImageIO;
 import javax.media.opengl.GL;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -52,5 +53,25 @@ public class JOGLPatternPaint extends PatternPaint {
     @Override
     public Paint duplicate() {
         return new JOGLPatternPaint(image);
+    }
+
+    @Override
+    public Point2D getStart() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Point2D getEnd() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public PatternPaint deriveNewStart(Point2D pt) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public PatternPaint deriveNewEnd(Point2D pt) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
