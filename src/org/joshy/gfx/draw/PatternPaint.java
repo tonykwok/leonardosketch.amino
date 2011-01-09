@@ -4,6 +4,7 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.stage.jogl.JOGLPatternPaint;
 import org.joshy.gfx.stage.swing.SwingPatternPaint;
 
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -36,4 +37,9 @@ public abstract class PatternPaint implements Paint {
         }
     }
 
+    public abstract Point2D getStart();
+    public abstract Point2D getEnd();
+
+    public abstract PatternPaint deriveNewStart(Point2D pt);
+    public abstract PatternPaint deriveNewEnd(Point2D pt);
 }

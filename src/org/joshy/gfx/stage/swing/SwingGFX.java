@@ -35,7 +35,16 @@ public class SwingGFX extends GFX {
         }
         if(paint instanceof SwingPatternPaint) {
             SwingPatternPaint pp = (SwingPatternPaint) paint;
-            g.setPaint(new TexturePaint(pp.image, new Rectangle(0,0,pp.image.getWidth(),pp.image.getHeight())));
+            TexturePaint tp = new TexturePaint(
+                    pp.image,
+                    new Rectangle2D.Double(
+                            pp.getStart().getX(),
+                            pp.getStart().getY(),
+                            pp.image.getWidth(),
+                            pp.image.getHeight()
+                    )
+            );
+            g.setPaint(tp);
         }
         if(paint instanceof GradientFill) {
             GradientFill gf = (GradientFill) paint;

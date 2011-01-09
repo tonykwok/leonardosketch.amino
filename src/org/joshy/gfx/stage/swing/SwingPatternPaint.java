@@ -4,6 +4,7 @@ import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.draw.PatternPaint;
 
 import javax.imageio.ImageIO;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,21 +19,51 @@ import java.net.URL;
  */
 public class SwingPatternPaint extends PatternPaint {
     BufferedImage image;
+    private Point2D start = new Point2D.Double(0,0);
+    private Point2D end;
 
     public SwingPatternPaint(File file) throws IOException {
-        image = ImageIO.read(file);
+        this(ImageIO.read(file));
     }
 
     public SwingPatternPaint(URL resource) throws IOException {
-        image = ImageIO.read(resource);
+        this(ImageIO.read(resource));
     }
 
     private SwingPatternPaint(BufferedImage img) {
         this.image = img;
+        this.start = new Point2D.Double(0,0);
+        this.end = new Point2D.Double(image.getWidth(),image.getHeight());
     }
 
     @Override
     public Paint duplicate() {
         return new SwingPatternPaint(image);
+    }
+
+    @Override
+    public Point2D getStart() {
+        return start;
+    }
+
+    @Override
+    public Point2D getEnd() {
+        return end;
+    }
+
+    @Override
+    public PatternPaint deriveNewStart(Point2D newPoint) {
+        SwingPatternPaint p = new SwingPatternPaint(this.image);
+        p.start = newPoint;
+        p.end = this.end;
+        return p;
+    }
+
+    @Override
+    public PatternPaint deriveNewEnd(Point2D newPoint) {
+        SwingPatternPaint p = new SwingPatternPaint(this.image);
+        p.start = this.start;
+        p.end = newPoint;
+        return p;
     }
 }
