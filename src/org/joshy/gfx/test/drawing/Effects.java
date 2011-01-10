@@ -37,7 +37,7 @@ public class Effects implements Runnable {
                 GFX g2 = buf.getGFX();
                 g2.setPaint(new FlatColor(0.1,0.1,0.1,0.3));
                 g2.drawText("ABCabc", Font.DEFAULT,20,20);
-                buf.apply(new BlurEffect(3,3));
+                buf.apply(new BlurEffect(3));
                 g.draw(buf,0,0);
 
                 g.setPaint(new FlatColor(0,0,0,1.0));
