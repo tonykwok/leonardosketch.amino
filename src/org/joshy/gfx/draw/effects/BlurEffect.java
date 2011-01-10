@@ -21,15 +21,20 @@ public class BlurEffect extends Effect {
         0.111f, 0.111f, 0.111f,
         0.111f, 0.111f, 0.111f,
     };
-    public BlurEffect(double width, double height) {
+    private int radius;
+
+    public BlurEffect(int radius) {
+        this.radius = radius;
+        matrix = new float[radius*radius];
+        for(int i=0; i<radius*radius; i++) {
+            matrix[i] = 1f/((float)(radius*radius));
+        }
     }
 
     @Override
     public void apply(ImageBuffer buf) {
-        BufferedImageOp op = new ConvolveOp( new Kernel(3, 3, matrix) );
+        BufferedImageOp op = new ConvolveOp( new Kernel(radius, radius, matrix) );
         BufferedImage blurredImage = op.filter(buf.buf,null);
         buf.buf = blurredImage;
-        //org.joshy.gfx.draw.Image finalImage = org.joshy.gfx.draw.Image.create(blurredImage);
-        //g.drawImage(finalImage,0,0);
     }
 }

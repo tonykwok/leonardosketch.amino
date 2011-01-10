@@ -51,7 +51,7 @@ public class BoxPainter {
                 g2.setPaint(new FlatColor(shadow.getColor(),1.0));
                 g2.translate(br,br);
                 drawBG(g2, bounds);
-                buf.apply(new BlurEffect(br,br));
+                buf.apply(new BlurEffect(br));
                 g2.translate(-br,-br);
             }
             g.draw(buf,shadow.getXoffset()-br,shadow.getYoffset()-br);
@@ -189,7 +189,7 @@ public class BoxPainter {
                         g2.setPaint(new FlatColor(shadow.getColor(),0.3));
                         g2.translate(-textX,-contentY);
                         Font.drawCentered(g2,content,font,textX,contentY,textWidth,size.contentHeight,true);
-                        buf.apply(new BlurEffect(3,3));
+                        buf.apply(new BlurEffect(3));
                         oldBuf = buf;
                     }
                     oldText = content;
