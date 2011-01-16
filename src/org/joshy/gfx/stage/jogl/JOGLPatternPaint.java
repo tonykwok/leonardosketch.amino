@@ -24,19 +24,28 @@ public class JOGLPatternPaint extends PatternPaint {
     BufferedImage image;
     private boolean initialized;
     Texture texture;
+    private String relativeURL;
 
     public JOGLPatternPaint(File file) throws IOException {
         this.image = ImageIO.read(file);
+        this.relativeURL = file.getName();
         initialized = false;
     }
 
-    public JOGLPatternPaint(URL resource) throws IOException {
+    public JOGLPatternPaint(URL resource, String relativeURL) throws IOException {
         this.image = ImageIO.read(resource);
+        this.relativeURL = relativeURL;
         initialized = false;
     }
     public JOGLPatternPaint(BufferedImage img) {
         this.image = img;
         initialized = false;
+    }
+
+    public JOGLPatternPaint(BufferedImage img, String relativeURL) {
+        this.image = img;
+        initialized = false;
+        this.relativeURL = relativeURL;
     }
 
     public void initialize() {
@@ -73,5 +82,15 @@ public class JOGLPatternPaint extends PatternPaint {
     @Override
     public PatternPaint deriveNewEnd(Point2D pt) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public BufferedImage getImage() {
+        return this.image;
+    }
+
+    @Override
+    public String getRelativeURL() {
+        return this.relativeURL;
     }
 }

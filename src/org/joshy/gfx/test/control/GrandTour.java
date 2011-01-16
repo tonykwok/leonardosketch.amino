@@ -290,7 +290,7 @@ public class GrandTour implements Runnable {
             @Override
             public Control build() throws Exception {
                 Group group = new Group();
-                PatternPaint pat = PatternPaint.create(GrandTour.class.getResource("pattern.png"));
+                PatternPaint pat = PatternPaint.create(GrandTour.class.getResource("pattern.png"),"pattern.png");
                 group.add(new Rectangle(100,20,200,100)
                         .setFill(pat));
                 group.add(new Oval(50,20)

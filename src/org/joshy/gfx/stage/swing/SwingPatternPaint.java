@@ -21,13 +21,16 @@ public class SwingPatternPaint extends PatternPaint {
     BufferedImage image;
     private Point2D start = new Point2D.Double(0,0);
     private Point2D end;
+    private String relativeURL;
 
     public SwingPatternPaint(File file) throws IOException {
         this(ImageIO.read(file));
+        relativeURL = file.getName();
     }
 
-    public SwingPatternPaint(URL resource) throws IOException {
+    public SwingPatternPaint(URL resource, String relativeURL) throws IOException {
         this(ImageIO.read(resource));
+        this.relativeURL = relativeURL;
     }
 
     private SwingPatternPaint(BufferedImage img) {
@@ -40,6 +43,11 @@ public class SwingPatternPaint extends PatternPaint {
         this.image = image;
         this.start = start;
         this.end = end;
+    }
+
+    public SwingPatternPaint(BufferedImage img, String relativeURL) {
+        this.image = img;
+        this.relativeURL = relativeURL;
     }
 
     @Override
@@ -62,6 +70,7 @@ public class SwingPatternPaint extends PatternPaint {
         SwingPatternPaint p = new SwingPatternPaint(this.image);
         p.start = newPoint;
         p.end = this.end;
+        p.relativeURL = this.relativeURL;
         return p;
     }
 
@@ -70,6 +79,17 @@ public class SwingPatternPaint extends PatternPaint {
         SwingPatternPaint p = new SwingPatternPaint(this.image);
         p.start = this.start;
         p.end = newPoint;
+        p.relativeURL = this.relativeURL;
         return p;
+    }
+
+    @Override
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public String getRelativeURL() {
+        return this.relativeURL;
     }
 }
