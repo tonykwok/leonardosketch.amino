@@ -3,6 +3,7 @@ package org.joshy.gfx.stage.swing;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.GeomUtil;
 
 import javax.media.opengl.GLAutoDrawable;
 import java.awt.*;
@@ -35,14 +36,12 @@ public class SwingGFX extends GFX {
         }
         if(paint instanceof SwingPatternPaint) {
             SwingPatternPaint pp = (SwingPatternPaint) paint;
+            double len = pp.getEnd().distance(0,0);
             TexturePaint tp = new TexturePaint(
                     pp.image,
                     new Rectangle2D.Double(
                             pp.getStart().getX(),
-                            pp.getStart().getY(),
-                            pp.image.getWidth(),
-                            pp.image.getHeight()
-                    )
+                            pp.getStart().getY(),len,len)
             );
             g.setPaint(tp);
         }
@@ -103,7 +102,18 @@ public class SwingGFX extends GFX {
     @Override
     public void fillRect(double x, double y, double width, double height) {
         Rectangle2D.Double r = new Rectangle2D.Double(x, y, width, height);
-        g.fill(r);
+        /*if(fill instanceof PatternPaint) {
+            PatternPaint pp = (PatternPaint) fill;
+            double a = GeomUtil.calcAngle(new Point(0,0),pp.getEnd());
+            a += Math.toRadians(45);
+            g.rotate(-a);
+            AffineTransform af = AffineTransform.getRotateInstance(a);
+            Shape r2 = af.createTransformedShape(r);
+            g.fill(r2);
+            g.rotate(a);
+        } else {*/
+            g.fill(r);
+        /*}*/
     }
 
     @Override

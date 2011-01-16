@@ -36,9 +36,15 @@ public class SwingPatternPaint extends PatternPaint {
         this.end = new Point2D.Double(image.getWidth(),image.getHeight());
     }
 
+    public SwingPatternPaint(BufferedImage image, Point2D start, Point2D end) {
+        this.image = image;
+        this.start = start;
+        this.end = end;
+    }
+
     @Override
     public Paint duplicate() {
-        return new SwingPatternPaint(image);
+        return new SwingPatternPaint(image,getStart(),getEnd());
     }
 
     @Override
