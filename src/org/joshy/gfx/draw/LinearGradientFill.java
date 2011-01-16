@@ -62,4 +62,17 @@ public class LinearGradientFill extends MultiGradientFill{
     public double getEndY() {
         return endY;
     }
+
+    @Override
+    public MultiGradientFill translate(double x, double y) {
+        LinearGradientFill grad = new LinearGradientFill();
+        grad.startX = startX+x;
+        grad.endX = endX+x;
+        grad.startY = startY+y;
+        grad.endY = endY+y;
+        for(Stop s : stops) {
+            grad.addStop(s.duplicate());
+        }
+        return grad;
+    }
 }

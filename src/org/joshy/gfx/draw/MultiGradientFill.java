@@ -30,6 +30,8 @@ public abstract class MultiGradientFill implements Paint {
         Collections.sort(this.stops);
     }
 
+    public abstract MultiGradientFill translate(double x, double y);
+
     public int getStopCount() {
         return stops.size();
     }

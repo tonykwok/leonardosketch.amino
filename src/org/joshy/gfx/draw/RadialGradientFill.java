@@ -52,4 +52,16 @@ public class RadialGradientFill extends MultiGradientFill {
         }
         return rgf;
     }
+
+    @Override
+    public MultiGradientFill translate(double x, double y) {
+        RadialGradientFill rgf = new RadialGradientFill();
+        rgf.centerX = centerX+x;
+        rgf.centerY = centerY+y;
+        rgf.radius = radius;
+        for(Stop s : stops) {
+            rgf.addStop(s.duplicate());
+        }
+        return rgf;
+    }
 }
