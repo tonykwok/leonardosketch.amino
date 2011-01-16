@@ -53,6 +53,39 @@ public class SwingGFX extends GFX {
             GradientPaint gp = new GradientPaint((float) gf.getStartX(), (float) gf.getStartY(), c1, (float) gf.getEndX(), (float) gf.getEndY(), c2);
             g.setPaint(gp);
         }
+        if(paint instanceof MultiGradientFill) {
+            MultiGradientFill grad = (MultiGradientFill) paint;
+
+            java.util.List<MultiGradientFill.Stop> stops = grad.getStops();
+            float[] positions = new float[stops.size()];
+            java.awt.Color[] colors = new java.awt.Color[stops.size()];
+            for(int i=0; i<stops.size(); i++) {
+                positions[i] = (float) stops.get(i).getPosition();
+                colors[i] = new java.awt.Color(stops.get(i).getColor().getRGBA());
+            }
+            if(grad instanceof RadialGradientFill) {
+                RadialGradientFill rad = (RadialGradientFill) grad;
+                RadialGradientPaint radp = new RadialGradientPaint(
+                        (float)rad.getCenterX(),
+                        (float)rad.getCenterY(),
+                        (float)rad.getRadius(),
+                        positions,colors
+                        );
+                g.setPaint(radp);
+            }
+            if(grad instanceof LinearGradientFill) {
+                LinearGradientFill lin = (LinearGradientFill) grad;
+                LinearGradientPaint linp = new LinearGradientPaint(
+                        (float)lin.getStartX(),
+                        (float)lin.getStartY(),
+                        (float)lin.getEndX(),
+                        (float)lin.getEndY(),
+                        positions,colors
+
+                );
+                g.setPaint(linp);
+            }
+        }
     }
 
     @Override
