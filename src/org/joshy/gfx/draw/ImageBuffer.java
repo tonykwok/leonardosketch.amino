@@ -30,4 +30,12 @@ public class ImageBuffer {
     public GFX getGFX() {
         return new SwingGFX(buf.createGraphics());
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
