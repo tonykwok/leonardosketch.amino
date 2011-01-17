@@ -3,7 +3,8 @@ package org.joshy.gfx.test.itunes;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.complex.ItemRenderer;
+import org.joshy.gfx.node.control.complex.ListView;
 
 /**
 * Created by IntelliJ IDEA.
@@ -12,7 +13,7 @@ import org.joshy.gfx.node.control.ListView;
 * Time: 9:20:47 PM
 * To change this template use File | Settings | File Templates.
 */
-class SourceListRenderer implements ListView.ItemRenderer {
+class SourceListRenderer implements ItemRenderer {
     private Font font;
 
     SourceListRenderer() {

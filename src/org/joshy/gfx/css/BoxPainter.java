@@ -45,7 +45,7 @@ public class BoxPainter {
         if(box_shadow instanceof ShadowValue) {
             ShadowValue shadow = (ShadowValue) box_shadow;
             ImageBuffer buf = g.createBuffer(100,100);
-            int br = shadow.getBlurRadius();
+            int br = shadow.getRadius();
             if(buf != null) {
                 GFX g2 = buf.getGFX();
                 g2.setPaint(new FlatColor(shadow.getColor(),1.0));
@@ -54,7 +54,7 @@ public class BoxPainter {
                 buf.apply(new BlurEffect(br));
                 g2.translate(-br,-br);
             }
-            g.draw(buf,shadow.getXoffset()-br,shadow.getYoffset()-br);
+            g.draw(buf,shadow.getXOffset()-br,shadow.getYOffset()-br);
         }
         g.setPaint(background_color);
         if(gradient) {
@@ -195,7 +195,7 @@ public class BoxPainter {
                     oldText = content;
                 }
                 if(oldBuf != null) {
-                    gfx.draw(oldBuf,textX+shadow.getXoffset(),contentY+shadow.getYoffset());
+                    gfx.draw(oldBuf,textX+shadow.getXOffset(),contentY+shadow.getYOffset());
                 }
 
             }

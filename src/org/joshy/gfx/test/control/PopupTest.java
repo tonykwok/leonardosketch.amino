@@ -2,8 +2,8 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.event.*;
-import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.complex.ListModel;
+import org.joshy.gfx.node.control.complex.ListView;
 import org.joshy.gfx.node.control.PopupMenuButton;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;

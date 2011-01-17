@@ -1,8 +1,8 @@
 package org.joshy.gfx.util;
 
 import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.complex.ListModel;
+import org.joshy.gfx.node.control.complex.ListView;
 
 import java.util.ArrayList;
 import java.util.Collection;

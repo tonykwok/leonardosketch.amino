@@ -283,9 +283,9 @@ public class MainCSSTest {
         BaseValue shadow = set.findValue(new CSSMatcher("shadowtest"), "text-shadow");
         assertTrue(shadow instanceof ShadowValue);
         ShadowValue sv = (ShadowValue)shadow;
-        assertTrue(sv.getXoffset()==3);
-        assertTrue(sv.getYoffset()==2);
-        assertTrue(sv.getBlurRadius()==4);
+        assertTrue(sv.getXOffset()==3);
+        assertTrue(sv.getYOffset()==2);
+        assertTrue(sv.getRadius()==4);
         
         CSSMatcher m = new CSSMatcher();
         m.id = "box_shadow_1";

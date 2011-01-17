@@ -7,6 +7,8 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
 import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.complex.ListModel;
+import org.joshy.gfx.node.control.complex.ListView;
 import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
 
@@ -84,7 +86,7 @@ public class LayoutTests implements Runnable {
         tests.add(VBOX_SHRINK_TO_FIT_EXPLICIT_HEIGHT);
         tests.add(VBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH_HEIGHT);
 
-        final ListView<String> testView =new ListView<String>().setModel(ListView.createModel(tests)); 
+        final ListView<String> testView =new ListView<String>().setModel(ListView.createModel(tests));
         split.setFirst(new ScrollPane(testView));
         split.setSecond(new Panel());
         EventBus.getSystem().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>() {

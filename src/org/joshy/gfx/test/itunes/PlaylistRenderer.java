@@ -3,7 +3,7 @@ package org.joshy.gfx.test.itunes;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.node.control.TableView;
+import org.joshy.gfx.node.control.complex.TableView;
 
 /**
 * Created by IntelliJ IDEA.

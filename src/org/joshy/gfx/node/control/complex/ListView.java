@@ -1,4 +1,4 @@
-package org.joshy.gfx.node.control;
+package org.joshy.gfx.node.control.complex;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
@@ -8,6 +8,10 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.Focusable;
+import org.joshy.gfx.node.control.ScrollPane;
+import org.joshy.gfx.node.control.SelectableControl;
 
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -503,16 +507,8 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     }
 
 
-    public static interface ItemRenderer<E> {
-        public void draw(GFX gfx, ListView listView, E item, int index, double x, double y, double width, double height);
-    }
-
     public enum Orientation {
         Horizontal, HorizontalWrap, VerticalWrap, Vertical
-    }
-
-    public static interface TextRenderer<E> {
-        public String toString(SelectableControl view, E item, int index);
     }
 
     ItemRenderer defaultItemRenderer =  new ItemRenderer<E>() {

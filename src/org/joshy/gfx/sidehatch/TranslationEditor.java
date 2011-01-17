@@ -10,6 +10,9 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
 import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.complex.ItemRenderer;
+import org.joshy.gfx.node.control.complex.ListModel;
+import org.joshy.gfx.node.control.complex.ListView;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
@@ -44,7 +47,7 @@ public class TranslationEditor<E> extends VFlexBox {
         keyView.setModel(new ArrayListModel<Key>());
         langView.setModel(new ArrayListModel<Lang>());
 
-        langView.setRenderer(new ListView.ItemRenderer<Lang>() {
+        langView.setRenderer(new ItemRenderer<Lang>() {
 
             @Override
             public void draw(GFX gfx, ListView listView, Lang item, int index, double x, double y, double width, double height) {

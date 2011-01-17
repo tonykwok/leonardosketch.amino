@@ -6,6 +6,8 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.complex.ListView;
+import org.joshy.gfx.node.control.complex.TextRenderer;
 import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
@@ -79,7 +81,7 @@ public class FlickrReader implements Runnable {
         }
     };
 
-    private ListView.TextRenderer<Photo> photoFormatter = new ListView.TextRenderer<Photo>(){
+    private TextRenderer<Photo> photoFormatter = new TextRenderer<Photo>(){
         public String toString(SelectableControl view, Photo item, int index) {
             if(item == null) return "";
             return "Photo: "+item.title;

@@ -1,8 +1,8 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.complex.ListModel;
+import org.joshy.gfx.node.control.complex.ListView;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.shape.Oval;
 import org.joshy.gfx.stage.Stage;

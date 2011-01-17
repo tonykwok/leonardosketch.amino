@@ -6,6 +6,8 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.complex.ListView;
+import org.joshy.gfx.node.control.complex.TableView;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.Spacer;
