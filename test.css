@@ -1,0 +1,43 @@
+.-class-Scrollbar {
+/*    left-arrow-margin: 0px;
+    right-arrow-margin: 0px;
+    right-arrow-border-width: 1px;
+    right-arrow-border-color: red;
+    left-arrow-padding: 0px;*/
+/*    margin: 0px;
+    border-width: 1px;
+    border-radius: 0px;*/
+/*
+    track-border-width: 1px;
+    track-border-color: red;
+    track-margin: 0px 0px 1px 0px;
+    */
+}
+#button1 {
+    border-width: 0px;
+    border-radius: 0px;
+    background: transparent;
+    background-color: white;
+/*    font-size: 30pt;*/
+}
+
+#button2 {
+    border-width: 0px;
+    border-radius: 0px;
+    background: transparent;
+    background-color: white;
+    text-shadow: 1px 2px 3px #ff0000;
+/*    font-size: 30pt;*/
+}
+
+#button3 {
+    border-width: 0px;
+    border-radius: 15px;
+    background: transparent;
+    background-color: #a0a0ff;
+    color: #505088;
+    text-shadow: 1px 1px 0px #ffffff;
+    font-size: 50pt;
+    box-shadow: 2px 2px 3px #ffffff;
+}
+
