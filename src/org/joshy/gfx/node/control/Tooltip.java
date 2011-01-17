@@ -1,5 +1,6 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
@@ -7,7 +8,6 @@ import org.joshy.gfx.css.SizeInfo;
 import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.NodeUtils;
@@ -29,7 +29,7 @@ public class Tooltip extends Control {
     public Tooltip(Control target, String text) {
         this.target = target;
         setText(text);
-        EventBus.getSystem().addListener(target, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(target, MouseEvent.MouseAll, new Callback<MouseEvent>(){
             @Override
             public void call(MouseEvent event) throws Exception {
                 if(MouseEvent.MouseEntered == event.getType()) {

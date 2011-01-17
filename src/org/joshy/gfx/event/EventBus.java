@@ -1,9 +1,13 @@
 package org.joshy.gfx.event;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.util.u;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,17 +18,9 @@ import java.util.*;
  */
 public class EventBus {
     private Map<MatchRule,List<Callback>> callbacks = new HashMap<MatchRule,List<Callback>>();
-    private static EventBus system;
     private Node pressedNode;
 
-    public static EventBus getSystem() {
-        if(system == null) {
-            system = new EventBus();
-        }
-        return system;
-    }
-
-    protected EventBus() {
+    public EventBus() {
     }
 
     /*
@@ -148,7 +144,7 @@ public class EventBus {
     }
 
     public static void main(String ... args) {
-        EventBus bus = EventBus.getSystem();
+        EventBus bus = Core.getShared().getEventBus();
         Event.EventType type = MouseEvent.MousePressed;
         Node node = null;
         Callback<MouseEvent> cb = new Callback<MouseEvent>() {
@@ -168,10 +164,6 @@ public class EventBus {
         bus.publish(me);
     }
 
-
-    public static void setSystem(EventBus eventBus) {
-        system = eventBus;
-    }
 
     public void setPressedNode(Node pressedNode) {
         this.pressedNode = pressedNode;

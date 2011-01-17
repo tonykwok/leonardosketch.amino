@@ -89,7 +89,7 @@ public class LayoutTests implements Runnable {
         final ListView<String> testView =new ListView<String>().setModel(ListView.createModel(tests));
         split.setFirst(new ScrollPane(testView));
         split.setSecond(new Panel());
-        EventBus.getSystem().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>() {
+        Core.getShared().getEventBus().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>() {
             public void call(SelectionEvent event) {
                 if(event.getView() == testView) {
                     split.setSecond(getTest(testView.getModel().get(testView.getSelectedIndex())));

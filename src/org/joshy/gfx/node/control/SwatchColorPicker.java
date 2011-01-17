@@ -1,10 +1,10 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.stage.Stage;
@@ -51,7 +51,7 @@ public class SwatchColorPicker extends Button {
             popup.setTranslateX(Math.round(Math.max(pt.getX(),0)));
             popup.setTranslateY(Math.round(Math.max(pt.getY(),0)));
             popup.setVisible(true);
-            EventBus.getSystem().setPressedNode(popup);
+            Core.getShared().getEventBus().setPressedNode(popup);
         } else {
             popup.setVisible(false);
         }
@@ -81,7 +81,7 @@ public class SwatchColorPicker extends Button {
         private final int colCount = 36;
 
         public PopupColorPicker(SwatchColorPicker swatchColorPicker) {
-            EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
+            Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
                 public void call(MouseEvent event) {
                     processMouse(event);
                 }
@@ -216,17 +216,17 @@ public class SwatchColorPicker extends Button {
     }
 
     private void setFinalColor(FlatColor selectedColor) {
-        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.FinalChange,selectedColor,this));
+        Core.getShared().getEventBus().publish(new ChangedEvent(ChangedEvent.FinalChange,selectedColor,this));
     }
 
     public void setSelectedColor(FlatColor flatColor) {
         selectedColor = flatColor;
-        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ColorChanged,selectedColor,this));
+        Core.getShared().getEventBus().publish(new ChangedEvent(ChangedEvent.ColorChanged,selectedColor,this));
         setDrawingDirty();
     }
 
     public void onColorSelected(Callback<ChangedEvent> callback) {
-        EventBus.getSystem().addListener(this, ChangedEvent.ColorChanged, callback);
+        Core.getShared().getEventBus().addListener(this, ChangedEvent.ColorChanged, callback);
     }
 
     public static interface ColorCallback {

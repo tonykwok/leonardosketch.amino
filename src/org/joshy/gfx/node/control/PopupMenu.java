@@ -1,5 +1,6 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.*;
 import org.joshy.gfx.draw.FlatColor;
@@ -37,7 +38,7 @@ public class PopupMenu extends Control {
 
     public PopupMenu() {
         setVisible(true);
-        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public void call(MouseEvent event) {
                 processMouse(event);
             }
@@ -46,8 +47,8 @@ public class PopupMenu extends Control {
     public PopupMenu(ListModel model, Callback<ChangedEvent> callback) {
         setVisible(true);
         this.model = model;
-        EventBus.getSystem().addListener(this, ChangedEvent.IntegerChanged,callback);
-        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(this, ChangedEvent.IntegerChanged,callback);
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
                 processMouse(event);
             }
@@ -88,7 +89,7 @@ public class PopupMenu extends Control {
     }
 
     private void fireSelection(int row) {
-        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.IntegerChanged,(Integer)row,this));
+        Core.getShared().getEventBus().publish(new ChangedEvent(ChangedEvent.IntegerChanged,(Integer)row,this));
     }
 
     double rowHeight = 25;
@@ -180,7 +181,7 @@ public class PopupMenu extends Control {
     }
 
     public void setCallback(Callback<ChangedEvent> callback) {
-        EventBus.getSystem().addListener(this, ChangedEvent.IntegerChanged,callback);
+        Core.getShared().getEventBus().addListener(this, ChangedEvent.IntegerChanged,callback);
     }
 
     public void setTextRenderer(TextRenderer textRenderer) {

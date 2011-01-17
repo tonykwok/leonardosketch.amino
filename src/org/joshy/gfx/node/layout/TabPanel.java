@@ -1,12 +1,12 @@
 package org.joshy.gfx.node.layout;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
@@ -89,7 +89,7 @@ public class TabPanel extends Panel {
 
     private class TabTop extends Control {
         private TabTop() {
-            EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
+            Core.getShared().getEventBus().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
                 public void call(MouseEvent event) {
                     int x = (int) (event.getX()/getWidth()*tabs.size());
                     setSelected(tabs.get(x));

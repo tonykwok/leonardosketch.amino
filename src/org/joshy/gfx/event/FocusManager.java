@@ -1,5 +1,6 @@
 package org.joshy.gfx.event;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Focusable;
@@ -36,9 +37,9 @@ public class FocusManager {
 
     public void setFocusedNode(Focusable focusableNode) {
 //        u.p("switching focused node to " + focusableNode);
-        EventBus.getSystem().publish(new FocusEvent(FocusEvent.Lost, focusedNode));
+        Core.getShared().getEventBus().publish(new FocusEvent(FocusEvent.Lost, focusedNode));
         focusedNode = focusableNode;
-        EventBus.getSystem().publish(new FocusEvent(FocusEvent.Gained, focusedNode));
+        Core.getShared().getEventBus().publish(new FocusEvent(FocusEvent.Gained, focusedNode));
         if(focusedNode instanceof IMETarget) {
             ime_target = (IMETarget) focusedNode;
         } else {

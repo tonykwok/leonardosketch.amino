@@ -172,7 +172,7 @@ public class PartyBoard implements Runnable {
                 ,messageLabel
                 ,controlPanel));
 
-        EventBus.getSystem().addListener(ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
+        Core.getShared().getEventBus().addListener(ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
             @Override
             public void call(ChangedEvent event) throws Exception {
                 if(event.getSource() instanceof Slider) {
@@ -196,7 +196,7 @@ public class PartyBoard implements Runnable {
             }
         });
 
-        EventBus.getSystem().addListener(MouseEvent.MouseMoved, new Callback<MouseEvent>() {
+        Core.getShared().getEventBus().addListener(MouseEvent.MouseMoved, new Callback<MouseEvent>() {
             @Override
             public void call(MouseEvent event) throws Exception {
                 lastMouseMove = System.currentTimeMillis();

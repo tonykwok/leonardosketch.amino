@@ -55,7 +55,7 @@ public class TransformTest extends GrandTour.Example implements Runnable {
         translateSlider.setPrefWidth(150);
         trans.setTranslateY(100);
 
-        EventBus.getSystem().addListener(ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
+        Core.getShared().getEventBus().addListener(ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
             @Override
             public void call(ChangedEvent event) throws Exception {
                 if(event.getSource() == scaleSlider) {

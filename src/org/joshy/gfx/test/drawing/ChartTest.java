@@ -46,7 +46,7 @@ public class ChartTest extends GrandTour.Example implements Runnable {
 
     @Override
     public Control build() throws Exception {
-        EventBus.getSystem().addListener(MouseEvent.MousePressed, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(MouseEvent.MousePressed, new Callback<MouseEvent>(){
             @Override
             public void call(MouseEvent event) throws Exception {
                 //u.p("pressed: " + event.getSource());

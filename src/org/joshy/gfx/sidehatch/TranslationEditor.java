@@ -85,7 +85,7 @@ public class TranslationEditor<E> extends VFlexBox {
         currentLocalePopup = new PopupMenuButton<String>()
                 .setModel(ListUtil.toAlphaListModel(currentLocaleModel));
 
-        EventBus.getSystem().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>(){
+        Core.getShared().getEventBus().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>(){
             public void call(SelectionEvent selectionEvent) throws Exception {
                 if(selectionEvent.getView() instanceof ListView) {
                     if(selectionEvent.getView() == prefixView) {

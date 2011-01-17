@@ -3,7 +3,6 @@ package org.joshy.gfx.test.control;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.ScrollPane;
@@ -32,7 +31,7 @@ public class ScrollPaneInputCropping implements Runnable {
         panel.setWidth(1000);
         panel.setHeight(1000);
         panel.setFill(FlatColor.PURPLE);
-        EventBus.getSystem().addListener(panel, MouseEvent.MousePressed, new Callback<MouseEvent>() {
+        Core.getShared().getEventBus().addListener(panel, MouseEvent.MousePressed, new Callback<MouseEvent>() {
             @Override
             public void call(MouseEvent event) {
                 u.p("panel was pressed");

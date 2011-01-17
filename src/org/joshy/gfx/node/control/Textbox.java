@@ -217,14 +217,14 @@ public class Textbox extends TextControl {
     protected void processKeyEvent(KeyEvent event) {
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_ENTER) {
             ActionEvent act = new ActionEvent(ActionEvent.Action,this);
-            EventBus.getSystem().publish(act);
+            Core.getShared().getEventBus().publish(act);
         } else {
             super.processKeyEvent(event);
         }
     }
 
     public Textbox onAction(Callback<ActionEvent> callback) {
-        EventBus.getSystem().addListener(this,ActionEvent.Action,callback);
+        Core.getShared().getEventBus().addListener(this,ActionEvent.Action,callback);
         return this;
     }
 

@@ -1,11 +1,11 @@
 package org.joshy.gfx.node.control.complex;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.util.GraphicsUtil;
@@ -25,8 +25,8 @@ public class TreeView<T,S> extends TableView{
     public TreeView() {
         setModel(new DummyTreeTableModel());
         setRenderer(new TreeTableDataRenderer());
-        EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new TreeTableMouseEventHandler());
-        EventBus.getSystem().addListener(this, KeyEvent.KeyPressed, new TreeTableKeyEventHandler());
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MousePressed, new TreeTableMouseEventHandler());
+        Core.getShared().getEventBus().addListener(this, KeyEvent.KeyPressed, new TreeTableKeyEventHandler());
     }
 
     private static class TreeTableDataRenderer<T,S> implements TableView.DataRenderer<T> {

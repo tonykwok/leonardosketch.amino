@@ -34,7 +34,7 @@ public class TableTest extends GrandTour.Example implements Runnable{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>(){
+        Core.getShared().getEventBus().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>(){
             @Override
             public void call(SystemMenuEvent event) throws Exception {
                 System.exit(0);
@@ -149,7 +149,7 @@ public class TableTest extends GrandTour.Example implements Runnable{
         final TableView table = new TableView();
         final Textbox filterBox = new Textbox()
                 .setHintText("filter text");
-        EventBus.getSystem().addListener(filterBox,KeyEvent.KeyReleased,new Callback<KeyEvent>(){
+        Core.getShared().getEventBus().addListener(filterBox,KeyEvent.KeyReleased,new Callback<KeyEvent>(){
             @Override
             public void call(KeyEvent event) throws Exception {
                 table.refilter();

@@ -2,11 +2,10 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SystemMenuEvent;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.control.complex.ListModel;
 import org.joshy.gfx.node.control.complex.ListView;
-import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.stage.Stage;
 
 public class ListTest implements Runnable {
@@ -18,7 +17,7 @@ public class ListTest implements Runnable {
     }
 
     public void run() {
-        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>(){
+        Core.getShared().getEventBus().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>(){
             @Override
             public void call(SystemMenuEvent event) throws Exception {
                 System.exit(0);

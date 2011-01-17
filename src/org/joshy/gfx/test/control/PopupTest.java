@@ -43,7 +43,7 @@ public class PopupTest implements Runnable {
         stage.setContent(button);
 
 
-        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<Event>() {
+        Core.getShared().getEventBus().addListener(SystemMenuEvent.Quit, new Callback<Event>() {
             @Override
             public void call(Event event) throws Exception {
                 System.exit(0);

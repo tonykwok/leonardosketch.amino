@@ -1,5 +1,6 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
@@ -9,7 +10,6 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 
@@ -74,28 +74,28 @@ public class Button extends Control {
     public Button() {
         text = "Button text";
         setSkinDirty();
-        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public void call(MouseEvent event) {
-                if(event.getType() == MouseEvent.MousePressed) {
+                if (event.getType() == MouseEvent.MousePressed) {
                     setPressed(true);
-                    if(selectable) {
+                    if (selectable) {
                         selected = !selected;
                     }
                     setSkinDirty();
                     setDrawingDirty();
                 }
-                if(event.getType() == MouseEvent.MouseReleased) {
+                if (event.getType() == MouseEvent.MouseReleased) {
                     setPressed(false);
                     setSkinDirty();
                     setDrawingDirty();
                     fireAction();
                 }
-                if(event.getType() == MouseEvent.MouseEntered) {
+                if (event.getType() == MouseEvent.MouseEntered) {
                     setHovered(true);
                     setSkinDirty();
                     setDrawingDirty();
                 }
-                if(event.getType() == MouseEvent.MouseExited) {
+                if (event.getType() == MouseEvent.MouseExited) {
                     setHovered(false);
                     setSkinDirty();
                     setDrawingDirty();
@@ -112,7 +112,7 @@ public class Button extends Control {
     protected void fireAction() {
         if(!isEnabled()) return;
         ActionEvent action = new ActionEvent(ActionEvent.Action, Button.this);
-        EventBus.getSystem().publish(action);
+        Core.getShared().getEventBus().publish(action);
         if(callback != null) {
             try {
                 callback.call(action);

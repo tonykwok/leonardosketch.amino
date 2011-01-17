@@ -1,11 +1,11 @@
 package org.joshy.gfx.node.layout;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
@@ -24,7 +24,8 @@ public class SplitPane extends AbstractPane {
     public SplitPane(boolean vert) {
         this.vertical = vert;
         position = 100.0;
-        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
+
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public void call(MouseEvent event) {
                 if(event.getType() == MouseEvent.MouseDragged) {
                     if(vertical) {

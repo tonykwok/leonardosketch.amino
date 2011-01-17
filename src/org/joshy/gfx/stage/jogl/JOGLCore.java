@@ -5,7 +5,6 @@ import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSProcessor;
 import org.joshy.gfx.css.CSSRuleSet;
 import org.joshy.gfx.css.CSSSkin;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.stage.swing.SwingCore;
 import org.parboiled.support.ParsingResult;
@@ -41,7 +40,7 @@ public class JOGLCore extends Core {
     
     @Override
     protected void createDefaultEventBus() {
-        EventBus.setSystem(new JOGLEventBus());
+        Core.getShared().setEventBus(new JOGLEventBus());
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {

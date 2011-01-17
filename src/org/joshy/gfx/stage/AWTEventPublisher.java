@@ -43,7 +43,7 @@ public class AWTEventPublisher extends EventPublisher
                         e.isControlDown()
                         ,e.isMetaDown()
                 );
-                EventBus.getSystem().publish(evt);
+                Core.getShared().getEventBus().publish(evt);
             }
             hoverNode = node;
             if(hoverNode != null) {
@@ -56,7 +56,7 @@ public class AWTEventPublisher extends EventPublisher
                         e.isControlDown()
                         ,e.isMetaDown()
                 );
-                EventBus.getSystem().publish(evt);
+                Core.getShared().getEventBus().publish(evt);
             }
         }
         Point2D point = convertSceneToNode(e.getX(),e.getY(),node);
@@ -68,7 +68,7 @@ public class AWTEventPublisher extends EventPublisher
                 e.isControlDown()
                 ,e.isMetaDown()
         );
-        EventBus.getSystem().publish(evt);
+        Core.getShared().getEventBus().publish(evt);
     }
 
 
@@ -77,11 +77,11 @@ public class AWTEventPublisher extends EventPublisher
         Node node = findTopNode(e.getX(),e.getY());
         Point2D point = convertSceneToNode(e.getX(),e.getY(), node);
         org.joshy.gfx.event.MouseEvent evt = toEvent(e, point, node, org.joshy.gfx.event.MouseEvent.MousePressed);
-        EventBus.getSystem().setPressedNode(node);
-        EventBus.getSystem().publish(evt);
+        Core.getShared().getEventBus().setPressedNode(node);
+        Core.getShared().getEventBus().publish(evt);
         if(evt.isControlPressed() && OSUtil.isMac() || evt.getButton() == 3 || e.isPopupTrigger()) {
             org.joshy.gfx.event.MouseEvent evt2 = toEvent(e, point, node, org.joshy.gfx.event.MouseEvent.OpenContextMenu);
-            EventBus.getSystem().publish(evt2);
+            Core.getShared().getEventBus().publish(evt2);
         }
     }
     private org.joshy.gfx.event.MouseEvent toEvent(MouseEvent e, Point2D point, Node node, Event.EventType type) {
@@ -109,14 +109,14 @@ public class AWTEventPublisher extends EventPublisher
     public void mouseDragged(MouseEvent e) {
         logEvent("MouseDragged",e);
         //send event to the pressedNode
-        publishMouseEvent(e.getX(),e.getY(),EventBus.getSystem().getPressedNode(),
+        publishMouseEvent(e.getX(),e.getY(),Core.getShared().getEventBus().getPressedNode(),
                 org.joshy.gfx.event.MouseEvent.MouseDragged,
                 e.getButton(),e.isShiftDown(),e.isAltDown(), e.isControlDown(),e.isMetaDown()
         );
         
         // also send event to the top node under the cursor if it's not the pressedNode
         Node node = findTopNode(e.getX(),e.getY());
-        if(EventBus.getSystem().getPressedNode() != node) {
+        if(Core.getShared().getEventBus().getPressedNode() != node) {
             publishMouseEvent(e.getX(),e.getY(),node,org.joshy.gfx.event.MouseEvent.MouseDraggedRaw,
                 e.getButton(),e.isShiftDown(),e.isAltDown(),e.isControlDown(),e.isMetaDown());
         }        
@@ -125,13 +125,13 @@ public class AWTEventPublisher extends EventPublisher
     public void mouseReleased(MouseEvent e) {
         logEvent("MouseReleased",e);
         //send event to the pressedNode
-        publishMouseEvent(e.getX(),e.getY(),EventBus.getSystem().getPressedNode(),org.joshy.gfx.event.MouseEvent.MouseReleased,e.getButton(),e.isShiftDown(),e.isAltDown(),e.isControlDown(),e.isMetaDown());
+        publishMouseEvent(e.getX(),e.getY(),Core.getShared().getEventBus().getPressedNode(),org.joshy.gfx.event.MouseEvent.MouseReleased,e.getButton(),e.isShiftDown(),e.isAltDown(),e.isControlDown(),e.isMetaDown());
         // also send event to the top node under the cursor if it's not the pressedNode
         Node node = findTopNode(e.getX(),e.getY());
-        if(node != EventBus.getSystem().getPressedNode()) {
+        if(node != Core.getShared().getEventBus().getPressedNode()) {
             publishMouseEvent(e.getX(),e.getY(),node,org.joshy.gfx.event.MouseEvent.MouseReleased,e.getButton(),e.isShiftDown(),e.isAltDown(),e.isControlDown(),e.isMetaDown());
         }
-        EventBus.getSystem().setPressedNode(null);
+        Core.getShared().getEventBus().setPressedNode(null);
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -145,7 +145,7 @@ public class AWTEventPublisher extends EventPublisher
         org.joshy.gfx.event.MouseEvent evt = new org.joshy.gfx.event.MouseEvent(
                 eventType, point.getX(), point.getY(), node,
                 button, shiftDown, altDown, controlDown, commandDown);
-        EventBus.getSystem().publish(evt);
+        Core.getShared().getEventBus().publish(evt);
     }
 
     public void mouseWheelMoved(MouseWheelEvent e) {
@@ -156,7 +156,7 @@ public class AWTEventPublisher extends EventPublisher
         if(e.isShiftDown()) {
             type = ScrollEvent.ScrollHorizontal;
         }
-        EventBus.getSystem().publish(new ScrollEvent(type,node,rotation));
+        Core.getShared().getEventBus().publish(new ScrollEvent(type,node,rotation));
     }
     
     public void keyTyped(KeyEvent e) {
@@ -172,7 +172,7 @@ public class AWTEventPublisher extends EventPublisher
                 e.isAltDown(),
                 e.isMetaDown()
                 );
-        EventBus.getSystem().publish(evt);
+        Core.getShared().getEventBus().publish(evt);
     }
 
     public void keyPressed(KeyEvent e) {
@@ -188,7 +188,7 @@ public class AWTEventPublisher extends EventPublisher
                 e.isAltDown(),
                 e.isMetaDown()
                 );
-        EventBus.getSystem().publish(evt);
+        Core.getShared().getEventBus().publish(evt);
     }
 
     public void keyReleased(KeyEvent e) {
@@ -203,7 +203,7 @@ public class AWTEventPublisher extends EventPublisher
                 e.isAltDown(),
                 e.isMetaDown()
                 );
-        EventBus.getSystem().publish(evt);
+        Core.getShared().getEventBus().publish(evt);
     }
 
     public void windowOpened(WindowEvent e) {
@@ -212,7 +212,7 @@ public class AWTEventPublisher extends EventPublisher
 
     public void windowClosing(WindowEvent e) {
 //        u.p("window is closing");
-        EventBus.getSystem().publish(new org.joshy.gfx.event.WindowEvent(org.joshy.gfx.event.WindowEvent.Closing, parent.getStage()));
+        Core.getShared().getEventBus().publish(new org.joshy.gfx.event.WindowEvent(org.joshy.gfx.event.WindowEvent.Closing, parent.getStage()));
     }
 
     public void windowClosed(WindowEvent e) {

@@ -153,9 +153,9 @@ public class TableView<D,H> extends Control implements Focusable, org.joshy.gfx.
         });
 
         // click listener
-        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, mouseListener);
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, mouseListener);
 
-        EventBus.getSystem().addListener(FocusEvent.All, new Callback<FocusEvent>(){
+        Core.getShared().getEventBus().addListener(FocusEvent.All, new Callback<FocusEvent>(){
             public void call(FocusEvent event) {
                 if(event.getType() == FocusEvent.Lost && event.getSource() == TableView.this) {
                     focused = false;
@@ -169,7 +169,7 @@ public class TableView<D,H> extends Control implements Focusable, org.joshy.gfx.
         });
 
         //keyboard listener
-        EventBus.getSystem().addListener(this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
+        Core.getShared().getEventBus().addListener(this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
             public void call(KeyEvent event) {
                 //check for focus changes
                 if(event.getKeyCode() == KeyEvent.KeyCode.KEY_TAB) {
@@ -238,7 +238,7 @@ public class TableView<D,H> extends Control implements Focusable, org.joshy.gfx.
                     rowHeight+ HEADER_HEIGHT);
             scrollPane.scrollToShow(bounds);
         }
-        EventBus.getSystem().publish(new SelectionEvent(SelectionEvent.Changed,this));
+        Core.getShared().getEventBus().publish(new SelectionEvent(SelectionEvent.Changed,this));
         setDrawingDirty();
     }
 

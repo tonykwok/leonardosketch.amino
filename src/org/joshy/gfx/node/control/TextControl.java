@@ -65,7 +65,7 @@ public abstract class TextControl extends Control implements Focusable, FocusMan
         cursor = new CursorPosition();
         selection = new TextSelection();
 
-        EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
                 if(!isEnabled()) return;
                 Core.getShared().getFocusManager().setFocusedNode(TextControl.this);
@@ -78,7 +78,7 @@ public abstract class TextControl extends Control implements Focusable, FocusMan
             }
         });
 
-        EventBus.getSystem().addListener(FocusEvent.All, new Callback<FocusEvent>(){
+        Core.getShared().getEventBus().addListener(FocusEvent.All, new Callback<FocusEvent>(){
             public void call(FocusEvent event) {
                 if(event.getType() == FocusEvent.Lost && event.getSource() == TextControl.this) {
                     focused = false;
@@ -91,23 +91,23 @@ public abstract class TextControl extends Control implements Focusable, FocusMan
             }
         });
         
-        EventBus.getSystem().addListener(this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
+        Core.getShared().getEventBus().addListener(this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
             public void call(KeyEvent event) {
                 processKeyEvent(event);
             }
         });
-        EventBus.getSystem().addListener(this, KeyEvent.KeyReleased, new Callback<KeyEvent>() {
+        Core.getShared().getEventBus().addListener(this, KeyEvent.KeyReleased, new Callback<KeyEvent>() {
             public void call(KeyEvent event) {
                 processKeyEvent(event);
             }
         });
-        EventBus.getSystem().addListener(this, KeyEvent.KeyTyped, new Callback<KeyEvent>() {
+        Core.getShared().getEventBus().addListener(this, KeyEvent.KeyTyped, new Callback<KeyEvent>() {
             public void call(KeyEvent event) {
                 processKeyTyped(event);
             }
         });
 
-        EventBus.getSystem().addListener(this, MouseEvent.MouseReleased, new Callback<MouseEvent>() {
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseReleased, new Callback<MouseEvent>() {
             public long lastRelease = 0;
             public int clickCount = 0;
 
@@ -328,7 +328,7 @@ public abstract class TextControl extends Control implements Focusable, FocusMan
     //TODO: this might be a problem you can set text without it getting re-layedout
     public TextControl setText(String text) {
         this.text = text;
-        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
+        Core.getShared().getEventBus().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
         selection.clear();
         if(cursor.getIndex()-1 > getText().length()) {
             cursor.reset();

@@ -149,7 +149,7 @@ public class SwingChartDemo implements Runnable {
             );
 
             //add event to update and show the popup
-            EventBus.getSystem().addListener(bar, MouseEvent.MouseMoved, new Callback<MouseEvent>(){
+            Core.getShared().getEventBus().addListener(bar, MouseEvent.MouseMoved, new Callback<MouseEvent>(){
                 @Override
                 public void call(MouseEvent event) throws Exception {
                     popup.setVisible(true);
@@ -184,7 +184,7 @@ public class SwingChartDemo implements Runnable {
         frame.setVisible(true);
 
         
-        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>() {
+        Core.getShared().getEventBus().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>() {
             @Override
             public void call(SystemMenuEvent event) throws Exception {
                 System.exit(-1);

@@ -32,7 +32,7 @@ public abstract class BackgroundTask<D,R> {
     
     protected void updateGUI(D data, R result, double percentage) {
         ProgressUpdate<D,R> e = new ProgressUpdate<D,R>(this,data,result,percentage);
-        EventBus.getSystem().publish(e);
+        Core.getShared().getEventBus().publish(e);
     }
 
     protected void onEnd(R result) {

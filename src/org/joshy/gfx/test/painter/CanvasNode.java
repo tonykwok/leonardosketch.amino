@@ -1,13 +1,12 @@
 package org.joshy.gfx.test.painter;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 
 /**
@@ -25,7 +24,7 @@ class CanvasNode extends Control {
     
     CanvasNode(TileManager manager) {
         this.manager = manager;
-        EventBus.getSystem().addListener(this,MouseEvent.MouseAll, new Callback<MouseEvent>() {
+        Core.getShared().getEventBus().addListener(this,MouseEvent.MouseAll, new Callback<MouseEvent>() {
             double prevx = -1;
             double prevy = -1;
 

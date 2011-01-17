@@ -1,5 +1,6 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
@@ -8,7 +9,6 @@ import org.joshy.gfx.css.StyleInfo;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.ProgressUpdate;
 
 /**
@@ -88,7 +88,7 @@ public class ProgressBar extends Control {
 
 
     public void setTask(BackgroundTask task) {
-        EventBus.getSystem().addListener(task, ProgressUpdate.TYPE, new Callback<ProgressUpdate>() {
+        Core.getShared().getEventBus().addListener(task, ProgressUpdate.TYPE, new Callback<ProgressUpdate>() {
             public void call(ProgressUpdate event) {
                 percentage = event.getPercentage();
                 setDrawingDirty();

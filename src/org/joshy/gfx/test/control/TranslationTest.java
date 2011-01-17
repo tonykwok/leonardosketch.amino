@@ -30,7 +30,7 @@ public class TranslationTest implements Runnable {
 
     @Override
     public void run() {
-        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>() {
+        Core.getShared().getEventBus().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>() {
             @Override
             public void call(SystemMenuEvent event) throws Exception {
                 System.exit(0);

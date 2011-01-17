@@ -88,7 +88,7 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
     public CompoundListView() {
         views = new ArrayList<Control>();
 
-        EventBus.getSystem().addListener(Scope.Container, this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
+        Core.getShared().getEventBus().addListener(Scope.Container, this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
             public void call(KeyEvent event) {
                 event.accept();
                 //check for focus changes
@@ -115,7 +115,7 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
             }
         });
 
-        EventBus.getSystem().addListener(Scope.Container, this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
+        Core.getShared().getEventBus().addListener(Scope.Container, this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public void call(MouseEvent event) {
                 if (event.getType() == MouseEvent.MousePressed) {
                     Point2D pt_scene = NodeUtils.convertToScene((Node) event.getSource(),event.getX(),event.getY());
@@ -128,7 +128,7 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
             }
         });
 
-        EventBus.getSystem().addListener(FocusEvent.All, new Callback<FocusEvent>() {
+        Core.getShared().getEventBus().addListener(FocusEvent.All, new Callback<FocusEvent>() {
             public void call(FocusEvent event) {
                 if (event.getType() == FocusEvent.Lost && event.getSource() == CompoundListView.this) {
                     focused = false;
@@ -192,7 +192,7 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
 
     public void setModel(ListModel model) {
         this.model = model;
-        EventBus.getSystem().addListener(model, ListView.ListEvent.Updated, new Callback<ListView.ListEvent>() {
+        Core.getShared().getEventBus().addListener(model, ListView.ListEvent.Updated, new Callback<ListView.ListEvent>() {
             public void call(ListView.ListEvent event) {
                 u.p("compound list view got an update from the model");
                 regenerateItemViews();
