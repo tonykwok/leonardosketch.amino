@@ -66,7 +66,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     private Orientation orientation = Orientation.Vertical;
     private boolean dropIndicatorVisible;
     private int dropIndicatorIndex;
-    private TextRenderer<E> textRenderer;
+    private TextItemRenderer<E> textRenderer;
     private Font font;
 
 
@@ -74,7 +74,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         setWidth(200);
         setHeight(300);
         setRenderer(defaultItemRenderer);
-        setTextRenderer(new TextRenderer<E>(){
+        setTextRenderer(new TextItemRenderer<E>(){
             public String toString(SelectableControl view, E item, int index) {
                 if(item == null) return "null";
                 return item.toString();
@@ -476,19 +476,11 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         this.dropIndicatorIndex = dropIndicatorIndex;
     }
 
-    public ListView<E> setTextRenderer(TextRenderer<E> textRenderer) {
+    public ListView<E> setTextRenderer(TextItemRenderer<E> textRenderer) {
         this.textRenderer = textRenderer;
         return this;
     }
 
-
-    public static class ListEvent extends Event {
-        public static final EventType Updated = new EventType("ListEventUpdated");
-        public ListEvent(EventType type, ListModel model) {
-            super(type);
-            this.source = model;            
-        }
-    }
 
     public static <T> ListModel<T> createModel(final T ... strings) {
         return new ListModel<T>() {

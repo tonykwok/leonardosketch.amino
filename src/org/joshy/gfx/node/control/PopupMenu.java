@@ -8,11 +8,10 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.complex.ListModel;
-import org.joshy.gfx.node.control.complex.TextRenderer;
+import org.joshy.gfx.node.control.complex.TextItemRenderer;
 
 import java.util.Date;
 
@@ -25,7 +24,7 @@ public class PopupMenu extends Control {
     private ListModel model;
     private int hoverRow = -1;
     private long openTime;
-    private TextRenderer textRenderer;
+    private TextItemRenderer textRenderer;
     private StyleInfo styleInfo;
     private StyleInfo itemStyleInfo;
     private StyleInfo selectedItemStyleInfo;
@@ -47,8 +46,8 @@ public class PopupMenu extends Control {
     public PopupMenu(ListModel model, Callback<ChangedEvent> callback) {
         setVisible(true);
         this.model = model;
-        Core.getShared().getEventBus().addListener(this, ChangedEvent.IntegerChanged,callback);
-        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(this, ChangedEvent.IntegerChanged, callback);
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public void call(MouseEvent event) {
                 processMouse(event);
             }
@@ -184,7 +183,7 @@ public class PopupMenu extends Control {
         Core.getShared().getEventBus().addListener(this, ChangedEvent.IntegerChanged,callback);
     }
 
-    public void setTextRenderer(TextRenderer textRenderer) {
+    public void setTextRenderer(TextItemRenderer textRenderer) {
         this.textRenderer = textRenderer;
     }
 }

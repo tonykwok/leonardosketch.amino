@@ -1,6 +1,6 @@
 package org.joshy.gfx.test.itunes;
 
-import org.joshy.gfx.node.control.complex.TableView;
+import org.joshy.gfx.node.control.complex.TableModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 * Time: 9:20:33 PM
 * To change this template use File | Settings | File Templates.
 */
-class PlaylistModel implements TableView.TableModel<Song,String> {
+class PlaylistModel implements TableModel<Song,String> {
     private List<Song> songs;
 
     PlaylistModel() {

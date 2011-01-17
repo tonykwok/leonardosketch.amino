@@ -286,32 +286,8 @@ public class TableView<D,H> extends Control implements Focusable, org.joshy.gfx.
         this.renderer = renderer;
     }
 
-    public static interface HeaderRenderer<H> {
-
-        public void draw(GFX g, TableView table, H header, int column, double x, double y, double width, double height);
-
-    }
-
     public void setHeaderRenderer(HeaderRenderer headerRenderer) {
         this.headerRenderer = headerRenderer;
-    }
-
-    public static interface TableModel<D,H> {
-
-        public int getRowCount();
-
-        public int getColumnCount();
-
-        public H getColumnHeader(int column);
-
-        /**
-         * Return the data item at the specified row and createColumn. May return null.
-         * @param row
-         * @param column
-         * @return the data at the specified row and createColumn. May be null.
-         */
-        public D get(int row, int column);
-
     }
 
     public TableModel<D,H> getModel() {
@@ -333,19 +309,6 @@ public class TableView<D,H> extends Control implements Focusable, org.joshy.gfx.
     public TableView<D, H> setAllowColumnResizing(boolean allowColumnResizing) {
         this.allowColumnResizing = allowColumnResizing;
         return this;
-    }
-
-    public static interface Filter<D,H> {
-
-        public boolean matches(TableModel<D,H> table, int row);
-
-    }
-
-    public static interface Sorter<D,H> {
-
-
-        public Comparator createComparator(TableModel table, int column, SortOrder order);
-
     }
 
     public void setSorter(Sorter sorter) {

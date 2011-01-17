@@ -1,8 +1,8 @@
 package org.joshy.gfx.util;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.node.control.complex.ListEvent;
 import org.joshy.gfx.node.control.complex.ListModel;
-import org.joshy.gfx.node.control.complex.ListView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,7 +58,7 @@ public class ArrayListModel<E> extends ArrayList<E> implements ListModel<E> {
     }
 
     private void fireUpdate() {
-        Core.getShared().getEventBus().publish(new ListView.ListEvent(ListView.ListEvent.Updated,this));
+        Core.getShared().getEventBus().publish(new ListEvent(ListEvent.Updated,this));
     }
 
 

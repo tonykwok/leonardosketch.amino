@@ -192,8 +192,8 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
 
     public void setModel(ListModel model) {
         this.model = model;
-        Core.getShared().getEventBus().addListener(model, ListView.ListEvent.Updated, new Callback<ListView.ListEvent>() {
-            public void call(ListView.ListEvent event) {
+        Core.getShared().getEventBus().addListener(model, ListEvent.Updated, new Callback<ListEvent>() {
+            public void call(ListEvent event) {
                 u.p("compound list view got an update from the model");
                 regenerateItemViews();
             }
