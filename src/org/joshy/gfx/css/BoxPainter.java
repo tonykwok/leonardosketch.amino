@@ -44,43 +44,48 @@ public class BoxPainter {
         //shadow first
         if(box_shadow instanceof ShadowValue) {
             ShadowValue shadow = (ShadowValue) box_shadow;
-            int br = shadow.getRadius();
-            ImageBuffer buf = g.createBuffer((int)size.width+br*2,(int)size.height+br*2);
+            int radius = shadow.getRadius();
+            int spread = shadow.getSpread();
+            ImageBuffer buf = g.createBuffer((int)size.width+radius*2,(int)size.height+radius*2);
             if(buf != null) {
                 GFX g2 = buf.getGFX();
+                g2.setPaint(new FlatColor(1,1,1,0.01));
+                g2.fillRect(0,0,buf.getWidth(),buf.getHeight());
                 g2.setPaint(new FlatColor(shadow.getColor(),1.0));
-                g2.translate(br,br);
-                drawBG(g2, bounds);
-                if(br > 0) {
-                    buf.apply(new BlurEffect(br));
+
+                g2.translate(radius,radius);
+                drawBG(g2, bounds, spread);
+                if(radius > 0) {
+                    buf.apply(new BlurEffect(radius));
                 }
-                g2.translate(-br,-br);
+                g2.translate(-radius, -radius);
+
             }
-            g.draw(buf,shadow.getXOffset()-br,shadow.getYOffset()-br);
+            g.draw(buf, shadow.getXOffset() - radius, shadow.getYOffset() - radius);
         }
         g.setPaint(background_color);
         if(gradient) {
             g.setPaint(gradientFill);
         }
-        drawBG(g,bounds);
+        drawBG(g,bounds,0);
         g.translate(-bounds.getX(),-bounds.getY());
     }
 
-    private void drawBG(GFX g, Bounds bounds) {
+    private void drawBG(GFX g, Bounds bounds, int spread) {
         if(!transparent) {
             if(borderRadius.allEquals(0)) {
                 g.fillRect(
-                        0,
-                        0,
-                        bounds.getWidth(),
-                        bounds.getHeight()
+                        -spread,
+                        -spread,
+                        bounds.getWidth()+spread*2,
+                        bounds.getHeight()+spread*2
                         );
             } else if(borderRadius.allEqual()) {
                 g.fillRoundRect(
-                        0,
-                        0,
-                        bounds.getWidth(),
-                        bounds.getHeight(),
+                        -spread,
+                        -spread,
+                        bounds.getWidth()+spread*2,
+                        bounds.getHeight()+spread*2,
                         borderRadius.getLeft(),
                         borderRadius.getLeft());
             } else {

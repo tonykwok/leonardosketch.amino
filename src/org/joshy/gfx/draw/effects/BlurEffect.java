@@ -33,7 +33,10 @@ public class BlurEffect extends Effect {
 
     @Override
     public void apply(ImageBuffer buf) {
-        BufferedImageOp op = new ConvolveOp( new Kernel(radius, radius, matrix) );
+        BufferedImageOp op = new ConvolveOp(
+                new Kernel(radius, radius, matrix),
+                ConvolveOp.EDGE_NO_OP,
+                null);
         BufferedImage blurredImage = op.filter(buf.buf,null);
         buf.buf = blurredImage;
     }

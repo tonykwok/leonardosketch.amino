@@ -32,7 +32,7 @@
 }
 
 .-class-Button:pressed {
-    box-shadow: 0px 0px 10px #00ffff;
+    box-shadow: 0px 0px 8px 2px #ffff00;
 }
 .-class-SwatchColorPicker {
     margin: 0px;
