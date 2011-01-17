@@ -44,14 +44,16 @@ public class BoxPainter {
         //shadow first
         if(box_shadow instanceof ShadowValue) {
             ShadowValue shadow = (ShadowValue) box_shadow;
-            ImageBuffer buf = g.createBuffer(100,100);
             int br = shadow.getRadius();
+            ImageBuffer buf = g.createBuffer((int)size.width+br*2,(int)size.height+br*2);
             if(buf != null) {
                 GFX g2 = buf.getGFX();
                 g2.setPaint(new FlatColor(shadow.getColor(),1.0));
                 g2.translate(br,br);
                 drawBG(g2, bounds);
-                buf.apply(new BlurEffect(br));
+                if(br > 0) {
+                    buf.apply(new BlurEffect(br));
+                }
                 g2.translate(-br,-br);
             }
             g.draw(buf,shadow.getXOffset()-br,shadow.getYOffset()-br);
