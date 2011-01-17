@@ -131,7 +131,7 @@ public class ITunes implements Runnable {
             }
         });
 
-        EventBus.getSystem().addListener(search, KeyEvent.KeyReleased,new Callback<KeyEvent>(){
+        Core.getShared().getEventBus().addListener(search, KeyEvent.KeyReleased,new Callback<KeyEvent>(){
             @Override
             public void call(KeyEvent event) throws Exception {
                 playList.refilter();

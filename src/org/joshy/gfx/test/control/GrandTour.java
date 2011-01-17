@@ -34,7 +34,7 @@ public class GrandTour implements Runnable {
     }
 
     public void run() {
-        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>() {
+        Core.getShared().getEventBus().addListener(SystemMenuEvent.Quit, new Callback<SystemMenuEvent>() {
             @Override
             public void call(SystemMenuEvent event) throws Exception {
                 System.exit(0);
@@ -383,7 +383,7 @@ public class GrandTour implements Runnable {
                 }
             }
         };
-        EventBus.getSystem().addListener(exampleList, SelectionEvent.Changed, callback);
+        Core.getShared().getEventBus().addListener(exampleList, SelectionEvent.Changed, callback);
 
         Stage stage = Stage.createStage();
         stage.setContent(split);

@@ -36,7 +36,7 @@ public class ScrollPaneTest implements Runnable {
         oval.setHeight(1000);
 //        scroll.setContent(oval);
                       /*
-        EventBus.getSystem().addListener(oval, ScrollEvent.ScrollAll, new Callback<ScrollEvent>(){
+        Core.getShared().getEventBus().addListener(oval, ScrollEvent.ScrollAll, new Callback<ScrollEvent>(){
             @Override
             public void call(ScrollEvent event) {
                 //u.p("got a scrll event: " + event);

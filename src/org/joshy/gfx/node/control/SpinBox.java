@@ -1,7 +1,11 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.*;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.ChangedEvent;
+import org.joshy.gfx.event.FocusEvent;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.Container;
 
@@ -45,12 +49,12 @@ public class SpinBox<E extends Number> extends Container {
                 }
             });
 
-        EventBus.getSystem().addListener(valueBox, FocusEvent.Gained, new Callback<FocusEvent>(){
+        Core.getShared().getEventBus().addListener(valueBox, FocusEvent.Gained, new Callback<FocusEvent>(){
             public void call(FocusEvent focusEvent) {
                 valueBox.selectAll();
             }
         });
-        EventBus.getSystem().addListener(valueBox, ActionEvent.Action, new Callback<ActionEvent>(){
+        Core.getShared().getEventBus().addListener(valueBox, ActionEvent.Action, new Callback<ActionEvent>(){
             public void call(ActionEvent event) {
                 int va = Integer.parseInt(valueBox.getText());
                 value = (E) new Integer(va);

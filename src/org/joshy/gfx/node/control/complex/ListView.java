@@ -89,7 +89,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
                 return 3;
             }
         });
-        EventBus.getSystem().addListener(FocusEvent.All, new Callback<FocusEvent>(){
+        Core.getShared().getEventBus().addListener(FocusEvent.All, new Callback<FocusEvent>(){
             public void call(FocusEvent event) {
                 if(event.getType() == FocusEvent.Lost && event.getSource() == ListView.this) {
                     focused = false;
@@ -103,7 +103,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         });
 
         // click listener
-        EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
                 if(event.getType() == MouseEvent.MousePressed) {
                     int index = calculateIndexAt(event.getX(),event.getY());
@@ -115,7 +115,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         });
         
         //keyboard listener
-        EventBus.getSystem().addListener(this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
+        Core.getShared().getEventBus().addListener(this, KeyEvent.KeyPressed, new Callback<KeyEvent>() {
             public void call(KeyEvent event) {
                 //check for focus changes
                 if(event.getKeyCode() == KeyEvent.KeyCode.KEY_TAB) {
@@ -337,7 +337,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     
     public ListView<E> setModel(ListModel<E> listModel) {
         this.model = listModel;
-        EventBus.getSystem().addListener(model, ListEvent.Updated, new Callback<ListEvent>() {
+        Core.getShared().getEventBus().addListener(model, ListEvent.Updated, new Callback<ListEvent>() {
             public void call(ListEvent event) {
                 setLayoutDirty();
                 setDrawingDirty();
@@ -368,7 +368,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
             scrollPane.scrollToShow(bounds);
         }
 
-        EventBus.getSystem().publish(new SelectionEvent(SelectionEvent.Changed,this));
+        Core.getShared().getEventBus().publish(new SelectionEvent(SelectionEvent.Changed,this));
         setDrawingDirty();
     }
     

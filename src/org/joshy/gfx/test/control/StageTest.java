@@ -4,7 +4,6 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
@@ -87,7 +86,7 @@ public class StageTest extends GrandTour.Example implements Runnable {
                         .setArcWidth(30)
                         .setArcHeight(30)
                         .setFill(FlatColor.BLACK.deriveWithAlpha(0.5));
-                EventBus.getSystem().addListener(rect,MouseEvent.MouseAll, new Callback<MouseEvent>(){
+                Core.getShared().getEventBus().addListener(rect,MouseEvent.MouseAll, new Callback<MouseEvent>(){
                     public Point2D start;
 
                     @Override

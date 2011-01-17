@@ -148,7 +148,7 @@ public class CollapsingListTest implements Runnable {
         public TreeItemView(final CompoundListView list, final int index) {
             this.list = list;
             this.index = index;
-            EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>() {
+            Core.getShared().getEventBus().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>() {
                 public void call(MouseEvent event) {
                     Blah item = (Blah) list.getModel().get(index);
                     if (item != null && item.count > 0) {

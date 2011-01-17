@@ -1,11 +1,11 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.anim.PropertyAnimator;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.ProgressUpdate;
 import org.joshy.gfx.util.u;
 
@@ -99,7 +99,7 @@ public class ProgressSpinner extends Control {
     }
 
     public void setTask(BackgroundTask task) {
-        EventBus.getSystem().addListener(task, ProgressUpdate.TYPE, new Callback<ProgressUpdate>() {
+        Core.getShared().getEventBus().addListener(task, ProgressUpdate.TYPE, new Callback<ProgressUpdate>() {
             public void call(ProgressUpdate event) {
                 setPercentage(event.getPercentage());
                 setDrawingDirty();

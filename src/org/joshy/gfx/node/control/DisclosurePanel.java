@@ -1,12 +1,12 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.layout.Container;
 
@@ -45,7 +45,7 @@ public class DisclosurePanel extends Container {
         };
         add(button);
 
-        EventBus.getSystem().addListener(button, ActionEvent.Action, new Callback<ActionEvent>(){
+        Core.getShared().getEventBus().addListener(button, ActionEvent.Action, new Callback<ActionEvent>(){
             @Override
             public void call(ActionEvent event) throws Exception {
                 setOpen(!isOpen());

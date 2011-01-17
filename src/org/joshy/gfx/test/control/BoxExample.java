@@ -62,7 +62,7 @@ class BoxExample extends GrandTour.Example implements Runnable {
         //only register the dragger once
         if(dragger == null) {
             dragger = new Dragger();
-            EventBus.getSystem().addListener(MouseEvent.MouseAll, dragger);
+            Core.getShared().getEventBus().addListener(MouseEvent.MouseAll, dragger);
         }
 
         return new Panel().add(new Group().add(l1,l2).add(r1,r2,r3));

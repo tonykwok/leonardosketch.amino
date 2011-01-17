@@ -1,5 +1,6 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
@@ -9,7 +10,6 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GraphicsUtil;
@@ -66,7 +66,7 @@ public class Scrollbar extends Control {
             setHeight(20);
             setWidth(100);
         }
-        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
                 processInput(event);
             }
@@ -321,7 +321,7 @@ public class Scrollbar extends Control {
         if(value > getMax()) value = getMax();
         if(this.value != value) {
             this.value = value;
-            EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.DoubleChanged, this.value, this));
+            Core.getShared().getEventBus().publish(new ChangedEvent(ChangedEvent.DoubleChanged, this.value, this));
             setDrawingDirty();
         }
     }

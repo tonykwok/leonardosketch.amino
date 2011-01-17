@@ -1,5 +1,6 @@
 package org.joshy.gfx;
 
+import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.FocusManager;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.stage.jogl.JOGLCore;
@@ -13,8 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-
-import org.joshy.gfx.event.FocusManager;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,6 +29,7 @@ public abstract class Core {
     private FocusManager _focusManager;
     private static boolean testing;
     private static boolean isInitting;
+    private EventBus systemEventBus;
 
     public static synchronized Core getShared() {
         if(_runtime == null) {
@@ -122,4 +122,15 @@ public abstract class Core {
 
     public abstract void loadCSS(File file) throws IOException;
     public abstract void loadCSS(InputStream in, URL uri) throws IOException, URISyntaxException;
+
+    public EventBus getEventBus() {
+        if(systemEventBus == null) {
+            systemEventBus = new EventBus();
+        }
+        return systemEventBus;
+    }
+    public void setEventBus(EventBus eventBus) {
+        systemEventBus = eventBus;
+    }
+
 }

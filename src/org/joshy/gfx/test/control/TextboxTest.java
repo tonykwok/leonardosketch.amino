@@ -25,7 +25,7 @@ public class TextboxTest implements Runnable {
         Core.setUseJOGL(false);
         Core.init();
         Core.getShared().defer(new TextboxTest());
-        EventBus.getSystem().addListener(KeyEvent.KeyPressed, new Callback<KeyEvent>() {
+        Core.getShared().getEventBus().addListener(KeyEvent.KeyPressed, new Callback<KeyEvent>() {
             public void call(KeyEvent event) {
 //                u.p("key pressed " + event + " on node " + event.getSource());
             }

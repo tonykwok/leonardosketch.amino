@@ -92,7 +92,7 @@ public class AutomationBase {
                             node,
                             ch,
                             false,false,false,false);
-                    EventBus.getSystem().publish(evt);
+                    Core.getShared().getEventBus().publish(evt);
                 }
             });
         }
@@ -108,7 +108,7 @@ public class AutomationBase {
 //                u.p("pt = " + ptx);
                 Point2D.Double pt = EventPublisher.convertSceneToNode(ptx.getX(), ptx.getY(), node);
                 Event e = new MouseEvent(MouseEvent.MousePressed,pt.getX(),pt.getY(),node);
-                EventBus.getSystem().publish(e);
+                Core.getShared().getEventBus().publish(e);
             }
         });
         queue.add(new Callback(){
@@ -120,7 +120,7 @@ public class AutomationBase {
 //                u.p("pt = " + ptx);
                 Point2D.Double pt = EventPublisher.convertSceneToNode(ptx.getX(), ptx.getY(), node);
                 Event e = new MouseEvent(MouseEvent.MouseReleased,pt.getX(),pt.getY(),node);
-                EventBus.getSystem().publish(e);
+                Core.getShared().getEventBus().publish(e);
             }
         });
     }
@@ -148,7 +148,7 @@ public class AutomationBase {
                 Node node = EventPublisher.findTopNode(root, x, y);
                 Point2D.Double pt = EventPublisher.convertSceneToNode(x, y, node);
                 Event e = new MouseEvent(MouseEvent.MousePressed,pt.getX(),pt.getY(),node);
-                EventBus.getSystem().publish(e);
+                Core.getShared().getEventBus().publish(e);
             }
         });
         queue.add(new Callback(){
@@ -156,7 +156,7 @@ public class AutomationBase {
             public void call(Object event) throws Exception {
                 Node node = EventPublisher.findTopNode(root, x, y);
                 Event e = new MouseEvent(MouseEvent.MouseReleased,x,y,node);
-                EventBus.getSystem().publish(e);
+                Core.getShared().getEventBus().publish(e);
             }
         });
     }

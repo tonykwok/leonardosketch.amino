@@ -91,7 +91,7 @@ public class ParticleSim implements Runnable {
             maxAge.setMax(400);
             maxAge.setValue(100);
 
-            EventBus.getSystem().addListener(ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
+            Core.getShared().getEventBus().addListener(ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
                 public void call(ChangedEvent event) {
                     if(event.getType() == ChangedEvent.DoubleChanged) {
                         if(event.getSource() == emissionRate) {

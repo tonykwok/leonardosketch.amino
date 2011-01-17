@@ -1,5 +1,6 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -129,7 +130,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
     public void setSelectedIndex(int selectedIndex) {
         this.selectedIndex = selectedIndex;
         this.setText(getSelectedItem().toString());
-        EventBus.getSystem().publish(new SelectionEvent(SelectionEvent.Changed,this));
+        Core.getShared().getEventBus().publish(new SelectionEvent(SelectionEvent.Changed, this));
         setDrawingDirty();
         super.fireAction();
     }

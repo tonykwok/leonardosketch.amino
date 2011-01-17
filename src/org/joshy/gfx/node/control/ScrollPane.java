@@ -1,14 +1,17 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.*;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.ChangedEvent;
+import org.joshy.gfx.event.Scope;
+import org.joshy.gfx.event.ScrollEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.AbstractPane;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,12 +78,14 @@ public class ScrollPane extends AbstractPane {
             }
         };
         contentWrapper.setParent(this);
-        EventBus.getSystem().addListener(vscroll,ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
+
+
+        Core.getShared().getEventBus().addListener(vscroll,ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) {
                 setVScrollValue(-(Double)event.getValue(), false);
             }
         });
-        EventBus.getSystem().addListener(hscroll,ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
+        Core.getShared().getEventBus().addListener(hscroll,ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) {
                 hscrollValue = -(Double)event.getValue();
                 if(content instanceof ScrollingAware) {
@@ -91,7 +96,7 @@ public class ScrollPane extends AbstractPane {
                 setDrawingDirty();
             }
         });
-        EventBus.getSystem().addListener(Scope.Container, contentWrapper, ScrollEvent.ScrollAll, new Callback<ScrollEvent>(){
+        Core.getShared().getEventBus().addListener(Scope.Container, contentWrapper, ScrollEvent.ScrollAll, new Callback<ScrollEvent>(){
             @Override
             public void call(ScrollEvent event) {
                 if(ScrollEvent.ScrollVertical == event.getType()) {

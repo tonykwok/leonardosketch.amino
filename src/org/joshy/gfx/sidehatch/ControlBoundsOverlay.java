@@ -1,10 +1,10 @@
 package org.joshy.gfx.sidehatch;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
@@ -37,7 +37,7 @@ public class ControlBoundsOverlay extends Node {
         format.setMaximumFractionDigits(3);
         this.editor = ie;
         this.stage = s;
-        EventBus.getSystem().addListener(MouseEvent.MouseMoved, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(MouseEvent.MouseMoved, new Callback<MouseEvent>(){
             @Override
             public void call(MouseEvent event) throws Exception {
                 if(event.getSource() instanceof Control) {

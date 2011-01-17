@@ -59,28 +59,28 @@ public class SwingCore extends Core {
 //                    for(File f : openFilesEvent.getFiles()) {
 //                        u.p("file = " + f.getAbsolutePath());
 //                    }
-                    EventBus.getSystem().publish(new FileOpenEvent(openFilesEvent.getFiles()));
+                    Core.getShared().getEventBus().publish(new FileOpenEvent(openFilesEvent.getFiles()));
                 }
             });
             app.setAboutHandler(new AboutHandler(){
                 @Override
                 public void handleAbout(AppEvent.AboutEvent aboutEvent) {
 //                    u.p("got about");
-                    EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.About));
+                    Core.getShared().getEventBus().publish(new SystemMenuEvent(SystemMenuEvent.About));
                 }
             });
             app.setQuitHandler(new QuitHandler(){
                 @Override
                 public void handleQuitRequestWith(AppEvent.QuitEvent quitEvent, QuitResponse quitResponse) {
 //                    u.p("got quit");
-                    EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.Quit));
+                    Core.getShared().getEventBus().publish(new SystemMenuEvent(SystemMenuEvent.Quit));
                 }
             });
             app.setPreferencesHandler(new PreferencesHandler(){
                 @Override
                 public void handlePreferences(AppEvent.PreferencesEvent preferencesEvent) {
 //                    u.p("got prefs");
-                    EventBus.getSystem().publish(new SystemMenuEvent(SystemMenuEvent.Preferences));
+                    Core.getShared().getEventBus().publish(new SystemMenuEvent(SystemMenuEvent.Preferences));
                 }
             });
         }
@@ -105,7 +105,7 @@ public class SwingCore extends Core {
 
     @Override
     protected void createDefaultEventBus() {
-        EventBus.setSystem(new SwingEventBus());
+        Core.getShared().setEventBus(new SwingEventBus());
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
@@ -129,7 +129,7 @@ public class SwingCore extends Core {
                 ((Control)root).doSkins();
             }
         }
-        EventBus.getSystem().publish(new SkinEvent(SkinEvent.SystemWideReload));
+        Core.getShared().getEventBus().publish(new SkinEvent(SkinEvent.SystemWideReload));
     }
 
     @Override

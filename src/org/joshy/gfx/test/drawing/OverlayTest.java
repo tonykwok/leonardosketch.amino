@@ -44,7 +44,7 @@ public class OverlayTest extends GrandTour.Example implements Runnable {
         Node n2 = new TransformNode().setRotate(30).setContent(oval).setTranslateX(80);
         Node n3 = new TransformNode().setRotate(45).setContent(new Textbox("text box")).setTranslateX(100);
 
-        EventBus.getSystem().addListener(oval, MouseEvent.MousePressed, new Callback<MouseEvent>(){
+        Core.getShared().getEventBus().addListener(oval, MouseEvent.MousePressed, new Callback<MouseEvent>(){
             @Override
             public void call(MouseEvent event) throws Exception {
                 u.p("pressed");
