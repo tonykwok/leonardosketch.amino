@@ -2,6 +2,8 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.complex.ListModel;
+import org.joshy.gfx.node.control.complex.ListView;
 import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
 

@@ -1,4 +1,4 @@
-package org.joshy.gfx.node.control;
+package org.joshy.gfx.node.control.complex;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
@@ -9,6 +9,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.util.GraphicsUtil;
 
 import java.awt.*;
@@ -20,7 +21,7 @@ import java.util.List;
  * for the columns and a model for the actual data. Styling can be done with
  * item renderers and text renderers just like the ListView. 
  */
-public class TableView<D,H> extends Control implements Focusable, ScrollPane.ScrollingAware, SelectableControl {
+public class TableView<D,H> extends Control implements Focusable, org.joshy.gfx.node.control.ScrollPane.ScrollingAware, SelectableControl {
 
     public static enum ResizeMode {
         Proportional,
@@ -40,7 +41,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
     private double scrollY = 0;
     private double scrollX = 0;
     final double rowHeight = 20;
-    private ScrollPane scrollPane;
+    private org.joshy.gfx.node.control.ScrollPane scrollPane;
     private Font font;
     private Map<Integer, Double> columnSizes = new HashMap<Integer,Double>();
     private Set<Integer> columnVisibles = new HashSet<Integer>();
@@ -459,7 +460,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
 
     private void showColumnFilterPopup(MouseEvent event) {
 
-        PopupMenu popup = new PopupMenu(new ListModel() {
+        org.joshy.gfx.node.control.PopupMenu popup = new org.joshy.gfx.node.control.PopupMenu(new ListModel() {
             @Override
             public Object get(int col) {
                 String prefix = "    ";
@@ -730,7 +731,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         this.scrollY = value;
     }
 
-    public void setScrollParent(ScrollPane scrollPane) {
+    public void setScrollParent(org.joshy.gfx.node.control.ScrollPane scrollPane) {
         this.scrollPane = scrollPane;
     }
 

@@ -1,4 +1,4 @@
-package org.joshy.gfx.node.control;
+package org.joshy.gfx.node.control.complex;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
@@ -9,6 +9,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.Parent;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 
@@ -140,7 +141,7 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
             }
         });
 
-        setModel(ListView.createModel(new String[]{"1","2","3","4","5"}));
+        setModel(ListView.createModel(new String[]{"1", "2", "3", "4", "5"}));
         setItemViewFactory(new ItemViewFactory() {
             @Override
             public Control createItemView(CompoundListView listView, final int index, Control prev) {

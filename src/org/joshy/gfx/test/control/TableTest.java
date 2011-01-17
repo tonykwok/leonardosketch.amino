@@ -6,6 +6,8 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.SystemMenuEvent;
 import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.complex.TableView;
+import org.joshy.gfx.node.control.complex.TreeView;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;

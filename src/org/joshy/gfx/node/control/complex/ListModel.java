@@ -1,4 +1,4 @@
-package org.joshy.gfx.node.control;
+package org.joshy.gfx.node.control.complex;
 
 /**
  * The base model for all list and list like controls.  Designed to be typesafe and

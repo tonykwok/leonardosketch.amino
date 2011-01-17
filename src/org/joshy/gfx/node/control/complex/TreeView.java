@@ -1,4 +1,4 @@
-package org.joshy.gfx.node.control;
+package org.joshy.gfx.node.control.complex;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;

@@ -1,6 +1,6 @@
 package org.joshy.gfx.test.itunes;
 
-import org.joshy.gfx.node.control.TableView;
+import org.joshy.gfx.node.control.complex.TableView;
 
 import java.util.ArrayList;
 import java.util.List;

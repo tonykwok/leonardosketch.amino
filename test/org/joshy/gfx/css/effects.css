@@ -1,0 +1,69 @@
+#boxshadow1 {
+    box-shadow: 10px 10px;
+}
+/*
+#boxshadow1 {
+    box-shadow: 10px 10px;
+}
+*/
+
+#boxshadow2 {
+    box-shadow: 12px 13px 5px #00ff00;
+}
+
+#boxshadow3 {
+    box-shadow: inset 2px 2px 2px 2px #000000;
+}
+/*
+#boxshadow4 {
+    box-shadow: 10px 20px red, -10px -30px #f4f4f4, 0px 0px 5px 5px #cc6600;
+}
+*/
+/*
+
+#textshadow1 {
+    text-shadow: 10px 10px;
+}
+#textshadow2 {
+    text-shadow: 12px 13px 5px #00ff00;
+}
+#textshadow3 {
+    text-shadow: 2px 2px 2px 2px black;
+}
+#textshadow4 {
+    text-shadow: 10px 20px red, -10px -30px #f4f4f4, 0px 0px 5px 5px #cc6600;
+}
+
+
+
+
+#lineargrad1 {
+    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
+}
+
+#lineargrad2 {
+    background: linear-gradient(top center, #ffffff 0%, #ff0000 40%, #808080 100%);
+}
+
+#radialgrad1 {
+    background: radial-gradient(20px 30px, 40px 50px, black 0%, red 50%, white 100%);
+}
+
+
+
+
+#imagebackground1 {
+    background-image: url(foo.png);
+}
+#imagebackground2 {
+    background-image: url(foo.png), url(bar.png);
+}
+
+
+#borderimage1 {
+    border-image-source: url(foo.png);
+    border-width: 10px;
+    border-image-slice: 10px 10px 20px 20px;
+}
+
+*/

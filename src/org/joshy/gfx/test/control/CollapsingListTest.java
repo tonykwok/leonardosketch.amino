@@ -7,9 +7,9 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.node.control.CompoundListView;
+import org.joshy.gfx.node.control.complex.CompoundListView;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.node.control.complex.ListModel;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.GraphicsUtil;
 

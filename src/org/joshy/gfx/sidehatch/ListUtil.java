@@ -1,6 +1,6 @@
 package org.joshy.gfx.sidehatch;
 
-import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.node.control.complex.ListModel;
 import org.joshy.gfx.util.ArrayListModel;
 
 import java.util.*;

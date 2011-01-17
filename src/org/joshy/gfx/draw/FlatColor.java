@@ -44,6 +44,10 @@ public class FlatColor implements Paint {
         blue = comps[2];
     }
 
+    public static FlatColor fromHexString(String s) {
+        return new FlatColor(s);
+    }
+
     public FlatColor(int rgb) {
         Color c = new Color(rgb,false);
         float[]comps = c.getComponents(null);
@@ -137,4 +141,5 @@ public class FlatColor implements Paint {
     public Paint duplicate() {
         return  new FlatColor(red,green,blue,alpha);
     }
+
 }

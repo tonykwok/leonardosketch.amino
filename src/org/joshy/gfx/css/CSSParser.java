@@ -1,5 +1,6 @@
 package org.joshy.gfx.css;
 
+import org.joshy.gfx.css.parser.BoxShadowAction;
 import org.joshy.gfx.css.values.*;
 import org.joshy.gfx.css.values.StringValue;
 import org.parboiled.*;
@@ -145,7 +146,9 @@ public class CSSParser extends BaseParser<Object> {
                     SEMICOLON,
                     new InsetsRuleAction("border","-width",propName,propValue)
                 ),
+
                 BorderRadiusShortcut(),
+                BoxShadow(),
                 //other property name
                 Sequence(
                     Spacing(),
@@ -160,6 +163,7 @@ public class CSSParser extends BaseParser<Object> {
                 )
         );
     }
+
 
     public Rule BorderRadiusShortcut() {
         final Var propName = new Var();
@@ -177,6 +181,34 @@ public class CSSParser extends BaseParser<Object> {
             Spacing(),
             SEMICOLON,
             new BorderRadiusAction(propName,propValue)
+        );
+    }
+
+    public Rule BoxShadow() {
+        final Var propName = new Var();
+        final Var propValue = new Var();
+        final Var<String> hexValue = new Var<String>();
+        final Var<String> inset = new Var<String>();
+        return Sequence(
+            Spacing(),
+            //prop name
+            OneOrMore(LetterOrDash()),toString,propName.set(value())
+            ,Spacing()
+            ,COLON
+            ,Spacing()
+
+                //inset
+            ,Optional(Sequence("inset",toString,inset.set((String) value()))),Spacing()
+                //2->4 px values
+            ,OneOrMore(
+                Sequence(OneOrMore(Number()),FirstOf("px","pt"),Spacing())
+            )
+            ,toString, propValue.set(value())
+            //hex value
+            ,Optional(Sequence(HexValue(), toString, hexValue.set((String) value())))
+            ,Spacing()
+            ,SEMICOLON
+            ,new BoxShadowAction(propName,propValue, hexValue, inset)
         );
     }
 
@@ -611,7 +643,7 @@ public class CSSParser extends BaseParser<Object> {
         }
 
         public boolean run(Context context) {
-            context.setNodeValue(new ShadowValue(color.get(), xoff.get(),yoff.get(), radius.get()));
+            context.setNodeValue(new ShadowValue(color.get(), xoff.get(),yoff.get(), radius.get(), "0", "false"));
             return true;
         }
     }
@@ -677,7 +709,8 @@ public class CSSParser extends BaseParser<Object> {
             return true;
         }
     }
-    
+
+
     public class BorderRadiusAction implements Action {
         private Var propName;
         private Var propValue;

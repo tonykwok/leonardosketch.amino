@@ -1,6 +1,6 @@
 package org.joshy.gfx.test.itunes;
 
-import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.node.control.complex.ListModel;
 
 /**
 * Created by IntelliJ IDEA.

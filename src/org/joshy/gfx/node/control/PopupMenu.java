@@ -10,6 +10,8 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.control.complex.ListModel;
+import org.joshy.gfx.node.control.complex.TextRenderer;
 
 import java.util.Date;
 
@@ -22,7 +24,7 @@ public class PopupMenu extends Control {
     private ListModel model;
     private int hoverRow = -1;
     private long openTime;
-    private ListView.TextRenderer textRenderer;
+    private TextRenderer textRenderer;
     private StyleInfo styleInfo;
     private StyleInfo itemStyleInfo;
     private StyleInfo selectedItemStyleInfo;
@@ -181,7 +183,7 @@ public class PopupMenu extends Control {
         EventBus.getSystem().addListener(this, ChangedEvent.IntegerChanged,callback);
     }
 
-    public void setTextRenderer(ListView.TextRenderer textRenderer) {
+    public void setTextRenderer(TextRenderer textRenderer) {
         this.textRenderer = textRenderer;
     }
 }
