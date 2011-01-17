@@ -9,7 +9,7 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.complex.ListModel;
-import org.joshy.gfx.node.control.complex.TextRenderer;
+import org.joshy.gfx.node.control.complex.TextItemRenderer;
 import org.joshy.gfx.stage.Stage;
 
 import java.awt.geom.Point2D;
@@ -25,7 +25,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
     private ListModel model;
     private int selectedIndex;
     private PopupMenu popup;
-    private TextRenderer<E> textRenderer;
+    private TextItemRenderer<E> textRenderer;
 
     public PopupMenuButton()  {
         setSkinDirty();
@@ -45,7 +45,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         return this;
     }
 
-    public PopupMenuButton<E> setTextRenderer(TextRenderer<E> textRenderer) {
+    public PopupMenuButton<E> setTextRenderer(TextItemRenderer<E> textRenderer) {
         this.textRenderer = textRenderer;
         return this;
     }

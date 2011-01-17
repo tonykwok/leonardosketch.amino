@@ -10,7 +10,7 @@ import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.control.complex.CompoundListView;
 import org.joshy.gfx.node.control.complex.ListModel;
 import org.joshy.gfx.node.control.complex.ListView;
-import org.joshy.gfx.node.control.complex.TextRenderer;
+import org.joshy.gfx.node.control.complex.TextItemRenderer;
 import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.node.shape.*;
 import org.joshy.gfx.stage.Stage;
@@ -354,7 +354,7 @@ public class GrandTour implements Runnable {
         ListView exampleList = new ListView();
         final ListModel<Example> exampleModel = (ListModel<Example>) ListView.createModel(examples);
         exampleList.setModel(exampleModel);
-        exampleList.setTextRenderer(new TextRenderer<Example>(){
+        exampleList.setTextRenderer(new TextItemRenderer<Example>(){
             public String toString(SelectableControl view, Example item, int index) {
                 if(item != null) {
                     return item.name;

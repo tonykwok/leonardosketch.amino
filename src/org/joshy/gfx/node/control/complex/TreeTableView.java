@@ -11,7 +11,6 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.util.GraphicsUtil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,8 +20,8 @@ import java.util.List;
  * Time: 2:18:21 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TreeView<T,S> extends TableView{
-    public TreeView() {
+public class TreeTableView<T,S> extends TableView{
+    public TreeTableView() {
         setModel(new DummyTreeTableModel());
         setRenderer(new TreeTableDataRenderer());
         Core.getShared().getEventBus().addListener(this, MouseEvent.MousePressed, new TreeTableMouseEventHandler());
@@ -124,119 +123,6 @@ public class TreeView<T,S> extends TableView{
                     model.close(node);
                     tb.redraw();
                 }
-            }
-        }
-    }
-
-    public static interface TreeTableModel<T, S> extends  TableView.TableModel {
-        public int getColumnCount();
-        public int getRowCount();
-        public boolean hasChildren(T node);
-        public Iterable<T> getChildren(T node);
-        public boolean isCollapsed(T node);
-        public S getColumnHeader(int column);
-        public void toggleRow(int row);
-        public T get(int row, int column);
-        public void open(T node);
-        public void close(T node);
-        public int getDepth(int row);
-        public S getColumnData(T node, int column);
-    }
-
-    public static abstract class AbstractTreeTableModel<T,S> implements TreeTableModel<T, S> {
-        private T root;
-        private HashSet<T> collapsedSet;
-
-        public AbstractTreeTableModel() {
-            collapsedSet = new HashSet<T>();
-        }
-
-        public void setRoot(T root) {
-            this.root = root;
-        }
-
-        @Override
-        public int getRowCount() {
-            return countBreadth();
-        }
-
-        private int countBreadth() {
-            return countBreadth(root);
-        }
-
-        private int countBreadth(T root) {
-            int count = 1;
-            if(!collapsedSet.contains(root)) {
-                for(T n : getChildren(root)) {
-                    count += countBreadth(n);
-                }
-            }
-            return count;
-        }
-
-        public int getDepth(T root, Count row) {
-            if(row.value == 0) return 1;
-            if(!collapsedSet.contains(root)) {
-                for(T n : getChildren(root)) {
-                    row.value--;
-                    int d = getDepth(n,row);
-                    if(d >= 0) return d+1;
-                }
-            }
-            return -1;
-        }
-
-        private T findNodeAtRow(T root, Count row) {
-            if(row.value == 0) return root;
-            if(!collapsedSet.contains(root)) {
-                for(T n : getChildren(root)) {
-                    row.value--;
-                    T result = findNodeAtRow(n, row);
-                    if(result != null) return result;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public T get(int row, int column) {
-            T node = findNodeAtRow(root, new Count(row));
-            if(node == null) return null;
-            return node;
-        }
-
-        public void toggleRow(int row) {
-            T node = findNodeAtRow(root, new Count(row));
-            if(node == null) return;
-            if(!hasChildren(node)) return;
-            if(collapsedSet.contains(node)) {
-                collapsedSet.remove(node);
-            } else {
-                collapsedSet.add(node);
-            }
-        }
-
-        public int getDepth(int row) {
-            return getDepth(root,new Count(row));
-        }
-
-        public boolean isCollapsed(T cellData) {
-            return collapsedSet.contains(cellData);
-        }
-
-        public void open(T node) {
-            collapsedSet.remove(node);
-        }
-
-        public void close(T node) {
-            collapsedSet.add(node);
-        }
-
-        private class Count {
-            private int value;
-
-            public Count(int row) {
-                this.value = row;
             }
         }
     }

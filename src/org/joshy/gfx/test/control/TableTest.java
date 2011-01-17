@@ -2,12 +2,10 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.SystemMenuEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.control.complex.TableView;
-import org.joshy.gfx.node.control.complex.TreeView;
+import org.joshy.gfx.node.control.complex.*;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
@@ -56,7 +54,7 @@ public class TableTest extends GrandTour.Example implements Runnable{
         public List<MyTreeNode> children = new ArrayList<MyTreeNode>();
     }
     private Control tree() {
-        TreeView tv = new TreeView();
+        TreeTableView tv = new TreeTableView();
         MyTreeNode n1 = new MyTreeNode();
         n1.title = "a";
         MyTreeNode n2 = new MyTreeNode();
@@ -69,7 +67,7 @@ public class TableTest extends GrandTour.Example implements Runnable{
         n1.children.add(n3);
         n2.children.add(n4);
 
-        TreeView.AbstractTreeTableModel<MyTreeNode, String> attm = new TreeView.AbstractTreeTableModel<MyTreeNode, String>() {
+        AbstractTreeTableModel<MyTreeNode, String> attm = new AbstractTreeTableModel<MyTreeNode, String>() {
             @Override
             public int getColumnCount() {
                 return 1;
@@ -98,12 +96,12 @@ public class TableTest extends GrandTour.Example implements Runnable{
         attm.setRoot(n1);
         tv.setModel(attm);
         tv.setWidth(500);
-        tv.setResizeMode(TreeView.ResizeMode.Proportional);
+        tv.setResizeMode(TreeTableView.ResizeMode.Proportional);
         return new ScrollPane(tv);
     }
 
     private Control treeTable() {
-        TreeView treeView = new TreeView();
+        TreeTableView treeView = new TreeTableView();
         treeView.setWidth(500);
         return new ScrollPane(treeView);
     }
@@ -111,9 +109,9 @@ public class TableTest extends GrandTour.Example implements Runnable{
     private Control standardTable() {
         TableView table = new TableView();
         table.setAllowColumnResizing(false);
-        table.setSorter(new TableView.Sorter() {
+        table.setSorter(new Sorter() {
             @Override
-            public Comparator createComparator(TableView.TableModel table, int column, TableView.SortOrder order) {
+            public Comparator createComparator(TableModel table, int column, TableView.SortOrder order) {
                 if(order == TableView.SortOrder.Default) {
                     return new Comparator<String>() {
                         @Override
@@ -160,9 +158,9 @@ public class TableTest extends GrandTour.Example implements Runnable{
         //This will filter by the first column.
         //It only applies if you type in at least 3 letters.
         //It is not case sensitive.
-        table.setFilter(new TableView.Filter() {
+        table.setFilter(new Filter() {
             @Override
-            public boolean matches(TableView.TableModel table, int row) {
+            public boolean matches(TableModel table, int row) {
                 String text = filterBox.getText();
                 if(text.length() < 3) return true;
                 Object data = table.get(row,0);

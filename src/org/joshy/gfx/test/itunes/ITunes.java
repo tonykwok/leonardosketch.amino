@@ -3,10 +3,11 @@ package org.joshy.gfx.test.itunes;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.complex.Filter;
 import org.joshy.gfx.node.control.complex.ListView;
+import org.joshy.gfx.node.control.complex.TableModel;
 import org.joshy.gfx.node.control.complex.TableView;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
@@ -112,9 +113,9 @@ public class ITunes implements Runnable {
         playList.setModel(new PlaylistModel());
         playList.setDefaultColumnWidth(150);
         playList.setRenderer(new PlaylistRenderer());
-        playList.setFilter(new TableView.Filter<Song,String>() {
+        playList.setFilter(new Filter<Song,String>() {
             @Override
-            public boolean matches(TableView.TableModel<Song,String> table, int row) {
+            public boolean matches(TableModel<Song,String> table, int row) {
                 String text = search.getText();
                 if(text.length() < 2) return true;
                 Song data = table.get(row,0);
