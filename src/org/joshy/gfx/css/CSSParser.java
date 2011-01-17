@@ -1,5 +1,6 @@
 package org.joshy.gfx.css;
 
+import org.joshy.gfx.css.parser.BorderRadiusAction;
 import org.joshy.gfx.css.parser.BoxShadowAction;
 import org.joshy.gfx.css.values.*;
 import org.joshy.gfx.css.values.StringValue;
@@ -180,7 +181,7 @@ public class CSSParser extends BaseParser<Object> {
             ,toString,propValue.set(value()),
             Spacing(),
             SEMICOLON,
-            new BorderRadiusAction(propName,propValue)
+            new BorderRadiusAction(this, propName,propValue)
         );
     }
 
@@ -710,67 +711,6 @@ public class CSSParser extends BaseParser<Object> {
         }
     }
 
-
-    public class BorderRadiusAction implements Action {
-        private Var propName;
-        private Var propValue;
-
-        public BorderRadiusAction(Var propName, Var propValue) {
-            this.propName = propName;
-            this.propValue = propValue;
-        }
-
-        @Override
-        public boolean run(Context context) {
-            String pn = propName.get()+"";
-            //u.p("propname = " + pn);
-            if(!pn.endsWith("border-radius")) return false;
-            
-            //u.p("doing border radius expansion");
-            String[] parts = (""+propValue.get()).split(" ");
-            String prefix = pn.substring(0,pn.indexOf("border-radius"));
-            //u.p("prefix = " + prefix);
-
-            CSSProperty tl = new CSSProperty();
-            CSSProperty tr = new CSSProperty();
-            CSSProperty br = new CSSProperty();
-            CSSProperty bl = new CSSProperty();
-            tl.name = prefix+"border-top-left-radius";
-            tr.name = prefix+"border-top-right-radius";
-            br.name = prefix+"border-bottom-right-radius";
-            bl.name = prefix+"border-bottom-left-radius";
-            if(parts.length == 1) {
-                tl.value = new IntegerPixelValue(parts[0]);
-                tr.value = new IntegerPixelValue(parts[0]);
-                br.value = new IntegerPixelValue(parts[0]);
-                bl.value = new IntegerPixelValue(parts[0]);
-            }
-            if(parts.length == 2) {
-                tl.value = new IntegerPixelValue(parts[0]);
-                tr.value = new IntegerPixelValue(parts[1]);
-                br.value = new IntegerPixelValue(parts[0]);
-                bl.value = new IntegerPixelValue(parts[1]);
-            }
-            if(parts.length == 3) {
-                tl.value = new IntegerPixelValue(parts[0]);
-                tr.value = new IntegerPixelValue(parts[1]);
-                br.value = new IntegerPixelValue(parts[2]);
-                bl.value = new IntegerPixelValue(parts[1]);
-            }
-            if(parts.length == 4) {
-                tl.value = new IntegerPixelValue(parts[0]);
-                tr.value = new IntegerPixelValue(parts[1]);
-                br.value = new IntegerPixelValue(parts[2]);
-                bl.value = new IntegerPixelValue(parts[3]);
-            }
-            CSSPropertySet set = new CSSPropertySet();
-            set.add(tl,tr,br,bl);
-            context.setNodeValue(set);
-            set(set);
-            return true;
-
-        }
-    }
 
 }
 
