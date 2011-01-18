@@ -130,6 +130,20 @@
             <arg value="--jardir=build/jars/"/>
         </java>
     </target>
+	
+    <target name="build-sidehatch-agent" depends="build-core">
+    	<jar jarfile="build/jars/sidehatch-agent.jar" basedir="bin" includes="**/sidehatch/*.class">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Implementation-Vendor" value="joshy" />
+				<attribute name="Implementation-Title" value="Amino sidehatch agent" />
+
+				<attribute name="Premain-Class" value="org.joshy.gfx.sidehatch.Agent" />
+				<attribute name="Agent-Class" value="org.joshy.gfx.sidehatch.Agent" />
+			</manifest>
+		</jar>
+    </target>
+	
 
     <target name="build-partyboard" depends="build-core">
         <java
