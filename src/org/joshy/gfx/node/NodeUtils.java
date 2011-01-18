@@ -1,6 +1,7 @@
 package org.joshy.gfx.node;
 
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.stage.Stage;
 
 import java.awt.geom.Point2D;
 
@@ -24,6 +25,21 @@ public class NodeUtils {
         }
         return new Point2D.Double(x,y);
     }
+    
+    /*************************************************************************
+     * Converts the given point from node coordinate space to screen coordinate space.
+     * @param node the reference node. 
+     * @param point2D the point in node coordinate space.
+     * @return the point in screen coordinates.
+     ************************************************************************/
+    
+    public static Point2D convertToScreen(Node node, double x, double y) {
+	    Point2D pt = NodeUtils.convertToScene(node, x, y);
+	    Stage stage = node.getParent().getStage();
+	    pt = new Point2D.Double(pt.getX()+stage.getX(),pt.getY()+stage.getY());
+	    return pt;
+    }
+    
 
     public static void doSkins(Control control) {
         if(control.isSkinDirty()) {

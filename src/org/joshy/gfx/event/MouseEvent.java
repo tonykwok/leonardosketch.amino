@@ -102,9 +102,7 @@ public class MouseEvent extends Event {
 
     public Point2D getPointInScreenCoords() {
         Node source = (Node) this.source;
-        Point2D pt = NodeUtils.convertToScene(source,x,y);
-        Stage stage = source.getParent().getStage();
-        pt = new Point2D.Double(pt.getX()+stage.getX(),pt.getY()+stage.getY());
+        Point2D pt = NodeUtils.convertToScreen(source, x,y);
         return pt;
     }
 
