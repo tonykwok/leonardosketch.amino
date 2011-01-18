@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl/gluegen-rt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl/jogl.all.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl/nativewindow.all.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl/newt.all.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/apache-mime4j-0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/AppBundler.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-codec-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpclient-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpcore-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpcore-nio-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpmime-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junit-4.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/parboiled-0.9.7.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/XMLLib.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/MacStubs.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
