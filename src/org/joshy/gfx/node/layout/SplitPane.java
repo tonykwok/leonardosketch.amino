@@ -197,8 +197,9 @@ public class SplitPane extends AbstractPane {
         if(vertical) {
             matcher.pseudo = "vertical";
         }
-        cssSkin.drawBackground(g,matcher,"divider-", thumbBounds);
-        cssSkin.drawBorder(g,matcher,"divider-",thumbBounds);
+        matcher.pseudoElement = "divider";
+        cssSkin.drawBackground(g,matcher, thumbBounds);
+        cssSkin.drawBorder(g,matcher,thumbBounds);
 
         this.drawingDirty = false;
     }

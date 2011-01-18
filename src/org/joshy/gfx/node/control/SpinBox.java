@@ -72,6 +72,10 @@ public class SpinBox<E extends Number> extends Container {
             int v = value.intValue() + i;
             value = (E) new Integer(v);
         }
+        if(value instanceof Double) {
+            double v = value.doubleValue() +i;
+            value = (E) new Double(v);
+        }
     }
 
     public SpinBox<E> setLabel(String text) {
@@ -82,7 +86,12 @@ public class SpinBox<E extends Number> extends Container {
     private void fireUpdate() {
         if(changedCallback != null) {
             try {
-                changedCallback.call(new ChangedEvent(ChangedEvent.IntegerChanged,value,this));
+                if(value instanceof Integer) {
+                    changedCallback.call(new ChangedEvent(ChangedEvent.IntegerChanged,value,this));
+                }
+                if(value instanceof Double) {
+                    changedCallback.call(new ChangedEvent(ChangedEvent.DoubleChanged,value,this));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

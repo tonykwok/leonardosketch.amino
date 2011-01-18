@@ -27,15 +27,16 @@ public class TitlePanel extends Panel {
 
         Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
         CSSMatcher matcher = new CSSMatcher(this);
-        cssSkin.drawBackground(g,matcher,"",bounds);
-        cssSkin.drawBorder(g,matcher,"",bounds);
+        cssSkin.drawBackground(g,matcher,bounds);
+        cssSkin.drawBorder(g,matcher,bounds);
 
         double tw = Font.DEFAULT.calculateWidth(title);
         double th = Font.DEFAULT.calculateHeight(title);
         Bounds textBounds = new Bounds(styleInfo.margin.getLeft()+10,styleInfo.margin.getTop()-th/2, tw+6, th);
-        cssSkin.drawBackground(g,matcher,"title-",textBounds);
-        cssSkin.drawBorder(g,matcher,"title-",textBounds);
-        cssSkin.drawText(g,matcher,"title-",textBounds,title);
+        matcher.pseudoElement = "title";
+        cssSkin.drawBackground(g,matcher,textBounds);
+        cssSkin.drawBorder(g,matcher,textBounds);
+        cssSkin.drawText(g,matcher,textBounds,title);
         return;
     }
 

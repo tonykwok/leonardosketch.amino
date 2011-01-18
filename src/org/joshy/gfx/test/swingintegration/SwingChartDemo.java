@@ -3,12 +3,15 @@ package org.joshy.gfx.test.swingintegration;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.event.SystemMenuEvent;
-import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.Group;
+import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.node.shape.Rectangle;
+import org.joshy.gfx.node.shape.Text;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,21 +51,136 @@ public class SwingChartDemo implements Runnable {
         data.add(new ElfDataPoint(11,90,10));
 
 
-        GraphControl graph = new GraphControl();
-        graph.setData(data);
+        //create a popup indicator
+        final Group popup = new Group();
+        //popup background
+        popup.add(new Rectangle()
+                .setWidth(200)
+                .setHeight(100)
+                .setArcWidth(10)
+                .setArcHeight(10)
+                .setStrokeWidth(5)
+                .setStroke(new FlatColor(0x202020))
+                .setFill(FlatColor.BLACK.deriveWithAlpha(0.7))
+        );
+        //popup current month
+        final Text currentMonth = new Text();
+        currentMonth
+                .setFont(Font.name("Arial").size(24).resolve())
+                .setFill(FlatColor.WHITE)
+                .setTranslateX(10)
+                .setTranslateY(25);
+        popup.add(currentMonth);
 
-        JButton b1 = new JButton("asdf");
+        //popup avg pay label
+        popup.add(new Text()
+                .setText("Avg Pay:")
+                .setFont(Font.name("Arial").size(24).resolve())
+                .setFill(new FlatColor(0xd0d0d0))
+                .setTranslateX(10)
+                .setTranslateY(60)
+        );
+
+        //popup avg pay of current month
+        final Text currentAvgPay = new Text();
+        currentAvgPay
+                .setFont(Font.name("Arial").size(24).resolve())
+                .setFill(FlatColor.WHITE)
+                .setTranslateX(130)
+                .setTranslateY(60)
+                ;
+        popup.add(currentAvgPay);
+        popup.setVisible(false);
+
+        //popup avg pay label
+        popup.add(new Text()
+                .setText("Morale:")
+                .setFont(Font.name("Arial").size(24).resolve())
+                .setFill(new FlatColor(0xd0d0d0))
+                .setTranslateX(10)
+                .setTranslateY(90)
+        );
+
+        //popup elf attitude of current month
+        final Text currentAttitude = new Text();
+        currentAttitude
+                .setFont(Font.name("Arial").size(24).resolve())
+                .setFill(FlatColor.WHITE)
+                .setTranslateX(130)
+                .setTranslateY(90)
+                ;
+        popup.add(currentAttitude);
+        popup.setVisible(false);
+
+
+        final Group graph = new Group();
+        for(final ElfDataPoint edp : data) {
+            //create a group in the right position
+            final Group g = new Group();
+            g.setTranslateX(10+edp.month*40);
+            g.setTranslateY(0);
+
+            //calculate the color of the bar based on the elf attitude
+            double colorAngle = edp.attitude*360/10;
+            FlatColor start = FlatColor.hsb(colorAngle,1,0.8);
+            FlatColor end = FlatColor.hsb(colorAngle,0.8,1);
+            GradientFill grad = new GradientFill(start,end,0,true, 0,0,30-5,0);
+
+            //create a bar with the height based on pay
+            final Rectangle bar = new Rectangle(0, 400-edp.avgPay * 4, 30, edp.avgPay * 4)
+                    .setArcWidth(20)
+                    .setArcHeight(20);
+            bar.setFill(grad);
+            g.add(bar);
+
+
+            // add text for each month
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.set(Calendar.MONTH,edp.month);
+
+            final String month = sdf.format(cal.getTime());
+            g.add(new Text()
+                    .setText(month)
+                    .setFill(FlatColor.BLACK)
+                    .setFont(Font.name("Arial").size(18).resolve())
+                    .setTranslateY(420)
+            );
+
+            //add event to update and show the popup
+            EventBus.getSystem().addListener(bar, MouseEvent.MouseMoved, new Callback<MouseEvent>(){
+                @Override
+                public void call(MouseEvent event) throws Exception {
+                    popup.setVisible(true);
+                    popup.setTranslateX(g.getTranslateX()+10);
+                    popup.setTranslateY(bar.getY()-10);
+                    currentMonth.setText(month);
+                    currentAvgPay.setText(""+edp.avgPay);
+                    currentAttitude.setText(""+edp.attitude);
+                }
+            });
+
+            //add to the graph
+            graph.add(g);
+        }
+        graph.setTranslateX(20);
+
+        graph.add(popup);
+
+        JButton b1 = new JButton("I'm a Swing Button");
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(b1,BorderLayout.WEST);
+        panel.add(new JLabel("I'm a Swing Label"),BorderLayout.NORTH);
         JComponentWrapper wrapper = new JComponentWrapper();
-        wrapper.setContent(graph);
+        wrapper.setContent(new Panel().setFill(FlatColor.WHITE).add(graph));
         panel.add(wrapper,BorderLayout.CENTER);
 
         JFrame frame = new JFrame("Amino + Swing Chart Demo");
         frame.pack();
         frame.add(panel);
-        frame.setSize(640,480);
+        frame.setSize(800,480);
         frame.setVisible(true);
 
         
@@ -75,70 +193,7 @@ public class SwingChartDemo implements Runnable {
 
     }
 
-    private class GraphControl extends Control {
-        private List<ElfDataPoint> data;
-        private double maxPay;
-
-        @Override
-        public void doLayout() {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void doPrefLayout() {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void doSkins() {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void draw(GFX g) {
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM");
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-
-            double colWidth = getWidth()/12-5;
-            double top = 30;
-            double bottom = getHeight()-30;
-            double height = bottom-top;
-            g.setPaint(FlatColor.WHITE);
-            g.fillRect(0,0,getWidth(),getHeight());
-            for(int month=0; month < data.size(); month++) {
-                cal.set(Calendar.MONTH,month);
-                ElfDataPoint d = data.get(month);
-                //u.p("d = " + d);
-                double x = 5+month*colWidth;
-                double y = 0;
-                g.translate(x,y);
-                double angle = d.attitude*360/10;
-                FlatColor start = FlatColor.hsb(angle,1,0.8);
-                FlatColor end = FlatColor.hsb(angle,0.8,1);
-                GradientFill grad = new GradientFill(start,end,0,true, 0,0,colWidth-5,0);
-                g.setPaint(grad);
-                g.fillRoundRect(
-                        0,
-                        bottom-height/maxPay*d.avgPay,
-                        colWidth-5,
-                        height/maxPay*d.avgPay,10,10);
-                g.setPaint(FlatColor.BLACK);
-                Date date = cal.getTime();
-                g.drawText(sdf.format(date), Font.name("Arial").size(18).resolve(),5,bottom+15);
-                g.translate(-x,-y);
-            }
-        }
-
-        public void setData(List<ElfDataPoint> data) {
-            this.data = data;
-            for(ElfDataPoint d : data) {
-                maxPay = Math.max(maxPay,d.avgPay);
-            }
-        }
-    }
-
-    //elf pay vs month, color elf attitude,
+    //elf pay vs month, color elf attitude
     public class ElfDataPoint {
         private int attitude;
         private double avgPay;

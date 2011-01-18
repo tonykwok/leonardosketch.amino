@@ -6,7 +6,6 @@ import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
-import org.joshy.gfx.node.control.Control;
 
 /**
  * Paints a control laid out by the css boxmodel.
@@ -30,13 +29,13 @@ public class BoxPainter {
     private ImageBuffer oldBuf;
 
 
-    public void draw(GFX g, StyleInfo styleInfo, SizeInfo size, Control control, String text) {
-        drawBackground(g,styleInfo,size,control);
+    public void draw(GFX g, StyleInfo styleInfo, SizeInfo size, String text) {
+        drawBackground(g, styleInfo,size);
         drawContent(g, styleInfo, size,text);
         drawBorder(g, styleInfo,size);
     }
     
-    public void drawBackground(GFX g, StyleInfo box, SizeInfo size, Control control) {
+    public void drawBackground(GFX g, StyleInfo box, SizeInfo size) {
         double backWidth = size.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = size.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
@@ -52,7 +51,7 @@ public class BoxPainter {
                 g2.setPaint(new FlatColor(shadow.getColor(),1.0));
                 g2.translate(br,br);
                 drawBG(g2, bounds);
-                buf.apply(new BlurEffect(br,br));
+                buf.apply(new BlurEffect(br));
                 g2.translate(-br,-br);
             }
             g.draw(buf,shadow.getXoffset()-br,shadow.getYoffset()-br);
@@ -190,7 +189,7 @@ public class BoxPainter {
                         g2.setPaint(new FlatColor(shadow.getColor(),0.3));
                         g2.translate(-textX,-contentY);
                         Font.drawCentered(g2,content,font,textX,contentY,textWidth,size.contentHeight,true);
-                        buf.apply(new BlurEffect(3,3));
+                        buf.apply(new BlurEffect(3));
                         oldBuf = buf;
                     }
                     oldText = content;

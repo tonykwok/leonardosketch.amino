@@ -71,12 +71,20 @@ public class TabPanel extends Panel {
         setDrawingDirty();
     }
 
-    public void setSelected(Node node) {
+    public TabPanel setSelected(Node node) {
         for(Control c : tabs){
             c.setVisible(false);
         }
         node.setVisible(true);
         setDrawingDirty();
+        return this;
+    }
+
+    public Control getSelected() {
+        for(Control c : tabs) {
+            if(c.isVisible()) return c;
+        }
+        return null;
     }
 
     private class TabTop extends Control {
@@ -118,9 +126,9 @@ public class TabPanel extends Panel {
                 }
                 Bounds bounds = new Bounds(x,0,size,30);
                 CharSequence title = titleMap.get(c);
-                cssSkin.drawBackground(g,matcher,"",bounds);
-                cssSkin.drawBorder(g,matcher,"",bounds);
-                cssSkin.drawText(g,matcher,"",bounds,title.toString());
+                cssSkin.drawBackground(g,matcher,bounds);
+                cssSkin.drawBorder(g,matcher,bounds);
+                cssSkin.drawText(g,matcher,bounds,title.toString());
                 x+=size;
             }
         }

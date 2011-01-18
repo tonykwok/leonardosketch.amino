@@ -8,4 +8,5 @@ package org.joshy.gfx.draw;
  * To change this template use File | Settings | File Templates.
  */
 public interface Paint {
+    public Paint duplicate();
 }

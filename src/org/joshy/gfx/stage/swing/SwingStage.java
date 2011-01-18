@@ -3,6 +3,7 @@ package org.joshy.gfx.stage.swing;
 import com.sun.awt.AWTUtilities;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.FocusManager;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.Parent;
@@ -17,6 +18,12 @@ import org.joshy.gfx.util.u;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.font.TextHitInfo;
+import java.awt.im.InputMethodRequests;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 
 public class SwingStage extends Stage {
     private JFrame frame;
@@ -354,6 +361,8 @@ public class SwingStage extends Stage {
 
     private class SceneComponent extends JComponent {
         private AWTEventPublisher publisher;
+        private TextHitInfo ime_caret;
+        private InputMethodRequests ime_imr;
 
         private SceneComponent() {
             publisher = new AWTEventPublisher(root);
@@ -362,6 +371,86 @@ public class SwingStage extends Stage {
             this.addMouseWheelListener(publisher);
             this.addKeyListener(publisher);
             this.setFocusTraversalKeysEnabled(false);
+            this.addInputMethodListener(new InputMethodListener() {
+                @Override
+                public void inputMethodTextChanged(InputMethodEvent inputMethodEvent) {
+                    //u.p("input method text changed: " + inputMethodEvent);
+                    //u.p("count = " + inputMethodEvent.getCommittedCharacterCount());
+                    //u.p("text = " + inputMethodEvent.getText());
+                    FocusManager.IMETarget target = Core.getShared().getFocusManager().getIMETarget();
+                    if(target != null) {
+                        target.setComposingText(inputMethodEvent);
+                        target.appendCommittedText(inputMethodEvent);
+                        inputMethodEvent.consume();
+                        ime_caret = inputMethodEvent.getCaret();
+                    }
+                }
+
+                @Override
+                public void caretPositionChanged(InputMethodEvent inputMethodEvent) {
+                    //u.p("caret position changed: " + inputMethodEvent);
+                    ime_caret = inputMethodEvent.getCaret();
+                    inputMethodEvent.consume();
+                    //repaint();
+                }
+            });
+            ime_imr = new InputMethodRequests(){
+                @Override
+                public Rectangle getTextLocation(TextHitInfo textHitInfo) {
+                    //u.p("get text location called: " + textHitInfo);
+                    return new Rectangle(60,60,100,100);
+                }
+
+                @Override
+                public TextHitInfo getLocationOffset(int i, int i1) {
+                    //u.p("get location offset called");
+                    return null;
+                }
+
+                @Override
+                public int getInsertPositionOffset() {
+                    //u.p("get insert position offset called");
+                    return 0;
+                }
+
+                @Override
+                public AttributedCharacterIterator getCommittedText(int i, int i1, AttributedCharacterIterator.Attribute[] attributes) {
+                    //u.p("get committed text called: " + i + " " + i1 + " " + attributes);
+                    FocusManager.IMETarget target = Core.getShared().getFocusManager().getIMETarget();
+                    if(target != null) {
+                        return new AttributedString(target.getCommittedText()).getIterator();
+                    }
+                    return null;
+                }
+
+                @Override
+                public int getCommittedTextLength() {
+                    //u.p("get committed text length called");
+                    FocusManager.IMETarget target = Core.getShared().getFocusManager().getIMETarget();
+                    if(target != null) {
+                        return target.getCommittedText().length();
+                    }
+                    return 0;
+                }
+
+                @Override
+                public AttributedCharacterIterator cancelLatestCommittedText(AttributedCharacterIterator.Attribute[] attributes) {
+                    //u.p("cancel latest committed text called " + attributes);
+                    return null;
+                }
+
+                @Override
+                public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
+                    //u.p("get selected text caleld: " + attributes);
+                    return (new AttributedString("")).getIterator();
+                }
+            };
+            enableInputMethods(true);
+        }
+
+        @Override
+        public InputMethodRequests getInputMethodRequests() {
+            return ime_imr;
         }
 
         @Override

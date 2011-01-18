@@ -123,7 +123,7 @@ public class Slider extends Control {
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
         styleInfo = cssSkin.getStyleInfo(this, null);
-        thumbStyleInfo = cssSkin.getStyleInfo(this,null,"thumb-");
+        thumbStyleInfo = cssSkin.getStyleInfo(this,null,"thumb");
         setLayoutDirty();
     }
     
@@ -138,7 +138,7 @@ public class Slider extends Control {
         }
         setHeight(sizeInfo.height);
         Bounds thumbBounds = calculateThumbBounds();
-        thumbSizeInfo = cssSkin.getSizeInfo(this,thumbStyleInfo,"","thumb-");
+        thumbSizeInfo = cssSkin.getSizeInfo(this,thumbStyleInfo,"","thumb");
         thumbSizeInfo.width = thumbBounds.getWidth();
         thumbSizeInfo.height = thumbBounds.getHeight();
     }
@@ -146,15 +146,15 @@ public class Slider extends Control {
     @Override
     public void doLayout() {
         boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
-        thumbPainter = cssSkin.createBoxPainter(this, thumbStyleInfo, thumbSizeInfo, "", CSSSkin.State.None, "thumb-");
+        thumbPainter = cssSkin.createBoxPainter(this, thumbStyleInfo, thumbSizeInfo, "", CSSSkin.State.None, "thumb");
     }
 
     public void draw(GFX g) {
         if(!isVisible()) return;
-        boxPainter.draw(g,styleInfo,sizeInfo,this,"");
+        boxPainter.draw(g,styleInfo,sizeInfo,"");
         Bounds thumbBounds = calculateThumbBounds();
         g.translate(thumbBounds.getX(),thumbBounds.getY());
-        thumbPainter.draw(g,thumbStyleInfo,thumbSizeInfo,this,"");
+        thumbPainter.draw(g,thumbStyleInfo,thumbSizeInfo,"");
         g.translate(-thumbBounds.getX(),-thumbBounds.getY());
     }
 

@@ -54,8 +54,8 @@ public abstract class GFX {
     public abstract void translate(double translateX, double translateY, double translateZ);
     public abstract void scale(double scaleX, double scaleY);
     public abstract void rotate(double rotation, Transform rotationAxis);
-    public abstract void pushMatrix();
-    public abstract void popMatrix();
+    public abstract void push();
+    public abstract void pop();
 
     public abstract boolean isGL();
     public abstract GLAutoDrawable getDrawable();
