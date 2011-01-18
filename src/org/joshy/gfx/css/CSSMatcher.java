@@ -15,6 +15,7 @@ import java.util.Set;
 public class CSSMatcher {
     public String element;
     public String pseudo;
+    public String pseudoElement;
     public String id;
     public Set<String> classes = new HashSet<String>();
     public CSSMatcher parent = null;
@@ -40,6 +41,7 @@ public class CSSMatcher {
         return "CSSMatcher{" +
                 "element='" + element + '\'' +
                 ", pseudo='" + pseudo + '\'' +
+                ", pseudoElement='" + pseudoElement + '\'' +
                 ", id='" + id + '\'' +
                 ", classes=" + classes +
                 ", parent=" + parent +

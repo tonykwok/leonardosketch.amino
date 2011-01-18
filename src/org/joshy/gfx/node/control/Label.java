@@ -80,7 +80,7 @@ public class Label extends Control {
         if(getOpacity() != 1.0) {
             g.setOpacity(getOpacity());
         }
-        boxPainter.draw(g, styleInfo, sizeInfo, this, "");
+        boxPainter.draw(g, styleInfo, sizeInfo, "");
         g.setPaint(boxPainter.color);
         if(color != null) {
             g.setPaint(color);

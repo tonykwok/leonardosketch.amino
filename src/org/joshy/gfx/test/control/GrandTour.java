@@ -232,13 +232,44 @@ public class GrandTour implements Runnable {
             @Override
             public Control build() throws Exception {
                 return new VFlexBox()
+                        .setBoxAlign(FlexBox.Align.Stretch)
                         .add(new DisclosurePanel()
                             .setTitle(new Label("click to disclose"))
                             .setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200))
                         )
                         .add(new DisclosurePanel()
                             .setTitle(new Label("click to disclose"))
-                            .setContent(new Panel().setFill(FlatColor.RED).setPrefWidth(200).setPrefHeight(200))
+                            .setContent(
+                                    new TabPanel()
+                                    .add("foo",new Button("foo"))
+                                    .add("bar",new Button("bar"))
+                                    .setPrefHeight(100)
+                                    .setPrefWidth(100)
+                                    )
+                        )
+                        .add(new DisclosurePanel()
+                            .setTitle(new Label("Right"))
+                            .setPosition(DisclosurePanel.Position.Right)
+                            .setContent(
+                                    new HFlexBox()
+                                            .add(new Button("b1"))
+                                            .add(new Button("b2"))
+                                            .add(new Button("b3"))
+                                            .add(new Button("b4"))
+                                    )
+
+                        )
+                        .add(new DisclosurePanel()
+                            .setTitle(new Label("Right + tabs"))
+                            .setPosition(DisclosurePanel.Position.Right)
+                            .setContent(
+                                    new TabPanel()
+                                    .add("foo",new Button("foo"))
+                                    .add("bar",new Button("bar"))
+                                    .setPrefHeight(100)
+                                    .setPrefWidth(100)
+                                    )
+
                         )
                         ;
             }
@@ -259,7 +290,7 @@ public class GrandTour implements Runnable {
             @Override
             public Control build() throws Exception {
                 Group group = new Group();
-                PatternPaint pat = PatternPaint.create(GrandTour.class.getResource("pattern.png"));
+                PatternPaint pat = PatternPaint.create(GrandTour.class.getResource("pattern.png"),"pattern.png");
                 group.add(new Rectangle(100,20,200,100)
                         .setFill(pat));
                 group.add(new Oval(50,20)

@@ -23,6 +23,7 @@ public class VFlexBox extends FlexBox {
         double totalHeight = 0;
         double maxWidth = 0;
         for(Control c : controlChildren()) {
+            if(!c.isVisible()) continue;
             c.doPrefLayout();
             Bounds bounds = c.getLayoutBounds();
             if(c instanceof SplitPane) {
@@ -57,6 +58,7 @@ public class VFlexBox extends FlexBox {
         double totalHeight = 0;
         double totalFlex = 0;
         for(Control c : controlChildren()) {
+            if(!c.isVisible()) continue;
             Bounds bounds = c.getLayoutBounds();
             if(bounds == null) {
                 u.p("ERROR! control " + c + " is returning null layout bounds: " + bounds );
@@ -82,6 +84,7 @@ public class VFlexBox extends FlexBox {
 
         double y = 0;
         for(Control c : controlChildren()) {
+            if(!c.isVisible()) continue;
             Bounds bounds = c.getLayoutBounds();
             //position child first
             c.setTranslateX(0+insets.getLeft());

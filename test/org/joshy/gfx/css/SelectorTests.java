@@ -3,6 +3,7 @@ package org.joshy.gfx.css;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Scrollbar;
+import org.joshy.gfx.util.u;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,6 +60,21 @@ public class SelectorTests {
         //matcher = new CSSMatcher(sb);
         matcher.pseudo = "vertical";
         assertTrue(set.findIntegerValue(matcher,"width")==20);
+
+        matcher = new CSSMatcher(button);
+        matcher.pseudo = "hover";
+        matcher.pseudoElement = "micro";
+        assertTrue(set.findIntegerValue(matcher,"prop5")==8);
+
+        matcher = new CSSMatcher(sb);
+        matcher.pseudo = "vertical";
+        matcher.pseudoElement = "track";
+        u.p("prop 6 = " + set.findIntegerValue(matcher,"prop6"));
+        assertTrue(set.findIntegerValue(matcher,"prop6")==23);
+        matcher.pseudoElement = "thumb";
+        u.p("prop 6 = " + set.findIntegerValue(matcher,"prop6"));
+        assertTrue(set.findIntegerValue(matcher,"prop6")==22);
+
     }
 
     

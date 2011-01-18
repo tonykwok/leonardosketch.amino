@@ -10,17 +10,11 @@ import org.joshy.gfx.stage.Camera;
 import org.joshy.gfx.stage.OrthoCamera;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.PerformanceTracker;
+import org.joshy.gfx.util.u;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GL2ES1;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
+import javax.media.opengl.*;
 import javax.media.opengl.awt.GLCanvas;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.HeadlessException;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -51,8 +45,8 @@ public class JOGLStage extends Stage {
         frame.setSize(500,500);
         caps = new GLCapabilities(null);
         //turn on anti-aliasing full screen
-        caps.setSampleBuffers(true);
-        caps.setNumSamples(4);
+        //caps.setSampleBuffers(true);
+        //caps.setNumSamples(4);
         
         canvas = new GLCanvas(caps);
         canvas.addGLEventListener(frame);
@@ -214,22 +208,7 @@ class JOGLFrame extends Frame implements GLEventListener {
         this.stage = stage;
     }
 
-    public void init(GLAutoDrawable glAutoDrawable) {
-        glAutoDrawable.getGL().setSwapInterval(1);
-        glAutoDrawable.setAutoSwapBufferMode(true);
-        GL gl = glAutoDrawable.getGL();
 
-        //turn on anti-aliasing for smooth lines
-        gl.glEnable(GL.GL_LINE_SMOOTH);
-        gl.glEnable(GL2.GL_POLYGON_SMOOTH);
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-        gl.glBlendFunc(GL.GL_LINE_SMOOTH_HINT, GL.GL_DONT_CARE);
-    }
-
-    public void dispose(GLAutoDrawable glAutoDrawable) {
-    }
-    
     private void doSkins() {
         PerformanceTracker.getInstance().skinStart();
         if(stage.content != null) {
@@ -254,6 +233,23 @@ class JOGLFrame extends Frame implements GLEventListener {
         PerformanceTracker.getInstance().layoutEnd();
     }
 
+    public void init(GLAutoDrawable glAutoDrawable) {
+        glAutoDrawable.getGL().setSwapInterval(1);
+        glAutoDrawable.setAutoSwapBufferMode(true);
+        GL2 gl = glAutoDrawable.getGL().getGL2();
+
+        double w = getWidth();
+        double h = getHeight()-getInsets().top;
+        stage.camera.configureDisplay(gl,stage,w,h);
+
+        //turn on anti-aliasing for smooth lines
+        gl.glEnable(GL.GL_LINE_SMOOTH);
+        gl.glEnable(GL2.GL_POLYGON_SMOOTH);
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        gl.glBlendFunc(GL.GL_LINE_SMOOTH_HINT, GL.GL_DONT_CARE);
+    }
+
     public void display(GLAutoDrawable drawable) {
         PerformanceTracker.getInstance().drawStart();
         if(skinsDirty) {
@@ -270,8 +266,8 @@ class JOGLFrame extends Frame implements GLEventListener {
         //gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 
         //set up normal projection mode
-        gl.glMatrixMode(GL2ES1.GL_PROJECTION);
-        gl.glLoadIdentity();
+        //gl.glMatrixMode(GL2ES1.GL_PROJECTION);
+        //gl.glLoadIdentity();
 
         double w = getWidth();
         double h = getHeight()-getInsets().top;
@@ -284,15 +280,21 @@ class JOGLFrame extends Frame implements GLEventListener {
         PerformanceTracker.getInstance().drawEnd();
     }
 
-    public void reshape(GLAutoDrawable arg0, int i, int i1, int width, int height) {
-        GL2 gl = arg0.getGL().getGL2();
+    public void reshape(GLAutoDrawable glAutoDrawable, int x, int y, int width, int height) {
+        u.p("reshape called");
+        GL2 gl = glAutoDrawable.getGL().getGL2();
+        stage.camera.configureDisplay(gl,stage,width,height);
+        /*
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL2ES1.GL_PROJECTION);
         gl.glLoadIdentity();
         gl.glOrtho(0.0, getWidth(), getHeight(), 0.0, -100.0, 100.0);
         gl.glMatrixMode(GL2ES1.GL_MODELVIEW);
-        gl.glLoadIdentity();
+        gl.glLoadIdentity();*/
         layoutDirty = true;
+    }
+
+    public void dispose(GLAutoDrawable glAutoDrawable) {
     }
 }
 

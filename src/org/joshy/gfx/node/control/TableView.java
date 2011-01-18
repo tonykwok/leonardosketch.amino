@@ -47,7 +47,8 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
     private Sorter<D,H> sorter;
     private SortModel sortModel;
     private int sortColumn = -1;
-    private boolean sortAscending;
+    public enum SortOrder { Default, Ascending, Descending };
+    private SortOrder currentSortOrder = SortOrder.Default;
     private Filter<D,H> filter;
     private FilterModel filterModel;
 
@@ -95,13 +96,13 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                 //if(cssSkin != null) {
                 CSSMatcher matcher = new CSSMatcher(table);
                 Bounds bounds = new Bounds(x,y,width,height);
-                String prefix = "item-";
+                matcher.pseudoElement = "item";
                 if(getSelectedIndex() == row) {
-                    prefix = "selected-item-";
+                    matcher.pseudoElement = "selected-item";
                 }
-                cssSkin.drawBackground(g,matcher,prefix,bounds);
-                cssSkin.drawBorder(g,matcher,prefix,bounds);
-                int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
+                cssSkin.drawBackground(g,matcher,bounds);
+                cssSkin.drawBorder(g,matcher,bounds);
+                int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
                 g.setPaint(new FlatColor(col));
                 if(cell != null) {
                     String s = cell.toString();
@@ -134,11 +135,17 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                 }
                 if(sortColumn >= 0) {
                     if(column == sortColumn) {
-                        if(sortAscending) {
-                            GraphicsUtil.fillDownArrow(g,x+width-15,y+5,10);
-                        } else {
-                            GraphicsUtil.fillUpArrow(g,x+width-15,y+5,10);
+                        switch(currentSortOrder) {
+                            case Ascending:
+                                GraphicsUtil.fillDownArrow(g,x+width-15,y+5,10);
+                                break;
+                            case Descending:
+                                GraphicsUtil.fillUpArrow(g,x+width-15,y+5,10);
+                                break;
+                            case Default:
+                                break;
                         }
+
                     }
                 }
             }
@@ -243,12 +250,14 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         this.selectedColumn = selectedColumn;
         if(sortModel != null) {
             if(sortColumn == selectedColumn) {
-                sortAscending = !sortAscending;
-            } else {
-                sortAscending = true;
+                switch(currentSortOrder) {
+                    case Default: currentSortOrder = SortOrder.Ascending; break;
+                    case Ascending: currentSortOrder = SortOrder.Descending; break;
+                    case Descending: currentSortOrder = SortOrder.Default; break;
+                }
             }
             sortColumn = selectedColumn;
-            sortModel.reSort(selectedColumn,sortAscending);
+            sortModel.reSort(selectedColumn,currentSortOrder);
         }
         setDrawingDirty();
     }
@@ -334,7 +343,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
     public static interface Sorter<D,H> {
 
 
-        public Comparator createComparator(TableModel table, int column, boolean ascending);
+        public Comparator createComparator(TableModel table, int column, SortOrder order);
 
     }
 
@@ -560,7 +569,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
 
         //draw bg
         if(cssSkin != null) {
-            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBackground(g,matcher,new Bounds(0,0,width,height));
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRect(0,0,width,height);
@@ -603,7 +612,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         //draw border
         g.setClipRect(clip);
         if(cssSkin != null) {
-            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBorder(g,matcher,new Bounds(0,0,width,height));
         }
     }
 
@@ -740,8 +749,17 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
             sortedList = list;
         }
 
-        public void reSort(final int column, boolean sortAscending) {
-            final Comparator comp = sorter.createComparator(model, column, sortAscending);
+        public void reSort(final int column, SortOrder order) {
+            final Comparator comp = sorter.createComparator(model, column, order);
+            if(order == SortOrder.Default) {
+                List<Row> list = new ArrayList<Row>();
+                for(int row =0; row<model.getRowCount(); row++) {
+                    list.add(new Row(row,model));
+                }
+                sortedList = list;
+                return;
+            }
+
             Collections.sort(sortedList,new Comparator<Row>(){
                 @Override
                 public int compare(Row a, Row b) {

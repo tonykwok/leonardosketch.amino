@@ -9,6 +9,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 
+import java.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -101,27 +102,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
             public void call(MouseEvent event) {
                 if(event.getType() == MouseEvent.MousePressed) {
-                    int startRow = (int)(-scrollY/rowHeight);
-                    int startCol = (int)(-scrollX/colWidth);
-                    int index = 0;
-                    int voff = (int) (scrollY % rowHeight);
-                    int ay = (int) (event.getY()-voff);
-                    int erow = (int) (ay / rowHeight);
-                    erow += startRow;
-                    int row = (int) ((event.getY()+voff)/rowHeight+startRow);
-                    int col = (int) (event.getX()/colWidth+startCol);
-                    switch(orientation) {
-                        case Vertical: index = erow; break;
-                        case Horizontal: index = (int) (event.getX()/colWidth+startCol); break;
-                        case HorizontalWrap:
-                            int rowLength = (int) (getWidth()/colWidth);
-                            index = row * rowLength + col;
-                            break;
-                        case VerticalWrap:
-                            int colLength = (int) (getHeight()/rowHeight);
-                            index = col * colLength + row;
-                            break;
-                    }
+                    int index = calculateIndexAt(event.getX(),event.getY());
                     setSelectedIndex(index);
                     setDrawingDirty();
                 }
@@ -153,6 +134,42 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         });
 
 
+    }
+
+    public E getItemAt(double x, double y) {
+        int index = calculateIndexAt(x,y);
+        if(index < 0) return null;
+        return getModel().get(index);
+    }
+    public E getItemAt(Point2D pt) {
+        int index = calculateIndexAt(pt.getX(),pt.getY());
+        if(index < 0) return null;
+        return getModel().get(index);
+    }
+
+    private int calculateIndexAt(double x, double y) {
+        int startRow = (int)(-scrollY/rowHeight);
+        int startCol = (int)(-scrollX/colWidth);
+        int index = 0;
+        int voff = (int) (scrollY % rowHeight);
+        int ay = (int) (y-voff);
+        int erow = (int) (ay / rowHeight);
+        erow += startRow;
+        int row = (int) ((y+voff)/rowHeight+startRow);
+        int col = (int) (x/colWidth+startCol);
+        switch(orientation) {
+            case Vertical: index = erow; break;
+            case Horizontal: index = (int) (x/colWidth+startCol); break;
+            case HorizontalWrap:
+                int rowLength = (int) (getWidth()/colWidth);
+                index = row * rowLength + col;
+                break;
+            case VerticalWrap:
+                int colLength = (int) (getHeight()/rowHeight);
+                index = col * colLength + row;
+                break;
+        }
+        return index;
     }
 
     private void handleArrowKeys(KeyEvent event) {
@@ -194,8 +211,9 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         }
     }
 
-    public void setRenderer(ItemRenderer<E> renderer) {
+    public ListView<E> setRenderer(ItemRenderer<E> renderer) {
         this.renderer = renderer;
+        return this;
     }
 
     @Override
@@ -221,7 +239,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         CSSMatcher matcher = new CSSMatcher(this);
         
         if(cssSkin != null) {
-            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBackground(g,matcher,new Bounds(0,0,width,height));
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRect(0,0,width,height);
@@ -303,7 +321,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         
         g.setClipRect(oldClip);
         if(cssSkin != null) {
-            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBorder(g,matcher,new Bounds(0,0,width,height));
         }
 
     }
@@ -313,7 +331,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         return model;
     }
     
-    public ListView setModel(ListModel<E> listModel) {
+    public ListView<E> setModel(ListModel<E> listModel) {
         this.model = listModel;
         EventBus.getSystem().addListener(model, ListEvent.Updated, new Callback<ListEvent>() {
             public void call(ListEvent event) {
@@ -429,18 +447,21 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     }
 
 
-    public void setRowHeight(double rowHeight) {
+    public ListView<E> setRowHeight(double rowHeight) {
         this.rowHeight = rowHeight;
+        return this;
     }
 
     
-    public void setColumnWidth(double colWidth) {
+    public ListView<E> setColumnWidth(double colWidth) {
         this.colWidth = colWidth;
+        return this;
     }
 
 
-    public void setOrientation(Orientation orientation) {
+    public ListView<E> setOrientation(Orientation orientation) {
         this.orientation = orientation;
+        return this;
     }
 
     public void setDropIndicatorVisible(boolean dropIndicatorVisible) {
@@ -451,7 +472,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         this.dropIndicatorIndex = dropIndicatorIndex;
     }
 
-    public ListView setTextRenderer(TextRenderer<E> textRenderer) {
+    public ListView<E> setTextRenderer(TextRenderer<E> textRenderer) {
         this.textRenderer = textRenderer;
         return this;
     }
@@ -498,13 +519,13 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         public void draw(GFX gfx, ListView listView, E item, int index, double x, double y, double width, double height) {
             CSSMatcher matcher = new CSSMatcher(listView);
             Bounds bounds = new Bounds(x,y,width,height);
-            String prefix = "item-";
+            matcher.pseudoElement = "item";
             if(listView.getSelectedIndex() == index) {
-                prefix = "selected-item-";
+                matcher.pseudoElement = "selected-item";
             }
-            cssSkin.drawBackground(gfx,matcher,prefix,bounds);
-            cssSkin.drawBorder(gfx,matcher,prefix,bounds);
-            int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
+            cssSkin.drawBackground(gfx,matcher,bounds);
+            cssSkin.drawBorder(gfx,matcher,bounds);
+            int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
             gfx.setPaint(new FlatColor(col));
             if(item != null) {
                 String s = textRenderer.toString(listView, item, index);

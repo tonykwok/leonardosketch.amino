@@ -109,7 +109,7 @@ public class Button extends Control {
         return this;
     }
 
-    private void fireAction() {
+    protected void fireAction() {
         if(!isEnabled()) return;
         ActionEvent action = new ActionEvent(ActionEvent.Action, Button.this);
         EventBus.getSystem().publish(action);
@@ -192,7 +192,7 @@ public class Button extends Control {
         if(!isVisible()) return;
         g.setPaint(new FlatColor(1,0,0,1));
 
-        boxPainter.draw(g, styleInfo, sizeInfo, this, text.toString());
+        boxPainter.draw(g, styleInfo, sizeInfo, text.toString());
     }
 
     private State calculateState() {

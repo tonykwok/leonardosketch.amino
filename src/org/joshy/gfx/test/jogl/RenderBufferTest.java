@@ -7,16 +7,11 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.geom3d.Rectangle3D;
 import org.joshy.gfx.stage.OrthoCamera;
-import org.joshy.gfx.stage.PerspectiveCamera;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 
 import javax.media.opengl.*;
-import javax.media.opengl.glu.GLU;
-import javax.xml.bind.Marshaller;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 
 /**
@@ -319,13 +314,13 @@ public class RenderBufferTest implements Runnable {
         g.setPaint(FlatColor.BLUE);
         g.drawRect(0,0,127,127);
         
-        g.pushMatrix();
+        g.push();
         for(int i=0; i<10; i++) {
             g.rotate(15, Transform.Z_AXIS);
             g.setPaint(FlatColor.RED);
             g.drawRect(30,30,70,90);
         }
-        g.popMatrix();
+        g.pop();
     }
 }
 }
