@@ -15,6 +15,10 @@ public class NodeUtils {
         return new Point2D.Double(x,y);
     }
 
+    public static Point2D convertToScene(Node node, Point2D pt) {
+        return convertToScene(node, pt.getX(), pt.getY());
+    }
+
     public static Point2D convertFromScene(Node node, Point2D point2D) {
         double x = point2D.getX();
         double y=  point2D.getY();

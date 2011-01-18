@@ -10,7 +10,6 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 import java.util.Date;
 
@@ -98,16 +97,16 @@ public class PopupMenu extends Control {
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
         styleInfo = cssSkin.getStyleInfo(this, null);
-        itemStyleInfo = cssSkin.getStyleInfo(this,null,"item-");
-        selectedItemStyleInfo = cssSkin.getStyleInfo(this,null,"selected-item-");
+        itemStyleInfo = cssSkin.getStyleInfo(this,null,"item");
+        selectedItemStyleInfo = cssSkin.getStyleInfo(this,null,"selected-item");
         setLayoutDirty();
     }
 
     @Override
     public void doPrefLayout() {
         sizeInfo = cssSkin.getSizeInfo(this,styleInfo,"");
-        itemSizeInfo = cssSkin.getSizeInfo(this,itemStyleInfo,"","item-");
-        selectedItemSizeInfo = cssSkin.getSizeInfo(this,selectedItemStyleInfo,"","selected-item-");
+        itemSizeInfo = cssSkin.getSizeInfo(this,itemStyleInfo,"","item");
+        selectedItemSizeInfo = cssSkin.getSizeInfo(this,selectedItemStyleInfo,"","selected-item");
     }
 
     @Override
@@ -126,8 +125,8 @@ public class PopupMenu extends Control {
         sizeInfo.width = getWidth();
         sizeInfo.height = getHeight();
         boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
-        itemPainter = cssSkin.createBoxPainter(this, itemStyleInfo, itemSizeInfo, "", CSSSkin.State.None, "item-");
-        selectedItemPainter = cssSkin.createBoxPainter(this, selectedItemStyleInfo, selectedItemSizeInfo, "", CSSSkin.State.None, "selected-item-");
+        itemPainter = cssSkin.createBoxPainter(this, itemStyleInfo, itemSizeInfo, "", CSSSkin.State.None, "item");
+        selectedItemPainter = cssSkin.createBoxPainter(this, selectedItemStyleInfo, selectedItemSizeInfo, "", CSSSkin.State.None, "selected-item");
     }
 
     @Override
@@ -137,28 +136,28 @@ public class PopupMenu extends Control {
         //Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
         CSSMatcher matcher = new CSSMatcher(this);
 
-        boxPainter.draw(g,styleInfo,sizeInfo,this,"");
+        boxPainter.draw(g,styleInfo,sizeInfo,"");
 
         for(int i=0; i<model.size(); i++) {
             Object o = model.get(i);
             double rowy = i*rowHeight;
             Bounds itemBounds = new Bounds(1, rowy + spacer, getWidth() - 2, rowHeight);
-            String prefix = "item-";
+            matcher.pseudoElement = "item";
             if(i == hoverRow) {
-                prefix = "selected-item-";
+                matcher.pseudoElement = "selected-item";
                 selectedItemSizeInfo.width= itemBounds.getWidth();
                 selectedItemSizeInfo.height = itemBounds.getHeight();
                 g.translate(itemBounds.getX(),itemBounds.getY());
-                selectedItemPainter.draw(g,selectedItemStyleInfo,selectedItemSizeInfo,this,"");
+                selectedItemPainter.draw(g,selectedItemStyleInfo,selectedItemSizeInfo,"");
                 g.translate(-itemBounds.getX(),-itemBounds.getY());
             } else {
                 itemSizeInfo.width= itemBounds.getWidth();
                 itemSizeInfo.height = itemBounds.getHeight();
                 g.translate(itemBounds.getX(),itemBounds.getY());
-                itemPainter.draw(g,itemStyleInfo,itemSizeInfo,this,"");
+                itemPainter.draw(g,itemStyleInfo,itemSizeInfo,"");
                 g.translate(-itemBounds.getX(),-itemBounds.getY());
             }
-            int col = cssSkin.getCSSSet().findColorValue(matcher, prefix+"color");
+            int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
             g.setPaint(new FlatColor(col));
             drawText(g, o, rowy, i);
         }

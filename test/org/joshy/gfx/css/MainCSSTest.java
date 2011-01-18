@@ -51,9 +51,9 @@ public class MainCSSTest {
     public void basicTests() throws IOException, URISyntaxException {
 
         //basic matching
-        assertTrue(set.findStringValue("button","color").equals("ff00aa"));
+        assertTrue(set.findStringValue("button","color").equals("ffff00aa"));
         //fallback to *
-        assertTrue(set.findStringValue("label","color").equals("ff00aa"));
+        assertTrue(set.findStringValue("label","color").equals("ffff00aa"));
         //parsing a pixel value
         assertTrue(set.findIntegerValue("button","border")==3);
 
@@ -105,7 +105,8 @@ public class MainCSSTest {
 
         idMatcher = new CSSMatcher();
         idMatcher.id = "hex_test";
-        assertTrue(set.findColorValue(idMatcher,"background-color") == 0x00ff00ff);
+        u.p("color value = " + Integer.toHexString(set.findColorValue(idMatcher,"background-color")));
+        assertTrue(set.findColorValue(idMatcher,"background-color") == 0xffff00ff);
 
     }
 
@@ -235,10 +236,11 @@ public class MainCSSTest {
         assertTrue(set.findIntegerValue(m,"border-left-width")==11);
 
         m.id = "border_test_6";
-        assertTrue(set.findIntegerValue(m,"thumb-border-top-width")==10);
-        assertTrue(set.findIntegerValue(m,"thumb-border-right-width")==11);
-        assertTrue(set.findIntegerValue(m,"thumb-border-bottom-width")==12);
-        assertTrue(set.findIntegerValue(m,"thumb-border-left-width")==11);
+        m.pseudoElement = "thumb";
+        assertTrue(set.findIntegerValue(m,"border-top-width")==10);
+        assertTrue(set.findIntegerValue(m,"border-right-width")==11);
+        assertTrue(set.findIntegerValue(m,"border-bottom-width")==12);
+        assertTrue(set.findIntegerValue(m,"border-left-width")==11);
     }
 
 
@@ -271,7 +273,8 @@ public class MainCSSTest {
         assertTrue(set.findIntegerValue(m,"border-bottom-right-radius")==3);
         assertTrue(set.findIntegerValue(m,"border-bottom-left-radius")==4);
         m.id = "border_radius_6";
-        assertTrue(set.findIntegerValue(m,"thumb-border-top-left-radius")==1);
+        m.pseudoElement = "thumb";
+        assertTrue(set.findIntegerValue(m,"border-top-left-radius")==1);
     }
 
     @Test
@@ -326,9 +329,7 @@ public class MainCSSTest {
         assertTrue(set.findColorValue(matcher,"prop1")==0xffffffff);
         assertTrue(set.findColorValue(matcher,"prop2")==0xffffffff);
         assertTrue(set.findColorValue(matcher,"prop3")==0xffff8000);
-        u.p("value = " + Integer.toHexString(set.findColorValue(matcher,"prop4")));
         assertTrue(set.findColorValue(matcher,"prop4")==0x80008000);
-        u.p("value = " + Integer.toHexString(set.findColorValue(matcher,"prop5")));
         assertTrue(set.findColorValue(matcher,"prop5")==0xFF00FF00);
     }
 

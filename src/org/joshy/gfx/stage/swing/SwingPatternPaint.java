@@ -1,8 +1,10 @@
 package org.joshy.gfx.stage.swing;
 
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.draw.PatternPaint;
 
 import javax.imageio.ImageIO;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,12 +19,77 @@ import java.net.URL;
  */
 public class SwingPatternPaint extends PatternPaint {
     BufferedImage image;
+    private Point2D start = new Point2D.Double(0,0);
+    private Point2D end;
+    private String relativeURL;
 
     public SwingPatternPaint(File file) throws IOException {
-        image = ImageIO.read(file);
+        this(ImageIO.read(file));
+        relativeURL = file.getName();
     }
 
-    public SwingPatternPaint(URL resource) throws IOException {
-        image = ImageIO.read(resource);
+    public SwingPatternPaint(URL resource, String relativeURL) throws IOException {
+        this(ImageIO.read(resource));
+        this.relativeURL = relativeURL;
+    }
+
+    private SwingPatternPaint(BufferedImage img) {
+        this.image = img;
+        this.start = new Point2D.Double(0,0);
+        this.end = new Point2D.Double(image.getWidth(),image.getHeight());
+    }
+
+    public SwingPatternPaint(BufferedImage image, Point2D start, Point2D end) {
+        this.image = image;
+        this.start = start;
+        this.end = end;
+    }
+
+    public SwingPatternPaint(BufferedImage img, String relativeURL) {
+        this.image = img;
+        this.relativeURL = relativeURL;
+    }
+
+    @Override
+    public Paint duplicate() {
+        return new SwingPatternPaint(image,getStart(),getEnd());
+    }
+
+    @Override
+    public Point2D getStart() {
+        return start;
+    }
+
+    @Override
+    public Point2D getEnd() {
+        return end;
+    }
+
+    @Override
+    public PatternPaint deriveNewStart(Point2D newPoint) {
+        SwingPatternPaint p = new SwingPatternPaint(this.image);
+        p.start = newPoint;
+        p.end = this.end;
+        p.relativeURL = this.relativeURL;
+        return p;
+    }
+
+    @Override
+    public PatternPaint deriveNewEnd(Point2D newPoint) {
+        SwingPatternPaint p = new SwingPatternPaint(this.image);
+        p.start = this.start;
+        p.end = newPoint;
+        p.relativeURL = this.relativeURL;
+        return p;
+    }
+
+    @Override
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public String getRelativeURL() {
+        return this.relativeURL;
     }
 }

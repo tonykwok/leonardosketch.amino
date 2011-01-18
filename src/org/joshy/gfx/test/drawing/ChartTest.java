@@ -49,7 +49,7 @@ public class ChartTest extends GrandTour.Example implements Runnable {
         EventBus.getSystem().addListener(MouseEvent.MousePressed, new Callback<MouseEvent>(){
             @Override
             public void call(MouseEvent event) throws Exception {
-                u.p("pressed: " + event.getSource());
+                //u.p("pressed: " + event.getSource());
             }
         });
         Group group = new Group();

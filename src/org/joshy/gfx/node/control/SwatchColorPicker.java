@@ -25,8 +25,8 @@ public class SwatchColorPicker extends Button {
 
     public SwatchColorPicker() {
         super();
-        setPrefWidth(25);
-        setPrefHeight(25);
+        setPrefWidth(26);
+        setPrefHeight(26);
     }
 
     public void setOutsideColorCallback(ColorCallback outsideColorCallback) {
@@ -61,10 +61,10 @@ public class SwatchColorPicker extends Button {
     @Override
     public void draw(GFX g) {
         if(!isVisible())return;
-        g.setPaint(FlatColor.WHITE);
-        g.fillRect(0, 0, getWidth(), getHeight());
         g.setPaint(FlatColor.BLACK);
-        g.drawRect(0, 0, getWidth(), getHeight());
+        g.fillRect(0, 0, getWidth(), getHeight());
+        g.setPaint(FlatColor.WHITE);
+        g.fillRect(0+1, 0+1, getWidth()-2, getHeight()-2);
         g.setPaint(selectedColor);
         g.fillRect(inset, inset, getWidth() - inset*2, getHeight() - inset*2);
     }
@@ -223,6 +223,10 @@ public class SwatchColorPicker extends Button {
         selectedColor = flatColor;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ColorChanged,selectedColor,this));
         setDrawingDirty();
+    }
+
+    public void onColorSelected(Callback<ChangedEvent> callback) {
+        EventBus.getSystem().addListener(this, ChangedEvent.ColorChanged, callback);
     }
 
     public static interface ColorCallback {

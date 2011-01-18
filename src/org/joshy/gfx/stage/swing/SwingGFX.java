@@ -3,18 +3,20 @@ package org.joshy.gfx.stage.swing;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.GeomUtil;
 
 import javax.media.opengl.GLAutoDrawable;
 import java.awt.*;
 import java.awt.Font;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
+import java.awt.Paint;
+import java.awt.geom.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class SwingGFX extends GFX {
     private org.joshy.gfx.draw.Paint fill;
     private Graphics2D g;
-    private AffineTransform prevTransform;
+    private Deque<GFXState> stateStack;
 
     public SwingGFX(Graphics2D graphics) {
         this.g = graphics;
@@ -22,6 +24,7 @@ public class SwingGFX extends GFX {
         this.g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         this.g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         //this.g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        stateStack = new ArrayDeque<GFXState>();
     }
 
     @Override
@@ -33,14 +36,54 @@ public class SwingGFX extends GFX {
         }
         if(paint instanceof SwingPatternPaint) {
             SwingPatternPaint pp = (SwingPatternPaint) paint;
-            g.setPaint(new TexturePaint(pp.image, new Rectangle(0,0,pp.image.getWidth(),pp.image.getHeight())));
+            double len = pp.getEnd().distance(0,0);
+            TexturePaint tp = new TexturePaint(
+                    pp.image,
+                    new Rectangle2D.Double(
+                            pp.getStart().getX(),
+                            pp.getStart().getY(),len,len)
+            );
+            g.setPaint(tp);
         }
         if(paint instanceof GradientFill) {
             GradientFill gf = (GradientFill) paint;
             Color c1 = new Color(gf.start.getRGBA());
             Color c2 = new Color(gf.end.getRGBA());
-            GradientPaint gp = new GradientPaint((float)gf.startX, (float)gf.startY, c1, (float)gf.endX, (float)gf.endY, c2);
+            GradientPaint gp = new GradientPaint((float) gf.getStartX(), (float) gf.getStartY(), c1, (float) gf.getEndX(), (float) gf.getEndY(), c2);
             g.setPaint(gp);
+        }
+        if(paint instanceof MultiGradientFill) {
+            MultiGradientFill grad = (MultiGradientFill) paint;
+
+            java.util.List<MultiGradientFill.Stop> stops = grad.getStops();
+            float[] positions = new float[stops.size()];
+            java.awt.Color[] colors = new java.awt.Color[stops.size()];
+            for(int i=0; i<stops.size(); i++) {
+                positions[i] = (float) stops.get(i).getPosition();
+                colors[i] = new java.awt.Color(stops.get(i).getColor().getRGBA());
+            }
+            if(grad instanceof RadialGradientFill) {
+                RadialGradientFill rad = (RadialGradientFill) grad;
+                RadialGradientPaint radp = new RadialGradientPaint(
+                        (float)rad.getCenterX(),
+                        (float)rad.getCenterY(),
+                        (float)rad.getRadius(),
+                        positions,colors
+                        );
+                g.setPaint(radp);
+            }
+            if(grad instanceof LinearGradientFill) {
+                LinearGradientFill lin = (LinearGradientFill) grad;
+                LinearGradientPaint linp = new LinearGradientPaint(
+                        (float)lin.getStartX(),
+                        (float)lin.getStartY(),
+                        (float)lin.getEndX(),
+                        (float)lin.getEndY(),
+                        positions,colors
+
+                );
+                g.setPaint(linp);
+            }
         }
     }
 
@@ -52,12 +95,25 @@ public class SwingGFX extends GFX {
 
     @Override
     public void drawRect(double x, double y, double width, double height) {
-        g.drawRect((int)x,(int)y,(int)width,(int)height);
+        Rectangle2D.Double r = new Rectangle2D.Double(x, y, width, height);
+        g.draw(r);
     }
 
     @Override
     public void fillRect(double x, double y, double width, double height) {
-        g.fillRect((int)x,(int)y,(int)width,(int)height);
+        Rectangle2D.Double r = new Rectangle2D.Double(x, y, width, height);
+        /*if(fill instanceof PatternPaint) {
+            PatternPaint pp = (PatternPaint) fill;
+            double a = GeomUtil.calcAngle(new Point(0,0),pp.getEnd());
+            a += Math.toRadians(45);
+            g.rotate(-a);
+            AffineTransform af = AffineTransform.getRotateInstance(a);
+            Shape r2 = af.createTransformedShape(r);
+            g.fill(r2);
+            g.rotate(a);
+        } else {*/
+            g.fill(r);
+        /*}*/
     }
 
     @Override
@@ -141,13 +197,14 @@ public class SwingGFX extends GFX {
     }
 
     @Override
-    public void pushMatrix() {
-        prevTransform = g.getTransform();
+    public void push() {
+        stateStack.push(new GFXState(g));
     }
 
     @Override
-    public void popMatrix() {
-        g.setTransform(prevTransform);
+    public void pop() {
+        GFXState s = stateStack.pop();
+        s.restore(g);
     }
 
     @Override
@@ -162,12 +219,14 @@ public class SwingGFX extends GFX {
 
     @Override
     public void fillOval(double x, double y, double width, double height) {
-        g.fillOval((int)x,(int)y,(int)width,(int)height);
+        Ellipse2D.Double o = new Ellipse2D.Double(x, y, width, height);
+        g.fill(o);
     }
 
     @Override
     public void drawOval(double x, double y, double width, double height) {
-        g.drawOval((int)x,(int)y,(int)width,(int)height);
+        Ellipse2D.Double o = new Ellipse2D.Double(x, y, width, height);
+        g.draw(o);
     }
 
     @Override
@@ -365,5 +424,18 @@ public class SwingGFX extends GFX {
     }
 
 
+    private class GFXState {
+        private AffineTransform oldTransform;
+        private Paint oldPaint;
 
+        public GFXState(Graphics2D g) {
+            this.oldTransform = g.getTransform();
+            this.oldPaint = g.getPaint();
+        }
+
+        public void restore(Graphics2D g) {
+            g.setTransform(oldTransform);
+            g.setPaint(oldPaint);
+        }
+    }
 }

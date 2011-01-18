@@ -53,7 +53,7 @@ public class ProgressBar extends Control {
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
         styleInfo = cssSkin.getStyleInfo(this, null);
-        barStyleInfo = cssSkin.getStyleInfo(this,null,"bar-");
+        barStyleInfo = cssSkin.getStyleInfo(this,null,"bar");
         setLayoutDirty();
     }
 
@@ -67,22 +67,22 @@ public class ProgressBar extends Control {
             setWidth(sizeInfo.width);
         }
         setHeight(sizeInfo.height);
-        barSizeInfo = cssSkin.getSizeInfo(this,barStyleInfo,"","bar-");
+        barSizeInfo = cssSkin.getSizeInfo(this,barStyleInfo,"");
     }
 
     @Override
     public void doLayout() {
         boxPainter = cssSkin.createBoxPainter(this, styleInfo, sizeInfo, "", CSSSkin.State.None);
-        barPainter = cssSkin.createBoxPainter(this, barStyleInfo, barSizeInfo, "", CSSSkin.State.None, "bar-");
+        barPainter = cssSkin.createBoxPainter(this, barStyleInfo, barSizeInfo, "", CSSSkin.State.None, "bar");
     }
     
 
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
-        boxPainter.draw(g,styleInfo,sizeInfo,this,"");
+        boxPainter.draw(g,styleInfo,sizeInfo,"");
         barSizeInfo.width = getWidth()*percentage;
-        barPainter.draw(g,barStyleInfo,barSizeInfo,this,"");
+        barPainter.draw(g,barStyleInfo,barSizeInfo,"");
     }
 
 

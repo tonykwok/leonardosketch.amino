@@ -423,12 +423,12 @@ public class JOGLGFX extends GFX {
     }
 
     @Override
-    public void pushMatrix() {
+    public void push() {
         gl.glPushMatrix();
     }
 
     @Override
-    public void popMatrix() {
+    public void pop() {
         gl.glPopMatrix();
     }
 
@@ -515,7 +515,7 @@ public class JOGLGFX extends GFX {
         //enable the texture
         image.texture.enable();
         gl.glEnable(GL.GL_BLEND);
-        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_DST_ALPHA);
         gl.glEnable(GL2.GL_ALPHA_TEST);
         gl.glAlphaFunc(GL.GL_GREATER, 0);
         gl.glEnable(GL.GL_TEXTURE_2D);
