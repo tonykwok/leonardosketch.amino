@@ -1,10 +1,9 @@
 package org.joshy.gfx.event;
 
+import java.awt.geom.Point2D;
+
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.NodeUtils;
-import org.joshy.gfx.stage.Stage;
-
-import java.awt.geom.Point2D;
 
 /**
 * Created by IntelliJ IDEA.
