@@ -111,6 +111,16 @@ public class FlatColor implements Paint {
         float[] comps = java.awt.Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), null);
         return comps[0]*360;
     }
+    public double getSaturation() {
+        java.awt.Color col = new java.awt.Color((float) getRed(), (float) getGreen(), (float) getBlue(), (float) getAlpha());
+        float[] comps = java.awt.Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), null);
+        return comps[1];
+    }
+    public double getBrightness() {
+        java.awt.Color col = new java.awt.Color((float) getRed(), (float) getGreen(), (float) getBlue(), (float) getAlpha());
+        float[] comps = java.awt.Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), null);
+        return comps[2];
+    }
 
     @Override
     public String toString() {
