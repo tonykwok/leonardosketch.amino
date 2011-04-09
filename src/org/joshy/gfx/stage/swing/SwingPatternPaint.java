@@ -52,7 +52,9 @@ public class SwingPatternPaint extends PatternPaint {
 
     @Override
     public Paint duplicate() {
-        return new SwingPatternPaint(image,getStart(),getEnd());
+        SwingPatternPaint paint = new SwingPatternPaint(image, getStart(), getEnd());
+        paint.relativeURL = this.relativeURL;
+        return paint;
     }
 
     @Override
