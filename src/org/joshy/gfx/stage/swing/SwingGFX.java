@@ -3,7 +3,6 @@ package org.joshy.gfx.stage.swing;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.GeomUtil;
 
 import javax.media.opengl.GLAutoDrawable;
 import java.awt.*;
@@ -40,8 +39,10 @@ public class SwingGFX extends GFX {
             TexturePaint tp = new TexturePaint(
                     pp.image,
                     new Rectangle2D.Double(
-                            pp.getStart().getX(),
-                            pp.getStart().getY(),len,len)
+                            pp.getStart().getX(),pp.getStart().getY(),
+                            pp.getEnd().getX()-pp.getStart().getX(),
+                            pp.getEnd().getY()-pp.getStart().getY()
+                    )
             );
             g.setPaint(tp);
         }
