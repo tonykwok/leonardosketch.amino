@@ -26,6 +26,13 @@ public abstract class MultiGradientFill implements Paint {
         return this;
     }
 
+    public MultiGradientFill removeStop(Stop stop) {
+        stop.fill = null;
+        this.stops.remove(stop);
+        sortStops();
+        return this;
+    }
+
     private void sortStops() {
         Collections.sort(this.stops);
     }
