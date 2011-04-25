@@ -111,7 +111,7 @@ public class OSUtil {
         }
     }
 
-    public static String getBaseStorageDir() {
+    public static String getBaseStorageDir(String appName) {
         String os = System.getProperty("os.name").toLowerCase();
         StringBuffer filepath = new StringBuffer(System.getProperty("user.home"));
         if(os.indexOf("windows xp") != -1) {
@@ -119,18 +119,32 @@ public class OSUtil {
             filepath.append("Local Settings");
             filepath.append(File.separator);
             filepath.append("Application Data");
+            filepath.append(File.separator);
+            filepath.append(appName);
+            filepath.append(File.separator);
         } else if (os.indexOf("vista") != -1) {
             filepath.append(File.separator);
             filepath.append("appdata");
             filepath.append(File.separator);
             filepath.append("locallow");
+            filepath.append(File.separator);
+            filepath.append(appName);
+            filepath.append(File.separator);
         } else if (os.startsWith("mac")) {
             filepath.append(File.separator);
             filepath.append("Library");
             filepath.append(File.separator);
             filepath.append("Preferences");
+            filepath.append(File.separator);
+            filepath.append(appName);
+            filepath.append(File.separator);
+        } else {
+            //if we don't know what OS it is then just use user.home followed by a .
+            filepath.append(File.separator);
+            filepath.append(".");
+            filepath.append(appName);
+            filepath.append(File.separator);
         }
-        filepath.append(File.separator);
         System.out.println("final base storage dir = " + filepath.toString());
       return filepath.toString();
     }

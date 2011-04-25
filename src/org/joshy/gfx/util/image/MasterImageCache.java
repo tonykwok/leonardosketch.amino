@@ -56,8 +56,8 @@ public class MasterImageCache {
     }
 
     private void initCache(String cacheName, boolean deleteOnStart) {
-        String BASE_DIR = "/tmp/FXImageCache";
-        BASE_DIR = org.joshy.gfx.util.OSUtil.getBaseStorageDir() + cacheName + File.separator;
+        String BASE_DIR = "/tmp/FXImageCache/";
+        BASE_DIR = org.joshy.gfx.util.OSUtil.getBaseStorageDir(cacheName);
         p("MasterImageCache: using dir: " + BASE_DIR);
         cacheDir = new File(BASE_DIR);
         if(deleteOnStart) {
