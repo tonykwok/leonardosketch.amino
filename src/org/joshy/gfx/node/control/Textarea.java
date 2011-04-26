@@ -22,6 +22,7 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
     private ScrollPane scrollParent;
     private double scrollX;
     private double scrollY;
+    private boolean sizeToText;
 
     public Textarea() {
         setWidth(100);
@@ -65,6 +66,24 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
             sizeInfo.width = getWidth();
             sizeInfo.height = getHeight();
         }
+
+        if(isSizeToText()) {
+            w = -1;
+            h = -1;
+            String[] strings = getText().split("\n");
+            double maxWidth = -1;
+            double maxHeight = 0;
+            for(String s : strings) {
+                maxWidth = Math.max(maxWidth,getFont().calculateWidth(s));
+                maxHeight += getFont().getAscender();
+                maxHeight += getFont().getLeading();
+                maxHeight += getFont().getDescender();
+            }
+            sizeInfo.width = maxWidth + insets.getLeft()+insets.getRight();
+            sizeInfo.height = maxHeight + insets.getTop() + insets.getBottom();
+            setHeight(sizeInfo.height + insets.getTop() + insets.getBottom());
+        }
+
         CSSSkin.State state = CSSSkin.State.None;
         if(isFocused()) {
             state = CSSSkin.State.Focused;
@@ -73,6 +92,7 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
         CSSMatcher matcher = CSSSkin.createMatcher(this, state);
         selectionColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"selection-color"));
         cursorColor = new FlatColor(cssSkin.getCSSSet().findColorValue(matcher,"cursor-color"));
+
     }
 
     @Override
@@ -216,5 +236,13 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
     @Override
     public void setScrollParent(ScrollPane scrollPane) {
         this.scrollParent = scrollPane;
+    }
+
+    public void setSizeToText(boolean sizeToText) {
+        this.sizeToText = sizeToText;
+    }
+
+    public boolean isSizeToText() {
+        return sizeToText;
     }
 }
