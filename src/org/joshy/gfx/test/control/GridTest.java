@@ -3,10 +3,16 @@ package org.joshy.gfx.test.control;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.Event;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.SystemMenuEvent;
+import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.Label;
+import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 
 /**
@@ -27,6 +33,11 @@ public class GridTest implements Runnable {
     }
     
     public void run() {
+        EventBus.getSystem().addListener(SystemMenuEvent.Quit,new Callback<Event>() {
+            public void call(Event event) throws Exception {
+                System.exit(0);
+            }
+        });
 
         Stage stage = Stage.createStage();
 
@@ -44,6 +55,9 @@ public class GridTest implements Runnable {
                 .addControl(new Button("pixels"))
                 ;
         widthHeight.setFill(FlatColor.WHITE);
+        widthHeight.debug(true);
+
+        /*
         TitleBorderPanel title1 = new TitleBorderPanel(widthHeight);
         GridBox docSize = new GridBox()
                 .createColumn(70, GridBox.Align.Right)
@@ -85,8 +99,9 @@ public class GridTest implements Runnable {
                 ;
         master.debug(false);
         master.setFill(FlatColor.YELLOW);            
-
         stage.setContent(master);
+        */
+        stage.setContent(widthHeight);
 
     }
 
