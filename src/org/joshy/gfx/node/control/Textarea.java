@@ -126,9 +126,9 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
         //set a new clip
         Bounds oldClip = g.getClipRect();
         g.setClipRect(new Bounds(
-                styleInfo.margin.getLeft()+styleInfo.borderWidth.getLeft(),
+                insets.getLeft(),
                 insets.getTop(),
-                getWidth() - insets.getLeft() - insets.getRight(),
+                getWidth() - insets.getLeft() - insets.getRight() + 1, //+1 for the cursor width
                 getHeight()-insets.getTop()-insets.getBottom()));
 
         //draw the text
@@ -217,7 +217,7 @@ public class Textarea extends TextControl implements ScrollPane.ScrollingAware{
 
     @Override
     public double getFullHeight(double width, double height) {
-        _layout_model.layout(width,height);
+        _layout_model.layout(width, height);
         Insets insets = styleInfo.calcContentInsets();
         double h =  _layout_model.calculatedHeight()+insets.getTop()+insets.getBottom();
         return h;

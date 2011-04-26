@@ -37,6 +37,7 @@ public class TextareaTest implements Runnable {
 //final Textarea ta = new Textarea("hello there! hello there! how are you doing today mister man?");
         final Textarea ta = new Textarea("Hello There");
         ta.setFont(Font.name("ChunkFive").size(100).resolve());
+        ta.setSizeToText(true);
         //ta.setSize
         stage.setContent(new Panel().add(ta));
         stage.setWidth(800);
