@@ -2,8 +2,12 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.node.control.ScrollPane;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.Event;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.SystemMenuEvent;
 import org.joshy.gfx.node.control.Textarea;
+import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.stage.Stage;
 
 /**
@@ -22,10 +26,20 @@ public class TextareaTest implements Runnable {
 
     @Override
     public void run() {
+        EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<Event>() {
+            @Override
+            public void call(Event event) throws Exception {
+                System.exit(0);
+            }
+        });
         Stage stage = Stage.createStage();
         //stage.setContent(g);
-        final Textarea ta = new Textarea("hello there! hello there! how are you doing today mister man?");
-        ta.setFont(Font.name("Arial").size(50).resolve());
-        stage.setContent(new ScrollPane(ta));
+//final Textarea ta = new Textarea("hello there! hello there! how are you doing today mister man?");
+        final Textarea ta = new Textarea("Hello There");
+        ta.setFont(Font.name("ChunkFive").size(100).resolve());
+        //ta.setSize
+        //stage.setContent(new ScrollPane(ta));
+        stage.setContent(new Panel().add(ta));
+        stage.setWidth(800);
     }
 }

@@ -56,6 +56,7 @@ public class Text implements Runnable {
             Textbox tb = new Textbox();
             tb.setTranslateX(20);
             tb.setTranslateY(50);
+            tb.setFont(Font.name("ChunkFive").size(50).resolve());
             tb.setText("typing");
             p.add(tb);
 
