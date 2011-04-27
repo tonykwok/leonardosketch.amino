@@ -4,6 +4,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.Container;
+import org.joshy.gfx.util.u;
 
 /**
  * The SpinBox is a small text box with up and down buttons that let the user
@@ -17,9 +18,11 @@ public class SpinBox<E extends Number> extends Container {
     private Label label;
     private Button incrementButton;
     private Button decrementButton;
+    private E minValue;
+    private E maxValue;
 
     public SpinBox() {
-        valueBox = new SpinBoxBox();
+        valueBox = new SpinBoxBox(this);
         valueBox.setText(""+value);
         valueBox.setPrefWidth(50);
         this.label = new Label("");
@@ -32,16 +35,12 @@ public class SpinBox<E extends Number> extends Container {
         incrementButton.onClicked(new Callback<ActionEvent>(){
                 public void call(ActionEvent actionEvent) {
                     increment(1);
-                    valueBox.setText(""+value);
-                    fireUpdate();
                 }
             });
         this.add(decrementButton);
         decrementButton.onClicked(new Callback<ActionEvent>(){
                 public void call(ActionEvent actionEvent) {
                     increment(-1);
-                    valueBox.setText(""+value);
-                    fireUpdate();
                 }
             });
 
@@ -57,6 +56,12 @@ public class SpinBox<E extends Number> extends Container {
                 fireUpdate();
             }
         });
+        EventBus.getSystem().addListener(valueBox, ScrollEvent.ScrollAll, new Callback<ScrollEvent>(){
+            @Override
+            public void call(ScrollEvent event) throws Exception {
+                increment(-event.getAmount());
+            }
+        });
 
         setWidth(100);
         setHeight(100);
@@ -69,13 +74,26 @@ public class SpinBox<E extends Number> extends Container {
 
     private void increment(int i) {
         if(value instanceof Integer) {
-            int v = value.intValue() + i;
-            value = (E) new Integer(v);
+            incrementInteger((Integer) value, (Integer) minValue, (Integer) maxValue, i);
         }
         if(value instanceof Double) {
-            double v = value.doubleValue() +i;
-            value = (E) new Double(v);
+            incrementDouble((Double) value, (Double) minValue, (Double) maxValue, i);
         }
+        valueBox.setText(""+value);
+        fireUpdate();
+    }
+
+    private void incrementInteger(Integer value, Integer minValue, Integer maxValue, int i) {
+        int v = value + i;
+        if(minValue != null && v < minValue) v = minValue;
+        if(maxValue != null && v > maxValue) v = maxValue;
+        this.value = (E) new Integer(v);
+    }
+    private void incrementDouble(Double value, Double minValue, Double maxValue, int i) {
+        double v = value + i;
+        if(minValue != null && v < minValue) v = minValue;
+        if(maxValue != null && v > maxValue) v = maxValue;
+        this.value = (E) new Double(v);
     }
 
     public SpinBox<E> setLabel(String text) {
@@ -155,6 +173,24 @@ public class SpinBox<E extends Number> extends Container {
 //        g.setOpacity(1.0);
     }
 
+    public E getMinValue() {
+        return minValue;
+    }
+
+    public SpinBox<E> setMinValue(E minValue) {
+        this.minValue = minValue;
+        return this;
+    }
+
+    public E getMaxValue() {
+        return maxValue;
+    }
+
+    public SpinBox<E> setMaxValue(E maxValue) {
+        this.maxValue = maxValue;
+        return this;
+    }
+
 
     private static class SpinButton extends Button {
         private boolean top;
@@ -171,8 +207,25 @@ public class SpinBox<E extends Number> extends Container {
     }
 
     private static class SpinBoxBox extends Textbox {
-        private SpinBoxBox() {
+        private SpinBox box;
+
+        private SpinBoxBox(SpinBox box) {
+            this.box = box;
             cssClasses.add("-SpinButton-box");
+        }
+
+        //override to handle up and down specially
+        @Override
+        protected void processKeyEvent(KeyEvent event) {
+            if(event.getKeyCode() == KeyEvent.KeyCode.KEY_UP_ARROW) {
+                box.increment(1);
+                return;
+            }
+            if(event.getKeyCode() == KeyEvent.KeyCode.KEY_DOWN_ARROW) {
+                box.increment(-1);
+                return;
+            }
+            super.processKeyEvent(event);
         }
     }
 }
