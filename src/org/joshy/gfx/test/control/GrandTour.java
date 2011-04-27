@@ -77,7 +77,11 @@ public class GrandTour implements Runnable {
                 tb.setPrefWidth(150);
                 Passwordbox passbox = new Passwordbox();
                 passbox.setText("password");
-                SpinBox<Integer> spinBox = new SpinBox<Integer>().setValue(99);
+                SpinBox<Integer> spinBox = new SpinBox<Integer>()
+                        .setValue(5)
+                        .setMinValue(0)
+                        .setMaxValue(10);
+                        ;
 
                 Textbox searchbox = new Textbox("searchbox");
                 searchbox.setId("searchbox");
