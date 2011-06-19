@@ -132,7 +132,7 @@ public class TreeView<T,S> extends TableView{
         public int getColumnCount();
         public int getRowCount();
         public boolean hasChildren(T node);
-        public Iterable<T> getChildren(T node);
+        public Iterable<? extends T> getChildren(T node);
         public boolean isCollapsed(T node);
         public S getColumnHeader(int column);
         public void toggleRow(int row);
@@ -167,8 +167,10 @@ public class TreeView<T,S> extends TableView{
         private int countBreadth(T root) {
             int count = 1;
             if(!collapsedSet.contains(root)) {
-                for(T n : getChildren(root)) {
-                    count += countBreadth(n);
+                if(hasChildren(root)) {
+                    for(T n : getChildren(root)) {
+                        count += countBreadth(n);
+                    }
                 }
             }
             return count;
@@ -177,10 +179,12 @@ public class TreeView<T,S> extends TableView{
         public int getDepth(T root, Count row) {
             if(row.value == 0) return 1;
             if(!collapsedSet.contains(root)) {
-                for(T n : getChildren(root)) {
-                    row.value--;
-                    int d = getDepth(n,row);
-                    if(d >= 0) return d+1;
+                if(hasChildren(root)) {
+                    for(T n : getChildren(root)) {
+                        row.value--;
+                        int d = getDepth(n,row);
+                        if(d >= 0) return d+1;
+                    }
                 }
             }
             return -1;
@@ -189,10 +193,12 @@ public class TreeView<T,S> extends TableView{
         private T findNodeAtRow(T root, Count row) {
             if(row.value == 0) return root;
             if(!collapsedSet.contains(root)) {
-                for(T n : getChildren(root)) {
-                    row.value--;
-                    T result = findNodeAtRow(n, row);
-                    if(result != null) return result;
+                if(hasChildren(root)) {
+                    for(T n : getChildren(root)) {
+                        row.value--;
+                        T result = findNodeAtRow(n, row);
+                        if(result != null) return result;
+                    }
                 }
             }
             return null;
