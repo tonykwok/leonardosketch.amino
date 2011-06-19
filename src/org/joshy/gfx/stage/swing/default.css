@@ -244,13 +244,12 @@
 /* =========== scroll bars ========== */
 .-class-Scrollbar {
     width: 100px;
-    height: 20px;
+    height: 14px;
     margin: 0px;
     padding: 0px;
     border-width: 1px;
     border-color: #000000;
-    background-color: #a0a0a0;
-    background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    background-color: #e0e0e0;
     border-radius: 0px;
 }
 
@@ -258,30 +257,25 @@
     background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     background-color: #888888;
     border-color: #666666;
-    border-radius: 18px;
+    border-radius: 12px;
     border-width: 1px;
-    margin: 1px 0px 1px 0px;
+    margin: 0px 0px 1px 0px;
 }
 .-class-Scrollbar::track {
-    /*background: linear-gradient(center top, #ffffff 0%, #808080 100%);*/
     background-color: #a0a0a0;
-    background: linear-gradient(center top, #808080 0%, #ffffff 100%);
+    background: linear-gradient(center top, #b0b0b0 0%, #ffffff 100%);
     border-color: #000000;
-    border-radius: 18px;
+    border-radius: 12px;
     border-width: 0px;
     margin: 1px 0px 0px 0px;
 }
 .-class-Scrollbar::left-arrow{
-    background-color: #a0a0a0;
-    background: linear-gradient(center top, #ffffff 0%, #808080 100%);
-    border-color: red;
+    border-color: #a0a0a0;
     border-width: 0px;
     border-radius: 0px;
     margin: 1px;
 }
 .-class-Scrollbar::right-arrow {
-    background-color: #a0a0a0;
-    background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     border-color: #a0a0a0;
     border-width: 0px;
     border-radius: 0px;
@@ -289,15 +283,12 @@
 }
 
 .-class-Scrollbar:vertical {
-    width: 20px;
+    width: 14px;
     height: 100px;
-    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
 }
 .-class-Scrollbar:vertical::left-arrow {
-    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
 }
 .-class-Scrollbar:vertical::right-arrow {
-    background: linear-gradient(left center, #ffffff 0%, #808080 100%);
 }
 .-class-Scrollbar:vertical::thumb {
     background: linear-gradient(left center, #ffffff 0%, #808080 100%);

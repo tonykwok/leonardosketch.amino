@@ -30,7 +30,7 @@ public class Scrollbar extends Control {
     private double largeScroll = 20;
 
     protected boolean vertical = false;
-    double arrowLength = 20;
+    double arrowLength = 15;
     double thumbLength = 20;
     private boolean thumbPressed = false;
     private boolean isProportional = false;
@@ -249,11 +249,11 @@ public class Scrollbar extends Control {
         //draw the arrows
         g.setPaint(new FlatColor(0x303030));
         if(isVertical()) {
-            GraphicsUtil.fillUpArrow(g,4,4,12);
-            GraphicsUtil.fillDownArrow(g,4,getHeight()-3-12,12);
+            GraphicsUtil.fillUpArrow(g,2,2,10);
+            GraphicsUtil.fillDownArrow(g,2,getHeight()-2-10,10);
         } else {
-            GraphicsUtil.fillLeftArrow(g,2,4,12);
-            GraphicsUtil.fillRightArrow(g,getWidth()-2-12,4,12);
+            GraphicsUtil.fillLeftArrow(g,2,2,10);
+            GraphicsUtil.fillRightArrow(g,getWidth()-2-10,2,10);
         }
     }
 
