@@ -2,6 +2,7 @@ package org.joshy.gfx.draw;
 
 import org.joshy.gfx.stage.swing.SwingGFX;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -25,6 +26,14 @@ public class ImageBuffer {
     public void apply(Effect effect) {
         effect.apply(this);
         //To change body of created methods use File | Settings | File Templates.
+    }
+
+    public void clear() {
+        Graphics2D g2 = buf.createGraphics();
+        g2.setComposite(AlphaComposite.Clear);
+        g2.fillRect(0,0,buf.getWidth(),buf.getHeight());
+        g2.setComposite(AlphaComposite.SrcOver);
+        g2.dispose();
     }
 
     public GFX getGFX() {

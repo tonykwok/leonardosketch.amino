@@ -220,6 +220,7 @@ public class SwatchColorPicker extends Button {
     }
 
     public void setSelectedColor(FlatColor flatColor) {
+        if(selectedColor != null && selectedColor.equals(flatColor)) return;
         selectedColor = flatColor;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ColorChanged,selectedColor,this));
         setDrawingDirty();

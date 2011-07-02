@@ -26,6 +26,9 @@ public class SwingGFX extends GFX {
         stateStack = new ArrayDeque<GFXState>();
     }
 
+    public Object getNative() {
+        return this.g;
+    }
     @Override
     public void setPaint(org.joshy.gfx.draw.Paint paint) {
         this.fill = paint;
