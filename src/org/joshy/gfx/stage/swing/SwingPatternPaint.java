@@ -48,6 +48,15 @@ public class SwingPatternPaint extends PatternPaint {
     public SwingPatternPaint(BufferedImage img, String relativeURL) {
         this.image = img;
         this.relativeURL = relativeURL;
+        this.start = new Point2D.Double(0,0);
+        this.end = new Point2D.Double(image.getWidth(),image.getHeight());
+    }
+
+    public SwingPatternPaint(BufferedImage img, int width, int height) {
+        this.image = img;
+        this.relativeURL = null;
+        this.start = new Point2D.Double(0,0);
+        this.end = new Point2D.Double(width,height);
     }
 
     @Override
