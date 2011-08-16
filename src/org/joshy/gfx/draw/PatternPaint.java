@@ -46,6 +46,14 @@ public abstract class PatternPaint implements Paint {
         }
     }
 
+    public static PatternPaint create(BufferedImage img, int width, int height) throws IOException {
+        if(Core.getShared().isUseJOGL()) {
+            return new JOGLPatternPaint(img, null);
+        } else {
+            return new SwingPatternPaint(img,width,height);
+        }
+    }
+
     public abstract Point2D getStart();
     public abstract Point2D getEnd();
 
