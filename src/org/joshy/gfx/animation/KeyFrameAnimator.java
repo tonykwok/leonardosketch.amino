@@ -27,6 +27,7 @@ public class KeyFrameAnimator implements Animateable {
     private int repeat = 1;
     private int count = 0;
     private boolean done = false;
+    private AnimationDriver driver;
 
     public KeyFrameAnimator(Object target) {
         this.keyFrames = new ArrayList<KeyFrame>();
@@ -146,7 +147,11 @@ public class KeyFrameAnimator implements Animateable {
     }
 
     public void start() {
-        new AnimationDriver(this).start();
+        driver = new AnimationDriver(this);
+        driver.start();
+    }
+    public void stop() {
+        this.done = true;
     }
 
     public KeyFrameAnimator repeat(int repeat) {
