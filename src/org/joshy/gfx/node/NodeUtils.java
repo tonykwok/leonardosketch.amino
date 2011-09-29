@@ -19,6 +19,11 @@ public class NodeUtils {
         return convertToScene(node, pt.getX(), pt.getY());
     }
 
+    public static Bounds convertToScene(Node node, Bounds bounds) {
+        Point2D pt = convertToScene(node, bounds.getX(), bounds.getY());
+        return new Bounds(pt.getX(),pt.getY(),bounds.getWidth(),bounds.getHeight());
+    }
+
     public static Point2D convertFromScene(Node node, Point2D point2D) {
         double x = point2D.getX();
         double y=  point2D.getY();
