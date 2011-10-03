@@ -1,7 +1,5 @@
 package org.joshy.gfx.draw;
 
-import org.joshy.gfx.util.u;
-
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
@@ -17,6 +15,7 @@ public class Font {
         this.fnt = rootFont.deriveFont(size);
         this.name = name;
         this.size = size;
+        graphics = img.createGraphics();
     }
 
     public static FontBuilder fromURL(URL url) {
