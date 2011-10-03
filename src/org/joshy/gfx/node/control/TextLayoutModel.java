@@ -27,6 +27,9 @@ public class TextLayoutModel {
     }
 
     public LayoutLine line(int i) {
+        if(i > lines.size()-1) {
+            return lines.get(0);
+        }
         return lines.get(i);
     }
 

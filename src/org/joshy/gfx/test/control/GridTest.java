@@ -7,13 +7,17 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SystemMenuEvent;
-import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,6 +37,17 @@ public class GridTest implements Runnable {
     }
     
     public void run() {
+        InputStream stream = MailApp.class.getResourceAsStream("gridtest.css");
+        URL uri = MailApp.class.getResource("gridtest.css");
+        try {
+            Core.getShared().loadCSS(stream,uri);
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (URISyntaxException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+
         EventBus.getSystem().addListener(SystemMenuEvent.Quit,new Callback<Event>() {
             public void call(Event event) throws Exception {
                 System.exit(0);
@@ -41,18 +56,21 @@ public class GridTest implements Runnable {
 
         Stage stage = Stage.createStage();
 
+        Textbox tb1 = new Textbox("1024");
+        tb1.addCSSClass("rgbbox");
+        u.p("layout bounds = " + tb1.getLayoutBounds());
         GridBox widthHeight = new GridBox()
-                .setPadding(5)
-                .createColumn(70, GridBox.Align.Right)
+                .setPadding(0)
+                .createColumn(70, GridBox.Align.Fill)
+                .createColumn(100, GridBox.Align.Fill)
                 .createColumn(100, GridBox.Align.Left)
-                .createColumn(100, GridBox.Align.Left)
-                .addControl(new Label("Width:"))
-                .addControl(new Textbox("1024"))
-                .addControl(new Button("pixels"))
+                //.addControl(new Label("Width:"))
+                .addControl(tb1)
+                //.addControl(new Button("pixels"))
                 .nextRow()
-                .addControl(new Label("Height:"))
-                .addControl(new Textbox("768"))
-                .addControl(new Button("pixels"))
+                //.addControl(new Label("Height:"))
+                .addControl(new Textbox("768").addCSSClass("rgbbox"))
+                //.addControl(new Button("pixels"))
                 ;
         widthHeight.setFill(FlatColor.WHITE);
         widthHeight.debug(true);
