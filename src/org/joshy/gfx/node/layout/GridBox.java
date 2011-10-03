@@ -3,7 +3,6 @@ package org.joshy.gfx.node.layout;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.util.u;
 
@@ -62,16 +61,19 @@ public class GridBox extends Panel {
         return this;
     }
 
+    /*
     @Override
     public Panel add(Node... nodes) {
         for(Node n : nodes) {
             if(n instanceof Control) {
-                currentRow.controls.add((Control)n);
+                //currentRow.controls.add((Control)n);
             }
         }
         return super.add(nodes);
     }
 
+    */
+    /*
     @Override
     public Container add(Node node) {
         if(node instanceof Control) {
@@ -80,6 +82,7 @@ public class GridBox extends Panel {
         return super.add(node);
     }
 
+    */
     public GridBox addControl(Control ... controls) {
         currentRow.controls.addAll(Arrays.asList(controls));
         super.add(controls);
