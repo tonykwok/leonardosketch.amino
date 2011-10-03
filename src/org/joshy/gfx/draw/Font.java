@@ -3,19 +3,35 @@ package org.joshy.gfx.draw;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 
 public class Font {
     private Weight weight = Weight.Regular;
     public static final Font DEFAULT = Font.name("Open Sans").size(12).resolve();
+    boolean custom = false;
+    private File file = null;
+    private URL url = null;
 
     Font(java.awt.Font rootFont, String name, float size) {
         this.fnt = rootFont.deriveFont(size);
         this.name = name;
         this.size = size;
         graphics = img.createGraphics();
+    }
+
+    public boolean isCustom() {
+        return custom;
+    }
+
+    public InputStream getInputStream() throws IOException {
+        if(file != null) {
+            return new FileInputStream(file);
+        }
+        if(url != null) {
+            return url.openStream();
+        }
+        return null;
     }
 
     public static FontBuilder fromURL(URL url) {
@@ -48,6 +64,8 @@ public class Font {
         this.vector = vector;
         this.weight = weight;
         graphics = img.createGraphics();
+        this.file = file;
+        this.url = url;
         int w = java.awt.Font.PLAIN;
         if(weight == Weight.Bold) {
             w = java.awt.Font.BOLD;

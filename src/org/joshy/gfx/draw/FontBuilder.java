@@ -85,12 +85,14 @@ public class FontBuilder {
     public Font resolve() {
         initCache();
         //load from file to get the name
+
+        boolean custom = false;
         if(file != null) {
             try {
                 java.awt.Font fnt = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,file);
                 name = fnt.getFontName();
                 customRootFontCache.put(name,fnt);
-                //System.out.println("loaded font from file : " + file.getAbsolutePath() + " name = " + name);
+                custom = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -101,14 +103,13 @@ public class FontBuilder {
                 java.awt.Font fnt = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,url.openStream());
                 name = fnt.getFontName();
                 customRootFontCache.put(name,fnt);
-                //System.out.println("loaded font from url : " + url + " name = " + name);
+                custom = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         String key = "Font:"+this.name+":"+size+":"+weight+":"+style+":".intern();
-        //u.p("searching for font " + key);
         if(cache.containsKey(key)) {
             return cache.get(key);
         }
@@ -119,6 +120,7 @@ public class FontBuilder {
             //u.p("pulling from styled font cache: " + styledKey);
             java.awt.Font rootFont = styledFontCache.get(styledKey);
             Font font = new Font(rootFont,this.name,size);
+            font.custom = custom;
             cache.put(key,font);
             return font;
         }
@@ -126,9 +128,11 @@ public class FontBuilder {
         Font font = null;
         if(Core.getShared().isUseJOGL()) {
             font = new JOGLFont(name,size,vector,file);
+            font.custom = true;
         } else {
             //u.p("creating new with: " + name + " " + size + " " + vector + " " + weight + " " + style + " " + file + " " + url);
             font = new Font(name,size,vector,weight,style,file,url);
+            font.custom = true;
         }
         cache.put(key,font);
         return font;
