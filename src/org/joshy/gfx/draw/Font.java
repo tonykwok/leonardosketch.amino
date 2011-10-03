@@ -11,11 +11,20 @@ import java.net.URL;
 
 public class Font {
     private Weight weight = Weight.Regular;
-    private Style style;
-    public static final Font DEFAULT = Font.name("Arial").size(12).resolve();
+    public static final Font DEFAULT = Font.name("Open Sans").size(12).resolve();
+
+    Font(java.awt.Font rootFont, String name, float size) {
+        this.fnt = rootFont.deriveFont(size);
+        this.name = name;
+        this.size = size;
+    }
 
     public static FontBuilder fromURL(URL url) {
         return new FontBuilder(url);
+    }
+
+    public static void registerFont(URL url, String name, Weight weight, Style style) throws IOException, FontFormatException {
+        FontBuilder.registerFont(url.openStream(),name,weight,style);
     }
 
     public enum Weight {
@@ -33,15 +42,12 @@ public class Font {
     private Graphics2D graphics;
     protected java.awt.Font fnt;
     protected boolean vector = false;
-    private File file;
 
     protected Font(String name, float size, boolean vector, Weight weight, Style style, File file, URL url) {
         this.name = name;
         this.size = size;
-        this.file = file;
         this.vector = vector;
         this.weight = weight;
-        this.style = style;
         graphics = img.createGraphics();
         int w = java.awt.Font.PLAIN;
         if(weight == Weight.Bold) {
@@ -72,16 +78,13 @@ public class Font {
                 e.printStackTrace();
             }
         } else if(FontBuilder.customRootFontCache.containsKey(name)) {
+            //u.p("generating out of the root cache");
             fnt = FontBuilder.customRootFontCache.get(name);
             fnt = fnt.deriveFont((float)size);
             fnt = fnt.deriveFont(w|s);
         } else {
             fnt = new java.awt.Font(getName(),w|s, (int)size);
         }
-//        String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-//        for(String na : names) {
-//            u.p("jogltext.font name = " + na);
-//        }
     }
     protected Font(String name, float size, File file) {
         this(name,size,false,Weight.Regular, Style.Regular, file, null);
