@@ -144,7 +144,7 @@ public class GridBox extends Panel {
                 maxHeight = Math.max(maxHeight,bounds.getHeight()+padding);
                 double baseline = (bounds.getY()+bounds.getHeight()) - bounds.getY();
                 maxBaseline = Math.max(maxBaseline,baseline);
-//                u.p("control " + c + " height = " + c.getHeight() + " vs " + c.getLayoutBounds() + " baseline = " + baseline);
+                //u.p("control " + c + " height = " + c.getHeight() + " vs " + c.getLayoutBounds() + " baseline = " + baseline);
             }
             //now really lay out the controls
             for(int i=0; i<row.controls.size(); i++) {

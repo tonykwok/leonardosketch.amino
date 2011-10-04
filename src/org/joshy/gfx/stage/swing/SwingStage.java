@@ -3,7 +3,9 @@ package org.joshy.gfx.stage.swing;
 import com.sun.awt.AWTUtilities;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.FocusManager;
+import org.joshy.gfx.event.SystemMenuEvent;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.Parent;
@@ -18,12 +20,18 @@ import org.joshy.gfx.util.u;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.InputMethodListener;
 import java.awt.font.TextHitInfo;
 import java.awt.im.InputMethodRequests;
+import java.io.File;
+import java.io.IOException;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
+import java.util.List;
 
 public class SwingStage extends Stage {
     private JFrame frame;
@@ -446,6 +454,7 @@ public class SwingStage extends Stage {
                 }
             };
             enableInputMethods(true);
+            this.setTransferHandler(new FileDropTransferHandler());
         }
 
         @Override
@@ -506,6 +515,36 @@ public class SwingStage extends Stage {
             root.draw(gfx);
             gfx.dispose();
             PerformanceTracker.getInstance().drawEnd();
+        }
+
+        private class FileDropTransferHandler extends TransferHandler {
+            @Override
+            public boolean canImport(TransferSupport transferSupport) {
+                //u.p("can import called ");
+                //u.p("can do file drop: " + transferSupport.isDataFlavorSupported(DataFlavor.javaFileListFlavor));
+                //u.p("flavors = "); u.p(transferSupport.getDataFlavors());
+                return transferSupport.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
+            }
+
+            @Override
+            public boolean importData(TransferSupport transferSupport) {
+                //u.p("doing drop");
+                Transferable tf = transferSupport.getTransferable();
+                try {
+                    Object data = tf.getTransferData(DataFlavor.javaFileListFlavor);
+                    //u.p("data = " + data);
+                    List<File> files = (List<File>) data;
+                    //u.p("files = " + files);
+                    //u.p(files);
+                    SystemMenuEvent event = new SystemMenuEvent(SystemMenuEvent.FileDrop,SwingStage.this,files);
+                    EventBus.getSystem().publish(event);
+                } catch (UnsupportedFlavorException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                return true;
+            }
         }
     }
 
