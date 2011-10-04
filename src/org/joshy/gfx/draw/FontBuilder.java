@@ -2,6 +2,7 @@ package org.joshy.gfx.draw;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.stage.jogl.JOGLFont;
+import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.io.File;
@@ -40,6 +41,7 @@ public class FontBuilder {
             URL url3 = FontBuilder.class.getResource("/org/joshy/gfx/stage/swing/fonts/OpenSans-Italic.ttf");
             Font.registerFont(url3,"Open Sans",Font.Weight.Regular,Font.Style.Italic);
             URL url4 = FontBuilder.class.getResource("/org/joshy/gfx/stage/swing/fonts/OpenSans-BoldItalic.ttf");
+            u.p("bold italic url = " + url4);
             Font.registerFont(url4,"Open Sans",Font.Weight.Bold,Font.Style.Italic);
             URL url = FontBuilder.class.getResource("/org/joshy/gfx/stage/swing/fonts/OpenSans-Regular.ttf");
             Font.registerFont(url,"Open Sans",Font.Weight.Regular,Font.Style.Regular);
