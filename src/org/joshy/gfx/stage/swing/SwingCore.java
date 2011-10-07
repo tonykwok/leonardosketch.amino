@@ -44,7 +44,11 @@ public class SwingCore extends Core {
 
     public SwingCore() {
         super();
+        try {
         initOSHooks();
+        } catch (Throwable thr) {
+            thr.printStackTrace();
+        }
     }
 
     private void initOSHooks() {
