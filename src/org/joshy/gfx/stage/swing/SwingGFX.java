@@ -280,24 +280,26 @@ public class SwingGFX extends GFX {
 
     @Override
     public void drawPolygon(double[] points, boolean closed) {
-        Polygon p = new Polygon();
-        for(int i=0; i<points.length; i+=2) {
-            p.addPoint((int)points[i],(int)points[i+1]);
+        if(points.length < 2) return;
+        Path2D.Double p = new Path2D.Double();
+        p.moveTo(points[0],points[1]);
+        for(int i=2; i<points.length; i+=2) {
+            p.lineTo(points[i],points[i+1]);
         }
         if(closed) {
-            g.drawPolygon(p.xpoints,p.ypoints,p.npoints);
-        } else {
-            g.drawPolyline(p.xpoints,p.ypoints,p.npoints);
+            p.lineTo(points[0],points[1]);
         }
+        g.draw(p);
     }
 
     @Override
     public void fillPolygon(double[] points) {
-        Polygon p = new Polygon();
-        for(int i=0; i<points.length; i+=2) {
-            p.addPoint((int)points[i],(int)points[i+1]);
+        Path2D.Double p = new Path2D.Double();
+        p.moveTo(points[0],points[1]);
+        for(int i=2; i<points.length; i+=2) {
+            p.lineTo(points[i],points[i+1]);
         }
-        g.fillPolygon(p);
+        g.fill(p);
     }
 
     @Override
