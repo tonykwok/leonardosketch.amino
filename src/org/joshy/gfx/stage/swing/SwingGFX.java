@@ -64,7 +64,7 @@ public class SwingGFX extends GFX {
             java.awt.Color[] colors = new java.awt.Color[stops.size()];
             for(int i=0; i<stops.size(); i++) {
                 positions[i] = (float) stops.get(i).getPosition();
-                colors[i] = new java.awt.Color(stops.get(i).getColor().getRGBA());
+                colors[i] = new java.awt.Color(stops.get(i).getColor().getRGBA(),true);
             }
             if(grad instanceof RadialGradientFill) {
                 RadialGradientFill rad = (RadialGradientFill) grad;
