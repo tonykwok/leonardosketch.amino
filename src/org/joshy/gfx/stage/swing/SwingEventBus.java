@@ -21,6 +21,7 @@ public class SwingEventBus extends EventBus {
     protected void invokeLater(final Event event) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                processQueuedEvents();
                 processEvents(event);
             }
         });
