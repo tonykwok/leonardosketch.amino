@@ -242,6 +242,7 @@ public class Button extends Control {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+        setSkinDirty();
         setDrawingDirty();
     }
 
