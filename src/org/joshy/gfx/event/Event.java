@@ -9,6 +9,7 @@ package org.joshy.gfx.event;
 */
 public class Event {
     protected EventType type;
+    public boolean defer;
 
     public Event(EventType type) {
         this.type = type;

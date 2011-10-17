@@ -16,6 +16,7 @@ public class EventBus {
     private Map<MatchRule,List<Callback>> callbacks = new HashMap<MatchRule,List<Callback>>();
     private static EventBus system;
     private Node pressedNode;
+    protected List<Event> queue = new ArrayList<Event>();
 
     public static EventBus getSystem() {
         if(system == null) {
@@ -64,13 +65,29 @@ public class EventBus {
         invokeLater(event);
     }
 
+    public void publishDeferred(FileOpenEvent evt) {
+        evt.defer = true;
+        invokeLater(evt);
+    }
+
     //subclass can override to implement true invokeLater functionality
     protected void invokeLater(Event event) {
+        processQueuedEvents();
         processEvents(event);
+    }
+
+    protected void processQueuedEvents() {
+        if(queue.isEmpty()) return;
+        List<Event> buffer = new ArrayList<Event>(queue);
+        queue.clear();
+        for(Event event : buffer) {
+            processEvents(event);
+        }
     }
 
     //process the specified event. subclasses can override
     protected void processEvents(Event event) {
+        boolean called = false;
         Map<MatchRule, List<Callback>> callbackMap = new HashMap<MatchRule, List<Callback>>();
         callbackMap.putAll(callbacks);
         for(MatchRule rule : callbackMap.keySet()) {
@@ -82,6 +99,7 @@ public class EventBus {
                 for(Callback cb : callbacks.get(rule)) {
                     try {
                         cb.call(event);
+                        called = true;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -107,6 +125,10 @@ public class EventBus {
             processContainerScope(event);
         }
         event.finished();
+        if(!called && event.defer) {
+            u.p("event never used: " + event);
+            queue.add(event);
+        }
     }
 
     //TODO: this method needs to be made recursive

@@ -44,11 +44,6 @@ public class SwingCore extends Core {
 
     public SwingCore() {
         super();
-        try {
-        initOSHooks();
-        } catch (Throwable thr) {
-            thr.printStackTrace();
-        }
     }
 
     private void initOSHooks() {
@@ -63,7 +58,8 @@ public class SwingCore extends Core {
 //                    for(File f : openFilesEvent.getFiles()) {
 //                        u.p("file = " + f.getAbsolutePath());
 //                    }
-                    EventBus.getSystem().publish(new FileOpenEvent(openFilesEvent.getFiles()));
+                    final FileOpenEvent evt = new FileOpenEvent(openFilesEvent.getFiles());
+                    EventBus.getSystem().publishDeferred(evt);
                 }
             });
             app.setAboutHandler(new AboutHandler(){
@@ -123,6 +119,11 @@ public class SwingCore extends Core {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+        try {
+            initOSHooks();
+        } catch (Throwable thr) {
+            thr.printStackTrace();
+        }
     }
 
     @Override
