@@ -1,9 +1,6 @@
 package org.joshy.gfx.node.control;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
-import org.joshy.gfx.draw.Transform;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -147,11 +144,10 @@ public class DisclosurePanel extends Container {
             case Top:
                 cw = getWidth();
                 ch = Math.max(bb.getHeight(),tb.getHeight());
-                GradientFill gradTop = new GradientFill()
-                        .setStartX(0).setEndX(0)
-                        .setStartY(0).setEndY(ch)
-                        .setStartColor(new FlatColor(0xebebeb))
-                        .setEndColor(new FlatColor(0xa1a1a1));
+                MultiGradientFill gradTop = new LinearGradientFill()
+                        .setStartX(0).setEndX(0).setStartY(0).setEndY(ch)
+                        .addStop(0,new FlatColor(0xebebeb))
+                        .addStop(1,new FlatColor(0xa1a1a1));
                 g.setPaint(gradTop);
                 g.fillRect(0,0,cw,ch);
                 g.setPaint(FlatColor.GRAY);
@@ -159,11 +155,11 @@ public class DisclosurePanel extends Container {
                 break;
             case Right:
                 cw = Math.max(bb.getWidth(),tb.getHeight());
-                GradientFill gradRight = new GradientFill()
+                MultiGradientFill gradRight = new LinearGradientFill()
                         .setStartX(0).setEndX(cw)
                         .setStartY(0).setEndY(0)
-                        .setStartColor(new FlatColor(0xebebeb))
-                        .setEndColor(new FlatColor(0xa1a1a1));
+                        .addStop(0,new FlatColor(0xebebeb))
+                        .addStop(1,new FlatColor(0xa1a1a1));
                 g.push();
                 g.translate(getWidth()-cw,0);
                 g.setPaint(gradRight);

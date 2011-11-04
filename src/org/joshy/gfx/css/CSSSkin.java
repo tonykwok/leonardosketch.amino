@@ -358,12 +358,15 @@ public class CSSSkin {
         return matcher;
     }
 
-    protected GradientFill toGradientFill(LinearGradientValue grad, double backWidth, double backHeight) {
-        GradientFill gf = new GradientFill(
+    protected LinearGradientFill toGradientFill(LinearGradientValue grad, double backWidth, double backHeight) {
+        /*GradientFill gf = new GradientFill(
                 new FlatColor(grad.getStop(0).getColor()),
                 new FlatColor(grad.getStop(1).getColor()),
                 90, false
-        );
+        );*/
+        LinearGradientFill gf = new LinearGradientFill();
+        gf.addStop(0,new FlatColor((grad.getStop(0).getColor())))
+            .addStop(1,new FlatColor((grad.getStop(1).getColor())));
         gf.setStartX(0);
         gf.setEndX(0);
         gf.setStartY(0);

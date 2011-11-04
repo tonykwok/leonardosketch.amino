@@ -16,7 +16,7 @@ public class BoxPainter {
     public boolean transparent;
     public FlatColor background_color;
     public boolean gradient;
-    public GradientFill gradientFill;
+    public LinearGradientFill gradientFill;
     public Insets borderWidth;
     public FlatColor border_color;
     public Image icon;

@@ -22,20 +22,20 @@ public class GeomUtil {
     }
 
     /**
-     * convert the angle to degrees then snap to the nearest 45 degree axis
+     * snap angle to the nearest 45 degree axis
+     * @param angle the angle in degrees
     */
     public static double snapTo45(double angle) {
-        angle = Math.toDegrees(angle); //convert to degrees
         angle = (angle+360) % 360; //make positive
         long iangle = Math.round(angle / 45); //round to nearest octant
         return iangle * 45.0;
     }
 
     /**
-     *  calculate the angle of the line formed by the two points, in radians
+     *  calculate the angle of the line formed by the two points, in degrees
      */
     public static double calcAngle(Point2D point1, Point2D point2) {
-        return Math.atan2(point2.getX()-point1.getX(),point2.getY()-point1.getY());
+        return Math.toDegrees(Math.atan2(point2.getX()-point1.getX(),point2.getY()-point1.getY()));
     }
 
     public static Point2D subtract(Point2D point1, Point2D point2) {

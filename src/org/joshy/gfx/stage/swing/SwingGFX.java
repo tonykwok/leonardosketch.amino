@@ -49,13 +49,6 @@ public class SwingGFX extends GFX {
             );
             g.setPaint(tp);
         }
-        if(paint instanceof GradientFill) {
-            GradientFill gf = (GradientFill) paint;
-            Color c1 = new Color(gf.start.getRGBA());
-            Color c2 = new Color(gf.end.getRGBA());
-            GradientPaint gp = new GradientPaint((float) gf.getStartX(), (float) gf.getStartY(), c1, (float) gf.getEndX(), (float) gf.getEndY(), c2);
-            g.setPaint(gp);
-        }
         if(paint instanceof MultiGradientFill) {
             MultiGradientFill grad = (MultiGradientFill) paint;
 

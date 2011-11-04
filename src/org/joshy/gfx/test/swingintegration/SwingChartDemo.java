@@ -3,7 +3,8 @@ package org.joshy.gfx.test.swingintegration;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
@@ -124,7 +125,9 @@ public class SwingChartDemo implements Runnable {
             double colorAngle = edp.attitude*360/10;
             FlatColor start = FlatColor.hsb(colorAngle,1,0.8);
             FlatColor end = FlatColor.hsb(colorAngle,0.8,1);
-            GradientFill grad = new GradientFill(start,end,0,true, 0,0,30-5,0);
+            MultiGradientFill grad = new LinearGradientFill()
+                    .setStartX(0).setStartY(0).setEndX(30-5).setEndY(0)
+                    .addStop(0,start).addStop(1,end);
 
             //create a bar with the height based on pay
             final Rectangle bar = new Rectangle(0, 400-edp.avgPay * 4, 30, edp.avgPay * 4)

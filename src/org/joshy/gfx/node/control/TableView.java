@@ -3,10 +3,8 @@ package org.joshy.gfx.node.control;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GraphicsUtil;
@@ -114,12 +112,16 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
         setHeaderRenderer(new HeaderRenderer() {
             public void draw(GFX g, TableView table, Object header, int column, double x, double y, double width, double height) {
                 if(column == table.getSelectedColumn()) {
-                    GradientFill grad = new GradientFill(new FlatColor(0x44bcff),new FlatColor(0x0186ba),
-                            0,true,0,0,0,height);
+                    MultiGradientFill grad = new LinearGradientFill()
+                            .setStartX(0).setEndX(0).setStartY(0).setEndY(height)
+                            .addStop(0,new FlatColor(0x44bcff))
+                            .addStop(1,new FlatColor(0x0186ba));
                     g.setPaint(grad);
                 } else {
-                    GradientFill grad = new GradientFill(new FlatColor(0xffffff),new FlatColor(0xa0a0a0),
-                            0,true,0,0,0,height);
+                    MultiGradientFill grad = new LinearGradientFill()
+                            .setStartX(0).setEndX(0).setStartY(0).setEndY(height)
+                            .addStop(0,new FlatColor(0xffffff))
+                            .addStop(1,new FlatColor(0xa0a0a0));
                     g.setPaint(grad);
                 }
                 g.fillRect(x,y,width,height);
