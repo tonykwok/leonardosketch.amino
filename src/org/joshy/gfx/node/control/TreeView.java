@@ -1,9 +1,6 @@
 package org.joshy.gfx.node.control;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
@@ -37,8 +34,13 @@ public class TreeView<T,S> extends TableView{
         g.setPaint(FlatColor.WHITE);
         if(row == table.getSelectedRow()) {
             //g.setPaint(new FlatColor(0xaaaaff));
+            MultiGradientFill grad = new LinearGradientFill()
+                    .setStartX(0).setEndX(0).setStartY(0).setEndY(height)
+                    .addStop(0,new FlatColor(0x44bcff))
+                    .addStop(1,new FlatColor(0x0186ba));
+            /*
             GradientFill grad = new GradientFill(new FlatColor(0x44bcff),new FlatColor(0x0186ba),
-                    0,true,0,0,0,height);
+                    0,true,0,0,0,height);*/
             g.setPaint(grad);
         }
         g.translate(x,y);
