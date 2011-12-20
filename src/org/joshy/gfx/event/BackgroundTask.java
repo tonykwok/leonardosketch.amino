@@ -44,13 +44,18 @@ public abstract class BackgroundTask<D,R> {
         ExecutorService pool = Executors.newFixedThreadPool(10);
         Future<R> result = pool.submit(new Callable<R>() {
             public R call() throws Exception {
-                final R results = onWork(data);
-                Core.getShared().defer(new Runnable() {
-                    public void run() {
-                        onEnd(results);
-                    }
-                });
-                return results;
+                try {
+                    final R results = onWork(data);
+                    Core.getShared().defer(new Runnable() {
+                        public void run() {
+                            onEnd(results);
+                        }
+                    });
+                    return results;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    throw ex;
+                }
             }
         });
 
