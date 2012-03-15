@@ -81,6 +81,10 @@ public class LinearGradientFill extends MultiGradientFill{
         grad.endX = endX;
         grad.startY = startY;
         grad.endY = endY;
+        grad.startXSnapped = startXSnapped;
+        grad.startYSnapped = startYSnapped;
+        grad.endXSnapped = endXSnapped;
+        grad.endYSnapped = endYSnapped;
         for(Stop s : stops) {
             grad.addStop(s.duplicate());
         }
