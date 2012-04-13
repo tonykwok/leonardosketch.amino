@@ -1,5 +1,8 @@
 package org.joshy.gfx.stage.swing;
 
+import com.apple.eawt.AppEvent;
+import com.apple.eawt.FullScreenListener;
+import com.apple.eawt.FullScreenUtilities;
 import com.sun.awt.AWTUtilities;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.GFX;
@@ -156,9 +159,36 @@ public class SwingStage extends Stage {
         frame.setAlwaysOnTop(b);
     }
 
-    public SwingStage() {
+    public SwingStage(boolean fullscreen) {
         super();
         frame = new JFrame("stage");
+        
+        
+
+        if(fullscreen) {
+            u.p("AMINO: is showing = " + frame.isShowing());
+            Window window = frame;
+            FullScreenUtilities.addFullScreenListenerTo(window, new FullScreenListener() {
+                public void windowEnteringFullScreen(AppEvent.FullScreenEvent fullScreenEvent) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                public void windowEnteredFullScreen(AppEvent.FullScreenEvent fullScreenEvent) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                public void windowExitingFullScreen(AppEvent.FullScreenEvent fullScreenEvent) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                public void windowExitedFullScreen(AppEvent.FullScreenEvent fullScreenEvent) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+            });
+            FullScreenUtilities.setWindowCanFullScreen(window, true);
+        }
+        
+        
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setMinimumSize(new Dimension(200,200));
         root = new Container() {
