@@ -14,7 +14,15 @@ public abstract class Stage {
 
     public static Stage createStage() {
         if(!Core.isUseJOGL()) {
-            return new SwingStage();
+            return new SwingStage(false);
+        } else {
+            return new JOGLStage();
+        }
+    }
+    
+    public static Stage createFullscreenEnabledStage() {
+        if(!Core.isUseJOGL()) {
+            return new SwingStage(true);
         } else {
             return new JOGLStage();
         }
