@@ -16,6 +16,7 @@ public class SwingGFX extends GFX {
     private org.joshy.gfx.draw.Paint fill;
     private Graphics2D g;
     private Deque<GFXState> stateStack;
+    private Shape mask;
 
     public SwingGFX(Graphics2D graphics) {
         this.g = graphics;
@@ -253,7 +254,14 @@ public class SwingGFX extends GFX {
     @Override
     public void drawImage(Image img, double x, double y) {
         SwingImage image = (SwingImage) img;
-        g.drawImage(image.buffer, (int)x, (int)y, null);
+        if(mask != null) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setClip(mask);
+            g2.drawImage(image.buffer, (int) x, (int) y, null);
+            g2.dispose();
+        } else {
+            g.drawImage(image.buffer, (int)x, (int)y, null);
+        }
     }
 
     @Override
@@ -365,6 +373,11 @@ public class SwingGFX extends GFX {
         } else {
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);            
         }
+    }
+
+    @Override
+    public void setMask(Shape mask) {
+        this.mask = mask;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.joshy.gfx.stage.jogl;
 
 import com.sun.opengl.util.texture.TextureCoords;
+import java.awt.Shape;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.node.Bounds;
 
@@ -198,6 +199,11 @@ public class JOGLGFX extends GFX {
 
     @Override
     public void setSmoothImage(boolean smooth) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setMask(Shape shape) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

@@ -166,7 +166,6 @@ public class SwingStage extends Stage {
         
 
         if(fullscreen) {
-            u.p("AMINO: is showing = " + frame.isShowing());
             Window window = frame;
             FullScreenUtilities.addFullScreenListenerTo(window, new FullScreenListener() {
                 public void windowEnteringFullScreen(AppEvent.FullScreenEvent fullScreenEvent) {
