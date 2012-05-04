@@ -1,5 +1,6 @@
 package org.joshy.gfx.draw;
 
+import java.awt.Shape;
 import org.joshy.gfx.node.Bounds;
 
 import javax.media.opengl.GLAutoDrawable;
@@ -73,6 +74,7 @@ public abstract class GFX {
     public abstract void fillPath(Path2D.Double path);
 
     public abstract void setSmoothImage(boolean smooth);
+    public abstract void setMask(Shape shape);
 
     public abstract ImageBuffer createBuffer(int i, int i1);
 
