@@ -21,12 +21,12 @@
 /* =========== buttons =========== */
 .-class-Button { /* this selects all subclasses of Button as well */
     margin: 3px;
-    padding: 8px;
+    padding: 5px;
     background-color: #c0c0c0;
     border-width: 1px;
     color: #444444;
     border-color: #808080;
-    border-radius: 11px;
+    border-radius: 15px;
     text-align: center;
     shrink-to-fit: true;
 }
@@ -50,9 +50,9 @@
 }
 
 .-class-Button, .-class-Togglebutton {
-    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    background: linear-gradient(center top, #ebebeb 0%, #c0c0c0 100%);
     /* a black shadow offset by 3,2 with a blur radius of 4 */
-    text-shadow: 0px 1px 4px #000000;
+    text-shadow: 0px 1px 3px #222222;
 }
 
 .-class-Checkbox {
@@ -78,13 +78,17 @@
 }
 
 .-class-Togglebutton {
-    border-radius: 3px;
+    border-radius: 0px;
 }
 
 .-class-Button:hover, .-class-Togglebutton:hover {
     background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
     color: #ffffff;
     border-color: #808080;
+}
+
+.-class-Checkbox:hover, .-class-Radiobutton:hover {
+    color: #a0a0a0;
 }
 
 .-class-Button:disabled, .-class-Togglebutton:disabled {
