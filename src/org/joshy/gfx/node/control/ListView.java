@@ -11,6 +11,7 @@ import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.Point2D;
 import java.util.List;
+import org.joshy.gfx.util.u;
 
 /**
  * ListView is the classic list control that uses lightweight renderers.  If is scrolling
@@ -219,7 +220,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        font = cssSkin.getDefaultFont();
+        font = cssSkin.getStyleInfo(this,null).font;
         setLayoutDirty();
     }
 

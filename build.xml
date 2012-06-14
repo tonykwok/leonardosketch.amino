@@ -37,7 +37,7 @@
 
         <mkdir dir="build/classes/"/>
 
-        <javac destdir="build/classes/" debug="true">
+        <javac destdir="build/classes/" debug="true" source="1.6" target="1.6">
             <src path="src"/>
             <classpath path="${lib.jogl.dir}gluegen-rt.jar"></classpath>
             <classpath path="${lib.jogl.dir}jogl.all.jar"></classpath>

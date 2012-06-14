@@ -26,7 +26,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
     }
 
     private boolean allowColumnResizing = true;
-    private static final int HEADER_HEIGHT = 20;
+    private static final int HEADER_HEIGHT = 18;
     private static final double RESIZE_THRESHOLD = 10;
     private TableModel<D,H> model;
     private DataRenderer<D> renderer;
@@ -104,7 +104,8 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                 g.setPaint(new FlatColor(col));
                 if(cell != null) {
                     String s = cell.toString();
-                    Font.drawCenteredVertically(g, s, font, x+2, y, width, height, true);
+                    Font.drawCenteredVertically(g, s, font,
+                            x+2, y, width, height, true);
                 }
             }
         });
@@ -133,7 +134,8 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
                     g.setPaint(FlatColor.WHITE);
                 }
                 if(header != null) {
-                    Font.drawCenteredVertically(g, header.toString(), Font.DEFAULT, x+2, y, width, height, true);
+                    Font.drawCenteredVertically(g, header.toString(), font,
+                            x+2, y, width, height, true);
                 }
                 if(sortColumn >= 0) {
                     if(column == sortColumn) {
@@ -549,7 +551,7 @@ public class TableView<D,H> extends Control implements Focusable, ScrollPane.Scr
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        font = cssSkin.getDefaultFont();
+        font = cssSkin.getStyleInfo(this,null).font;
         setLayoutDirty();
     }
 
